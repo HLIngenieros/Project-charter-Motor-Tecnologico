@@ -30,7 +30,7 @@ Mantenlo breve y actualizado: si algo cambia, edita esta sección en lugar de a�
 
 - **Tablero del proyecto:** página privada en claude.ai con las fases y tareas, el avance, la bitácora de sesiones y las decisiones.
 - **Fuente:** [tablero.html](tablero.html). Los datos están en el bloque JSON `<script id="datos">` al inicio del archivo; la página se dibuja a partir de ellos.
-- **URL:** _(se registra al publicar)_
+- **URL:** https://claude.ai/artifact/7vS94KqN5FP4Q1npvi5fcG (privado; se comparte desde su menú Share)
 - **Cómo actualizarlo al cierre:**
   1. Editar el JSON a partir de PENDIENTES.md y CLAUDE.md: estado de las tareas, `revision` y `fecha`, `proxima`, una nueva entrada en `sesiones` y las nuevas `decisiones`.
   2. Publicar con la herramienta Artifact pasando `url` (la de arriba) y `file_path` = tablero.html. Sin `url` se crearía un tablero nuevo con otra dirección.
