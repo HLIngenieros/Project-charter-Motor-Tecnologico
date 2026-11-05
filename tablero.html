@@ -1,0 +1,348 @@
+<title>Tablero Motor Tecnológico</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: cajetín de plano como cabecera · franja de avance · dos columnas: fases y tareas | bitácora, decisiones y cierre */
+:root {
+  --bg: #F4F5F2;
+  --surface: #FFFFFF;
+  --ink: #17202A;
+  --muted: #5A6570;
+  --line: #D3D8D1;
+  --accent: #1F5FAD;
+  --ok: #2B7349;    --ok-bg: #E1F0E6;
+  --wip: #8F5E0E;   --wip-bg: #F7E9CF;
+  --todo: #66707B;  --todo-bg: #EBEDEA;
+  --f-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10151B; --surface: #17202A; --ink: #E5E9ED; --muted: #98A3AF; --line: #2B3642; --accent: #74A9EC;
+    --ok: #6EC491; --ok-bg: #173225; --wip: #E4B460; --wip-bg: #382A12; --todo: #97A1AD; --todo-bg: #222B35;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10151B; --surface: #17202A; --ink: #E5E9ED; --muted: #98A3AF; --line: #2B3642; --accent: #74A9EC;
+  --ok: #6EC491; --ok-bg: #173225; --wip: #E4B460; --wip-bg: #382A12; --todo: #97A1AD; --todo-bg: #222B35;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15px; line-height: 1.55;
+}
+.page {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+  display: grid; gap: 28px;
+}
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.label {
+  font-family: var(--f-mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: .09em; color: var(--muted);
+}
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+h2 {
+  font-family: var(--f-display); font-stretch: 85%; font-weight: 700;
+  font-size: 15px; text-transform: uppercase; letter-spacing: .06em;
+  margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--ink);
+}
+
+/* Cajetín */
+.cajetin {
+  display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: 1px; background: var(--line); border: 1.5px solid var(--ink);
+}
+.cajetin > div { background: var(--surface); padding: 10px 14px; display: grid; gap: 2px; align-content: start; min-width: 0; }
+.cajetin .nombre { grid-row: span 2; padding: 16px 18px; align-content: end; }
+.cajetin .nombre strong {
+  font-family: var(--f-display); font-stretch: 78%; font-weight: 800;
+  font-size: clamp(30px, 5vw, 46px); line-height: 1; letter-spacing: -.01em; text-wrap: balance;
+}
+.cajetin .nombre span { font-family: var(--f-display); font-stretch: 90%; font-weight: 500; font-size: 18px; color: var(--muted); }
+.cajetin .valor { font-weight: 600; overflow-wrap: anywhere; }
+
+/* Avance */
+.avance {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line);
+}
+.avance > div { background: var(--surface); padding: 14px 18px; display: grid; gap: 8px; min-width: 0; }
+.avance .cifra { font-family: var(--f-display); font-stretch: 85%; font-weight: 700; font-size: 22px; }
+.avance .cifra small { font-family: var(--f-body); font-weight: 400; font-size: 14px; color: var(--muted); font-stretch: 100%; }
+.proxima { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.proxima .mono { color: var(--accent); font-weight: 500; }
+
+/* Barra segmentada: un segmento por tarea */
+.barra { display: flex; gap: 3px; height: 10px; }
+.barra i { flex: 1; border-radius: 2px; background: var(--todo-bg); border: 1px solid var(--line); }
+.barra i.hecha { background: var(--ok); border-color: var(--ok); }
+.barra i.curso { background: var(--wip); border-color: var(--wip); }
+.barra i.tbd { background: transparent; border: 1px dashed var(--line); flex: 2; }
+
+/* Columnas */
+.cuerpo { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+.col { display: grid; gap: 32px; min-width: 0; }
+
+/* Fases */
+.fase { display: grid; gap: 12px; }
+.fase + .fase { margin-top: 26px; }
+.fase-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.fase-cab h3 { margin: 0; font-family: var(--f-display); font-stretch: 88%; font-weight: 700; font-size: 20px; text-wrap: balance; }
+.fase-cab h3 .mono { font-size: 13px; color: var(--muted); font-weight: 500; margin-right: 8px; }
+.tareas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.tareas li {
+  display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline;
+  padding: 9px 0; border-bottom: 1px solid var(--line);
+}
+.tareas li .mono:first-child { color: var(--muted); font-size: 13px; }
+.tareas li .fecha { grid-column: 2 / 3; font-size: 12px; color: var(--muted); }
+.tareas li.tbd { color: var(--muted); font-style: italic; }
+.chip {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; white-space: nowrap;
+  padding: 2px 8px; border-radius: 3px;
+}
+.chip.hecha { color: var(--ok); background: var(--ok-bg); }
+.chip.curso { color: var(--wip); background: var(--wip-bg); }
+.chip.pendiente { color: var(--todo); background: var(--todo-bg); }
+
+/* Bitácora */
+.sesion { display: grid; gap: 6px; padding-left: 14px; border-left: 2px solid var(--accent); }
+.sesion + .sesion { margin-top: 20px; }
+.sesion .cab { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.sesion .cab strong { font-family: var(--f-display); font-stretch: 88%; font-size: 17px; }
+.sesion ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.sesion .commit { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Decisiones */
+.decisiones { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.decisiones li { display: grid; gap: 2px; }
+.decisiones .motivo { color: var(--muted); font-size: 14px; }
+
+/* Cierre */
+.cierre { margin: 0; padding: 0; list-style: none; counter-reset: paso; display: grid; gap: 10px; }
+.cierre li { counter-increment: paso; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; }
+.cierre li::before {
+  content: counter(paso); font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  width: 24px; height: 24px; display: grid; place-items: center;
+  border: 1.5px solid var(--ink); border-radius: 50%;
+}
+.cierre span { color: var(--muted); font-size: 14px; }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+
+@media (max-width: 820px) {
+  .cuerpo, .avance { grid-template-columns: minmax(0, 1fr); }
+  .cajetin { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cajetin .nombre { grid-column: span 2; grid-row: auto; }
+}
+</style>
+
+<script type="application/json" id="datos">
+{
+  "proyecto": "Motor Tecnológico",
+  "documento": "Project Charter",
+  "responsable": "rovalle1987",
+  "revision": "01",
+  "fecha": "2026-11-05",
+  "repo": "https://github.com/rovalle1987/Project-charter-Motor-Tecnologico",
+  "proxima": { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter" },
+  "fases": [
+    {
+      "id": "Fase 0", "nombre": "Configuración del entorno",
+      "tareas": [
+        { "id": "T0.1", "titulo": "Crear el repositorio local y en GitHub (privado)", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.2", "titulo": "Instalar Git, GitHub CLI y la skill impeccable", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.3", "titulo": "Crear CLAUDE.md y definir la forma de trabajo", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.4", "titulo": "Definir el artefacto que se actualiza al cierre de cada sesión", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.5", "titulo": "Decidir qué hacer con ejemplo.md: eliminarlo o reemplazarlo", "estado": "pendiente" }
+      ]
+    },
+    {
+      "id": "Fase 1", "nombre": "Definición del Project Charter",
+      "tareas": [
+        { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter", "estado": "pendiente" }
+      ],
+      "porDefinir": "El resto de tareas de esta fase se definen en T1.1"
+    }
+  ],
+  "sesiones": [
+    {
+      "rev": "01", "fecha": "2026-11-05", "tarea": "Fase 0 · T0.1 a T0.4",
+      "resumen": [
+        "Repositorio creado y publicado en GitHub como privado",
+        "Instalados Git 2.56, GitHub CLI 2.103 y la skill impeccable",
+        "Creados CLAUDE.md y PENDIENTES.md",
+        "Definida la forma de trabajo por fases y tareas, y este tablero"
+      ],
+      "commit": "Configura el proyecto: CLAUDE.md, PENDIENTES.md y tablero"
+    }
+  ],
+  "decisiones": [
+    { "fecha": "2026-11-05", "decision": "Repositorio privado en GitHub", "motivo": "Contiene documentación interna." },
+    { "fecha": "2026-11-05", "decision": "Trabajo por fases y tareas, una sesión por tarea", "motivo": "Cada sesión cierra con documentación, commit a main y actualización del tablero." },
+    { "fecha": "2026-11-05", "decision": "Este tablero como artefacto de seguimiento", "motivo": "Muestra el estado del proyecto sin abrir el repositorio." }
+  ]
+}
+</script>
+
+<div class="page">
+  <header class="cajetin" aria-label="Datos del proyecto">
+    <div class="nombre"><span class="label">Proyecto</span><strong id="c-proyecto"></strong><span id="c-documento"></span></div>
+    <div><span class="label">Responsable</span><span class="valor" id="c-responsable"></span></div>
+    <div><span class="label">Revisión</span><span class="valor mono" id="c-revision"></span></div>
+    <div><span class="label">Fecha</span><span class="valor mono" id="c-fecha"></span></div>
+    <div><span class="label">Fase actual</span><span class="valor" id="c-fase"></span></div>
+    <div><span class="label">Estado</span><span class="valor" id="c-estado"></span></div>
+    <div><span class="label">Repositorio</span><span class="valor"><a id="c-repo" target="_blank" rel="noopener">GitHub · privado</a></span></div>
+  </header>
+
+  <section class="avance" aria-label="Avance">
+    <div>
+      <span class="label">Avance</span>
+      <span class="cifra" id="a-cifra"></span>
+      <div class="barra" id="a-barra" aria-hidden="true"></div>
+    </div>
+    <div>
+      <span class="label">Próxima tarea</span>
+      <div class="proxima"><span class="mono" id="p-id"></span><span id="p-titulo"></span></div>
+    </div>
+  </section>
+
+  <div class="cuerpo">
+    <section class="col" aria-labelledby="h-fases">
+      <div>
+        <h2 id="h-fases">Fases y tareas</h2>
+        <div id="fases"></div>
+      </div>
+    </section>
+
+    <aside class="col">
+      <section aria-labelledby="h-bitacora">
+        <h2 id="h-bitacora">Bitácora de sesiones</h2>
+        <div id="sesiones"></div>
+      </section>
+      <section aria-labelledby="h-decisiones">
+        <h2 id="h-decisiones">Decisiones</h2>
+        <ul class="decisiones" id="decisiones"></ul>
+      </section>
+      <section aria-labelledby="h-cierre">
+        <h2 id="h-cierre">Cierre de cada sesión</h2>
+        <ol class="cierre">
+          <li><div>Memoria y documentación<br><span>CLAUDE.md y PENDIENTES.md al día</span></div></li>
+          <li><div>Commit a main<br><span>Mensaje en español con la tarea completada</span></div></li>
+          <li><div>Actualizar este tablero<br><span>Se publica en la misma dirección</span></div></li>
+        </ol>
+      </section>
+    </aside>
+  </div>
+
+  <footer>Fuente: PENDIENTES.md y CLAUDE.md del repositorio. Se actualiza al cierre de cada sesión.</footer>
+</div>
+
+<script>
+(function () {
+  var d = JSON.parse(document.getElementById("datos").textContent);
+  var ETIQUETA = { hecha: "Hecha", curso: "En curso", pendiente: "Pendiente" };
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function set(id, text) { document.getElementById(id).textContent = text; }
+  function segmentos(tareas, conTbd) {
+    var b = el("div", "barra");
+    b.setAttribute("aria-hidden", "true");
+    tareas.forEach(function (t) { b.appendChild(el("i", t.estado === "pendiente" ? "" : t.estado)); });
+    if (conTbd) b.appendChild(el("i", "tbd"));
+    return b;
+  }
+
+  var todas = [];
+  d.fases.forEach(function (f) { todas = todas.concat(f.tareas); });
+  var hechas = todas.filter(function (t) { return t.estado === "hecha"; }).length;
+  var enCurso = todas.filter(function (t) { return t.estado === "curso"; }).length;
+  var actual = d.fases.find(function (f) { return f.tareas.some(function (t) { return t.estado !== "hecha"; }); }) || d.fases[d.fases.length - 1];
+
+  set("c-proyecto", d.proyecto);
+  set("c-documento", d.documento);
+  set("c-responsable", d.responsable);
+  set("c-revision", "Rev. " + d.revision);
+  set("c-fecha", d.fecha);
+  set("c-fase", actual.id + " · " + actual.nombre);
+  set("c-estado", enCurso ? "Tarea en curso" : "Entre sesiones");
+  document.getElementById("c-repo").href = d.repo;
+
+  var cifra = document.getElementById("a-cifra");
+  cifra.textContent = hechas + " de " + todas.length + " ";
+  cifra.appendChild(el("small", null, "tareas hechas · faltan tareas de la Fase 1 por definir"));
+  document.getElementById("a-barra").replaceWith(segmentos(todas, true));
+  set("p-id", d.proxima.id);
+  set("p-titulo", d.proxima.titulo);
+
+  var cont = document.getElementById("fases");
+  d.fases.forEach(function (f) {
+    var box = el("div", "fase");
+    var cab = el("div", "fase-cab");
+    var h = el("h3");
+    h.appendChild(el("span", "mono", f.id));
+    h.appendChild(document.createTextNode(f.nombre));
+    cab.appendChild(h);
+    var n = f.tareas.filter(function (t) { return t.estado === "hecha"; }).length;
+    cab.appendChild(el("span", "mono label", n + "/" + f.tareas.length + " hechas"));
+    box.appendChild(cab);
+    box.appendChild(segmentos(f.tareas, !!f.porDefinir));
+    var ul = el("ul", "tareas");
+    f.tareas.forEach(function (t) {
+      var li = el("li");
+      li.appendChild(el("span", "mono", t.id));
+      li.appendChild(el("span", null, t.titulo));
+      li.appendChild(el("span", "chip " + t.estado, ETIQUETA[t.estado]));
+      if (t.fecha) { li.appendChild(el("span", "fecha mono", "Completada " + t.fecha)); }
+      ul.appendChild(li);
+    });
+    if (f.porDefinir) {
+      var tbd = el("li", "tbd");
+      tbd.appendChild(el("span", "mono", "—"));
+      tbd.appendChild(el("span", null, f.porDefinir));
+      ul.appendChild(tbd);
+    }
+    box.appendChild(ul);
+    cont.appendChild(box);
+  });
+
+  var ses = document.getElementById("sesiones");
+  d.sesiones.slice().reverse().forEach(function (s) {
+    var box = el("div", "sesion");
+    var cab = el("div", "cab");
+    cab.appendChild(el("strong", null, "Rev. " + s.rev));
+    cab.appendChild(el("span", "mono label", s.fecha + " · " + s.tarea));
+    box.appendChild(cab);
+    var ul = el("ul");
+    s.resumen.forEach(function (r) { ul.appendChild(el("li", null, r)); });
+    box.appendChild(ul);
+    box.appendChild(el("span", "commit mono", "commit: " + s.commit));
+    ses.appendChild(box);
+  });
+
+  var dec = document.getElementById("decisiones");
+  d.decisiones.slice().reverse().forEach(function (x) {
+    var li = el("li");
+    li.appendChild(el("span", "mono label", x.fecha));
+    li.appendChild(el("strong", null, x.decision));
+    li.appendChild(el("span", "motivo", x.motivo));
+    dec.appendChild(li);
+  });
+})();
+</script>
