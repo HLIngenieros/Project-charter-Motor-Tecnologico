@@ -152,7 +152,7 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
   "proyecto": "Motor Tecnológico",
   "documento": "Project Charter",
   "responsable": "rovalle1987",
-  "revision": "01",
+  "revision": "02",
   "fecha": "2026-11-05",
   "repo": "https://github.com/rovalle1987/Project-charter-Motor-Tecnologico",
   "proxima": { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter" },
@@ -164,7 +164,10 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
         { "id": "T0.2", "titulo": "Instalar Git, GitHub CLI y la skill impeccable", "estado": "hecha", "fecha": "2026-11-05" },
         { "id": "T0.3", "titulo": "Crear CLAUDE.md y definir la forma de trabajo", "estado": "hecha", "fecha": "2026-11-05" },
         { "id": "T0.4", "titulo": "Definir el artefacto que se actualiza al cierre de cada sesión", "estado": "hecha", "fecha": "2026-11-05" },
-        { "id": "T0.5", "titulo": "Decidir qué hacer con ejemplo.md: eliminarlo o reemplazarlo", "estado": "pendiente" }
+        { "id": "T0.5", "titulo": "Decidir qué hacer con ejemplo.md: eliminarlo o reemplazarlo", "estado": "pendiente" },
+        { "id": "T0.6", "titulo": "Crear el protocolo de inicio de proyecto para Claude", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.7", "titulo": "Instalar las skills humanizer y superpowers", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T0.8", "titulo": "Decidir si se enlaza el protocolo desde el CLAUDE.md global", "estado": "pendiente" }
       ]
     },
     {
@@ -185,12 +188,23 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
         "Definida la forma de trabajo por fases y tareas, y este tablero"
       ],
       "commit": "Configura el proyecto: CLAUDE.md, PENDIENTES.md y tablero"
+    },
+    {
+      "rev": "02", "fecha": "2026-11-05", "tarea": "Fase 0 · T0.6 y T0.7",
+      "resumen": [
+        "Creado el protocolo de inicio de proyecto, escrito para que Claude lo siga",
+        "Instaladas humanizer (skill global) y superpowers (plugin oficial)",
+        "Confirmado que frontend-design y web-artifacts-builder ya estaban disponibles"
+      ],
+      "commit": "Añade el protocolo de inicio, las skills nuevas y la Rev. 02 del tablero"
     }
   ],
   "decisiones": [
     { "fecha": "2026-11-05", "decision": "Repositorio privado en GitHub", "motivo": "Contiene documentación interna." },
     { "fecha": "2026-11-05", "decision": "Trabajo por fases y tareas, una sesión por tarea", "motivo": "Cada sesión cierra con documentación, commit a main y actualización del tablero." },
-    { "fecha": "2026-11-05", "decision": "Este tablero como artefacto de seguimiento", "motivo": "Muestra el estado del proyecto sin abrir el repositorio." }
+    { "fecha": "2026-11-05", "decision": "Este tablero como artefacto de seguimiento", "motivo": "Muestra el estado del proyecto sin abrir el repositorio." },
+    { "fecha": "2026-11-05", "decision": "El protocolo de inicio de proyecto va dirigido a Claude", "motivo": "Claude inicia los proyectos nuevos solo, siguiendo las preferencias del usuario." },
+    { "fecha": "2026-11-05", "decision": "Superpowers instalado para todos los proyectos", "motivo": "Petición del usuario. Se puede desactivar si resulta excesivo." }
   ]
 }
 </script>

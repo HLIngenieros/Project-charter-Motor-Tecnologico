@@ -11,6 +11,9 @@ Fases y tareas del proyecto. Una sesión de trabajo corresponde a una tarea.
 - [x] T0.3 · Crear CLAUDE.md y definir la forma de trabajo — 2026-11-05
 - [x] T0.4 · Definir el artefacto que se actualiza al cierre de cada sesión — 2026-11-05
 - [ ] T0.5 · Decidir qué hacer con `ejemplo.md`: eliminarlo o reemplazarlo
+- [x] T0.6 · Crear el protocolo de inicio de proyecto para Claude (documento en claude.ai) — 2026-11-05
+- [x] T0.7 · Instalar las skills humanizer y superpowers — 2026-11-05
+- [ ] T0.8 · Decidir si se enlaza el protocolo desde el CLAUDE.md global (`~/.claude/CLAUDE.md`) para usarlo en proyectos nuevos
 
 ## Fase 1 · Definición del Project Charter
 
@@ -24,3 +27,4 @@ Fases y tareas del proyecto. Una sesión de trabajo corresponde a una tarea.
 | Rev. | Fecha | Tarea | Resumen |
 |---|---|---|---|
 | 01 | 2026-11-05 | Fase 0 · T0.1 a T0.4 | Repositorio en GitHub (privado), instalaciones, CLAUDE.md, PENDIENTES.md, forma de trabajo y tablero del proyecto |
+| 02 | 2026-11-05 | Fase 0 · T0.6 y T0.7 | Protocolo de inicio de proyecto para Claude; instaladas humanizer y superpowers |

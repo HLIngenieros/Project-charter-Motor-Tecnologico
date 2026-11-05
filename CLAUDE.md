@@ -36,6 +36,10 @@ Mantenlo breve y actualizado: si algo cambia, edita esta sección en lugar de a�
   2. Publicar con la herramienta Artifact pasando `url` (la de arriba) y `file_path` = tablero.html. Sin `url` se crearía un tablero nuevo con otra dirección.
 - Cada sesión es una **revisión** del tablero (Rev. 01, 02…), igual que en el registro de sesiones de PENDIENTES.md.
 
+## Referencias
+
+- **Protocolo de inicio de proyecto para Claude:** https://claude.ai/artifact/8Q2szpGdfVPqhsyt62C8CJ. Es un documento de Claude Docs que se edita con el conector de Claude Docs, no publicando archivos. Contiene los pasos y las preferencias del usuario para iniciar proyectos nuevos; hay que seguirlo cuando el usuario pida iniciar uno.
+
 ## Estructura
 
 | Archivo | Contenido |
@@ -56,7 +60,9 @@ Mantenlo breve y actualizado: si algo cambia, edita esta sección en lugar de a�
 
 - Windows 11, PowerShell 5.1, VS Code.
 - Git 2.56 y GitHub CLI 2.103 instalados con winget.
-- La skill global `impeccable` (diseño de interfaces) está instalada en `~/.claude/skills/impeccable`, sin el hook de diseño.
+- Skills globales en `~/.claude/skills/`: `impeccable` (diseño de interfaces, sin su hook) y `humanizer` (quitar rasgos de texto escrito por IA).
+- Plugin `superpowers` (marketplace oficial, ámbito usuario): 14 skills de proceso (brainstorming, planes, TDD, depuración, revisión de código…) y un hook de inicio de sesión que me obliga a revisar las skills antes de actuar.
+- Disponibles desde claude.ai: `frontend-design` y `web-artifacts-builder`.
 
 ## Decisiones
 
@@ -64,6 +70,8 @@ Mantenlo breve y actualizado: si algo cambia, edita esta sección en lugar de a�
 - 2026-11-05 · Repositorio privado en GitHub · Contiene documentación interna.
 - 2026-11-05 · Trabajo por fases y tareas, una sesión por tarea, con un cierre de 3 pasos · Preferencia del usuario.
 - 2026-11-05 · El artefacto de seguimiento es el tablero del proyecto (tablero.html) · Muestra el estado del proyecto sin abrir el repositorio.
+- 2026-11-05 · El protocolo de inicio de proyecto va dirigido a Claude, no al usuario · El usuario quiere que Claude inicie proyectos nuevos solo, siguiendo sus preferencias.
+- 2026-11-05 · Se instala superpowers para todos los proyectos del usuario · Petición del usuario; se desactiva con `claude plugin disable` si resulta excesivo.
 
 ## Glosario
 
