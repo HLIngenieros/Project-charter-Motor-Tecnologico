@@ -152,10 +152,10 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
   "proyecto": "Motor Tecnológico",
   "documento": "Project Charter",
   "responsable": "rovalle1987",
-  "revision": "02",
+  "revision": "03",
   "fecha": "2026-11-05",
   "repo": "https://github.com/rovalle1987/Project-charter-Motor-Tecnologico",
-  "proxima": { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter" },
+  "proxima": { "id": "T1.2", "titulo": "Validar el charter Rev. 0 con el patrocinador" },
   "fases": [
     {
       "id": "Fase 0", "nombre": "Configuración del entorno",
@@ -173,9 +173,14 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
     {
       "id": "Fase 1", "nombre": "Definición del Project Charter",
       "tareas": [
-        { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter", "estado": "pendiente" }
-      ],
-      "porDefinir": "El resto de tareas de esta fase se definen en T1.1"
+        { "id": "T1.1", "titulo": "Describir el propósito del Motor Tecnológico y el alcance del charter", "estado": "hecha", "fecha": "2026-11-05" },
+        { "id": "T1.2", "titulo": "Validar el charter Rev. 0: gobierno, presupuesto 2027, metas e iniciativas propuestas", "estado": "pendiente" },
+        { "id": "T1.3", "titulo": "Validar la línea base del cronograma: tareas, fechas, pesos y responsables", "estado": "pendiente" },
+        { "id": "T1.4", "titulo": "Hacer el primer corte semanal real con el dashboard", "estado": "pendiente" },
+        { "id": "T1.5", "titulo": "Proponer el seguimiento mensual de indicadores (KPI)", "estado": "pendiente" },
+        { "id": "T1.6", "titulo": "Compilar Tailwind en local para usar el dashboard sin conexión", "estado": "pendiente" },
+        { "id": "T1.7", "titulo": "Decidir qué hacer con la primera versión del charter y las fuentes", "estado": "pendiente" }
+      ]
     }
   ],
   "sesiones": [
@@ -197,6 +202,16 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
         "Confirmado que frontend-design y web-artifacts-builder ya estaban disponibles"
       ],
       "commit": "Añade el protocolo de inicio, las skills nuevas y la Rev. 02 del tablero"
+    },
+    {
+      "rev": "03", "fecha": "2026-11-05", "tarea": "Fase 1 · T1.1",
+      "resumen": [
+        "Dashboard del Project Charter: principal y uno por cada una de las 4 iniciativas, enfoque PMI + Scrum, horizonte 2027 con visión 2028",
+        "Pestaña Seguimiento: fecha de corte, % planeado y real por tarea, desviación en días, forecast y curva S",
+        "Línea base preliminar de 84 tareas y registro del corte semanal que genera avance.js",
+        "Quedan por validar el gobierno, el presupuesto 2027, las metas y los pesos de la línea base"
+      ],
+      "commit": "Crea el dashboard del Project Charter con seguimiento por fecha de corte"
     }
   ],
   "decisiones": [
@@ -204,7 +219,10 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
     { "fecha": "2026-11-05", "decision": "Trabajo por fases y tareas, una sesión por tarea", "motivo": "Cada sesión cierra con documentación, commit a main y actualización del tablero." },
     { "fecha": "2026-11-05", "decision": "Este tablero como artefacto de seguimiento", "motivo": "Muestra el estado del proyecto sin abrir el repositorio." },
     { "fecha": "2026-11-05", "decision": "El protocolo de inicio de proyecto va dirigido a Claude", "motivo": "Claude inicia los proyectos nuevos solo, siguiendo las preferencias del usuario." },
-    { "fecha": "2026-11-05", "decision": "Superpowers instalado para todos los proyectos", "motivo": "Petición del usuario. Se puede desactivar si resulta excesivo." }
+    { "fecha": "2026-11-05", "decision": "Superpowers instalado para todos los proyectos", "motivo": "Petición del usuario. Se puede desactivar si resulta excesivo." },
+    { "fecha": "2026-11-05", "decision": "El charter es un dashboard local en HTML, CSS, Tailwind y JavaScript", "motivo": "Petición del usuario, en lugar de un artefacto." },
+    { "fecha": "2026-11-05", "decision": "Charter 2027 con visión 2028, uno general y uno por iniciativa, PMI + Scrum", "motivo": "Respuestas del usuario." },
+    { "fecha": "2026-11-05", "decision": "Seguimiento semanal por fecha de corte con % real por tarea", "motivo": "Mismo modelo que el Project Charter TI 2025; el corte se guarda en avance.js." }
   ]
 }
 </script>
