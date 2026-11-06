@@ -318,8 +318,9 @@ footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line)
 
   var cifra = document.getElementById("a-cifra");
   cifra.textContent = hechas + " de " + todas.length + " ";
-  cifra.appendChild(el("small", null, "tareas hechas · faltan tareas de la Fase 1 por definir"));
-  document.getElementById("a-barra").replaceWith(segmentos(todas, true));
+  var hayTbd = d.fases.some(function (f) { return !!f.porDefinir; });
+  cifra.appendChild(el("small", null, "tareas hechas" + (hayTbd ? " · faltan tareas por definir" : "")));
+  document.getElementById("a-barra").replaceWith(segmentos(todas, hayTbd));
   set("p-id", d.proxima.id);
   set("p-titulo", d.proxima.titulo);
 
