@@ -68,6 +68,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Fase 3: crear charter con diálogo desde el portafolio (no `/charters/nuevo`); la ficha solo muestra secciones ya construidas; estado y eliminar en un menú de la banda; guardado automático con cola serial; `GET /charters` solo trae los propios, también al Admin · Claude (plan aprobado).
 - 2026-11-09 · Repartir cada fase en sesiones equilibradas · Usuario.
 - 2026-11-09 · Portafolio: con corte, estado vacío y barra neutra hasta T5.5; sin corte, «editado el …» (el resumen no trae `creadoEn`). En celular el estado de guardado se ve sobre la hoja para poder reintentar · Claude.
+- 2026-11-09 · Listas de la ficha con campos propios (no `TextoEditable`): necesitan Enter, Retroceso y Alt + flechas; un ítem vacío desaparece al salir · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
