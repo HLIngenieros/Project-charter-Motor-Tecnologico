@@ -43,7 +43,11 @@ beforeEach(() => {
         cabeceras: Object.fromEntries(new Headers(init.headers).entries()),
       }
       llamadas.push(l)
-      const r = responder(l)
+      // El portafolio pide sus listas; aquí solo importa la sesión.
+      const r =
+        l.metodo === 'GET' && ['/api/charters', '/api/categorias', '/api/areas'].includes(url)
+          ? { estado: 200, cuerpo: [] }
+          : responder(l)
       return new Response(r.cuerpo === undefined ? null : JSON.stringify(r.cuerpo), {
         status: r.estado,
         headers: { 'content-type': 'application/json' },
@@ -145,7 +149,7 @@ describe('rutas', () => {
   it('con sesión, /entrar redirige al inicio', async () => {
     responder = () => ({ estado: 200, cuerpo: usuarioAna })
     abrir('/entrar')
-    expect(await screen.findByRole('heading', { name: 'Hola, Ana' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Mis charters' })).toBeInTheDocument()
   })
 
   it('un login exitoso navega al inicio', async () => {
@@ -156,7 +160,7 @@ describe('rutas', () => {
     await usuario.type(await screen.findByLabelText('Correo'), 'ana@hlingenieros.com')
     await usuario.type(screen.getByLabelText('Clave'), 'clave-segura-1')
     await usuario.click(screen.getByRole('button', { name: 'Entrar' }))
-    expect(await screen.findByRole('heading', { name: 'Hola, Ana' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Mis charters' })).toBeInTheDocument()
   })
 
   it('salir vuelve a /entrar', async () => {

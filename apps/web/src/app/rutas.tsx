@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { Entrar } from '../pantallas/Entrar'
-import { Inicio } from '../pantallas/Inicio'
 import { Muestra } from '../pantallas/Muestra'
+import { Portafolio } from '../pantallas/portafolio/Portafolio'
 import { Registro } from '../pantallas/Registro'
 import { RutaProtegida, SoloInvitado } from './RutaProtegida'
 
@@ -28,7 +28,7 @@ export function Rutas() {
         path="/"
         element={
           <RutaProtegida>
-            <Inicio />
+            <Portafolio />
           </RutaProtegida>
         }
       />

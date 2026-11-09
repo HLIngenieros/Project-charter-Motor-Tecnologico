@@ -2,15 +2,25 @@ import { aDia, aISO } from '@charter/shared'
 
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
 
-/** `'2026-11-09'` → `'9 nov 2026'`, sin pasar por la zona horaria local. */
+/** Una marca ISO (`…T…Z`) pasa a la fecha local; una fecha `YYYY-MM-DD` queda igual. */
+function dia(iso: string): string {
+  return iso.length > 10 ? fechaLocal(new Date(iso)) : iso
+}
+
+function fechaLocal(f: Date): string {
+  const dos = (n: number) => String(n).padStart(2, '0')
+  return `${f.getFullYear()}-${dos(f.getMonth() + 1)}-${dos(f.getDate())}`
+}
+
+/** `'2026-11-09'` → `'9 nov 2026'`; las fechas no pasan por la zona horaria. */
 export function fechaCorta(iso: string): string {
-  const [a, m, d] = aISO(aDia(iso.slice(0, 10))).split('-')
+  const [a, m, d] = aISO(aDia(dia(iso))).split('-')
   return `${Number(d)} ${MESES[Number(m) - 1]} ${a}`
 }
 
 /** Días calendario de `desde` a `hasta` (negativo si `hasta` es anterior). */
 export function diasEntre(desde: string, hasta: string): number {
-  return aDia(hasta.slice(0, 10)) - aDia(desde.slice(0, 10))
+  return aDia(dia(hasta)) - aDia(dia(desde))
 }
 
 /** `0.1251` → `'12,5 %'`. */
@@ -24,9 +34,7 @@ export function porcentaje(fraccion: number, decimales = 1): string {
 
 /** Fecha de hoy en el navegador, `YYYY-MM-DD`. */
 export function hoyISO(): string {
-  const h = new Date()
-  const dos = (n: number) => String(n).padStart(2, '0')
-  return `${h.getFullYear()}-${dos(h.getMonth() + 1)}-${dos(h.getDate())}`
+  return fechaLocal(new Date())
 }
 
 /** «hace un momento», «hace 3 min», «hace 2 h»… para marcas ISO. */

@@ -1,7 +1,7 @@
-/** Indicador de carga de pantalla completa. */
-export function Cargando() {
+/** Indicador de carga; `pantalla` ocupa todo el alto, si no, un bloque. */
+export function Cargando({ pantalla = true }: { pantalla?: boolean }) {
   return (
-    <div role="status" className="grid min-h-dvh place-items-center">
+    <div role="status" className={`grid place-items-center ${pantalla ? 'min-h-dvh' : 'py-20'}`}>
       <span
         aria-hidden
         className="size-6 animate-spin rounded-full border-2 border-institucional border-r-transparent"
