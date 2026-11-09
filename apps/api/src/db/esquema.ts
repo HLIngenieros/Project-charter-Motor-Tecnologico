@@ -1,3 +1,4 @@
+import { ESTADOS_CHARTER, TIPOS_LISTA } from '@charter/shared'
 import {
   type AnySQLiteColumn,
   integer,
@@ -67,8 +68,6 @@ export const area = sqliteTable('area', {
 
 // ── 5.2 Charter ─────────────────────────────────────────────────────────
 
-export const ESTADOS_CHARTER = ['activo', 'pausado', 'cerrado', 'cancelado'] as const
-
 export const charter = sqliteTable(
   'charter',
   {
@@ -103,7 +102,7 @@ const charterId = () =>
 export const itemLista = sqliteTable('item_lista', {
   id: text('id').primaryKey(),
   charterId: charterId(),
-  tipo: text('tipo', { enum: ['objetivo', 'supuesto', 'criterio_exito'] }).notNull(),
+  tipo: text('tipo', { enum: TIPOS_LISTA }).notNull(),
   texto: text('texto').notNull(),
   orden: integer('orden').notNull().default(0),
   ...tiempos,
