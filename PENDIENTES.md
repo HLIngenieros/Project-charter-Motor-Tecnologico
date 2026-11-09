@@ -38,4 +38,4 @@
 
 | Fecha | Tareas | Resumen |
 |---|---|---|
-| 2026-11-09 | T0.1–T0.3 | Repo movido a la raíz, análisis del Excel (hallados doble conteo de pesos y la fila 1.2 mal calculada), README y especificación de cálculos |
+| 2026-11-09 | T0.1–T0.3 | Repo movido a la raíz, análisis del Excel (hallados doble conteo de pesos y la fila 1.2 mal calculada), README y especificación de cálculos. Commit 05596eb |

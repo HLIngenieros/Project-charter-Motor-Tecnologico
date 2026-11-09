@@ -43,6 +43,11 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Stack propuesto: React + Vite + TS + Tailwind / Fastify + Drizzle + SQLite / Zod y motor de cálculo compartidos · Pendiente de aprobar en el spec.
 - 2026-11-09 · Consolidar el avance ponderando sobre las hojas (corrige el doble conteo del Excel) · Claude.
 
+## Estado actual
+
+- Fase 0 terminada (2026-11-09). Próxima: T1.1, brainstorming y spec de pantallas y flujos.
+- Decisiones abiertas: registro libre o por administrador, congelamiento de la línea base y despliegue.
+
 ## Glosario
 
 - **Hoja / agrupadora:** actividad sin hijas (lleva peso, fechas y % real) / con hijas (se calcula).
