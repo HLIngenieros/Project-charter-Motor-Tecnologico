@@ -34,13 +34,15 @@
 - [ ] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts`.
 - [ ] Contraste: los títulos de categoría en su color (p. ej. `#D98A00`) no llegan a 4,5:1. Resolver en el portafolio (T3.2).
 - [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
-- [ ] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) cuando se apruebe la nueva regla de estado.
+- [x] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) con la regla por brecha — 2026-11-09
 - [ ] T5.4: fijar los tonos de amarillo, naranja y vinotinto del semáforo con prueba de contraste.
 - Seguridad y despliegue (helmet, argon2, purga de sesiones, dominio en la web, bundle) quedaron en T8.5; cerrar sesiones al desactivar, en T7.1.
 
 ## Fase 3 · Charter básico
 
-- [ ] T3.1 · API de charters y listas
+Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3) · web base, portafolio y ficha (Tasks 4–6) · listas, estado y cierre (Tasks 7–9).
+
+- [x] T3.1 · API de charters y listas — 2026-11-09
 - [ ] T3.2 · Portafolio
 - [ ] T3.3 · Ficha · Definición
 
@@ -80,7 +82,7 @@
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** 1) plan detallado de la Fase 3 (`docs/planes/fase-3.md`) siguiendo `docs/pantallas.md`; 2) actualizar la demo del semáforo en el resumen visual.
+**Próxima tarea sugerida:** Fase 3, Tasks 4–6 (tokens y cliente web, portafolio y ficha con guardado automático).
 
 ## Registro de sesiones
 
@@ -92,3 +94,4 @@
 | 2026-11-09 | — | Resumen visual de la propuesta publicado como artefacto privado: problema, demo del cálculo con Gantt y curva S, diagrama de arquitectura interactivo (5 escenarios y modo local/servidor), plan por fases y stack. Sin cambios de código |
 | 2026-11-09 | Regla de estado | Semáforo por brecha en puntos (verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50) y estado `vencida` (vinotinto); agrupadoras cuentan sus hojas vencidas. Migración 0001 con umbrales 10/25/50 (corregido el `INSERT` que generó drizzle-kit). 134 pruebas y lint en verde. Commit 03aed49. Instalada la skill Impeccable (global, con hook) para las maquetas |
 | 2026-11-09 | T1.3 | PRODUCT.md (líder de proyecto, éxito = dejar el Excel). Ficha elegida entre tres estructuras: documento vivo. Maquetas de portafolio, ficha (Gantt arrastrable, detalle A–J en línea, impresión A4), registro de corte "solo lo que toca" y vista celular, con port mínimo del motor. Tres rondas de revisión y DESIGN.md. Al aprobar, el usuario pidió la curva S protagonista (animada, con semáforo por corte, brecha, proyección y zoom). Desde ahora, Impeccable austero en validación |
+| 2026-11-09 | T3.1 | Plan de la Fase 3 aprobado (9 tareas, repartidas en tres sesiones). Demo del semáforo del resumen visual con la regla por brecha. API de charters, catálogos y listas con aislamiento, solo lectura de cerrados y catálogos inactivos conservados. Lint excluye `docs/maquetas`. 169 pruebas, lint y build en verde. Commits 94d2fd0, 6ef31c6, eb402c4 |

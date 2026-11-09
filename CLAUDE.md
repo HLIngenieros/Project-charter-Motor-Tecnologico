@@ -40,7 +40,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 | `PRODUCT.md` / `DESIGN.md` | Contexto de producto y sistema visual (Impeccable); `.impeccable/` guarda su configuración y el contrato de dirección |
 | `docs/pantallas.md` y `docs/maquetas/` | Flujos aprobados (T1.3) y maquetas HTML navegables con port mínimo del motor |
 | `packages/shared/` | Motor de cálculo (`src/calculo`) y esquemas Zod (`src/esquemas`); fixture del Excel en `test/fixtures/id-ti.json` |
-| `apps/api/` | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/acceso.ts` (único control de acceso), `cli/admin.ts` |
+| `apps/api/` | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/` (`acceso.ts` = único control de acceso, `servicio.ts`, `rutas.ts`), `modulos/catalogos/`, `cli/admin.ts` |
 | `apps/web/` | React: `componentes/`, `pantallas/`, `app/` (rutas, layout), `api/` (cliente y sesión), `estilos/tokens.css` |
 | `scripts/extraer_fixture.py` | Regenera el fixture desde el Excel |
 
@@ -65,13 +65,15 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Ficha = **documento vivo** en el orden de la hoja ID & TI; cronograma capturado como **Gantt interactivo** (arrastrar barras); corte "solo lo que toca"; portafolio con avance, semáforo, mini curva S y último corte · Usuario.
 - 2026-11-09 · **Curva S protagonista** antes del cronograma: a todo el ancho, animada, con lectura por fecha, semáforo por corte, brecha sombreada y proyección al ritmo actual · Usuario.
 - 2026-11-09 · Acento `#00A9E0` = lo medido en cortes (línea de corte y serie Real), selección y foco · Claude.
+- 2026-11-09 · Fase 3: crear charter con diálogo desde el portafolio (no `/charters/nuevo`); la ficha solo muestra secciones ya construidas; estado y eliminar en un menú de la banda; guardado automático con cola serial; `GET /charters` solo trae los propios, también al Admin · Claude (plan aprobado).
+- 2026-11-09 · Repartir cada fase en sesiones equilibradas · Usuario.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
-- Siguiente sesión: 1) plan detallado de la Fase 3 (`docs/planes/fase-3.md`) siguiendo las maquetas; 2) actualizar la demo del semáforo en el resumen visual (https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC, aún con la regla vieja por días).
-- Fase 3 debe pasar a `tokens.css` los colores del semáforo de las maquetas (amarillo, naranja, vinotinto, `--barra`) y alinear botón/campo con la app (DESIGN.md lista las diferencias).
+- **Fase 3 en curso** con plan en `docs/planes/fase-3.md`, repartida en tres sesiones: API (Tasks 1–3, hechas) · base web, portafolio y ficha (Tasks 4–6, siguiente) · listas, estado y cierre (Tasks 7–9).
+- La Task 4 pasa a `tokens.css` los colores del semáforo (amarillo, naranja, vinotinto, `barra`, `ok-texto`). Botón (40 px) y campo (44 px) ya cumplen DESIGN.md.
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
 ## Comandos
@@ -88,6 +90,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Vite puede quedar con un módulo a medio editar en caché: reiniciar `npm run dev`.
 - Con Playwright, `locator.click()` desplaza la página para centrar el elemento: para medir el scroll usar `element.click()` dentro de `evaluate`.
 - Las maquetas cargan los scripts con `?v=n`: subir el número al cambiarlos, o el navegador muestra la versión en caché.
+- Las pruebas de API usan `sesionDe(app, correo, { admin })` y `crearCharterPrueba` de `test/ayudas.ts`; para ordenar por `actualizado_en`, `pausa()` evita marcas ISO iguales.
+- Prettier puede romper una edición hecha con `sed` sobre líneas que reacomodó: correr Prettier después de editar, no antes.
 - `drizzle-kit generate` en SQLite recrea la tabla y copia **todas** las columnas, incluso las nuevas que no existen en la vieja: revisar el `INSERT … SELECT` de cada migración antes de commitear.
 
 ## Glosario
