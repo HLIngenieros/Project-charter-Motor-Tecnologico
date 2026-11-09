@@ -9,7 +9,7 @@ import {
   type ItemLista,
   type TipoLista,
 } from '@charter/shared'
-import { asc, desc, eq, inArray } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray } from 'drizzle-orm'
 import { v7 } from 'uuid'
 import type { UsuarioSesion } from '../../auth/sesiones'
 import type { BaseDatos } from '../../db/conexion'
@@ -191,4 +191,26 @@ export function editarCharter(db: BaseDatos, fila: FilaCharter, datos: CharterEd
 
 export function eliminarCharter(db: BaseDatos, id: string): void {
   db.delete(charter).where(eq(charter.id, id)).run()
+}
+
+/** Reemplaza la lista completa de un tipo, en el orden recibido, en una transacción. */
+export function reemplazarLista(
+  db: BaseDatos,
+  charterId: string,
+  tipo: TipoLista,
+  items: { texto: string }[],
+): ItemLista[] {
+  const nuevos = items.map((i, orden) => ({ id: v7(), charterId, tipo, texto: i.texto, orden }))
+  db.transaction((tx) => {
+    tx.delete(itemLista)
+      .where(and(eq(itemLista.charterId, charterId), eq(itemLista.tipo, tipo)))
+      .run()
+    if (nuevos.length > 0) tx.insert(itemLista).values(nuevos).run()
+    // Cambiar una lista también cuenta como editar el charter (orden del portafolio).
+    tx.update(charter)
+      .set({ actualizadoEn: new Date().toISOString() })
+      .where(eq(charter.id, charterId))
+      .run()
+  })
+  return nuevos.map(({ id, texto }) => ({ id, texto }))
 }

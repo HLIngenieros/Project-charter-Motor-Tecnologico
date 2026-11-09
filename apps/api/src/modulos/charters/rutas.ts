@@ -1,4 +1,4 @@
-import { charterCrear, charterEditar } from '@charter/shared'
+import { charterCrear, charterEditar, listaEntrada, tipoLista } from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
 import { exigirSesion } from '../../auth/guardas'
 import { cargarCharter } from './acceso'
@@ -8,6 +8,7 @@ import {
   editarCharter,
   eliminarCharter,
   listarMisCharters,
+  reemplazarLista,
 } from './servicio'
 
 interface ConId {
@@ -43,6 +44,13 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
       soloReabre ? 'reapertura' : 'escritura',
     )
     return detalleCharter(db, editarCharter(db, fila, datos), yo)
+  })
+
+  app.put<{ Params: { id: string; tipo: string } }>('/:id/listas/:tipo', async (request) => {
+    const tipo = tipoLista.parse(request.params.tipo)
+    const { items } = listaEntrada.parse(request.body)
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
+    return reemplazarLista(db, fila.id, tipo, items)
   })
 
   app.delete<ConId>('/:id', async (request, reply) => {
