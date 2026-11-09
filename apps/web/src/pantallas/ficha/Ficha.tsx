@@ -1,15 +1,18 @@
-import type { CharterDetalle, CharterEditar } from '@charter/shared'
-import { useCallback } from 'react'
+import type { CharterDetalle, CharterEditar, EstadoCharter } from '@charter/shared'
+import { useQueryClient } from '@tanstack/react-query'
+import { Fragment, useCallback, useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
+import { CLAVES, useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
 import { ErrorCliente } from '../../api/cliente'
+import { CLAVE_SESION, useSesion } from '../../api/sesion'
 import { Layout } from '../../app/Layout'
 import { Aviso } from '../../componentes/Aviso'
 import { Boton } from '../../componentes/Boton'
 import { Cargando } from '../../componentes/Cargando'
 import { BandaEstado } from './BandaEstado'
-import { ContextoGuardado, useColaGuardado } from './colaGuardado'
+import { ContextoGuardado, useColaGuardado, type AlFallar } from './colaGuardado'
 import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFicha'
+import { MenuCharter } from './MenuCharter'
 import { SeccionEncabezado } from './SeccionEncabezado'
 import { SeccionObjetivos } from './SeccionObjetivos'
 import { SeccionRazon } from './SeccionRazon'
@@ -50,7 +53,27 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
   const categorias = useCategorias()
   const areas = useAreas()
   const editar = useEditarCharter(charter.id)
-  const cola = useColaGuardado()
+  const cliente = useQueryClient()
+  const sesion = useSesion()
+  /** Mensaje de la API cuando un guardado chocó con un charter ya cerrado. */
+  const [rechazo, setRechazo] = useState<string>()
+
+  const alFallar = useCallback<AlFallar>(
+    (error) => {
+      if (error.estado === 401) {
+        cliente.setQueryData(CLAVE_SESION, null)
+        return true
+      }
+      if (error.estado === 409 && error.codigo === 'charter_cerrado') {
+        setRechazo(error.message)
+        void cliente.invalidateQueries({ queryKey: CLAVES.charter(charter.id) })
+        return true
+      }
+      return false
+    },
+    [cliente, charter.id],
+  )
+  const cola = useColaGuardado(alFallar)
   const { encolar } = cola
   const { mutateAsync } = editar
 
@@ -60,29 +83,79 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
         encolar(() => mutateAsync({ [campo]: valor } as CharterEditar)),
     [encolar, mutateAsync],
   )
+  const cambiarEstado = useCallback(
+    (estado: EstadoCharter) => {
+      setRechazo(undefined)
+      encolar(() => mutateAsync({ estado }))
+    },
+    [encolar, mutateAsync],
+  )
   const soloLectura = !charter.permisos.editar
+  const esDueno = sesion.data?.id === charter.propietario.id
+  const aviso = !esDueno ? (
+    <Aviso>Charter de {charter.propietario.nombre} · solo lectura</Aviso>
+  ) : charter.permisos.reabrir ? (
+    <Aviso tono={rechazo ? 'alerta' : 'info'}>
+      <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>
+          {rechazo && <span className="block">{rechazo}</span>}
+          Este charter está {charter.estado === 'cancelado' ? 'cancelado' : 'cerrado'}.
+        </span>
+        <button
+          type="button"
+          onClick={() => cambiarEstado('activo')}
+          className="rounded-sm font-semibold underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
+        >
+          Reabrir
+        </button>
+      </span>
+    </Aviso>
+  ) : rechazo ? (
+    <Aviso tono="alerta">{rechazo}</Aviso>
+  ) : null
 
   return (
     <ContextoGuardado.Provider value={cola}>
-      <Layout ancho="ficha" arriba={<BandaEstado nombre={charter.nombre} />}>
+      <Layout
+        ancho="ficha"
+        arriba={
+          <BandaEstado
+            nombre={charter.nombre}
+            acciones={
+              esDueno && (
+                <MenuCharter
+                  charterId={charter.id}
+                  nombre={charter.nombre}
+                  estado={charter.estado}
+                  cambiarEstado={cambiarEstado}
+                />
+              )
+            }
+          />
+        }
+      >
         <div className="grid gap-8 lg:grid-cols-[216px_minmax(0,1fr)]">
           <IndiceFicha secciones={secciones(charter)} />
           <article className="flex min-w-0 flex-col gap-8 rounded-tarjeta border border-linea bg-superficie px-10 pt-7.5 pb-11 max-lg:-mx-4 max-lg:rounded-none max-lg:border-x-0 max-lg:px-4 max-lg:pt-6 max-lg:pb-8 max-sm:gap-9">
+            {aviso}
             <EstadoGuardadoMovil />
-            <SeccionEncabezado
-              charter={charter}
-              categorias={categorias.data ?? []}
-              areas={areas.data ?? []}
-              guardar={guardar}
-              soloLectura={soloLectura}
-            />
-            <SeccionRazon
-              charter={charter}
-              guardar={guardar}
-              soloLectura={soloLectura}
-              derecha={<SeccionObjetivos charter={charter} soloLectura={soloLectura} />}
-            />
-            <SeccionSupuestos charter={charter} soloLectura={soloLectura} />
+            {/* Al pasar a solo lectura o volver, los campos se rehacen desde los datos de la API. */}
+            <Fragment key={soloLectura ? 'lectura' : 'edicion'}>
+              <SeccionEncabezado
+                charter={charter}
+                categorias={categorias.data ?? []}
+                areas={areas.data ?? []}
+                guardar={guardar}
+                soloLectura={soloLectura}
+              />
+              <SeccionRazon
+                charter={charter}
+                guardar={guardar}
+                soloLectura={soloLectura}
+                derecha={<SeccionObjetivos charter={charter} soloLectura={soloLectura} />}
+              />
+              <SeccionSupuestos charter={charter} soloLectura={soloLectura} />
+            </Fragment>
           </article>
         </div>
       </Layout>

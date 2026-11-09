@@ -25,11 +25,18 @@ function avisarAlSalir(e: BeforeUnloadEvent) {
 }
 
 /**
+ * Decide qué hacer con un error de guardado. Si lo atiende (devuelve `true`), la cola
+ * descarta lo pendiente y sigue disponible; si no, se detiene hasta `reintentar`.
+ */
+export type AlFallar = (error: ErrorCliente) => boolean
+
+/**
  * Cola serial de guardados: corre las tareas de una en una y en orden, así el último
  * valor siempre llega de último. Si una falla, la cola se detiene (sin perder las
- * siguientes) hasta `reintentar`. Mientras haya trabajo pendiente pide confirmar al salir.
+ * siguientes) hasta `reintentar`, salvo que `alFallar` atienda el error. Mientras haya
+ * trabajo pendiente pide confirmar al salir.
  */
-export function useColaGuardado(): ColaGuardado {
+export function useColaGuardado(alFallar?: AlFallar): ColaGuardado {
   const pendientes = useRef<(() => Promise<unknown>)[]>([])
   const corriendo = useRef(false)
   const detenida = useRef(false)
@@ -37,6 +44,10 @@ export function useColaGuardado(): ColaGuardado {
   const [ultimoGuardado, setUltimoGuardado] = useState<string | null>(null)
   const [error, setError] = useState<ErrorCliente | null>(null)
   const [hayPendientes, setHayPendientes] = useState(false)
+  const atender = useRef(alFallar)
+  useEffect(() => {
+    atender.current = alFallar
+  })
 
   const avanzar = useCallback(async () => {
     if (corriendo.current || detenida.current) return
@@ -48,9 +59,16 @@ export function useColaGuardado(): ColaGuardado {
         await pendientes.current[0]!()
         pendientes.current.shift()
       } catch (e) {
+        const error = comoErrorCliente(e)
         corriendo.current = false
+        if (atender.current?.(error)) {
+          pendientes.current = []
+          setHayPendientes(false)
+          setEstado('guardado')
+          return
+        }
         detenida.current = true
-        setError(comoErrorCliente(e))
+        setError(error)
         setEstado('error')
         return
       }
