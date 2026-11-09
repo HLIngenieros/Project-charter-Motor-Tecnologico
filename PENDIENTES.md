@@ -44,7 +44,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 
 - [x] T3.1 · API de charters y listas — 2026-11-09
 - [x] T3.2 · Portafolio — 2026-11-09
-- [~] T3.3 · Ficha · Definición · hechos encabezado, razón de ser y guardado automático; faltan listas, estado y eliminar (Tasks 7–8)
+- [x] T3.3 · Ficha · Definición (encabezado, razón de ser, listas ordenables, estado, solo lectura y eliminar) — 2026-11-09
 
 ## Fase 4 · Cronograma y cortes
 
@@ -82,7 +82,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** Fase 3, Tasks 7–9 (listas ordenables, estado del charter y eliminar, cierre de la fase con capturas).
+**Próxima tarea sugerida:** Fase 4. Antes del `PUT` del cronograma (T4.1), los dos ajustes del motor pendientes de la revisión de la Fase 2 (`pct` no numérico y `id_duplicado`). Después, plan detallado `docs/planes/fase-4.md`.
 
 ## Registro de sesiones
 
@@ -96,3 +96,4 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 | 2026-11-09 | T1.3 | PRODUCT.md (líder de proyecto, éxito = dejar el Excel). Ficha elegida entre tres estructuras: documento vivo. Maquetas de portafolio, ficha (Gantt arrastrable, detalle A–J en línea, impresión A4), registro de corte "solo lo que toca" y vista celular, con port mínimo del motor. Tres rondas de revisión y DESIGN.md. Al aprobar, el usuario pidió la curva S protagonista (animada, con semáforo por corte, brecha, proyección y zoom). Desde ahora, Impeccable austero en validación |
 | 2026-11-09 | T3.1 | Plan de la Fase 3 aprobado (9 tareas, repartidas en tres sesiones). Demo del semáforo del resumen visual con la regla por brecha. API de charters, catálogos y listas con aislamiento, solo lectura de cerrados y catálogos inactivos conservados. Lint excluye `docs/maquetas`. 169 pruebas, lint y build en verde. Commits 94d2fd0, 6ef31c6, eb402c4 |
 | 2026-11-09 | T3.2, T3.3 (parcial) | Fase 3, Tasks 4–6: tokens del semáforo, chips, formato es-CO, cliente de charters y aviso de conexión; portafolio con filtros en la URL, estados vacíos y diálogo de nuevo charter; ficha con banda fija, índice, edición en su sitio y cola de guardado serial (reintentar y aviso al cerrar). Sin semáforo ni curva en el portafolio hasta T5.5. 44 pruebas web, tipos, lint y build en verde. Commits 763ba0f, d8a46c1, 3e529e8. Revisado también el uso de agentes y del plugin superpowers: el usuario decidió no cambiar la configuración por ahora |
+| 2026-11-09 | T3.3, cierre Fase 3 | Tasks 7–9: listas ordenables (teclado, botones y animación de Motion) para objetivos, supuestos y criterios, con contadores en el índice; menú de estado en la banda (cerrar y cancelar con confirmación), solo lectura con «Reabrir», vista de Admin y eliminar; la cola atiende 401 (a `/entrar`) y 409 `charter_cerrado` (solo lectura con el mensaje). Recorrido en el navegador a 1440 y 390 px: corregidos íconos SVG sin `<svg>` y el ícono apilado en `Boton` (preflight pone `svg` en bloque). 210 pruebas (84 shared · 68 API · 58 web), lint y build en verde. Commits 2cf872b, aa678da y cierre |

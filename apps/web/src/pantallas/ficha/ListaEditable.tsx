@@ -72,7 +72,7 @@ function BotonIcono({
       onClick={alPulsar}
       className="grid size-7 place-items-center rounded-control text-texto-2 transition-colors duration-150 hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento disabled:pointer-events-none disabled:opacity-35"
     >
-      {children}
+      <Icono>{children}</Icono>
     </button>
   )
 }

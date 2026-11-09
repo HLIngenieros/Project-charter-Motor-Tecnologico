@@ -42,7 +42,9 @@ export function Boton({
       ].join(' ')}
       {...props}
     >
-      <span className={cargando ? 'invisible' : undefined}>{children}</span>
+      <span className={`inline-flex items-center gap-2 ${cargando ? 'invisible' : ''}`}>
+        {children}
+      </span>
       {cargando && (
         <span className="absolute inset-0 flex items-center justify-center">
           <span

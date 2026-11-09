@@ -73,8 +73,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
-- **Fase 3 en curso** con plan en `docs/planes/fase-3.md`, repartida en tres sesiones: API (Tasks 1–3) y web base, portafolio y ficha (Tasks 4–6), hechas · listas, estado y cierre (Tasks 7–9), siguiente.
-- La ficha guarda con `useColaGuardado` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`); las Tasks 7 y 8 deben encolar por ahí. `SECCIONES` en `Ficha.tsx` lista solo las secciones construidas; la Task 7 pasa los objetivos específicos a la columna derecha de «Razón de ser», como en la maqueta.
+- **Fase 3 cerrada (2026-11-09).** Siguiente: Fase 4 (cronograma y cortes), empezando por los ajustes del motor pendientes y su plan detallado.
+- La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
 - Pruebas web: `test/simular-api.ts` simula `fetch` (la sesión de Ana va por defecto).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
@@ -100,6 +100,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - El estado `isPending` de una mutación llega un render tarde: para evitar el doble envío, usar un `ref`.
 - Testing Library: `getByLabelText` también encuentra contenedores con `aria-labelledby`; no etiquetar una sección con el mismo texto que su campo.
 - Tailwind: nada de clases armadas con plantillas ni `bg-[url(...)]` con comillas; la flecha del `select` va en `style` (`FLECHA` de `Selector.tsx`).
+- El preflight de Tailwind pone `svg` en `display: block`: un ícono junto a texto necesita un contenedor flex (`Boton` ya lo trae). Un `<path>` suelto fuera de `<svg>` solo se nota en la consola («tag unrecognized»): revisarla en la ronda de navegador.
+- Reordenar nodos con React (`insertBefore`) les quita el foco: tras mover, reenfocar explícitamente (ver `ListaEditable`).
 
 ## Glosario
 

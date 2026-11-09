@@ -41,16 +41,17 @@ Entrar / Registro  (ya construidas, Fase 2)
 - **Índice lateral** con contadores y la sección visible marcada; abajo, «Guardado hace un momento» (guardado automático).
 - **Hoja** en el orden del Excel:
   1. Encabezado: nombre, ficha de 4 celdas (responsable, patrocinador, categoría, revisión).
-  2. Razón de ser y objetivo general (a dos columnas).
-  3. Objetivos específicos (lista numerada, «+ Agregar objetivo»).
-  4. **Curva S** (ver abajo), a todo el ancho de la hoja.
-  5. **Cronograma** (ver abajo).
-  6. Supuestos y criterios de éxito.
-  7. Indicadores: fórmula, meta y medición frente a la meta.
-  8. Riesgos: riesgo, causa, mitigación.
-  9. Presupuesto: rubros y total.
-  10. Historial de cortes: tabla con fecha, estado, planeado, real y nota.
+  2. Razón de ser y objetivo general (columna izquierda) con los objetivos específicos a la derecha (lista numerada, «+ Agregar objetivo»).
+  3. **Curva S** (ver abajo), a todo el ancho de la hoja.
+  4. **Cronograma** (ver abajo).
+  5. Supuestos y criterios de éxito.
+  6. Indicadores: fórmula, meta y medición frente a la meta.
+  7. Riesgos: riesgo, causa, mitigación.
+  8. Presupuesto: rubros y total.
+  9. Historial de cortes: tabla con fecha, estado, planeado, real y nota.
 - Los textos se editan en su sitio (resaltado al pasar, borde de foco al editar).
+- **Listas** (objetivos, supuestos, criterios): Enter al final crea un ítem debajo, Retroceso en uno vacío lo quita, Alt + ↑/↓ lo mueve; botones Subir, Bajar y Quitar al pasar o con foco (siempre visibles en pantallas táctiles). Un ítem que queda vacío desaparece al salir.
+- **Estado del charter** (construido en la Fase 3): botón con el estado en la banda que abre un menú con Activo, Pausado, Cerrado, Cancelado y «Eliminar charter…». Cerrar o cancelar pide confirmación y deja la ficha en solo lectura con un aviso y «Reabrir». El Admin ve los charters ajenos con «Charter de {nombre} · solo lectura» y sin menú.
 
 ### Curva S protagonista
 
