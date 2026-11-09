@@ -31,8 +31,8 @@
 - [ ] Límite de intentos por IP también en `POST /auth/registro`.
 - [ ] Motor: `pct` no numérico se trata como 0 (hoy lanza) y `construirArbol` rechaza ids repetidos (`id_duplicado`). Hacerlo antes del `PUT` del cronograma (T4.1).
 - [ ] La prueba de zona horaria debe verificar que `TZ` sí se aplicó (hoy no podría fallar).
-- [ ] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts`.
-- [ ] Contraste: los títulos de categoría en su color (p. ej. `#D98A00`) no llegan a 4,5:1. Resolver en el portafolio (T3.2).
+- [x] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts` — 2026-11-09
+- [x] Contraste: el color de la categoría solo va en el punto y el fondo del chip; el texto es `tinta` (T3.2) — 2026-11-09
 - [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
 - [x] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) con la regla por brecha — 2026-11-09
 - [ ] T5.4: fijar los tonos de amarillo, naranja y vinotinto del semáforo con prueba de contraste.
@@ -43,8 +43,8 @@
 Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3) · web base, portafolio y ficha (Tasks 4–6) · listas, estado y cierre (Tasks 7–9).
 
 - [x] T3.1 · API de charters y listas — 2026-11-09
-- [ ] T3.2 · Portafolio
-- [ ] T3.3 · Ficha · Definición
+- [x] T3.2 · Portafolio — 2026-11-09
+- [~] T3.3 · Ficha · Definición · hechos encabezado, razón de ser y guardado automático; faltan listas, estado y eliminar (Tasks 7–8)
 
 ## Fase 4 · Cronograma y cortes
 
@@ -82,7 +82,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** Fase 3, Tasks 4–6 (tokens y cliente web, portafolio y ficha con guardado automático).
+**Próxima tarea sugerida:** Fase 3, Tasks 7–9 (listas ordenables, estado del charter y eliminar, cierre de la fase con capturas).
 
 ## Registro de sesiones
 
@@ -95,3 +95,4 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 | 2026-11-09 | Regla de estado | Semáforo por brecha en puntos (verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50) y estado `vencida` (vinotinto); agrupadoras cuentan sus hojas vencidas. Migración 0001 con umbrales 10/25/50 (corregido el `INSERT` que generó drizzle-kit). 134 pruebas y lint en verde. Commit 03aed49. Instalada la skill Impeccable (global, con hook) para las maquetas |
 | 2026-11-09 | T1.3 | PRODUCT.md (líder de proyecto, éxito = dejar el Excel). Ficha elegida entre tres estructuras: documento vivo. Maquetas de portafolio, ficha (Gantt arrastrable, detalle A–J en línea, impresión A4), registro de corte "solo lo que toca" y vista celular, con port mínimo del motor. Tres rondas de revisión y DESIGN.md. Al aprobar, el usuario pidió la curva S protagonista (animada, con semáforo por corte, brecha, proyección y zoom). Desde ahora, Impeccable austero en validación |
 | 2026-11-09 | T3.1 | Plan de la Fase 3 aprobado (9 tareas, repartidas en tres sesiones). Demo del semáforo del resumen visual con la regla por brecha. API de charters, catálogos y listas con aislamiento, solo lectura de cerrados y catálogos inactivos conservados. Lint excluye `docs/maquetas`. 169 pruebas, lint y build en verde. Commits 94d2fd0, 6ef31c6, eb402c4 |
+| 2026-11-09 | T3.2, T3.3 (parcial) | Fase 3, Tasks 4–6: tokens del semáforo, chips, formato es-CO, cliente de charters y aviso de conexión; portafolio con filtros en la URL, estados vacíos y diálogo de nuevo charter; ficha con banda fija, índice, edición en su sitio y cola de guardado serial (reintentar y aviso al cerrar). Sin semáforo ni curva en el portafolio hasta T5.5. 44 pruebas web, tipos, lint y build en verde. Commits 763ba0f, d8a46c1, 3e529e8. Revisado también el uso de agentes y del plugin superpowers: el usuario decidió no cambiar la configuración por ahora |

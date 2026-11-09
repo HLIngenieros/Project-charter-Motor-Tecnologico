@@ -67,13 +67,15 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Acento `#00A9E0` = lo medido en cortes (línea de corte y serie Real), selección y foco · Claude.
 - 2026-11-09 · Fase 3: crear charter con diálogo desde el portafolio (no `/charters/nuevo`); la ficha solo muestra secciones ya construidas; estado y eliminar en un menú de la banda; guardado automático con cola serial; `GET /charters` solo trae los propios, también al Admin · Claude (plan aprobado).
 - 2026-11-09 · Repartir cada fase en sesiones equilibradas · Usuario.
+- 2026-11-09 · Portafolio: con corte, estado vacío y barra neutra hasta T5.5; sin corte, «editado el …» (el resumen no trae `creadoEn`). En celular el estado de guardado se ve sobre la hoja para poder reintentar · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
-- **Fase 3 en curso** con plan en `docs/planes/fase-3.md`, repartida en tres sesiones: API (Tasks 1–3, hechas) · base web, portafolio y ficha (Tasks 4–6, siguiente) · listas, estado y cierre (Tasks 7–9).
-- La Task 4 pasa a `tokens.css` los colores del semáforo (amarillo, naranja, vinotinto, `barra`, `ok-texto`). Botón (40 px) y campo (44 px) ya cumplen DESIGN.md.
+- **Fase 3 en curso** con plan en `docs/planes/fase-3.md`, repartida en tres sesiones: API (Tasks 1–3) y web base, portafolio y ficha (Tasks 4–6), hechas · listas, estado y cierre (Tasks 7–9), siguiente.
+- La ficha guarda con `useColaGuardado` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`); las Tasks 7 y 8 deben encolar por ahí. `SECCIONES` en `Ficha.tsx` lista solo las secciones construidas; la Task 7 pasa los objetivos específicos a la columna derecha de «Razón de ser», como en la maqueta.
+- Pruebas web: `test/simular-api.ts` simula `fetch` (la sesión de Ana va por defecto).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
 ## Comandos
@@ -93,6 +95,11 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Las pruebas de API usan `sesionDe(app, correo, { admin })` y `crearCharterPrueba` de `test/ayudas.ts`; para ordenar por `actualizado_en`, `pausa()` evita marcas ISO iguales.
 - Prettier puede romper una edición hecha con `sed` sobre líneas que reacomodó: correr Prettier después de editar, no antes.
 - `drizzle-kit generate` en SQLite recrea la tabla y copia **todas** las columnas, incluso las nuevas que no existen en la vieja: revisar el `INSERT … SELECT` de cada migración antes de commitear.
+
+- Un campo editable no adopta el valor de la API mientras su propio envío va en camino; si no, una respuesta vieja pisa lo último escrito.
+- El estado `isPending` de una mutación llega un render tarde: para evitar el doble envío, usar un `ref`.
+- Testing Library: `getByLabelText` también encuentra contenedores con `aria-labelledby`; no etiquetar una sección con el mismo texto que su campo.
+- Tailwind: nada de clases armadas con plantillas ni `bg-[url(...)]` con comillas; la flecha del `select` va en `style` (`FLECHA` de `Selector.tsx`).
 
 ## Glosario
 
