@@ -2,7 +2,14 @@ import { aDia, aISO } from './fechas'
 import type { FechaISO, NodoArbol } from './tipos'
 
 export type Estado =
-  'sin_programar' | 'por_iniciar' | 'terminada' | 'al_dia' | 'en_atencion' | 'atrasada'
+  | 'sin_programar'
+  | 'terminada'
+  | 'vencida'
+  | 'por_iniciar'
+  | 'al_dia'
+  | 'en_atencion'
+  | 'en_riesgo'
+  | 'atrasada'
 
 export interface AvanceHoja {
   /** Avance real, fracción 0–1. */
@@ -13,13 +20,17 @@ export interface AvanceHoja {
 
 export type AvancesPorHoja = Record<string, AvanceHoja>
 
-/** Umbrales de desviación en días (negativos = atraso). */
+/**
+ * Umbrales de brecha (planeado − real) en puntos porcentuales: desde `atencion` es amarillo,
+ * desde `riesgo` naranja y desde `atraso` rojo.
+ */
 export interface Umbrales {
   atencion: number
+  riesgo: number
   atraso: number
 }
 
-export const UMBRALES_POR_DEFECTO: Umbrales = { atencion: -3, atraso: -10 }
+export const UMBRALES_POR_DEFECTO: Umbrales = { atencion: 10, riesgo: 25, atraso: 50 }
 
 export interface ResultadoNodo {
   id: string
@@ -35,6 +46,8 @@ export interface ResultadoNodo {
   forecast: FechaISO | null
   estado: Estado
   adelantada: boolean
+  /** Hojas vencidas bajo el nodo (en una hoja, 1 si ella misma lo está). */
+  vencidas: number
 }
 
 export interface ResultadoCronograma {
@@ -53,6 +66,7 @@ interface Acumulado {
   ini: number
   fin: number
   forecast: number
+  vencidas: number
 }
 
 const VACIO: Acumulado = {
@@ -62,6 +76,7 @@ const VACIO: Acumulado = {
   ini: Infinity,
   fin: -Infinity,
   forecast: -Infinity,
+  vencidas: 0,
 }
 
 const recortar = (x: number) => Math.min(1, Math.max(0, x))
@@ -74,14 +89,19 @@ function combinar(a: Acumulado, b: Acumulado): Acumulado {
     ini: Math.min(a.ini, b.ini),
     fin: Math.max(a.fin, b.fin),
     forecast: Math.max(a.forecast, b.forecast),
+    vencidas: a.vencidas + b.vencidas,
   }
 }
 
-function estadoDe(pv: number, ev: number, desv: number, u: Umbrales): Estado {
+/** Estado del semáforo (spec §4.4): gana la primera condición que se cumpla. */
+function estadoDe(pv: number, ev: number, t: number, fin: number, u: Umbrales): Estado {
   if (ev >= 1 - EPS) return 'terminada'
+  if (t > fin) return 'vencida'
   if (pv === 0 && ev === 0) return 'por_iniciar'
-  if (desv >= u.atencion) return 'al_dia'
-  if (desv >= u.atraso) return 'en_atencion'
+  const brecha = (pv - ev) * 100 + EPS
+  if (brecha < u.atencion) return 'al_dia'
+  if (brecha < u.riesgo) return 'en_atencion'
+  if (brecha < u.atraso) return 'en_riesgo'
   return 'atrasada'
 }
 
@@ -100,12 +120,19 @@ function sinProgramar(id: string, item: string, extra: Partial<ResultadoNodo> = 
     forecast: null,
     estado: 'sin_programar',
     adelantada: false,
+    vencidas: 0,
     ...extra,
   }
 }
 
 /** Resultado de un nodo a partir del acumulado de sus hojas programadas. */
-function resultadoDe(id: string, item: string, acc: Acumulado, u: Umbrales): ResultadoNodo {
+function resultadoDe(
+  id: string,
+  item: string,
+  acc: Acumulado,
+  t: number,
+  u: Umbrales,
+): ResultadoNodo {
   if (acc.peso <= 0) return sinProgramar(id, item)
   const dur = acc.fin - acc.ini + 1
   const pv = acc.pesoPv / acc.peso
@@ -123,8 +150,9 @@ function resultadoDe(id: string, item: string, acc: Acumulado, u: Umbrales): Res
     desv,
     spi: pv > 0 ? ev / pv : null,
     forecast: aISO(acc.forecast),
-    estado: estadoDe(pv, ev, desv, u),
+    estado: estadoDe(pv, ev, t, acc.fin, u),
     adelantada: desv > 0,
+    vencidas: acc.vencidas,
   }
 }
 
@@ -167,6 +195,8 @@ export function calcularCronograma(
           : t
         : Math.max(t, fin - Math.round(desv))
 
+    const estado = estadoDe(pv, ev, t, fin, umbrales)
+    const vencidas = estado === 'vencida' ? 1 : 0
     nodos[n.id] = {
       id: n.id,
       item: n.item,
@@ -179,19 +209,20 @@ export function calcularCronograma(
       desv,
       spi: pv > 0 ? ev / pv : null,
       forecast: aISO(forecast),
-      estado: estadoDe(pv, ev, desv, umbrales),
+      estado,
       adelantada: desv > 0,
+      vencidas,
     }
-    return { peso, pesoPv: peso * pv, pesoEv: peso * ev, ini, fin, forecast }
+    return { peso, pesoPv: peso * pv, pesoEv: peso * ev, ini, fin, forecast, vencidas }
   }
 
   const visitar = (n: NodoArbol): Acumulado => {
     if (n.esHoja) return hoja(n)
     const acc = n.hijos.map(visitar).reduce(combinar, VACIO)
-    nodos[n.id] = resultadoDe(n.id, n.item, acc, umbrales)
+    nodos[n.id] = resultadoDe(n.id, n.item, acc, t, umbrales)
     return acc
   }
 
   const total = raices.map(visitar).reduce(combinar, VACIO)
-  return { proyecto: resultadoDe('proyecto', '', total, umbrales), nodos }
+  return { proyecto: resultadoDe('proyecto', '', total, t, umbrales), nodos }
 }

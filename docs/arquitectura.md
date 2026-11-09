@@ -103,7 +103,7 @@ Convenciones: identificadores `TEXT` con UUID v7 *(criterio técnico: ordenables
 
 | Tabla | Campos |
 |---|---|
-| `charter` | id, propietario_id, nombre, codigo (opcional, ej. "A1"), categoria_id?, area_id?, responsable, patrocinador, revision, razon_de_ser, objetivo_general, estado (`activo` · `pausado` · `cerrado` · `cancelado`), umbral_atencion (−3), umbral_atraso (−10) |
+| `charter` | id, propietario_id, nombre, codigo (opcional, ej. "A1"), categoria_id?, area_id?, responsable, patrocinador, revision, razon_de_ser, objetivo_general, estado (`activo` · `pausado` · `cerrado` · `cancelado`), umbral_atencion (10), umbral_riesgo (25), umbral_atraso (50) — puntos de brecha, §4.4 del análisis |
 | `item_lista` | id, charter_id, tipo (`objetivo` · `supuesto` · `criterio_exito`), texto, orden |
 | `riesgo` | id, charter_id, riesgo, causa, mitigacion, orden |
 | `indicador` | id, charter_id, nombre, formula, meta_operador (`>=` · `<=` · `=`), meta_valor, meta_unidad, observaciones, orden |

@@ -155,7 +155,7 @@
 - Hoja **sin programar**: sin `inicio`, sin `fin` o con `peso` nulo o 0. Queda fuera de toda suma; su resultado lleva `pv = ev = desv = 0`, `spi = null` y `forecast = null`.
 - Hoja: `dur = fin − ini + 1`; `pv = clamp((t − ini + 1) / dur, 0, 1)`; `ev = clamp(avances[id]?.pct ?? 0, 0, 1)`; `desv = (ev − pv) × dur`; `spi = pv > 0 ? ev / pv : null`. El `forecast`: si `ev ≥ 1`, `terminadaEn ?? fecha`; si no, `max(t, fin − round(desv))`.
 - Agrupadora y proyecto, sobre sus hojas programadas: `peso = Σ`, `inicio = min`, `fin = max`, `pv` y `ev` ponderados por peso, `desv = (ev − pv) × dur` con su propia `dur`, y `forecast` = máximo de las hojas. Sin hojas programadas → `sin_programar`, con todo en 0 o `null`.
-- Estado, en este orden: sin_programar → `terminada` (`ev ≥ 1`) → `por_iniciar` (`pv = 0` y `ev = 0`) → `al_dia` (`desv ≥ atencion`) → `en_atencion` (`desv ≥ atraso`) → `atrasada`. `adelantada = desv > 0`.
+- Estado, en este orden: sin_programar → `terminada` (`ev ≥ 1`) → `por_iniciar` (`pv = 0` y `ev = 0`) → `al_dia` (`desv ≥ atencion`) → `en_atencion` (`desv ≥ atraso`) → `atrasada`. `adelantada = desv > 0`. *(Reemplazada el 2026-11-09 por la regla de brecha en puntos con estado `vencida`: ver §4.4 del análisis.)*
 
 - [ ] **Step 1: Pruebas que fallan** (`cronograma.test.ts`):
   - Hoja 2025-03-01 a 2025-03-10, corte 2025-03-05, pct 0,3 → `pv = 0.5`, `desv = -2`, estado `al_dia`, `forecast = '2025-03-12'`.

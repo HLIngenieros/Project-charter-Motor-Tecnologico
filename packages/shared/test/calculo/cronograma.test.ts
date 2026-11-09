@@ -28,32 +28,51 @@ function sinNumerosRaros(n: ResultadoNodo) {
 }
 
 describe('calcularCronograma · hoja', () => {
-  it('a mitad de plazo con 30 % real está al día', () => {
+  it('a mitad de plazo con 30 % real: 20 puntos de brecha, en atención', () => {
     const h = unaHoja('2025-03-05', 0.3).nodos.h!
     expect(h.dur).toBe(10)
     expect(h.pv).toBeCloseTo(0.5, 12)
     expect(h.ev).toBeCloseTo(0.3, 12)
     expect(h.desv).toBeCloseTo(-2, 12)
     expect(h.spi).toBeCloseTo(0.6, 12)
-    expect(h.estado).toBe('al_dia')
+    expect(h.estado).toBe('en_atencion')
     expect(h.adelantada).toBe(false)
+    expect(h.vencidas).toBe(0)
     expect(h.forecast).toBe('2025-03-12')
   })
 
-  it('sin avance y casi al final queda en atención', () => {
-    const h = unaHoja('2025-03-09', 0).nodos.h!
-    expect(h.pv).toBeCloseTo(0.9, 12)
-    expect(h.desv).toBeCloseTo(-9, 12)
-    expect(h.estado).toBe('en_atencion')
+  it('el color sale de la brecha en puntos, con los cortes 10 / 25 / 50 incluidos', () => {
+    const estado = (pct: number) => unaHoja('2025-03-05', pct).nodos.h!.estado // pv = 50 %
+    expect(estado(0.45)).toBe('al_dia') // 5
+    expect(estado(0.41)).toBe('al_dia') // 9
+    expect(estado(0.4)).toBe('en_atencion') // 10
+    expect(estado(0.26)).toBe('en_atencion') // 24
+    expect(estado(0.25)).toBe('en_riesgo') // 25
+    expect(estado(0.01)).toBe('en_riesgo') // 49
+    expect(estado(0)).toBe('atrasada') // 50
+    expect(estado(0.7)).toBe('al_dia') // adelantada
   })
 
-  it('con -10 días sigue en atención y con umbral -9 queda atrasada', () => {
-    const h = unaHoja('2025-03-10', 0).nodos.h!
-    expect(h.desv).toBeCloseTo(-10, 12)
-    expect(h.estado).toBe('en_atencion')
-    const r = calcularCronograma(construirArbol([hoja('h')]), { h: { pct: 0 } }, '2025-03-10', {
-      atencion: -3,
-      atraso: -9,
+  it('una hoja corta muy atrasada ya no queda al día (60 % planeado, 20 % real)', () => {
+    const h = unaHoja('2025-03-06', 0.2).nodos.h!
+    expect(h.pv).toBeCloseTo(0.6, 12)
+    expect(h.desv).toBeCloseTo(-4, 12)
+    expect(h.estado).toBe('en_riesgo')
+  })
+
+  it('después del fin y sin el 100 % queda vencida, aunque le falte muy poco', () => {
+    expect(unaHoja('2025-03-10', 0.999).nodos.h!.estado).toBe('al_dia')
+    const h = unaHoja('2025-03-11', 0.999).nodos.h!
+    expect(h.estado).toBe('vencida')
+    expect(h.vencidas).toBe(1)
+    expect(unaHoja('2025-03-11', 1).nodos.h!.estado).toBe('terminada')
+  })
+
+  it('respeta umbrales propios del charter', () => {
+    const r = calcularCronograma(construirArbol([hoja('h')]), { h: { pct: 0.3 } }, '2025-03-05', {
+      atencion: 5,
+      riesgo: 10,
+      atraso: 20,
     })
     expect(r.nodos.h!.estado).toBe('atrasada')
   })
@@ -107,6 +126,30 @@ describe('calcularCronograma · agrupadora', () => {
     expect(r.proyecto.id).toBe('proyecto')
     expect(r.proyecto.item).toBe('')
     expect(r.proyecto.pv).toBeCloseTo(g.pv, 12)
+  })
+
+  it('cuenta las hojas vencidas aunque la agrupadora siga en plazo', () => {
+    const raices = construirArbol([
+      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      hoja('a', { padreId: 'g', orden: 1 }),
+      hoja('b', { padreId: 'g', orden: 2, inicio: '2025-03-01', fin: '2025-03-31' }),
+    ])
+    const r = calcularCronograma(raices, { a: { pct: 0.9 }, b: { pct: 0.5 } }, '2025-03-15')
+    expect(r.nodos.a!.estado).toBe('vencida')
+    expect(r.nodos.g!.estado).not.toBe('vencida')
+    expect(r.nodos.g!.vencidas).toBe(1)
+    expect(r.proyecto.vencidas).toBe(1)
+  })
+
+  it('la agrupadora queda vencida si se pasó su propio fin', () => {
+    const raices = construirArbol([
+      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      hoja('a', { padreId: 'g', orden: 1 }),
+      hoja('b', { padreId: 'g', orden: 2 }),
+    ])
+    const r = calcularCronograma(raices, { a: { pct: 1 }, b: { pct: 0.8 } }, '2025-03-12')
+    expect(r.nodos.g!.estado).toBe('vencida')
+    expect(r.nodos.g!.vencidas).toBe(1)
   })
 })
 

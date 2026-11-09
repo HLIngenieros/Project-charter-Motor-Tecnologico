@@ -8,6 +8,13 @@
       "when": 1794238689383,
       "tag": "0000_inicial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794251197289,
+      "tag": "0001_umbrales_por_brecha",
+      "breakpoints": true
     }
   ]
 }

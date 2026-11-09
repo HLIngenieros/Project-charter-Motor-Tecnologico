@@ -59,11 +59,12 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Una hoja con fin antes del inicio cuenta como sin programar y da aviso · Claude.
 - 2026-11-09 · Texto de error en `alerta-texto` `#A63F2C` (el `#C4513C` no llega a 4,5:1); cifras grandes en Sora, mono solo en tablas y códigos · Claude.
 - 2026-11-09 · `CONFIAR_PROXY=true` solo detrás de IIS; el `.env` de la raíz lo cargan la API y el CLI · Claude (revisión).
+- 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
-- **Fase 2 completa (2026-11-09):** 129 pruebas, lint y build en verde; revisión final sin críticos. Siguiente sesión: 1) ajustar la regla de estado (decidido por el usuario; detalle en PENDIENTES.md), 2) T1.3 (maquetas), 3) plan de la Fase 3 (crear charters).
-- Resumen visual de la propuesta (artefacto privado, con diagrama de arquitectura interactivo y demo del cálculo): https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC. Su semáforo usa la regla actual; actualizarlo cuando cambie.
+- **Fase 2 completa (2026-11-09)** y regla de estado nueva aplicada (134 pruebas, lint en verde). Siguiente: 1) demo del semáforo en el resumen visual, 2) T1.3 (maquetas), 3) plan de la Fase 3 (crear charters).
+- Resumen visual de la propuesta (artefacto privado, con diagrama de arquitectura interactivo y demo del cálculo): https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC. Su semáforo aún usa la regla vieja por días: pendiente actualizarlo.
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
 ## Comandos

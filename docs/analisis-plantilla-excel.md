@@ -118,17 +118,26 @@ Ponderar sobre las hojas da el mismo resultado que ponderar los hijos directos c
 
 ### 4.4 Estado (semáforo)
 
-| Estado | Condición |
-|---|---|
-| Sin programar | Hoja sin fechas o sin peso: queda fuera de los cálculos y se muestra un aviso |
-| Por iniciar | `PV = 0` y `EV = 0` |
-| Terminada | `EV = 100 %` |
-| Al día | `desv ≥ −3` días |
-| En atención | `−10 ≤ desv < −3` |
-| Atrasada | `desv < −10` |
-| Adelantada (etiqueta) | `desv > 0` |
+Regla aprobada por el usuario el 2026-11-09. Reemplaza la regla por días (−3 / −10), con la que una hoja de 10 días o menos nunca quedaba atrasada y una hoja vencida al 99,9 % salía al día.
 
-Los umbrales se pueden configurar por charter.
+El color sale de la **brecha** = `(PV − EV) × 100`, en puntos porcentuales, sin importar la duración. Gana la primera condición que se cumpla:
+
+| # | Estado | Color (propuesta) | Condición |
+|---|---|---|---|
+| 1 | Sin programar | gris | Hoja sin fechas o sin peso: queda fuera de los cálculos y se muestra un aviso |
+| 2 | Terminada | azul `#1F6FD1` | `EV = 100 %` |
+| 3 | Vencida | vinotinto `#7A1F2B` | `t > fin` y `EV < 100 %` |
+| 4 | Por iniciar | gris claro | `PV = 0` y `EV = 0` |
+| 5 | Al día | verde `#15A06A` | `brecha < 10` |
+| 6 | En atención | amarillo | `10 ≤ brecha < 25` |
+| 7 | En riesgo | naranja | `25 ≤ brecha < 50` |
+| 8 | Atrasada | rojo `#C4513C` | `brecha ≥ 50` |
+
+- **Adelantada** (etiqueta aparte): `desv > 0`.
+- Los cortes 10 / 25 / 50 se pueden configurar por charter (`umbral_atencion`, `umbral_riesgo`, `umbral_atraso`).
+- Las agrupadoras y el proyecto aplican la misma regla con sus valores consolidados y su propio `fin`. Además informan cuántas hojas vencidas tienen debajo (`vencidas`), para mostrar el aviso "contiene N vencidas".
+- La desviación en días (`desv`) se sigue mostrando como dato informativo, pero ya no decide el color.
+- El color nunca va solo: siempre lleva el nombre del estado. Los tonos de amarillo, naranja y vinotinto se fijan con su prueba de contraste en T5.4.
 
 ### 4.5 Gráficas
 

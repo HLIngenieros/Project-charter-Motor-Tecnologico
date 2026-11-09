@@ -33,8 +33,9 @@
 - [ ] La prueba de zona horaria debe verificar que `TZ` sí se aplicó (hoy no podría fallar).
 - [ ] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts`.
 - [ ] Contraste: los títulos de categoría en su color (p. ej. `#D98A00`) no llegan a 4,5:1. Resolver en el portafolio (T3.2).
-- [ ] **Ajustar la regla de estado (decidido por el usuario, primera tarea de la próxima sesión):** con umbrales −3/−10, una hoja de ≤ 10 días nunca queda "atrasada", y una hoja vencida al 99,9 % sale "al día". Proponer la nueva regla (spec §4.4 del análisis), aprobarla y cambiar `calcularCronograma` con sus pruebas.
+- [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
 - [ ] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) cuando se apruebe la nueva regla de estado.
+- [ ] T5.4: fijar los tonos de amarillo, naranja y vinotinto del semáforo con prueba de contraste.
 - Seguridad y despliegue (helmet, argon2, purga de sesiones, dominio en la web, bundle) quedaron en T8.5; cerrar sesiones al desactivar, en T7.1.
 
 ## Fase 3 · Charter básico
@@ -79,7 +80,7 @@
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** 1) ajustar la regla de estado; 2) T1.3 (pantallas y flujos con maquetas); 3) plan detallado de la Fase 3 (`docs/planes/fase-3.md`), que es donde se crean los charters.
+**Próxima tarea sugerida:** 1) actualizar la demo del semáforo en el resumen visual; 2) T1.3 (pantallas y flujos con maquetas); 3) plan detallado de la Fase 3 (`docs/planes/fase-3.md`), que es donde se crean los charters.
 
 ## Registro de sesiones
 

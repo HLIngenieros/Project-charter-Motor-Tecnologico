@@ -86,8 +86,10 @@ export const charter = sqliteTable(
     razonDeSer: text('razon_de_ser').notNull().default(''),
     objetivoGeneral: text('objetivo_general').notNull().default(''),
     estado: text('estado', { enum: ESTADOS_CHARTER }).notNull().default('activo'),
-    umbralAtencion: real('umbral_atencion').notNull().default(-3),
-    umbralAtraso: real('umbral_atraso').notNull().default(-10),
+    // Brecha (planeado − real) en puntos porcentuales; spec §4.4.
+    umbralAtencion: real('umbral_atencion').notNull().default(10),
+    umbralRiesgo: real('umbral_riesgo').notNull().default(25),
+    umbralAtraso: real('umbral_atraso').notNull().default(50),
     ...tiempos,
   },
   (t) => [index('charter_propietario_idx').on(t.propietarioId)],
