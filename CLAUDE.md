@@ -69,7 +69,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 - `npm run dev` (API 3100 + web 5173) · `npm test` · `npm run lint` · `npm run build`.
 - Admin: registrar la cuenta y luego `npm run admin -- --promover <correo>` (`--quitar` lo retira).
-- Si un puerto queda ocupado por un `tsx watch` huérfano, matar el proceso que escucha en 3100/5173.
+- Si Claude levanta `npm run dev` para verificar, al terminar debe matar **todo el árbol** (`concurrently` y `tsx watch`), no solo el proceso del puerto: un `tsx watch` huérfano relanza la API al cambiar el código y ocupa el 3100 (EADDRINUSE).
 
 ## Aprendido
 
