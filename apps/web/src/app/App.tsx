@@ -1,24 +1,13 @@
-import { MotionConfig } from 'motion/react'
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { Layout } from './Layout'
-import { Muestra } from '../pantallas/Muestra'
+import { BrowserRouter } from 'react-router'
+import { Proveedores } from './Proveedores'
+import { Rutas } from './rutas'
 
 export function App() {
   return (
-    <MotionConfig reducedMotion="user">
+    <Proveedores>
       <BrowserRouter>
-        <Routes>
-          {import.meta.env.DEV && <Route path="/muestra" element={<Muestra />} />}
-          <Route
-            path="*"
-            element={
-              <Layout>
-                <h1 className="text-2xl font-semibold">Inicio</h1>
-              </Layout>
-            }
-          />
-        </Routes>
+        <Rutas />
       </BrowserRouter>
-    </MotionConfig>
+    </Proveedores>
   )
 }

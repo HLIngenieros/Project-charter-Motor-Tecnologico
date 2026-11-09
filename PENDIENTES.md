@@ -16,15 +16,15 @@
 
 ## Fase 2 · Cimientos
 
-- [ ] T2.1 · Monorepo (apps/api, apps/web, packages/shared)
-- [ ] T2.2 · Fixture del Excel en JSON
-- [ ] T2.3 · Motor de cálculo con prueba de aceptación (12,51 % / 12,47 %)
-- [ ] T2.4 · Esquemas Zod compartidos
-- [ ] T2.5 · Base de datos y migraciones
-- [ ] T2.6 · Autenticación (registro por dominio, sesiones, CLI de Admin)
-- [ ] T2.7 · Aislamiento por dueño y lectura del Admin
-- [ ] T2.8 · Sistema de diseño
-- [ ] T2.9 · Pantallas de acceso
+- [x] T2.1 · Monorepo (apps/api, apps/web, packages/shared) — 2026-11-09
+- [x] T2.2 · Fixture del Excel en JSON — 2026-11-09
+- [x] T2.3 · Motor de cálculo con prueba de aceptación (12,51 % / 12,47 %) — 2026-11-09
+- [x] T2.4 · Esquemas Zod compartidos — 2026-11-09
+- [x] T2.5 · Base de datos y migraciones — 2026-11-09
+- [x] T2.6 · Autenticación (registro por dominio, sesiones, CLI de Admin) — 2026-11-09
+- [x] T2.7 · Aislamiento por dueño y lectura del Admin — 2026-11-09
+- [x] T2.8 · Sistema de diseño — 2026-11-09
+- [x] T2.9 · Pantallas de acceso — 2026-11-09
 
 ## Fase 3 · Charter básico
 
