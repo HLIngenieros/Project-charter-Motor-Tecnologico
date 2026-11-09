@@ -36,3 +36,7 @@ Desktop.ini
 # Logs
 *.log
 npm-debug.log*
+
+# Monorepo
+data/*.db*
+.superpowers/
