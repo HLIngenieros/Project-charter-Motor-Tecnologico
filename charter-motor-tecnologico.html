@@ -1,0 +1,1073 @@
+<title>Charter Motor Tecnológico</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: barra superior fija con una pestaña por charter (general + 4 iniciativas). Cada charter abre con una banda azul institucional con trama de plano y sigue con secciones claras en flujo. Identidad de la palanca Motor Tecnológico; un solo aspecto, independiente del tema del visor. */
+:root{
+  color-scheme:light;
+  --navy:#003366; --navy-d:#00264d; --navy-dd:#00182f; --blue:#1d4f86; --blue-l:#4f86c6; --blue-ll:#b8cfe9; --ice:#edf3fa;
+  --bg:#f5f7fa; --white:#ffffff; --ink:#0e1c2b; --muted:#56667b; --line:#d9e1eb; --track:#e3e9f1;
+  --gold:#c08a1e; --gold-l:#f2d48e; --crit:#b3261e; --crit-soft:#f9e2e0; --warn:#b5651d; --warn-soft:#fbeedd; --ok:#2c7a4b; --ok-soft:#e2f1e8;
+  --on-dark:#ffffff; --on-dark-m:#b6c9df;
+  --core:#1d4f86; --datos:#0a6c87; --ia:#4a4c9c; --vigilancia:#2b7a66; --general:#c08a1e;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;margin:0;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--f-display);margin:0;line-height:1.08;text-wrap:balance}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ---------- Barra superior ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--navy-dd)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--navy-dd);border-bottom:1px solid rgba(255,255,255,.08)}
+.tb-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;flex-direction:column;gap:2px;padding-block:10px;flex:none}
+.brand b{font:800 18px/1.1 var(--f-display);font-stretch:80%;color:#fff}
+.brand span{font:500 11px/1 var(--f-mono);color:var(--on-dark-m);letter-spacing:.04em}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0;margin-left:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:transparent;color:var(--on-dark-m);font:600 14px/1 var(--f-body);padding:20px 12px 18px;cursor:pointer;white-space:nowrap;display:flex;gap:8px;align-items:center;border-bottom:3px solid transparent;transition:color .2s,border-color .2s}
+.tab i{width:8px;height:8px;border-radius:50%;background:var(--tc)}
+.tab:hover{color:#fff}
+.tab[aria-selected="true"]{color:#fff;border-bottom-color:var(--tc)}
+@media(max-width:860px){.brand{display:none}.tabs{margin-left:0}}
+
+/* ---------- Bandas y secciones ---------- */
+.inner{max-width:1180px;margin:0 auto;padding-block:56px;padding-left:max(clamp(16px,4vw,48px),env(safe-area-inset-left,0px));padding-right:max(clamp(16px,4vw,48px),env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px;position:relative}
+.sec{background:var(--bg)}
+.sec:nth-of-type(even){background:var(--white)}
+.sec + .sec{border-top:1px solid var(--line)}
+.sec:nth-of-type(even) .card,.sec:nth-of-type(even) .tile,.sec:nth-of-type(even) .tbl-wrap,.sec:nth-of-type(even) .rfi,.sec:nth-of-type(even) .epic{background:var(--bg)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.head>div{min-width:0}
+.kick{font:600 13px/1.3 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--c,var(--blue))}
+.h2{font-size:clamp(28px,3.4vw,40px);font-weight:780;font-stretch:84%;letter-spacing:-.01em;margin-top:8px;color:var(--ink);max-width:26ch}
+.lede{font-size:18px;color:var(--muted);max-width:46ch;line-height:1.4}
+.pmi,.agil{display:inline-flex;align-items:center;font:600 11px/1 var(--f-mono);letter-spacing:.06em;padding:5px 8px;border-radius:6px;white-space:nowrap;vertical-align:middle}
+.pmi{background:var(--ice);color:var(--navy);border:1px solid var(--blue-ll)}
+.agil{background:var(--gold-l);color:var(--navy-dd)}
+.tag{display:inline-flex;align-items:center;gap:7px;font:600 12.5px/1 var(--f-body);letter-spacing:.03em;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.tag.ghost{background:rgba(255,255,255,.1);color:var(--on-dark);border:1px solid rgba(255,255,255,.2)}
+.tag.prop{background:var(--gold);color:var(--navy-dd)}
+.tbd{color:var(--warn);font-style:italic}
+
+/* ---------- Portada ---------- */
+.band{color:var(--on-dark);background-color:var(--navy);
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:96px 96px,96px 96px,16px 16px,16px 16px;position:relative;overflow:hidden}
+.band.init{background-color:var(--navy-dd);background-image:radial-gradient(1100px 650px at 0% 100%,color-mix(in srgb,var(--c) 70%,transparent),transparent 70%),linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:auto,96px 96px,96px 96px}
+.band .kick{color:var(--on-dark-m)}
+.band h1{font-size:clamp(54px,8.6vw,100px);font-weight:800;font-stretch:78%;letter-spacing:-.02em;line-height:.95;color:#fff}
+.band .sub{font:500 clamp(19px,2.2vw,26px)/1.3 var(--f-display);font-stretch:92%;color:var(--on-dark-m);max-width:30ch}
+.hero-top{display:flex;flex-direction:column;gap:18px;max-width:640px;position:relative;z-index:1}
+.engine{position:absolute;right:clamp(16px,4vw,48px);top:40px;width:min(28vw,320px);height:auto;opacity:.95}
+.engine .ring{transform-origin:260px 260px}
+.engine .r1{animation:spin 40s linear infinite}
+.engine .r2{animation:spin 60s linear infinite reverse}
+.engine .r3{animation:spin 26s linear infinite}
+.ficha{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;margin:0;position:relative;z-index:1}
+.ficha div{background:rgba(0,24,47,.72);padding:14px 16px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.ficha dt{font:600 11.5px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-m)}
+.ficha dd{margin:0;font:600 16px/1.3 var(--f-body);color:#fff}
+.ficha dd small{display:block;font-weight:400;font-size:13.5px;color:var(--gold-l)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;position:relative;z-index:1}
+.stat{border-top:3px solid var(--gold);padding-top:12px}
+.stat b{display:block;font:800 clamp(30px,3.6vw,42px)/1 var(--f-display);font-stretch:76%;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.stat b em{font-style:normal;color:var(--gold-l);font-size:.62em;margin:0 4px}
+.stat span{display:block;font-size:14.5px;color:var(--on-dark-m);margin-top:6px}
+
+/* ---------- Tarjetas y rejillas ---------- */
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card .ml{font:600 12.5px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.mv{white-space:nowrap;font:800 clamp(40px,5vw,56px)/1 var(--f-display);font-stretch:76%;color:var(--navy);display:flex;align-items:baseline;gap:12px;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.mv em{font-style:normal;color:var(--gold);font-size:.6em}
+.bar2{display:flex;flex-direction:column;gap:9px;margin-top:auto}
+.bar2 .row{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;font:600 13px/1 var(--f-mono);color:var(--muted)}
+.bar2 .t{height:14px;background:var(--track);border-radius:5px;position:relative;overflow:hidden}
+.bar2 .f{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.quote{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center;background:var(--navy);color:var(--on-dark);border-radius:16px;padding:20px 26px}
+.quote .qm{font:800 66px/0.6 var(--f-display);color:var(--gold);padding-top:22px}
+.quote p{font:560 21px/1.4 var(--f-display);font-stretch:94%}
+.quote p b{color:var(--gold-l)}
+.stmt-l{font:600 13px/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.stmt{font:580 clamp(20px,2.2vw,25px)/1.38 var(--f-display);font-stretch:92%;color:var(--ink)}
+.obj-gen{background:var(--navy);color:#fff;border-radius:16px;padding:24px 28px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.obj-gen .ml{font:600 12.5px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-l);padding-top:6px;white-space:nowrap}
+.obj-gen p{font:560 clamp(18px,2vw,22px)/1.4 var(--f-display);font-stretch:94%}
+.oe{appearance:none;border:0;cursor:pointer;text-align:left;background:var(--white);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 4px 0 var(--lc),0 0 0 1px var(--line);transition:transform .25s,box-shadow .25s;min-width:0}
+.oe:hover{transform:translateY(-4px);box-shadow:inset 0 4px 0 var(--lc),0 12px 28px rgba(0,40,80,.12)}
+.oe .n{font:800 30px/1 var(--f-display);font-stretch:76%;color:var(--lc)}
+.oe h3{font-size:20px;font-weight:760;font-stretch:88%}
+.oe p{font-size:15px;color:var(--muted);line-height:1.42}
+.oe .go{font:600 13px/1 var(--f-body);color:var(--lc);margin-top:auto}
+
+/* ---------- Balance ---------- */
+.tbl-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--line);background:var(--white)}
+.mtx{display:grid;grid-template-columns:minmax(220px,320px) repeat(4,minmax(96px,1fr));min-width:720px}
+.mtx .hc{font:600 12.5px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:14px 10px;text-align:center;border-bottom:1px solid var(--line);background:var(--ice)}
+.mtx .hc:first-child{text-align:left;padding-left:22px}
+.mtx .rn{padding:14px 22px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:3px;box-shadow:inset 5px 0 0 var(--rc)}
+.mtx .rn b{font:740 18px/1.15 var(--f-display);font-stretch:88%}
+.mtx .rn span{font-size:14px;color:var(--muted)}
+.mtx .cell{display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative}
+.mtx .last{border-bottom:0}
+.dot{width:28px;height:28px;border-radius:50%;position:relative;z-index:1;display:grid;place-items:center}
+.dot.d2{background:var(--rc)}
+.dot.d2::after{content:"";width:7px;height:12px;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(45deg) translate(-1px,-2px)}
+.dot.d1{background:var(--white);border:3px solid var(--rc);background-image:linear-gradient(90deg,var(--rc) 50%,transparent 50%)}
+.dot.d0{background:var(--white);border:3px dashed var(--crit)}
+.legend{display:flex;gap:20px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend .dot{width:18px;height:18px;--rc:var(--blue)}
+.legend .dot.d2::after{width:5px;height:8px;border-width:2px}
+.legend .dot.d1,.legend .dot.d0{border-width:2px}
+.gaps{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.gaps .gl{font:600 13px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--crit);margin-right:6px}
+.gaps span.g{background:var(--crit-soft);color:var(--crit);border-radius:999px;padding:9px 15px;font:600 15px/1 var(--f-body)}
+
+/* ---------- Alcance ---------- */
+.scope h3{font-size:19px;font-weight:760;font-stretch:88%;display:flex;align-items:center;gap:10px}
+.scope h3 i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font:800 14px/1 var(--f-display);font-style:normal;background:var(--hc)}
+.si{display:grid;grid-template-columns:6px minmax(0,1fr);gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.si:first-of-type{border-top:0}
+.si::before{content:"";border-radius:3px;background:var(--lc,var(--hc))}
+.si b{font:700 16px/1.3 var(--f-body)}
+.si p{font-size:15px;color:var(--muted);margin-top:3px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font:600 12px/1 var(--f-mono);padding:5px 8px;border-radius:6px;background:color-mix(in srgb,var(--lc,var(--blue)) 12%,var(--white));color:var(--lc,var(--blue))}
+
+/* ---------- Modelo híbrido ---------- */
+.lanes{display:grid;gap:16px}
+.lane{display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px;align-items:stretch}
+.lane-h{border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.lane-h b{font:800 22px/1.05 var(--f-display);font-stretch:82%}
+.lane-h span{font-size:14px;line-height:1.35}
+.lane.p .lane-h{background:var(--navy);color:#fff}
+.lane.p .lane-h span{color:var(--on-dark-m)}
+.lane.s .lane-h{background:var(--gold);color:var(--navy-dd)}
+.steps{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;min-width:0}
+.step{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;position:relative;min-width:0}
+.lane.p .step{box-shadow:inset 0 3px 0 var(--navy)}
+.lane.s .step{box-shadow:inset 0 3px 0 var(--gold)}
+.step .w{font:600 12px/1.2 var(--f-mono);color:var(--muted)}
+.step h4{font-size:17px;font-weight:740;font-stretch:90%}
+.step p{font-size:14px;color:var(--muted);line-height:1.38}
+.loop{display:inline-block;animation:spin 6s linear infinite;color:var(--gold)}
+.bridge{display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px}
+.bridge div{grid-column:2;display:flex;align-items:center;gap:14px;border:2px dashed var(--gold);border-radius:12px;padding:12px 18px;font-size:15.5px;background:color-mix(in srgb,var(--gold-l) 22%,var(--white))}
+.bridge b{font-weight:700}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;min-width:680px}
+.tbl th{font:600 12px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px;background:var(--ice);border-bottom:1px solid var(--line)}
+.tbl td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td b{font-weight:700}
+.tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.role{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.role .rt{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.role h4{font-size:17px;font-weight:740;font-stretch:90%}
+.role .who{font:600 13.5px/1.3 var(--f-body);color:var(--blue)}
+.role p{font-size:14.5px;color:var(--muted);line-height:1.38}
+.dod{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:start;background:var(--ok-soft);border:1px solid color-mix(in srgb,var(--ok) 30%,var(--white));border-radius:14px;padding:18px 22px}
+.dod .ml{font:700 13px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ok);padding-top:3px;white-space:nowrap}
+.dod ol{margin:0;padding-left:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 28px;font-size:15.5px}
+
+/* ---------- Hoja de ruta ---------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.fb{appearance:none;border:1.5px solid var(--line);background:var(--white);border-radius:999px;padding:8px 14px;font:600 14px/1 var(--f-body);cursor:pointer;display:inline-flex;gap:8px;align-items:center;color:var(--ink)}
+.fb i{width:9px;height:9px;border-radius:50%;background:var(--fc)}
+.fb[aria-pressed="true"]{border-color:var(--fc);background:color-mix(in srgb,var(--fc) 12%,var(--white))}
+.rm{min-width:820px}
+.rm-row{display:grid;grid-template-columns:minmax(230px,300px) minmax(0,1fr);border-bottom:1px solid var(--line)}
+.rm-row:last-child{border-bottom:0}
+.rm-row[hidden]{display:none}
+.rm-l{padding:10px 18px;display:flex;flex-direction:column;justify-content:center;gap:2px;box-shadow:inset 4px 0 0 var(--lc,transparent);min-width:0}
+.rm-l b{font:700 14.5px/1.25 var(--f-body)}
+.rm-l span{font:500 11.5px/1.2 var(--f-mono);color:var(--muted)}
+.trk{position:relative;min-height:46px;background-image:linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:20% 100%}
+.trk::after{content:"";position:absolute;top:0;bottom:0;left:var(--hoy);width:2px;background:var(--gold);opacity:.7}
+.rm-h .trk{display:grid;grid-template-columns:repeat(5,1fr);background:var(--ice);min-height:0}
+.rm-h .trk span{font:600 12px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 10px;border-left:1px solid var(--line)}
+.rm-h .rm-l{background:var(--ice);font:600 12px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rm-h .hoy{position:absolute;left:var(--hoy);top:100%;transform:translate(-50%,4px);background:var(--gold);color:var(--navy-dd);font:700 10.5px/1 var(--f-mono);padding:3px 6px;border-radius:4px;z-index:2;white-space:nowrap}
+.rm-g .rm-l{background:color-mix(in srgb,var(--lc) 8%,var(--white))}
+.rm-g .rm-l b{font:760 16px/1.2 var(--f-display);font-stretch:88%;color:var(--lc)}
+.rm-g .trk{background-color:color-mix(in srgb,var(--lc) 4%,var(--white));min-height:38px}
+.bar{position:absolute;top:50%;height:20px;margin-top:-10px;border-radius:6px;background:var(--lc);transform-origin:left center}
+.bar.ph{height:24px;margin-top:-12px;display:flex;align-items:center;padding:0 10px;color:#fff;font:600 12px/1 var(--f-body);white-space:nowrap;overflow:hidden}
+.ms{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;background:var(--gold);transform:rotate(45deg);border:2px solid var(--white);box-shadow:0 0 0 1px var(--gold);z-index:2}
+.ms-l{position:absolute;top:50%;transform:translate(12px,-50%);font:600 12px/1.15 var(--f-body);color:var(--ink);white-space:nowrap;padding:3px 7px;z-index:2;background:var(--white);border:1px solid var(--line);border-radius:5px}
+.ms-l.left{transform:translate(calc(-100% - 12px),-50%)}
+
+/* ---------- Indicadores ---------- */
+.kpi-n{font-weight:700}
+.kpi-n small{display:block;font-weight:400;color:var(--muted);font-size:13.5px;margin-top:2px}
+.ini-pill{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1.2 var(--f-body);color:var(--lc);white-space:nowrap}
+.ini-pill i{width:8px;height:8px;border-radius:50%;background:var(--lc)}
+.bm{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bm .b{font:600 14px/1 var(--f-mono);color:var(--muted)}
+.bm .m{font:700 14px/1 var(--f-mono);color:var(--navy)}
+.bm i{font-style:normal;color:var(--gold)}
+.orig{font:600 11px/1 var(--f-mono);padding:4px 7px;border-radius:5px;white-space:nowrap}
+.orig.pal{background:var(--ice);color:var(--navy)}
+.orig.pro{background:var(--warn-soft);color:var(--warn)}
+.orig.c25{background:var(--ok-soft);color:var(--ok)}
+
+/* ---------- Riesgos ---------- */
+.risk-grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:32px;align-items:start}
+.heat{display:grid;grid-template-columns:28px repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(96px,auto)) auto;gap:6px}
+.heat .ax{font:600 11.5px/1.1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:grid;place-items:center}
+.heat .ay{writing-mode:vertical-rl;transform:rotate(180deg)}
+.hc2{border-radius:10px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.hc2.s1{background:var(--ok-soft)} .hc2.s2{background:var(--warn-soft)} .hc2.s3{background:var(--crit-soft)}
+.rdot{appearance:none;border:0;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;font:700 13px/1 var(--f-mono);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.rdot:hover,.rdot.hl{transform:scale(1.12);box-shadow:0 0 0 4px var(--gold-l)}
+.rlist{display:flex;flex-direction:column;gap:10px}
+.ritem{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 18px;transition:box-shadow .2s,border-color .2s}
+.ritem.hl{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-l)}
+.ritem .rid{font:800 20px/1 var(--f-display);font-stretch:80%;color:var(--navy)}
+.ritem .sev{display:inline-block;font:600 11px/1 var(--f-mono);padding:4px 7px;border-radius:5px;margin-top:6px}
+.sev.s3{background:var(--crit-soft);color:var(--crit)} .sev.s2{background:var(--warn-soft);color:var(--warn)} .sev.s1{background:var(--ok-soft);color:var(--ok)}
+.ritem h4{font-size:18px;font-weight:740;font-stretch:90%}
+.ritem p{font-size:14.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+.ritem p.mit{color:var(--ink)}
+.ritem p.mit b{color:var(--ok)}
+
+/* ---------- Presupuesto ---------- */
+.alert{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;background:var(--crit-soft);border:1px solid color-mix(in srgb,var(--crit) 25%,var(--white));border-radius:14px;padding:16px 20px;font-size:16px}
+.alert .ic{width:32px;height:32px;border-radius:50%;background:var(--crit);color:#fff;display:grid;place-items:center;font:800 17px/1 var(--f-display)}
+.hb{display:flex;flex-direction:column;gap:12px}
+.hb-r{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 92px;gap:14px;align-items:center}
+.hb-r .l{font-size:14.5px;line-height:1.3}
+.hb-r .l small{display:block;font:600 11px/1.2 var(--f-mono);margin-top:2px}
+.hb-r .t{height:22px;background:var(--track);border-radius:6px;position:relative;overflow:hidden}
+.hb-r .f{position:absolute;inset:0 auto 0 0;border-radius:6px}
+.hb-r .v{font:600 13.5px/1 var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.hb-tot{display:flex;justify-content:space-between;border-top:2px solid var(--ink);padding-top:10px;font:700 15px/1.2 var(--f-body)}
+.hb-tot span:last-child{font-family:var(--f-mono)}
+
+/* ---------- Listas sencillas ---------- */
+.ck{display:flex;flex-direction:column;gap:10px}
+.ck li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;font-size:15.5px;line-height:1.42}
+.ck li::before{content:"";width:10px;height:10px;border-radius:3px;margin-top:7px;background:var(--bc,var(--blue))}
+.pend{counter-reset:p;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pend li{counter-increment:p;display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;align-items:start;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:15.5px}
+.pend li::before{content:counter(p);width:38px;height:38px;border-radius:10px;background:var(--warn-soft);color:var(--warn);display:grid;place-items:center;font:800 18px/1 var(--f-display)}
+.pend li b{display:block;font-weight:700}
+.pend li span{color:var(--muted);font-size:14.5px}
+.firmas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.firma{border:1px dashed var(--blue-ll);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:4px;min-height:150px}
+.firma .sl{margin-top:auto;border-top:1px solid var(--ink);padding-top:8px;font:600 15px/1.3 var(--f-body)}
+.firma span{font-size:13.5px;color:var(--muted)}
+.firma .st{font:600 11.5px/1 var(--f-mono);color:var(--warn);background:var(--warn-soft);padding:4px 7px;border-radius:5px;align-self:flex-start}
+
+/* ---------- Iniciativa ---------- */
+.op{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(28px,4vw,56px);align-items:center}
+.op .num{font:800 clamp(80px,11vw,140px)/0.8 var(--f-display);font-stretch:75%;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.35)}
+.op h1{font-size:clamp(38px,5vw,60px);margin-top:20px;line-height:1}
+.op .thesis{font:500 21px/1.4 var(--f-display);font-stretch:94%;color:var(--on-dark-m);margin-top:18px;max-width:26ch}
+.op .tags{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.glass{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:20px 24px}
+.glass + .glass{margin-top:14px}
+.glass .gl{display:flex;justify-content:space-between;align-items:center;font:600 12.5px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l);margin-bottom:10px}
+.glass .gl span{font:700 13px/1 var(--f-mono);letter-spacing:.02em;background:var(--gold);color:var(--navy-dd);padding:5px 9px;border-radius:6px}
+.glass p{font:540 18.5px/1.42 var(--f-display);font-stretch:94%;color:#fff}
+.glass.obj{border-color:color-mix(in srgb,var(--gold-l) 50%,transparent);background:rgba(192,138,30,.12)}
+.fi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.fi div{background:var(--white);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fi dt{font:600 11.5px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fi dd{margin:0;font-size:15.5px;line-height:1.4}
+.sec:nth-of-type(even) .fi div{background:var(--bg)}
+.tile{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile .big{font:800 clamp(38px,4.4vw,50px)/1 var(--f-display);font-stretch:76%;color:var(--c);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile .big.crit{color:var(--crit)} .tile .big.ok{color:var(--ok)}
+.tile .cap{font-size:16px;line-height:1.36}
+.tile .cap small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.epics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.epic{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.epic .et{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.epic .eid{font:700 12.5px/1 var(--f-mono);color:var(--c)}
+.epic h4{font-size:18.5px;font-weight:740;font-stretch:90%;margin-top:6px}
+.epic p{font-size:14.5px;color:var(--muted);line-height:1.4}
+.epic p b{color:var(--ink);font-weight:600}
+.prio{font:600 11.5px/1 var(--f-mono);padding:5px 8px;border-radius:6px;white-space:nowrap}
+.prio.p1{background:var(--c);color:#fff}
+.prio.p2{background:color-mix(in srgb,var(--c) 14%,var(--white));color:var(--c)}
+.qs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.qs span{height:8px;border-radius:3px;background:var(--track)}
+.qs span.act{background:var(--c)}
+.qs-l{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;font:600 10.5px/1 var(--f-mono);color:var(--muted)}
+.hito{display:inline-flex;align-items:center;gap:8px;font:600 13px/1.2 var(--f-body);color:var(--navy)}
+.hito i{width:10px;height:10px;background:var(--gold);transform:rotate(45deg);flex:none}
+.rf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+.rf-col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.rf-h{display:flex;align-items:center;gap:12px;font:700 14.5px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding-bottom:10px;border-bottom:3px solid var(--hc);color:var(--hc)}
+.rf-h i{width:28px;height:28px;border-radius:8px;background:var(--hc);display:grid;place-items:center;color:#fff;font:800 15px/1 var(--f-display);font-style:normal}
+.rf-col.r{--hc:var(--crit)} .rf-col.f{--hc:var(--ok)}
+.rfi{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 20px;display:grid;grid-template-columns:6px minmax(0,1fr);gap:16px}
+.rfi::before{content:"";border-radius:3px;background:var(--hc)}
+.rfi h4{font-size:19px;font-weight:740;font-stretch:88%}
+.rfi p{font-size:15px;color:var(--muted);margin-top:5px;line-height:1.4}
+.rfi p.mit{color:var(--ink)}
+.rfi p.mit b{color:var(--ok)}
+.next{background:var(--navy)}
+.next .inner{padding-block:26px;align-items:flex-end}
+.next-btn{appearance:none;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;border-radius:14px;padding:14px 20px;display:grid;grid-template-columns:auto auto;column-gap:18px;text-align:left;cursor:pointer;transition:background .2s,transform .2s}
+.next-btn:hover{background:rgba(255,255,255,.08);transform:translateX(4px)}
+.next-btn .label{color:var(--on-dark-m);font:600 11.5px/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase}
+.next-btn b{font:760 20px/1.2 var(--f-display);font-stretch:86%;grid-row:2;border-left:4px solid var(--nc);padding-left:10px;margin-top:6px}
+.next-btn .arr{grid-row:1/3;grid-column:2;align-self:center;font:700 24px/1 var(--f-display);color:var(--gold)}
+.pfoot{background:var(--navy-dd);color:var(--on-dark-m);font-size:13px}
+.pfoot .inner{padding-block:22px}
+
+/* ---------- Animación de entrada (el estado de reposo es visible) ---------- */
+.on .a{animation:fu .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*90ms + 120ms)}
+.on .gx{animation:gx 1.1s cubic-bezier(.2,.75,.2,1) both;animation-delay:calc(var(--i,0)*70ms + 300ms);transform-origin:left center}
+.on .pop{animation:pop .55s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i,0)*60ms + 350ms)}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}}
+@keyframes gx{from{transform:scaleX(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.3)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ms{animation-name:none}
+.on .ms.pop{animation-name:popd}
+@keyframes popd{from{opacity:0;transform:rotate(45deg) scale(.2)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- Responsivo ---------- */
+@media(max-width:1000px){
+  .engine{display:none}
+  .ficha,.stats,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3,.roles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .risk-grid,.op{grid-template-columns:minmax(0,1fr)}
+  .lane,.bridge{grid-template-columns:minmax(0,1fr)}
+  .bridge div{grid-column:1}
+  .steps{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fi{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .g2,.g3,.roles,.epics,.rf,.pend,.firmas,.fi,.dod ol{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .ficha,.stats,.g4{grid-template-columns:minmax(0,1fr)}
+  .quote,.obj-gen,.dod{grid-template-columns:minmax(0,1fr)}
+  .quote .qm{display:none}
+  .hb-r{grid-template-columns:minmax(0,1fr) 84px}
+  .hb-r .t{grid-column:1/-1;grid-row:2}
+  .inner{padding-block:44px}
+}
+</style>
+
+<script id="datos" type="application/json">
+{
+  "meta": {
+    "revision": "Rev. 0",
+    "fecha": "05-nov-2026",
+    "estado": "Borrador para validación",
+    "hoy": 0.016
+  },
+  "trimestres": ["Inicio · nov–dic 2026", "T1 · 2027", "T2 · 2027", "T3 · 2027", "T4 · 2027"],
+  "general": {
+    "ficha": [
+      ["Patrocinador", "Gerencia General", "Por confirmar"],
+      ["Director de la palanca", "Líder ID&TI", "Por confirmar"],
+      ["Horizonte", "Enero a diciembre de 2027", "Visión 2028"],
+      ["Metodología", "Híbrida PMI + Scrum", "Sprints de 2 semanas"],
+      ["Área responsable", "Dirección de Innovación Digital & TI", ""],
+      ["Marco", "Plan Estratégico Integrado 2026–2030", "Grupo HL"],
+      ["Alcance geográfico", "Los cuatro países de operación", ""],
+      ["Estado", "Borrador para validación", "Rev. 0 · 05-nov-2026"]
+    ],
+    "mision": "Convertir la tecnología en ventaja competitiva: registrar la operación una sola vez, decidir con datos confiables y usar la IA para liberar tiempo y proteger el conocimiento.",
+    "vision": "Cada proyecto se administra y se decide sobre un dato único y confiable, y la tecnología es un argumento comercial ante clientes mineros y cementeros.",
+    "objetivo": "Durante 2027, poner las herramientas, los datos y la IA al servicio de la gestión de los proyectos: que el costo del mes salga de los sistemas sin conciliaciones manuales, que las decisiones se tomen con datos gobernados y que la IA libere tiempo medible. Es la base para la visión 2028.",
+    "fueraAlcance": [
+      ["Renovación de hardware y software", "Inventario, obsolescencia y compra de equipos. Sigue en el plan de renovación de TI."],
+      ["Operación de TI", "Outsourcing TIC, mantenimiento de HW y SW, conectividad y licencias recurrentes."],
+      ["Ideas no priorizadas del portafolio de TI", "40 de las 86 ideas identificadas quedaron fuera de los 46 proyectos priorizados."],
+      ["Cuarto de control completo", "Es la meta 2028. En 2027 solo entra la primera versión del tablero de control de obra."]
+    ],
+    "fases": [
+      {"n": "Inicio", "d": 0, "h": 0, "w": "nov–dic 2026", "p": "Charter aprobado, patrocinador y Product Owners designados, presupuesto 2027 cerrado."},
+      {"n": "Planificación", "d": 0, "h": 1, "w": "dic 2026–ene 2027", "p": "Línea base de hitos, costo e indicadores. Backlog inicial de épicas y matriz de riesgos."},
+      {"n": "Ejecución y control", "d": 1, "h": 4, "w": "feb–nov 2027", "p": "Sprints, informe mensual de avance planeado contra real y control de cambios."},
+      {"n": "Cierre", "d": 4, "h": 4, "w": "dic 2027", "p": "Valor medido contra metas, lecciones aprendidas y charter 2028."}
+    ],
+    "scrum": [
+      {"n": "Backlog de épicas", "w": "Continuo", "p": "Cada iniciativa ordena sus épicas por valor. El Product Owner decide el orden."},
+      {"n": "Planificación del sprint", "w": "Día 1", "p": "El equipo toma lo que puede terminar en 2 semanas."},
+      {"n": "Sprint", "w": "2 semanas", "p": "Seguimiento corto 3 veces por semana para ver bloqueos."},
+      {"n": "Revisión", "w": "Día 10", "p": "Se muestra el incremento a usuarios clave; se acepta o se devuelve."},
+      {"n": "Retrospectiva", "w": "Día 10", "p": "Una mejora concreta para el siguiente sprint."}
+    ],
+    "puente": "Revisión trimestral con el Comité Directivo: se revisa el valor entregado, se repriorizan épicas y se aprueban los cambios a la línea base.",
+    "ceremonias": [
+      ["Planificación del sprint", "Cada 2 semanas", "Product Owner, facilitador y equipo", "Compromiso del sprint", "agil"],
+      ["Seguimiento corto", "15 min, 3 veces por semana", "Equipo de entrega", "Bloqueos visibles y asignados", "agil"],
+      ["Revisión del sprint", "Cada 2 semanas", "Product Owner y usuarios clave", "Incremento aceptado o devuelto", "agil"],
+      ["Retrospectiva", "Cada 2 semanas", "Equipo de entrega", "Una mejora concreta", "agil"],
+      ["Comité de la palanca", "Mensual", "Director y Product Owners de las 4 iniciativas", "Informe de avance, riesgos y solicitudes de cambio", "pmi"],
+      ["Comité Directivo", "Trimestral", "Gerencia General y gerencias", "Repriorización y cambios a la línea base aprobados", "pmi"],
+      ["Comité de IA", "Mensual", "12 integrantes, 7 de proyecto y obra", "Ideas de IA evaluadas por impacto y complejidad", "agil"]
+    ],
+    "roles": [
+      ["Patrocinador", "Gerencia General", "pmi", "Aprueba el charter, el presupuesto y los cambios a la línea base. Asigna tiempo formal a los usuarios clave."],
+      ["Director de la palanca", "Líder ID&TI", "pmi", "Es dueño del charter. Integra las cuatro iniciativas, controla avance, costo y riesgos y reporta al Comité Directivo."],
+      ["Product Owner", "Uno por iniciativa, del negocio", "agil", "Ordena el backlog por valor, acepta o devuelve cada incremento y responde por el indicador de su iniciativa."],
+      ["Facilitador Scrum", "ID&TI", "agil", "Cuida la cadencia de sprints, quita bloqueos y mantiene el tablero del equipo al día."],
+      ["Equipo de entrega", "ID&TI, proveedores y consultoría", "agil", "4 personas internas de ID&TI, proveedor de Libra, subcontratista TIC y consultoría de transformación digital."],
+      ["Líderes funcionales", "Uno por proceso, con suplente", "pmi", "Definen cómo se usa cada módulo en su área y forman a los usuarios. El suplente evita depender de una sola persona."]
+    ],
+    "dod": [
+      "Está en producción, no en piloto.",
+      "Los usuarios para los que se hizo lo están usando.",
+      "Hay capacitación dictada y un manual o procedimiento.",
+      "Su indicador tiene medición contra la línea base."
+    ],
+    "kpis": [
+      {"n": "Costo de administrar los proyectos", "d": "Costo administrativo del proyecto / costo total del proyecto × 100 (fórmula por validar)", "b": "30–35 %", "m27": "Por definir", "m28": "En ruta al 20 %", "o": "pal"},
+      {"n": "Iniciativas con valor medido", "d": "Iniciativas con su indicador medido contra la línea base", "b": "0 de 4", "m27": "4 de 4", "m28": "4 de 4", "o": "pro"},
+      {"n": "Desviación del avance", "d": "% avance real − % avance planeado del charter (curva S mensual)", "b": "—", "m27": "≤ 10 %", "m28": "—", "o": "c25"},
+      {"n": "Cumplimiento del sprint", "d": "Historias terminadas / historias comprometidas", "b": "—", "m27": "≥ 80 %", "m28": "—", "o": "pro"}
+    ],
+    "riesgos": [
+      {"id": "R1", "n": "Financiación 2027 sin cierre formal", "c": "El presupuesto 2027 no está aprobado desde el portafolio. Las iniciativas podrían arrancar sin financiación asegurada.", "m": "Cerrar el presupuesto por iniciativa en la fase de Inicio. Cada épica entra con su beneficio en pesos.", "p": 3, "i": 3},
+      {"id": "R2", "n": "Capacidad para ejecutar", "c": "4 personas internas para 15 iniciativas a la vez. Libra ya ocupa 36 de 43 semanas de desarrollo y el proveedor externo cuesta 4 veces más por hora.", "m": "Limitar el trabajo en curso por sprint, priorizar por valor cada trimestre y acordar desde el inicio la capacidad externa.", "p": 3, "i": 3},
+      {"id": "R3", "n": "Herramientas implementadas que no se usan", "c": "Solo se usa el 33–42 % de lo contratado en Procore y los usuarios clave no tienen tiempo asignado.", "m": "La definición de terminado exige uso real. Tiempo formal para usuarios clave y un líder con suplente por módulo.", "p": 2, "i": 3},
+      {"id": "R4", "n": "Valor sin medir", "c": "Ninguna iniciativa tiene hoy valor medido; la IA no tiene línea base de tiempo.", "m": "Línea base de todos los indicadores en el T1 de 2027 y revisión en cada comité trimestral.", "p": 3, "i": 2},
+      {"id": "R5", "n": "Ciberataque", "c": "Libra no exige doble autenticación, ningún sistema tiene monitoreo de amenazas y la seguridad de M365 está en 48 de 100.", "m": "Épica E2.3 de ciberseguridad básica en el primer semestre.", "p": 2, "i": 3},
+      {"id": "R6", "n": "Decisiones pendientes que frenan", "c": "Faltan los líderes de los módulos críticos de Procore y la metodología de conciliación de Perú.", "m": "Agenda de decisiones con fecha límite en el comité mensual de la palanca.", "p": 2, "i": 2}
+    ],
+    "supuestos": [
+      "La Gerencia General respalda la palanca de forma visible y asigna tiempo formal a los usuarios clave.",
+      "El presupuesto 2027 se aprueba antes de terminar enero de 2027.",
+      "Libra, OPUS y Procore pueden integrarse sin cambios estructurales (supuesto del charter 2025 que sigue vigente).",
+      "El proveedor de Libra mantiene la capacidad contratada durante 2027.",
+      "La consultoría de transformación digital sigue la hoja de ruta a 24 meses que arrancó en octubre de 2026."
+    ],
+    "restricciones": [
+      "Crecer sin crecer de forma sustancial la estructura corporativa.",
+      "Equipo interno de ID&TI de 4 personas.",
+      "Capacidad de desarrollo de Libra: 43 semanas al año, 36 ya comprometidas.",
+      "La ejecución se cierra en el año calendario 2027."
+    ],
+    "exito": [
+      "Las herramientas se usan, no solo se implementan.",
+      "Cada iniciativa termina 2027 con valor medido contra su línea base.",
+      "El costo del mes sale de los sistemas sin conciliaciones manuales.",
+      "La Gerencia decide con datos gobernados y TI tiene un espacio fijo en cada Comité Directivo."
+    ],
+    "ppto2025": [
+      ["Potenciación de herramientas de software", 89398502, true],
+      ["Implementación de IA", 13284000, true],
+      ["Outsourcing TIC", 135369688, false],
+      ["Mantenimiento de HW y SW", 148550000, false],
+      ["Plan de renovación de HW y SW", 166644000, false]
+    ],
+    "ppto2027": [
+      ["core", "Horas del proveedor de Libra, desarrollo en Procore y OPUS, licencias de Zoho CRM, formación"],
+      ["datos", "Consultoría de transformación digital, herramientas de integración y de seguridad"],
+      ["ia", "Licencias de Copilot, consumo de agentes, formación de Champions"],
+      ["vigilancia", "Pilotos de tecnología y su medición"]
+    ],
+    "pendientes": [
+      ["Nombres del gobierno", "Patrocinador, director de la palanca y Product Owner de cada iniciativa."],
+      ["Presupuesto 2027", "Monto por iniciativa, aprobado desde el portafolio."],
+      ["Metas intermedias 2027", "Los indicadores marcados «Por definir»."],
+      ["Iniciativa 1 ampliada", "Confirmar que OPUS, Zoho CRM y M365 entran en «Potenciar las herramientas core»."],
+      ["Vigilancia Tecnológica", "Confirmar que pasa de propuesta a iniciativa con responsable propio."],
+      ["Fórmula del costo de administrar", "Qué entra en el costo administrativo y de dónde sale el dato."],
+      ["Fechas de hitos y valoración de riesgos", "Las de este borrador son preliminares."]
+    ]
+  },
+  "iniciativas": [
+    {
+      "id": "core", "num": "01", "nombre": "Potenciar las herramientas core", "corto": "Herramientas core",
+      "tesis": "Que Libra sea donde se decide, Procore donde se gestiona la obra, y que OPUS, Zoho CRM y M365 completen el ciclo del proyecto.",
+      "herramientas": ["Libra · ERP y costos", "Procore · obra", "OPUS · presupuestos", "Zoho CRM · comercial", "M365 · colaboración"],
+      "estado": "Plan definido; ejecución iniciando",
+      "balance": [2, 2, 1, 0],
+      "mision": "Ser la fuente única y confiable del costo, la administración y la ejecución de cada proyecto: todo se registra una vez, en el sistema y donde ocurre el trabajo.",
+      "vision": "Todo proyecto, en cualquier país, se administra y se cierra en Libra integrado con Procore, y la gerencia decide con el costo del mes sin conciliaciones manuales.",
+      "visionAno": "2028",
+      "objetivo": "A diciembre de 2027, todo proyecto nuevo de los cuatro países abre con el estándar único en Libra y Procore, los 14 usuarios clave de Libra están formados desde junio y el costo del mes sale de Libra sin nivelar en Excel.",
+      "ficha": [
+        ["Patrocinador", "Gerencia General", "pmi"],
+        ["Product Owner", "Por designar: dueño del proceso de costos y control de proyectos", "agil"],
+        ["Facilitador", "ID&TI", "agil"],
+        ["Equipo", "ID&TI, proveedor de Libra, subcontratista TIC y líderes funcionales con suplente", "agil"],
+        ["Interesados", "Gerencias de proyecto, Contabilidad, Compras, Estimaciones (OPUS) y Comercial (Zoho CRM)", "pmi"],
+        ["Depende de", "Integraciones de Data Driven (E2.2) para el costo del mes", "pmi"]
+      ],
+      "base": [
+        {"v": "33–42 %", "t": "de lo contratado en Procore se usa", "s": "En uso desde 2018"},
+        {"v": "0", "tono": "crit", "t": "planes de acción salen de 14.900 inspecciones", "s": "Los hallazgos de obra no se cierran en el sistema"},
+        {"v": "3 de 14", "t": "usuarios clave de Libra formados", "s": "Meta: los 14 a junio de 2027"},
+        {"v": "−52 %", "tono": "ok", "t": "incidencias en Libra", "s": "De 87 a 42, febrero a agosto de 2026"}
+      ],
+      "incluye": [
+        "Libra: estándar de proyecto, formación de usuarios clave, cierre del costo mensual y arranque de Perú.",
+        "Procore: módulos críticos con líder, e inspecciones y observaciones que terminan en un plan de acción.",
+        "OPUS: catálogos por país y plantilla de costo industrial (pendientes de la fase 2 de 2025).",
+        "Zoho CRM: registro de oportunidades y traspaso al arranque del proyecto.",
+        "M365: repositorio documental estándar y uso de Teams y SharePoint."
+      ],
+      "excluye": [
+        "Copilot y agentes de IA (iniciativa 3).",
+        "Seguridad de M365 e integraciones entre sistemas (iniciativa 2).",
+        "Licencias o módulos nuevos sin un caso de negocio aprobado."
+      ],
+      "epicas": [
+        {"id": "E1.1", "n": "Estándar único de proyecto", "d": 1, "h": 2, "e": "Configuración de apertura en Libra y Procore, replicable en los cuatro países.", "p": 1, "hito": "Estándar aprobado"},
+        {"id": "E1.2", "n": "Usuarios clave de Libra formados", "d": 1, "h": 2, "e": "Los 14 usuarios clave formados, con tiempo asignado.", "p": 1, "hito": "14 de 14"},
+        {"id": "E1.3", "n": "Procore: líderes de módulo e inspecciones que cierran", "d": 1, "h": 3, "e": "Líder y suplente por módulo crítico; hallazgos con plan de acción en el sistema.", "p": 1},
+        {"id": "E1.4", "n": "Costo del mes desde Libra", "d": 2, "h": 4, "e": "Cierre mensual integrado con Procore, sin nivelación en Excel.", "p": 1, "hito": "Cierre sin Excel"},
+        {"id": "E1.5", "n": "Perú en Libra", "d": 1, "h": 2, "e": "Metodología de conciliación contabilidad–proyectos definida y en operación.", "p": 1},
+        {"id": "E1.6", "n": "OPUS: catálogos y costo industrial", "d": 1, "h": 3, "e": "Catálogos de República Dominicana y Perú; plantilla de indirectos en OPUS.", "p": 2},
+        {"id": "E1.7", "n": "Zoho CRM: embudo comercial único", "d": 2, "h": 3, "e": "Oportunidades registradas en Zoho y traspaso al arranque del proyecto.", "p": 2},
+        {"id": "E1.8", "n": "M365: repositorio documental", "d": 1, "h": 4, "e": "Estructura estándar en SharePoint y Teams, con usuarios formados.", "p": 2}
+      ],
+      "kpis": [
+        {"n": "Aprovechamiento de las herramientas core", "d": "Funcionalidades contratadas en uso / contratadas", "b": "33–42 %", "m27": "Por definir", "m28": "100 %", "o": "pal"},
+        {"n": "Usuarios clave de Libra formados", "d": "Formados / 14 usuarios clave × 100", "b": "3 de 14", "m27": "14 de 14 (jun)", "m28": "—", "o": "pal"},
+        {"n": "Proyectos con costo del mes sin Excel", "d": "Proyectos cerrados en Libra sin nivelación manual / proyectos activos", "b": "Parcial", "m27": "Todos", "m28": "Todos", "o": "pal"},
+        {"n": "Inspecciones con plan de acción", "d": "Hallazgos con plan de acción en Procore / hallazgos registrados", "b": "0 de 252", "m27": "Por definir", "m28": "Por definir", "o": "pal"},
+        {"n": "Reducción de incidencias en Libra", "d": "(Incidencias antes − después) / antes × 100", "b": "−52 %", "m27": "Por definir", "m28": "—", "o": "c25"}
+      ],
+      "riesgos": [
+        ["Capacidad de desarrollo justa", "El plan de Libra ocupa 36 de 43 semanas disponibles; el proveedor externo cuesta 4 veces más por hora.", "Priorizar épicas por valor en cada revisión trimestral y reservar capacidad para el costo del mes."],
+        ["Arranque de Perú", "Su contabilidad está fuera de Libra y falta la metodología de conciliación entre contabilidad y proyectos.", "Decidir la metodología en el T1 de 2027 (épica E1.5)."],
+        ["Decisiones pendientes que frenan", "Faltan líderes de los módulos críticos de Procore; hay desconocimiento y bajo uso de M365 y del repositorio documental.", "Agenda de decisiones con fecha en el comité mensual y un líder con suplente por módulo."]
+      ],
+      "exito": [
+        ["Un estándar único", "Todo proyecto abre con la misma configuración, replicable en los cuatro países."],
+        ["Un dueño por proceso", "Líder funcional con suplente en cada módulo, para no depender de personas."],
+        ["Respaldo visible de la Gerencia", "Con tiempo formalmente asignado a los usuarios clave."]
+      ]
+    },
+    {
+      "id": "datos", "num": "02", "nombre": "Organización Data Driven", "corto": "Data Driven",
+      "tesis": "Pasar de un área de soporte a un socio que anticipa con datos.",
+      "herramientas": ["Transformación digital con consultoría externa", "Libra · OPUS · Procore"],
+      "estado": "Consultoría cerrada; ejecución desde octubre",
+      "balance": [2, 2, 1, 0],
+      "mision": "Garantizar la continuidad y la seguridad digital de la compañía, y convertir el dato de sus sistemas en decisiones estratégicas.",
+      "vision": "ID&TI es socio estratégico del negocio: el dato de Libra, OPUS y Procore está gobernado en un cuarto de control que anticipa desviaciones de costo y cronograma.",
+      "visionAno": "2028",
+      "objetivo": "En 2027, catalogar y asignar dueño a los datos críticos, automatizar y monitorear las integraciones prioritarias entre Libra, OPUS y Procore, y cerrar las brechas de seguridad más expuestas.",
+      "ficha": [
+        ["Patrocinador", "Gerencia General", "pmi"],
+        ["Product Owner", "Por designar", "agil"],
+        ["Facilitador", "ID&TI", "agil"],
+        ["Equipo", "ID&TI y consultoría de transformación digital", "agil"],
+        ["Interesados", "Comité Directivo, gerentes de proyecto y dueños de datos", "pmi"],
+        ["Depende de", "Estándar de proyecto de la iniciativa 1 (E1.1) y presupuesto 2027", "pmi"]
+      ],
+      "base": [
+        {"v": "1 de 5", "t": "es el aporte de TI que percibe la Gerencia", "s": "Meta: 4 de 5 en 2028"},
+        {"v": "46", "t": "proyectos priorizados con reglas claras", "s": "De 86 ideas identificadas"},
+        {"v": "10 de 10", "tono": "crit", "t": "conexiones entre sistemas son manuales", "s": "Libra, OPUS y Procore se cruzan en Excel"},
+        {"v": "48/100", "tono": "crit", "t": "seguridad de Microsoft 365", "s": "Libra sin doble autenticación"}
+      ],
+      "incluye": [
+        "Gobierno y catálogo de los datos críticos, con dueño.",
+        "Integraciones entre Libra, OPUS y Procore, automatizadas y monitoreadas.",
+        "Ciberseguridad básica: doble autenticación, monitoreo de amenazas y seguridad de M365.",
+        "Portafolio de proyectos de TI con presupuesto y beneficio en pesos.",
+        "Primera versión del tablero de control de obra."
+      ],
+      "excluye": [
+        "Cuarto de control completo (meta 2028).",
+        "Operación de infraestructura y mesa de ayuda."
+      ],
+      "epicas": [
+        {"id": "E2.1", "n": "Gobierno de datos: catálogo y dueños", "d": 1, "h": 3, "e": "Datos críticos catalogados y con dueño (hoy 39 indicadores sin dueño y 11 repositorios sin catálogo).", "p": 1},
+        {"id": "E2.2", "n": "Integraciones Libra–OPUS–Procore", "d": 2, "h": 4, "e": "Integraciones prioritarias automatizadas, monitoreadas y con acuerdo de servicio.", "p": 1, "hito": "Primeras integraciones"},
+        {"id": "E2.3", "n": "Ciberseguridad básica", "d": 1, "h": 2, "e": "Doble autenticación en Libra, monitoreo de amenazas y plan para subir la seguridad de M365.", "p": 1},
+        {"id": "E2.4", "n": "Portafolio de TI con beneficio medido", "d": 0, "h": 1, "e": "Los 46 proyectos con presupuesto y beneficio en pesos, aprobados desde el portafolio.", "p": 1, "hito": "Presupuesto 2027"},
+        {"id": "E2.5", "n": "Tablero de control de obra", "d": 3, "h": 4, "e": "Tablero piloto de costo y plazo en un proyecto.", "p": 2, "hito": "Piloto"},
+        {"id": "E2.6", "n": "Capacidad de ID&TI", "d": 1, "h": 2, "e": "Modelo operativo con 3 a 5 iniciativas simultáneas por persona y apoyo externo definido.", "p": 2}
+      ],
+      "kpis": [
+        {"n": "Integraciones automatizadas y monitoreadas", "d": "Integraciones automáticas con monitoreo y SLA / 10", "b": "0 de 10", "m27": "Por definir", "m28": "10 de 10 (oct)", "o": "pal"},
+        {"n": "Datos críticos catalogados y con dueño", "d": "Datos críticos catalogados con dueño / datos críticos", "b": "0 %", "m27": "Por definir", "m28": "100 %", "o": "pal"},
+        {"n": "Aporte de TI percibido por la Gerencia", "d": "Encuesta a la Gerencia, escala 1 a 5", "b": "1 de 5", "m27": "Por definir", "m28": "4 de 5", "o": "pal"},
+        {"n": "Seguridad de Microsoft 365", "d": "Puntaje de seguridad de M365 (Secure Score)", "b": "48 de 100", "m27": "Por definir", "m28": "—", "o": "pal"},
+        {"n": "Madurez tecnológica promedio", "d": "Evaluación de madurez de la consultoría, escala 1 a 5", "b": "2,1 de 5", "m27": "Por definir", "m28": "—", "o": "pal"}
+      ],
+      "riesgos": [
+        ["Presupuesto 2027 sin cierre formal", "Sin definir y aprobar recursos desde el portafolio, las iniciativas podrían iniciar sin financiación asegurada.", "Cerrar el presupuesto desde el portafolio en la fase de Inicio (épica E2.4)."],
+        ["Exposición a ciberataques", "Libra no exige doble autenticación y ningún sistema tiene monitoreo de amenazas. La seguridad de M365 está en 48 de 100.", "Épica E2.3 en el primer semestre de 2027."],
+        ["Equipo al límite", "4 personas internas para 15 iniciativas a la vez; lo sano son 3 a 5.", "Limitar el trabajo en curso por sprint y definir el apoyo externo (épica E2.6)."]
+      ],
+      "exito": [
+        ["Patrocinio de la Gerencia General", "TI con un espacio fijo en cada Comité Directivo."],
+        ["Presupuesto desde el portafolio", "Cada iniciativa entra con su beneficio en pesos y sale medida."],
+        ["Resultados que el negocio use", "Primero la gestión y captura de los datos, luego el tablero de control de obra."]
+      ]
+    },
+    {
+      "id": "ia", "num": "03", "nombre": "IA para reducir el costo de administrar", "corto": "IA",
+      "tesis": "Que la IA optimice costos y guarde lo que la compañía aprende.",
+      "herramientas": ["Adopción y plan de IA", "Copilot · M365"],
+      "estado": "2 asistentes en uso; falta medir el ahorro",
+      "balance": [2, 2, 1, 0],
+      "mision": "Incorporar inteligencia artificial para liberar tiempo, proteger el conocimiento y mejorar las decisiones en obra y oficina, con control de costo, dato y riesgo.",
+      "vision": "Consolidar una operación inteligente: cualquier profesional, en cualquier país, gestiona y ejecuta con agilidad, apoyado en lo que la compañía ha aprendido.",
+      "visionAno": "2031",
+      "objetivo": "En 2027, medir las horas liberadas por cada iniciativa de IA en producción, subir el uso diario del 15 % al 35 % y controlar el costo de los agentes.",
+      "ficha": [
+        ["Patrocinador", "Gerencia General", "pmi"],
+        ["Product Owner", "Por designar, dentro del Comité de IA", "agil"],
+        ["Facilitador", "Núcleo de IA (3 personas)", "agil"],
+        ["Equipo", "Comité de IA (12 integrantes, 7 de proyecto y obra) y red de Champions", "agil"],
+        ["Interesados", "Todas las áreas; 146 usuarios activos de Copilot", "pmi"],
+        ["Depende de", "Datos gobernados (E2.1) para la memoria organizacional y seguridad de M365 (E2.3)", "pmi"]
+      ],
+      "base": [
+        {"v": "146", "t": "usuarios activos de Copilot", "s": "+106 % en tres meses"},
+        {"v": "15 %", "t": "la usa a diario", "s": "23 de 150 · meta: 35 % en 12 meses"},
+        {"v": "2", "t": "asistentes de IA en producción", "s": "Analizador de informes de Procore y asistente del Sistema de Gestión"},
+        {"v": "4 de 6", "tono": "crit", "t": "iniciativas siguen en prueba o desarrollo", "s": "Formación: 18 de 24 sesiones"}
+      ],
+      "incluye": [
+        "Línea base y medición de horas liberadas.",
+        "Registro, responsable y control de costo de los agentes.",
+        "Adopción diaria de Copilot y formación por rol.",
+        "Paso a producción de los pilotos priorizados.",
+        "Memoria organizacional consultable con IA."
+      ],
+      "excluye": [
+        "Ideas que no pasan por el Comité de IA.",
+        "Modelos propios entrenados desde cero."
+      ],
+      "epicas": [
+        {"id": "E3.1", "n": "Línea base de horas liberadas", "d": 1, "h": 1, "e": "Horas por mes medidas en los 2 asistentes en producción y meta fijada.", "p": 1, "hito": "Línea base"},
+        {"id": "E3.2", "n": "Control de costo de agentes", "d": 1, "h": 2, "e": "Registro de agentes con responsable y tope de consumo.", "p": 1},
+        {"id": "E3.3", "n": "Uso diario: del 15 % al 35 %", "d": 1, "h": 4, "e": "Red de Champions activa y formación completa (24 de 24 sesiones).", "p": 1, "hito": "35 %"},
+        {"id": "E3.4", "n": "Pilotos a producción", "d": 2, "h": 4, "e": "Pilotos priorizados en producción con ahorro medido, o cerrados.", "p": 2},
+        {"id": "E3.5", "n": "Memoria organizacional", "d": 2, "h": 4, "e": "Lecciones aprendidas consultables con IA desde cualquier país.", "p": 2},
+        {"id": "E3.6", "n": "Un resultado visible por trimestre", "d": 1, "h": 4, "e": "Comunicado trimestral con el nombre del área que lo usa.", "p": 2}
+      ],
+      "kpis": [
+        {"n": "Horas liberadas por iniciativa de IA", "d": "Horas por mes ahorradas frente a la línea base de tiempo", "b": "Sin medir", "m27": "Meta fijada en T1", "m28": "Por definir", "o": "pal"},
+        {"n": "Uso diario de IA", "d": "Usuarios diarios / usuarios con licencia × 100", "b": "15 %", "m27": "35 %", "m28": "—", "o": "pal"},
+        {"n": "Iniciativas de IA en producción", "d": "Iniciativas en producción / iniciativas priorizadas", "b": "2 de 6", "m27": "Por definir", "m28": "—", "o": "pal"},
+        {"n": "Procesos optimizados con IA", "d": "Conteo de procesos mejorados con IA", "b": "2", "m27": "Por definir", "m28": "—", "o": "c25"}
+      ],
+      "riesgos": [
+        ["Costo sin control", "Agentes creados sin registro ni responsable consumen todos los días.", "Registro obligatorio de agentes con responsable y tope de consumo (épica E3.2)."],
+        ["Uso amplio pero superficial", "146 usuarios activos, pero solo 23 la usan a diario.", "Champions por área y casos de uso por rol."],
+        ["Pilotos que no llegan a producción", "4 de las 6 iniciativas siguen en prueba o desarrollo.", "Cada piloto tiene un trimestre para pasar a producción o cerrarse."]
+      ],
+      "exito": [
+        ["Reglas claras para priorizar", "Toda idea entra por el Comité de IA y se evalúa por impacto y complejidad."],
+        ["Núcleo pequeño, ejecución amplia", "Tres personas gobiernan; el Comité y la red de Champions ejecutan."],
+        ["Un resultado visible por trimestre", "Comunicado con el nombre del área que lo usa."]
+      ]
+    },
+    {
+      "id": "vigilancia", "num": "04", "nombre": "Vigilancia Tecnológica", "corto": "Vigilancia",
+      "tesis": "Buscar la tecnología emergente que mejora nuestros procesos, antes de que sea obligatoria.",
+      "herramientas": ["Radar de Transformación Digital v3.0"],
+      "propuesta": true,
+      "estado": "Piloto en marcha; proceso por formalizar",
+      "balance": [2, 1, 1, 0],
+      "mision": "Identificar, evaluar y probar tecnologías emergentes que mejoren los procesos de obra y oficina, con evidencia y no por tendencia.",
+      "vision": "Cada año, Grupo HL cuenta con un portafolio de tecnologías evaluadas y probadas en piloto, conectadas con problemas reales de sus procesos.",
+      "visionAno": "Anual",
+      "objetivo": "En 2027, formalizar la vigilancia como proceso con responsable, actualizar el radar cada trimestre y llevar al menos una tecnología de piloto a operación.",
+      "ficha": [
+        ["Patrocinador", "Gerencia General", "pmi"],
+        ["Product Owner", "Por designar", "agil"],
+        ["Facilitador", "ID&TI", "agil"],
+        ["Equipo", "Responsable de vigilancia (por designar) y las áreas de obra que prueban", "agil"],
+        ["Interesados", "Operaciones, HSE, Estimaciones y clientes mineros y cementeros", "pmi"],
+        ["Depende de", "Portafolio de TI (E2.4) para financiar pilotos e integraciones (E2.2)", "pmi"]
+      ],
+      "base": [
+        {"v": "34", "t": "tecnologías evaluadas en el Radar v3.0", "s": "4 adoptar, 10 considerar, 13 explorar, 7 fuera de alcance"},
+        {"v": "Piloto", "t": "dentro del portafolio del Gobierno de TI", "s": "Sin responsable ni proceso propio"},
+        {"v": "0", "tono": "crit", "t": "tecnologías adoptadas", "s": "Meta: mínimo 1 por año"},
+        {"v": "11", "t": "tecnologías mejor puntuadas", "s": "Drones, GNSS, LiDAR, sensores de concreto, BIM 5D…"}
+      ],
+      "incluye": [
+        "Proceso, criterios de evaluación y responsable de la vigilancia.",
+        "Radar actualizado cada trimestre.",
+        "Pilotos con resultado medido.",
+        "Recomendación de adopción al Comité Directivo."
+      ],
+      "excluye": [
+        "Compra a escala de tecnologías no probadas en piloto.",
+        "Tecnologías marcadas fuera de alcance en el radar (7 en la v3.0)."
+      ],
+      "epicas": [
+        {"id": "E4.1", "n": "Proceso formal y responsable", "d": 0, "h": 1, "e": "Procedimiento, responsable y criterios de evaluación aprobados.", "p": 1, "hito": "Proceso aprobado"},
+        {"id": "E4.2", "n": "Radar trimestral", "d": 1, "h": 4, "e": "Radar actualizado cada trimestre, partiendo de la v3.0.", "p": 1},
+        {"id": "E4.3", "n": "Pilotos del anillo Adoptar", "d": 2, "h": 3, "e": "Pilotos con resultado medido, por ejemplo escaneo con drones y sensores de concreto.", "p": 1},
+        {"id": "E4.4", "n": "Decisión de adopción", "d": 4, "h": 4, "e": "Al menos una tecnología pasa de piloto a operación.", "p": 1, "hito": "≥ 1 adoptada"}
+      ],
+      "kpis": [
+        {"n": "Tecnologías adoptadas por año", "d": "Tecnologías del radar que pasan de piloto a operación", "b": "0", "m27": "≥ 1", "m28": "≥ 1", "o": "pal"},
+        {"n": "Tecnologías evaluadas por trimestre", "d": "Tecnologías nuevas o reevaluadas en el radar", "b": "34 (v3.0)", "m27": "Por definir", "m28": "Por definir", "o": "pal"},
+        {"n": "Pilotos con resultado medido", "d": "Pilotos cerrados con métrica de éxito medida", "b": "0", "m27": "Por definir", "m28": "Por definir", "o": "pal"}
+      ],
+      "riesgos": [
+        ["Pilotos que nunca escalan", "Menos del 30 % de los pilotos llega a escalar (Microsoft; McKinsey).", "Cada piloto empieza con un problema costoso y una métrica de éxito acordada."],
+        ["Tecnología que no se integra", "El 38 % de las empresas con IoT dice que la complejidad técnica frena su expansión (Microsoft).", "Revisar la integración con Data Driven antes de aprobar el piloto."],
+        ["Más puntos de entrada para ciberataques", "En construcción, un incidente deja en promedio 24 días de interrupción (QBE, 2026).", "Evaluación de seguridad como criterio de entrada al radar."]
+      ],
+      "exito": [
+        ["Vigilancia sistemática, no ocasional", "Las empresas que vigilan el futuro de forma estructurada fueron un 33 % más rentables."],
+        ["Empezar por el problema más costoso", "Los grandes proyectos superan su costo o plazo entre un 30 % y un 45 % (McKinsey)."],
+        ["Invertir en personas tanto como en tecnología", "Un dólar en gestión del cambio por cada dólar en tecnología (McKinsey)."]
+      ]
+    }
+  ]
+}
+</script>
+
+<header class="topbar"><div class="tb-in">
+  <span class="brand"><b>Charter · Motor Tecnológico</b><span id="brand-sub">Grupo HL</span></span>
+  <nav class="tabs" role="tablist" aria-label="Charters" id="tabs"></nav>
+</div></header>
+<main id="app"></main>
+<footer class="pfoot"><div class="inner" id="foot"></div></footer>
+
+<script>
+(function(){
+const D = JSON.parse(document.getElementById('datos').textContent);
+const INI = D.iniciativas, G = D.general, Q = D.trimestres, M = D.meta;
+const byId = {}; INI.forEach(i => byId[i.id] = i);
+const $ = (s, r=document) => r.querySelector(s), $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const col = id => `var(--${id})`;
+const tbd = s => /por definir|por designar|por confirmar|sin medir/i.test(s) ? `<span class="tbd">${esc(s)}</span>` : esc(s);
+const method = m => m === 'pmi' ? '<span class="pmi">PMI</span>' : '<span class="agil">SCRUM</span>';
+const ORIG = {pal: ['pal', 'Palanca'], pro: ['pro', 'Propuesta'], c25: ['c25', 'Charter 2025']};
+const sevOf = (p, i) => p * i >= 6 ? 3 : p * i >= 3 ? 2 : 1;
+const SEVTXT = {3: 'Alta', 2: 'Media', 1: 'Baja'};
+const fmtCOP = n => (n / 1e6).toFixed(1).replace('.', ',') + ' M';
+const nEpicas = INI.reduce((a, i) => a + i.epicas.length, 0);
+
+const TABS = [{id: 'motor', label: 'Motor Tecnológico', c: 'var(--gold)'}].concat(INI.map(i => ({id: i.id, label: `${+i.num} · ${i.corto}`, c: col(i.id)})));
+
+function sec(kick, title, body, o={}){
+  return `<section class="sec" ${o.c ? `style="--c:${o.c}"` : ''}><div class="inner">
+    <div class="head"><div><div class="kick a">${kick}</div><h2 class="h2 a" style="--i:1">${title}</h2></div>${o.lede ? `<p class="lede a" style="--i:2">${o.lede}</p>` : ''}</div>
+    ${body}</div></section>`;
+}
+
+/* ---------- Bloques compartidos ---------- */
+function kpiTable(rows, showIni){
+  return `<div class="tbl-wrap a" style="--i:3"><table class="tbl kpi-tbl">
+    <thead><tr><th>Indicador</th>${showIni ? '<th>Iniciativa</th>' : ''}<th>Línea base → meta 2027</th><th>Meta 2028</th><th>Origen</th></tr></thead>
+    <tbody>${rows.map(k => `<tr data-ini="${k.ini}">
+      <td class="kpi-n">${esc(k.n)}<small>${esc(k.d)}</small></td>
+      ${showIni ? `<td><span class="ini-pill" style="--lc:${k.ini === 'general' ? 'var(--gold)' : col(k.ini)}"><i></i>${k.ini === 'general' ? 'Palanca' : esc(byId[k.ini].corto)}</span></td>` : ''}
+      <td><span class="bm"><span class="b">${esc(k.b)}</span><i>→</i><span class="m">${tbd(k.m27)}</span></span></td>
+      <td class="num">${tbd(k.m28)}</td>
+      <td><span class="orig ${ORIG[k.o][0]}">${ORIG[k.o][1]}</span></td></tr>`).join('')}</tbody></table></div>`;
+}
+
+function roadmap(rows, withFilters){
+  const head = `<div class="rm-row rm-h"><div class="rm-l">Épica</div><div class="trk" style="--hoy:${M.hoy * 100}%">${Q.map(q => `<span>${esc(q)}</span>`).join('')}<b class="hoy">HOY</b></div></div>`;
+  let i = 0;
+  const body = rows.map(r => {
+    const left = r.d * 20, w = (r.h - r.d + 1) * 20;
+    if (r.grupo) return `<div class="rm-row rm-g" data-ini="${r.ini}" style="--lc:${r.c}"><div class="rm-l"><b>${esc(r.n)}</b></div><div class="trk" style="--hoy:${M.hoy * 100}%"></div></div>`;
+    i++;
+    const right = left + w;
+    const ms = r.hito ? `<span class="ms pop" style="left:${right}%;--i:${i}"></span><span class="ms-l ${right > 70 ? 'left' : ''}" style="left:${right > 70 ? right - 1 : right}%">${esc(r.hito)}</span>` : '';
+    return `<div class="rm-row" data-ini="${r.ini}" style="--lc:${r.c}" title="${esc(r.e || '')}"><div class="rm-l"><b>${esc(r.n)}</b><span>${esc(r.id || '')}</span></div>
+      <div class="trk" style="--hoy:${M.hoy * 100}%"><span class="bar gx ${r.ph ? 'ph' : ''}" style="left:${left}%;width:${w}%;--i:${i}">${r.ph ? esc(r.w) : ''}</span>${ms}</div></div>`;
+  }).join('');
+  return `<div class="tbl-wrap a" style="--i:3"><div class="rm">${head}${body}</div></div>`;
+}
+
+function filters(group){
+  return `<div class="filters a" style="--i:2" data-group="${group}"><button class="fb" aria-pressed="true" data-f="all" style="--fc:var(--navy)"><i></i>Todas</button>${INI.map(i => `<button class="fb" aria-pressed="false" data-f="${i.id}" style="--fc:${col(i.id)}"><i></i>${esc(i.corto)}</button>`).join('')}</div>`;
+}
+
+function engine(){
+  return `<svg class="engine" viewBox="0 0 520 520" aria-hidden="true">
+    <g class="ring r1"><circle cx="260" cy="260" r="230" fill="none" style="stroke:var(--core)" stroke-width="16" stroke-dasharray="300 61" stroke-linecap="round"/></g>
+    <g class="ring r2"><circle cx="260" cy="260" r="190" fill="none" style="stroke:var(--datos)" stroke-width="16" stroke-dasharray="220 78" stroke-linecap="round"/></g>
+    <g class="ring r3"><circle cx="260" cy="260" r="150" fill="none" style="stroke:var(--ia)" stroke-width="16" stroke-dasharray="160 75" stroke-linecap="round"/></g>
+    <g class="ring r1"><circle cx="260" cy="260" r="110" fill="none" style="stroke:var(--vigilancia)" stroke-width="16" stroke-dasharray="110 62" stroke-linecap="round"/></g>
+    <circle cx="260" cy="260" r="64" style="fill:var(--gold)"/><circle cx="260" cy="260" r="22" style="fill:var(--navy)"/></svg>`;
+}
+
+function nextBtn(id){
+  const t = TABS.find(x => x.id === id);
+  return `<div class="next"><div class="inner"><button class="next-btn" data-go="${t.id}" style="--nc:${t.c}"><span class="label">Siguiente</span><b>${esc(t.label)}</b><span class="arr">→</span></button></div></div>`;
+}
+
+/* ---------- Charter general ---------- */
+function panelMotor(){
+  const hero = `<section class="band"><div class="inner">${engine()}
+    <div class="hero-top">
+      <div class="kick a">Project Charter · ${esc(M.revision)} · ${esc(M.estado)} · ${esc(M.fecha)}</div>
+      <h1 class="a" style="--i:1">Motor<br>Tecnológico</h1>
+      <p class="sub a" style="--i:2">Herramientas, datos e IA, en los proyectos y en la oficina. Charter 2027 con visión a 2028.</p>
+    </div>
+    <div class="stats a" style="--i:3">
+      <div class="stat"><b>48,5<em>→</em>100</b><span>Ingresos en cinco años, millones de USD</span></div>
+      <div class="stat"><b>30–35 %<em>→</em>20 %</b><span>Costo de administrar los proyectos</span></div>
+      <div class="stat"><b><span class="cnt" data-n="4">4</span> · <span class="cnt" data-n="${nEpicas}">${nEpicas}</span></b><span>Iniciativas y épicas en 2027</span></div>
+      <div class="stat"><b>21</b><span>Sprints de 2 semanas, feb–nov 2027</span></div>
+    </div>
+    <dl class="ficha a" style="--i:4">${G.ficha.map(f => `<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}${f[2] ? `<small>${esc(f[2])}</small>` : ''}</dd></div>`).join('')}</dl>
+  </div></section>`;
+
+  const caso = sec('Caso de negocio', 'El mandato: crecer sin crecer la estructura', `
+    <div class="g2">
+      <div class="card a" style="--i:2"><div class="ml">Ingresos en cinco años · millones de USD</div>
+        <div class="mv"><span>48,5</span><em>→</em><span class="cnt" data-n="100">100</span></div>
+        <p>Sin crecer sustancialmente la estructura corporativa.</p>
+        <div class="bar2"><div class="row"><span>2026</span><div class="t"><div class="f gx" style="width:48.5%;background:var(--blue-ll)"></div></div></div><div class="row"><span>2031</span><div class="t"><div class="f gx" style="width:100%;background:var(--navy);--i:1"></div></div></div></div>
+      </div>
+      <div class="card a" style="--i:3"><div class="ml">Costo de administrar los proyectos</div>
+        <div class="mv">30–35 %<em>→</em><span><span class="cnt" data-n="20">20</span> %</span></div>
+        <p>Cada punto que baja es competitividad directa.</p>
+        <div class="bar2"><div class="row"><span>Hoy</span><div class="t"><div class="f gx" style="width:100%;background:var(--crit);opacity:.75"></div></div></div><div class="row"><span>Meta</span><div class="t"><div class="f gx" style="width:57%;background:var(--ok);--i:1"></div></div></div></div>
+      </div>
+    </div>
+    <div class="quote a" style="--i:4"><span class="qm">“</span><p>Hoy el equipo administrativo dedica la mayor parte de su tiempo a <b>reunir datos y producir informes</b>, no a analizarlos. La tecnología debe devolver ese tiempo.</p></div>
+    <div class="tbl-wrap a" style="--i:5"><div class="mtx">
+      <div class="hc">Balance a octubre de 2026</div><div class="hc">Diagnóstico</div><div class="hc">Plan</div><div class="hc">Ejecución</div><div class="hc">Valor medido</div>
+      ${INI.map((x, r) => { const last = r === INI.length - 1 ? ' last' : ''; return `<div class="rn${last}" style="--rc:${col(x.id)}"><b>${esc(x.corto)}</b><span>${esc(x.estado)}</span></div>` + x.balance.map((b, k) => `<div class="cell${last}" style="--rc:${col(x.id)}"><span class="dot d${b} pop" style="--i:${r * 4 + k}"></span></div>`).join(''); }).join('')}
+    </div></div>
+    <div class="legend a" style="--i:6"><span><i class="dot d2"></i>Hecho</span><span><i class="dot d1"></i>En curso</span><span><i class="dot d0"></i>Pendiente</span></div>
+    <div class="gaps a" style="--i:7"><span class="gl">Lo que falta en todas</span><span class="g">Uso real de las herramientas</span><span class="g">Medir el valor</span><span class="g">Capacidad para ejecutar</span><span class="g">Financiación 2027</span></div>
+  `, {lede: 'Todas las iniciativas tienen rumbo. Ninguna tiene todavía valor medido: eso es lo que este charter debe cambiar en 2027.'});
+
+  const mvo = sec('Misión, visión y objetivos', 'Hacia dónde va el motor', `
+    <div class="g2">
+      <div class="a" style="--i:2"><div class="stmt-l">Misión</div><p class="stmt" style="margin-top:10px">${esc(G.mision)}</p></div>
+      <div class="a" style="--i:3"><div class="stmt-l">Visión 2028</div><p class="stmt" style="margin-top:10px">${esc(G.vision)}</p></div>
+    </div>
+    <div class="obj-gen a" style="--i:4"><span class="ml">Objetivo general 2027</span><p>${esc(G.objetivo)}</p></div>
+    <div class="g4">${INI.map((x, k) => `<button class="oe a" style="--lc:${col(x.id)};--i:${5 + k}" data-go="${x.id}"><span class="n">${x.num}</span><h3>${esc(x.nombre)}</h3><p>${esc(x.objetivo)}</p><span class="go">Ver charter de la iniciativa →</span></button>`).join('')}</div>
+  `, {lede: 'Un objetivo general para la palanca y un objetivo específico por iniciativa, cada uno con su indicador.'});
+
+  const alcance = sec('Alcance', 'Qué entra en 2027 y qué no', `
+    <div class="g2 scope">
+      <div class="card a" style="--i:2;--hc:var(--ok)"><h3><i>✓</i>Dentro del alcance</h3>
+        ${INI.map(x => `<div class="si" style="--lc:${col(x.id)}"><div><b>${x.num} · ${esc(x.nombre)}</b><div class="chips">${x.herramientas.map(h => `<span class="chip">${esc(h)}</span>`).join('')}</div></div></div>`).join('')}
+      </div>
+      <div class="card a" style="--i:3;--hc:var(--crit)"><h3><i>✕</i>Fuera del alcance</h3>
+        ${G.fueraAlcance.map(f => `<div class="si"><div><b>${esc(f[0])}</b><p>${esc(f[1])}</p></div></div>`).join('')}
+      </div>
+    </div>`, {lede: 'OPUS, Zoho CRM y M365 se suman a Libra y Procore en la iniciativa 1. El detalle de cada alcance está en el charter de cada iniciativa.'});
+
+  const lane = (cls, title, sub, items) => `<div class="lane ${cls} a" style="--i:${cls === 'p' ? 2 : 3}"><div class="lane-h"><b>${title}</b><span>${sub}</span></div>
+    <div class="steps">${items.map(s => `<div class="step"><span class="w">${esc(s.w)}</span><h4>${esc(s.n)}</h4><p>${esc(s.p)}</p></div>`).join('')}</div></div>`;
+  const modelo = sec('Cómo se gestiona', 'Modelo híbrido: PMI para gobernar, Scrum para entregar', `
+    <div class="lanes">
+      ${lane('p', 'PMI', 'Qué, cuánto y cuándo: línea base, costo, riesgos y control de cambios.', G.fases)}
+      <div class="bridge a" style="--i:3"><div><span class="loop">↻</span><span><b>Punto de unión.</b> ${esc(G.puente)}</span></div></div>
+      ${lane('s', 'Scrum', 'Cómo se entrega: backlog por iniciativa y un incremento usable cada 2 semanas.', G.scrum)}
+    </div>
+    <div class="tbl-wrap a" style="--i:4"><table class="tbl"><thead><tr><th>Evento</th><th>Cadencia</th><th>Participan</th><th>Sale de ahí</th><th>Enfoque</th></tr></thead>
+      <tbody>${G.ceremonias.map(c => `<tr><td><b>${esc(c[0])}</b></td><td>${esc(c[1])}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td><td>${method(c[4])}</td></tr>`).join('')}</tbody></table></div>
+    <div class="roles">${G.roles.map((r, k) => `<div class="role a" style="--i:${5 + k}"><div class="rt"><h4>${esc(r[0])}</h4>${method(r[2])}</div><span class="who">${tbd(r[1])}</span><p>${esc(r[3])}</p></div>`).join('')}</div>
+    <div class="dod a" style="--i:8"><span class="ml">Definición de terminado</span><ol>${G.dod.map(d => `<li>${esc(d)}</li>`).join('')}</ol></div>
+  `, {lede: 'El charter, la línea base y el presupuesto se controlan como en PMI. Cada iniciativa entrega por sprints, con un Product Owner del negocio.'});
+
+  const rows = [];
+  rows.push({grupo: true, n: 'Fases PMI de la palanca', ini: 'all', c: 'var(--navy)'});
+  G.fases.forEach(f => rows.push({n: f.n, id: f.w, d: f.d, h: f.h, ph: true, w: f.n, ini: 'all', c: 'var(--navy)', e: f.p}));
+  INI.forEach(x => {
+    rows.push({grupo: true, n: `${x.num} · ${x.nombre}`, ini: x.id, c: col(x.id)});
+    x.epicas.forEach(e => rows.push(Object.assign({}, e, {ini: x.id, c: col(x.id)})));
+  });
+  const ruta = sec('Hoja de ruta 2027', 'Épicas por trimestre y sus hitos', `${filters('rm')}${roadmap(rows)}
+    <div class="legend a" style="--i:4"><span><i style="width:22px;height:10px;border-radius:3px;background:var(--core)"></i>Épica</span><span><i style="width:11px;height:11px;background:var(--gold);transform:rotate(45deg)"></i>Hito</span><span><i style="width:2px;height:16px;background:var(--gold)"></i>Hoy: ${esc(M.fecha)}</span></div>`,
+    {lede: 'Fechas preliminares. Se fijan como línea base en la fase de Planificación y se revisan cada trimestre.'});
+
+  const allK = G.kpis.map(k => Object.assign({ini: 'general'}, k)).concat(...INI.map(x => x.kpis.map(k => Object.assign({ini: x.id}, k))));
+  const kpis = sec('Indicadores', 'Cómo sabremos que funcionó', `${filters('kpi')}${kpiTable(allK, true)}
+    <div class="legend a" style="--i:4"><span><span class="orig pal">Palanca</span>Dato de la palanca, oct-2026</span><span><span class="orig c25">Charter 2025</span>Formato o indicador heredado</span><span><span class="orig pro">Propuesta</span>Nuevo en este borrador</span></div>`,
+    {lede: 'Cada indicador tiene línea base. Las metas «Por definir» se fijan en la fase de Planificación.'});
+
+  const heat = [];
+  for (let p = 3; p >= 1; p--){
+    heat.push(`<div class="ax ay">${['', 'Baja', 'Media', 'Alta'][p]}</div>`);
+    for (let i = 1; i <= 3; i++){
+      const rs = G.riesgos.filter(r => r.p === p && r.i === i);
+      heat.push(`<div class="hc2 s${sevOf(p, i)}">${rs.map((r, k) => `<button class="rdot pop" data-r="${r.id}" style="--i:${k + p + i}" aria-label="${esc(r.id + ': ' + r.n)}">${r.id}</button>`).join('')}</div>`);
+    }
+  }
+  heat.push('<div></div>', '<div class="ax">Impacto bajo</div>', '<div class="ax">Medio</div>', '<div class="ax">Alto</div>');
+  const riesgos = sec('Riesgos', 'Lo que puede frenar el motor', `
+    <div class="risk-grid">
+      <div class="a" style="--i:2"><div class="heat" role="group" aria-label="Matriz de probabilidad por impacto">${heat.join('')}</div>
+        <p style="font-size:13.5px;color:var(--muted);margin-top:10px">Eje vertical: probabilidad. Valoración preliminar, por validar en la fase de Planificación.</p></div>
+      <div class="rlist">${G.riesgos.map((r, k) => { const s = sevOf(r.p, r.i); return `<div class="ritem a" data-r="${r.id}" style="--i:${3 + k}"><div><span class="rid">${r.id}</span><span class="sev s${s}">${SEVTXT[s]}</span></div><div><h4>${esc(r.n)}</h4><p>${esc(r.c)}</p><p class="mit"><b>Mitigación:</b> ${esc(r.m)}</p></div></div>`; }).join('')}</div>
+    </div>`, {lede: 'Riesgos de toda la palanca. Los de cada iniciativa están en su charter.'});
+
+  const tot25 = D.general.ppto2025.reduce((a, r) => a + r[1], 0);
+  const max25 = Math.max(...D.general.ppto2025.map(r => r[1]));
+  const ppto = sec('Presupuesto', 'Financiación 2027: pendiente de cierre', `
+    <div class="alert a" style="--i:2"><span class="ic">!</span><span><b>No hay presupuesto 2027 aprobado.</b> Sin cerrarlo desde el portafolio, las iniciativas podrían arrancar sin financiación asegurada. Es la primera tarea de la fase de Inicio.</span></div>
+    <div class="g2">
+      <div class="card a" style="--i:3"><div class="ml">Presupuesto 2027 por iniciativa</div>
+        <div class="tbl-wrap" style="border:0;border-radius:0;background:transparent"><table class="tbl" style="min-width:0"><thead><tr><th>Iniciativa</th><th>Qué incluye</th><th>COP</th></tr></thead>
+        <tbody>${G.ppto2027.map(r => `<tr><td><span class="ini-pill" style="--lc:${col(r[0])}"><i></i>${esc(byId[r[0]].corto)}</span></td><td style="font-size:14px;color:var(--muted)">${esc(r[1])}</td><td><span class="tbd">Por definir</span></td></tr>`).join('')}</tbody></table></div>
+      </div>
+      <div class="card a" style="--i:4"><div class="ml">Referencia: presupuesto TI 2025 · COP</div>
+        <div class="hb">${G.ppto2025.map((r, k) => `<div class="hb-r"><span class="l">${esc(r[0])}<small style="color:${r[2] ? 'var(--ok)' : 'var(--muted)'}">${r[2] ? 'Equivale a líneas del Motor' : 'Fuera del alcance del Motor'}</small></span><div class="t"><div class="f gx" style="width:${(r[1] / max25 * 100).toFixed(1)}%;background:${r[2] ? 'var(--blue)' : 'var(--blue-ll)'};--i:${k}"></div></div><span class="v">${fmtCOP(r[1])}</span></div>`).join('')}
+          <div class="hb-tot"><span>Total 2025</span><span>${fmtCOP(tot25)}</span></div></div>
+      </div>
+    </div>`, {lede: 'En 2025, las líneas equivalentes al Motor (potenciación de herramientas e IA) sumaron 102,7 M COP de un total de 553,2 M COP.'});
+
+  const sup = sec('Supuestos, restricciones y criterios de éxito', 'Las condiciones del charter', `
+    <div class="g3">
+      <div class="card a" style="--i:2"><div class="ml">Supuestos</div><ul class="ck">${G.supuestos.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+      <div class="card a" style="--i:3;--bc:var(--warn)"><div class="ml">Restricciones</div><ul class="ck" style="--bc:var(--warn)">${G.restricciones.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+      <div class="card a" style="--i:4"><div class="ml">Criterios de éxito</div><ul class="ck" style="--bc:var(--ok)">${G.exito.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+    </div>`);
+
+  const firmas = ['Patrocinador · Gerencia General', 'Director de la palanca · Líder ID&TI', 'Product Owners de las 4 iniciativas'];
+  const cierre = sec('Validación y aprobación', 'Lo que falta para aprobar este charter', `
+    <ol class="pend">${G.pendientes.map((p, k) => `<li class="a" style="--i:${2 + k}"><div><b>${esc(p[0])}</b><span>${esc(p[1])}</span></div></li>`).join('')}</ol>
+    <div class="firmas">${firmas.map((f, k) => `<div class="firma a" style="--i:${9 + k}"><span class="st">Pendiente</span><span class="sl">${esc(f)}</span><span>Firma y fecha</span></div>`).join('')}</div>`,
+    {lede: 'Con estas respuestas el charter pasa de borrador a Rev. A y su línea base queda fija.'});
+
+  return hero + caso + mvo + alcance + modelo + ruta + kpis + riesgos + ppto + sup + cierre + nextBtn(INI[0].id);
+}
+
+/* ---------- Charter de iniciativa ---------- */
+function panelIni(x, idx){
+  const c = col(x.id);
+  const hero = `<section class="band init" style="--c:${c}"><div class="inner"><div class="op">
+    <div>
+      <div class="num a">${x.num}</div>
+      <h1 class="a" style="--i:1">${esc(x.nombre)}</h1>
+      <p class="thesis a" style="--i:2">${esc(x.tesis)}</p>
+      <div class="tags a" style="--i:3">${x.propuesta ? '<span class="tag prop">Propuesta</span>' : ''}${x.herramientas.map(h => `<span class="tag ghost">${esc(h)}</span>`).join('')}</div>
+    </div>
+    <div>
+      <div class="glass a" style="--i:3"><div class="gl">Misión</div><p>${esc(x.mision)}</p></div>
+      <div class="glass a" style="--i:4"><div class="gl">Visión <span>${esc(x.visionAno)}</span></div><p>${esc(x.vision)}</p></div>
+      <div class="glass obj a" style="--i:5"><div class="gl">Objetivo <span>2027</span></div><p>${esc(x.objetivo)}</p></div>
+    </div>
+  </div></div></section>`;
+
+  const ficha = sec(`Iniciativa ${+x.num} · Gobierno`, 'Quién decide y quién entrega', `
+    <dl class="fi a" style="--i:2">${x.ficha.map(f => `<div><dt>${esc(f[0])} ${method(f[2])}</dt><dd>${tbd(f[1])}</dd></div>`).join('')}</dl>`, {c});
+
+  const base = sec(`Iniciativa ${+x.num} · Línea base`, 'Desde dónde partimos', `
+    <div class="g4">${x.base.map((b, k) => `<div class="tile a" style="--i:${2 + k}"><div class="big ${b.tono || ''}">${esc(b.v)}</div><p class="cap">${esc(b.t)}<small>${esc(b.s)}</small></p></div>`).join('')}</div>`, {c, lede: `Estado: ${esc(x.estado)}. Datos de los resúmenes ejecutivos de octubre de 2026.`});
+
+  const alc = sec(`Iniciativa ${+x.num} · Alcance`, 'Qué incluye y qué no', `
+    <div class="g2 scope">
+      <div class="card a" style="--i:2;--hc:var(--ok)"><h3><i>✓</i>Incluye</h3><ul class="ck" style="--bc:var(--ok)">${x.incluye.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+      <div class="card a" style="--i:3;--hc:var(--crit)"><h3><i>✕</i>No incluye</h3><ul class="ck" style="--bc:var(--crit)">${x.excluye.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+    </div>`, {c});
+
+  const qlab = ['Ini', 'T1', 'T2', 'T3', 'T4'];
+  const back = sec(`Iniciativa ${+x.num} · Backlog 2027`, 'Épicas, en orden de prioridad', `
+    <div class="epics">${x.epicas.map((e, k) => `<div class="epic a" style="--i:${2 + k}">
+      <div class="et"><div><span class="eid">${e.id}</span><h4>${esc(e.n)}</h4></div><span class="prio p${e.p}">${e.p === 1 ? 'Debe' : 'Debería'}</span></div>
+      <p><b>Entregable:</b> ${esc(e.e)}</p>
+      <div><div class="qs">${qlab.map((q, j) => `<span class="${j >= e.d && j <= e.h ? 'act gx' : ''}" style="--i:${j}"></span>`).join('')}</div>
+      <div class="qs-l" style="margin-top:5px">${qlab.map(q => `<span>${q}</span>`).join('')}</div></div>
+      ${e.hito ? `<span class="hito"><i></i>Hito: ${esc(e.hito)}</span>` : ''}
+    </div>`).join('')}</div>`, {c, lede: 'El Product Owner puede reordenar el backlog en cada revisión trimestral. Cada épica se parte en historias al planificar el sprint.'});
+
+  const kp = sec(`Iniciativa ${+x.num} · Indicadores`, 'Cómo se mide el valor', kpiTable(x.kpis.map(k => Object.assign({ini: x.id}, k)), false), {c});
+
+  const rf = sec(`Iniciativa ${+x.num} · Riesgos y factores de éxito`, 'Qué puede salir mal y qué lo evita', `
+    <div class="rf">
+      <div class="rf-col r"><div class="rf-h a" style="--i:2"><i>!</i>Riesgos</div>
+        ${x.riesgos.map((r, k) => `<div class="rfi a" style="--i:${3 + k}"><div><h4>${esc(r[0])}</h4><p>${esc(r[1])}</p><p class="mit"><b>Mitigación:</b> ${esc(r[2])}</p></div></div>`).join('')}</div>
+      <div class="rf-col f"><div class="rf-h a" style="--i:2"><i>✓</i>Factores de éxito</div>
+        ${x.exito.map((r, k) => `<div class="rfi a" style="--i:${3 + k}"><div><h4>${esc(r[0])}</h4><p>${esc(r[1])}</p></div></div>`).join('')}</div>
+    </div>`, {c});
+
+  const nxt = idx < INI.length - 1 ? nextBtn(INI[idx + 1].id) : nextBtn('motor');
+  return hero + ficha + base + alc + back + kp + rf + nxt;
+}
+
+/* ---------- Montaje ---------- */
+$('#tabs').innerHTML = TABS.map((t, k) => `<button class="tab" role="tab" id="t-${t.id}" data-tab="${t.id}" aria-controls="p-${t.id}" aria-selected="${k === 0}" ${k ? 'tabindex="-1"' : ''} style="--tc:${t.c}"><i></i>${esc(t.label)}</button>`).join('');
+$('#app').innerHTML = `<div class="panel" id="p-motor" role="tabpanel" aria-labelledby="t-motor">${panelMotor()}</div>` +
+  INI.map((x, k) => `<div class="panel" id="p-${x.id}" role="tabpanel" aria-labelledby="t-${x.id}" hidden>${panelIni(x, k)}</div>`).join('');
+$('#brand-sub').textContent = `Grupo HL · ${M.revision} · ${M.fecha}`;
+$('#foot').textContent = `Dirección de Innovación Digital & TI · ${M.revision} · ${M.estado} · Fuentes: Palanca Motor Tecnológico (resúmenes ejecutivos de Libra, Procore, Transformación Digital e IA, 16-oct-2026) y Project Charter TI 2025 Rev. B. Metas «Por definir», fechas y valoración de riesgos son preliminares.`;
+
+/* Filtros (hoja de ruta e indicadores) */
+$$('.filters').forEach(fg => {
+  const target = fg.dataset.group === 'rm' ? fg.parentElement.querySelectorAll('.rm-row:not(.rm-h)') : fg.parentElement.querySelectorAll('.kpi-tbl tbody tr');
+  fg.addEventListener('click', e => {
+    const b = e.target.closest('.fb'); if (!b) return;
+    $$('.fb', fg).forEach(x => x.setAttribute('aria-pressed', x === b));
+    const f = b.dataset.f;
+    target.forEach(r => { const ini = r.dataset.ini; r.hidden = !(f === 'all' || ini === f || ini === 'all' || (fg.dataset.group === 'kpi' && ini === 'general' && f === 'all')); });
+  });
+});
+
+/* Matriz de riesgos ↔ lista */
+function hl(id, on){ $$(`[data-r="${id}"]`).forEach(el => el.classList.toggle('hl', on)); }
+$$('.rdot').forEach(d => {
+  d.addEventListener('mouseenter', () => hl(d.dataset.r, true));
+  d.addEventListener('mouseleave', () => hl(d.dataset.r, false));
+  d.addEventListener('focus', () => hl(d.dataset.r, true));
+  d.addEventListener('blur', () => hl(d.dataset.r, false));
+  d.addEventListener('click', () => { const it = $(`.ritem[data-r="${d.dataset.r}"]`); if (it) it.scrollIntoView({behavior: RM ? 'auto' : 'smooth', block: 'center'}); });
+});
+$$('.ritem').forEach(it => { it.addEventListener('mouseenter', () => hl(it.dataset.r, true)); it.addEventListener('mouseleave', () => hl(it.dataset.r, false)); });
+
+/* Contadores */
+const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+function countUp(scope){ if (RM) return;
+  $$('.cnt[data-n]', scope).forEach(el => { const to = +el.dataset.n, t0 = performance.now() + 300, dur = 1000;
+    const st = t => { const p = Math.max(0, Math.min(1, (t - t0) / dur)), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(to * e); if (p < 1) requestAnimationFrame(st); else el.textContent = fmt(to); };
+    requestAnimationFrame(st); });
+}
+
+/* Animación al entrar en pantalla */
+let io = null;
+function observe(panel){
+  if (io) io.disconnect();
+  const secs = $$('.sec, .band', panel);
+  secs.forEach(s => s.classList.remove('on'));
+  if (!('IntersectionObserver' in window) || RM) return;
+  io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting && !en.target.classList.contains('on')) { en.target.classList.add('on'); countUp(en.target); io.unobserve(en.target); } }), {threshold: 0.12});
+  requestAnimationFrame(() => secs.forEach(s => io.observe(s)));
+}
+
+/* Pestañas */
+const tabs = $$('.tab'), ids = tabs.map(t => t.dataset.tab);
+function show(id, o={}){
+  if (ids.indexOf(id) < 0) id = ids[0];
+  tabs.forEach(t => { const on = t.dataset.tab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
+  $$('.panel').forEach(p => { p.hidden = p.id !== 'p-' + id; });
+  const at = tabs.find(t => t.dataset.tab === id), cont = at.parentElement;
+  if (at.offsetLeft < cont.scrollLeft || at.offsetLeft + at.offsetWidth > cont.scrollLeft + cont.clientWidth) cont.scrollLeft = at.offsetLeft - 16;
+  if (o.scroll) window.scrollTo({top: 0, behavior: 'auto'});
+  if (o.hash) { try { history.replaceState(null, '', '#' + id); } catch (e) {} }
+  observe($('#p-' + id));
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => show(t.dataset.tab, {hash: 1, scroll: 1}));
+  t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length]; n.focus(); n.click(); } });
+});
+document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) show(b.dataset.go, {hash: 1, scroll: 1}); });
+const h0 = (location.hash || '').slice(1);
+show(ids.indexOf(h0) >= 0 ? h0 : ids[0]);
+window.addEventListener('hashchange', () => { const k = location.hash.slice(1); if (ids.indexOf(k) >= 0) show(k, {scroll: 1}); });
+})();
+</script>
