@@ -6,6 +6,8 @@ import { rutasAuth } from './auth/rutas'
 import type { Config } from './config'
 import { crearDb, type BaseDatos } from './db/conexion'
 import { ErrorApi, registrarErrores } from './errores'
+import { rutasCatalogos } from './modulos/catalogos/rutas'
+import { rutasCharters } from './modulos/charters/rutas'
 
 export interface OpcionesApp {
   /** Por defecto, una base en memoria (útil en pruebas). */
@@ -32,6 +34,8 @@ export async function construirApp({ db, config }: OpcionesApp): Promise<Fastify
     async (api) => {
       api.get('/salud', async () => ({ ok: true }))
       await api.register(rutasAuth, { prefix: '/auth' })
+      await api.register(rutasCatalogos)
+      await api.register(rutasCharters, { prefix: '/charters' })
     },
     { prefix: '/api' },
   )

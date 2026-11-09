@@ -1,7 +1,9 @@
 import type { FastifyInstance, LightMyRequestResponse } from 'fastify'
+import { eq } from 'drizzle-orm'
 import { construirApp } from '../src/app'
 import { leerConfig } from '../src/config'
 import { crearDb, type BaseDatos } from '../src/db/conexion'
+import { usuario as tablaUsuario } from '../src/db/esquema'
 
 export const CSRF = { 'x-requested-with': 'charter' }
 
@@ -54,3 +56,39 @@ export function entrar(
     remoteAddress,
   })
 }
+
+/**
+ * Registra una cuenta (opcionalmente Admin) y devuelve las cabeceras de su sesión,
+ * con la cabecera anti-CSRF incluida.
+ */
+export async function sesionDe(
+  app: FastifyInstance,
+  correo: string,
+  { admin = false }: { admin?: boolean } = {},
+): Promise<Record<string, string>> {
+  const nombre = correo.split('@')[0]!
+  const r = await registrar(app, { correo, nombre: `${nombre} Prueba`, clave: 'clave-segura-1' })
+  if (r.statusCode !== 201) throw new Error(`No se pudo registrar ${correo}: ${r.body}`)
+  if (admin) {
+    app.db.update(tablaUsuario).set({ esAdmin: true }).where(eq(tablaUsuario.correo, correo)).run()
+  }
+  return { ...conSesion(r), ...CSRF }
+}
+
+export async function crearCharterPrueba(
+  app: FastifyInstance,
+  cabeceras: Record<string, string>,
+  cuerpo: Record<string, unknown> = { nombre: 'Plan de prueba' },
+): Promise<string> {
+  const r = await app.inject({
+    method: 'POST',
+    url: '/api/charters',
+    headers: cabeceras,
+    payload: cuerpo,
+  })
+  if (r.statusCode !== 201) throw new Error(`No se pudo crear el charter: ${r.body}`)
+  return r.json<{ id: string }>().id
+}
+
+/** Pausa corta para que dos marcas de tiempo ISO no coincidan. */
+export const pausa = (ms = 5) => new Promise((r) => setTimeout(r, ms))
