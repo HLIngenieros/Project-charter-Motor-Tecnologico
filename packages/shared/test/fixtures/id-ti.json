@@ -1,0 +1,2933 @@
+{
+  "corte": "2025-03-13",
+  "filas": [
+    {
+      "fila": 20,
+      "item": "1",
+      "nombre": "Potenciacion de herramientas de software actuales.",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-01-15",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": null,
+      "esperado": {
+        "K": 0.07900378837125713,
+        "L": 0.06950192184497121
+      }
+    },
+    {
+      "fila": 21,
+      "item": "1.1",
+      "nombre": "ERP Libra (453 Fase 2)",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-01-15",
+      "fin": "2025-11-01",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 20,
+      "esperado": {
+        "K": 0.23784417297046626,
+        "L": 0.22571428571428565
+      }
+    },
+    {
+      "fila": 22,
+      "item": "1.1.1",
+      "nombre": "Capacitacion y actualizacion en el manejo del uso del software.",
+      "entregable": "Matriz de uso del software y lista de priorizacion de actividades.",
+      "peso": 0.08,
+      "inicio": "2025-01-15",
+      "fin": "2025-04-30",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.5471698113207547,
+        "L": 0.6
+      }
+    },
+    {
+      "fila": 23,
+      "item": "1.1.1",
+      "nombre": "Entrevista con usuarios del software",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-01-15",
+      "fin": "2025-01-23",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 24,
+      "item": "1.1.2",
+      "nombre": "Diagnostico y evaluacion del uso del software.",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-01-23",
+      "fin": "2025-01-25",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 25,
+      "item": "1.1.3",
+      "nombre": "Lista de priorizacion de actividades",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-01-25",
+      "fin": "2025-01-26",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 26,
+      "item": "1.1.4",
+      "nombre": "Gestion de relaciones CRM (Desarrollo & Implementacion)",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-02-07",
+      "fin": "2025-07-01",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.13118279569892471,
+        "L": 0.11999999999999995
+      }
+    },
+    {
+      "fila": 27,
+      "item": "1.1.4.1",
+      "nombre": "Aprobacion cotizacion.",
+      "entregable": "1. Diagrama de flujo y listado de requerimientos de los usuarios.\n2. Cronograma detallado de implementacion.\n3. Modulo CRM Funcionando.",
+      "peso": 0.001,
+      "inicio": "2025-02-07",
+      "fin": "2025-02-08",
+      "responsables": [
+        "SGI",
+        "GG",
+        "Lider ID&TI"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 28,
+      "item": "1.1.4.2",
+      "nombre": "Elaborar requisicion y OC del desarrollo del modulo.",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-02-08",
+      "fin": "2025-02-12",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 29,
+      "item": "1.1.4.3",
+      "nombre": "Validacion del diagrama de flujo y requerimientos de los usuarios.",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-02-12",
+      "fin": "2025-03-14",
+      "responsables": [
+        "Lider ID&TI",
+        "Comercial"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.967741935483871,
+        "L": 0.8
+      }
+    },
+    {
+      "fila": 30,
+      "item": "1.1.4.4",
+      "nombre": "Revision de cronograma detallado del desarrollo e implementacion",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-03-14",
+      "fin": "2025-03-21",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 31,
+      "item": "1.1.4.5",
+      "nombre": "Reunion de arranque del desarrollo.",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-03-21",
+      "fin": "2025-03-22",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 32,
+      "item": "1.1.4.6",
+      "nombre": "Seguimiento de avance 1",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-03-28",
+      "fin": "2025-03-29",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 33,
+      "item": "1.1.4.7",
+      "nombre": "Seguimiento de avance 2",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-04-04",
+      "fin": "2025-04-05",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 34,
+      "item": "1.1.4.8",
+      "nombre": "Seguimiento de avance 3",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-04-11",
+      "fin": "2025-04-12",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 35,
+      "item": "1.1.4.9",
+      "nombre": "Seguimiento de avance 4",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-04-18",
+      "fin": "2025-04-19",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 36,
+      "item": "1.1.4.10",
+      "nombre": "Seguimiento de avance 5 & Pruebas 1",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-04-25",
+      "fin": "2025-04-26",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 37,
+      "item": "1.1.4.11",
+      "nombre": "Seguimiento de avance 6 & Pruebas 2",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-02",
+      "fin": "2025-05-03",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 38,
+      "item": "1.1.4.12",
+      "nombre": "Seguimiento de avance 7 & Pruebas 3",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-09",
+      "fin": "2025-05-10",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 39,
+      "item": "1.1.4.13",
+      "nombre": "Seguimiento de avance 8 & Pruebas 4",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-16",
+      "fin": "2025-05-17",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 40,
+      "item": "1.1.4.14",
+      "nombre": "Seguimiento de avance 9 & Pruebas 5",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-23",
+      "fin": "2025-05-24",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 41,
+      "item": "1.1.4.15",
+      "nombre": "Seguimiento de avance 10 & Pruebas 6",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-05-30",
+      "fin": "2025-05-31",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 42,
+      "item": "1.1.4.16",
+      "nombre": "Seguimiento de avance 11 & Pruebas 7",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-06-06",
+      "fin": "2025-06-07",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 43,
+      "item": "1.1.4.17",
+      "nombre": "Seguimiento final  & Pruebas finales",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-06-13",
+      "fin": "2025-06-18",
+      "responsables": [
+        "Subcontratista TIC",
+        "Lider ID&TI",
+        "Comercial",
+        "Edisa"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 44,
+      "item": "1.1.4.18",
+      "nombre": "Gestion de comunicación & capacitación módulo CRM",
+      "entregable": "Capacitacion",
+      "peso": 0.001,
+      "inicio": "2025-06-20",
+      "fin": "2025-06-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 45,
+      "item": "1.1.4.19",
+      "nombre": "Gestion del cambio CRM",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.001,
+      "inicio": "2025-06-27",
+      "fin": "2025-07-01",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 26,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 46,
+      "item": "1.1.5",
+      "nombre": "Gestion de recursos humanos",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-05-05",
+      "fin": "2025-07-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 47,
+      "item": "1.1.5.1",
+      "nombre": "Creacion de empleados",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-05-26",
+      "fin": "2025-07-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 46,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 48,
+      "item": "1.1.5.1.1",
+      "nombre": "Mesa de trabajo",
+      "entregable": "Diagrama de flujo del proceso.",
+      "peso": 0.003,
+      "inicio": "2025-06-12",
+      "fin": "2025-06-19",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC",
+        "GH"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 49,
+      "item": "1.1.5.1.2",
+      "nombre": "Revisar esquema creación empleados en RRHH",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-06-19",
+      "fin": "2025-06-26",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC",
+        "GH"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 50,
+      "item": "1.1.5.1.3",
+      "nombre": "Crear Flujo de Proceso \"Crear empleados\"",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-06-26",
+      "fin": "2025-07-03",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 51,
+      "item": "1.1.5.1.4",
+      "nombre": "Desarrollo BPM Creación Empleados",
+      "entregable": "BPM Funcionando.",
+      "peso": 0.002,
+      "inicio": "2025-05-26",
+      "fin": "2025-06-16",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 52,
+      "item": "1.1.5.1.5",
+      "nombre": "Pruebas 6 Ajustes BPM",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-07-03",
+      "fin": "2025-07-10",
+      "responsables": [
+        "Lider ID&TI",
+        "GH",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 53,
+      "item": "1.1.5.1.6",
+      "nombre": "Gestion de comunicación & capacitación módulo RRHH",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.0015,
+      "inicio": "2025-07-10",
+      "fin": "2025-07-17",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 54,
+      "item": "1.1.5.1.7",
+      "nombre": "Gestion del cambio módulo RRHH",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.0015,
+      "inicio": "2025-07-17",
+      "fin": "2025-07-24",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 47,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 55,
+      "item": "1.1.5.2",
+      "nombre": "Control de acceso de personal en proyectos.",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-05-05",
+      "fin": "2025-06-20",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 46,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 56,
+      "item": "1.1.5.2.1",
+      "nombre": "Mesa de trabajo",
+      "entregable": "Diagrama de flujo del proceso.",
+      "peso": 0.003,
+      "inicio": "2025-05-05",
+      "fin": "2025-05-07",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 57,
+      "item": "1.1.5.2.2",
+      "nombre": "Revisar esquema de control de acceso con el nuevo dispositivo biometrico.",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-05-05",
+      "fin": "2025-05-09",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 58,
+      "item": "1.1.5.10",
+      "nombre": "Evaluar el archivo generado de reportes del dispositivo",
+      "entregable": "Normalizacion de archivo generado por dispositivo biometrico.",
+      "peso": 0.003,
+      "inicio": "2025-05-12",
+      "fin": "2025-05-19",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 59,
+      "item": "1.1.5.11",
+      "nombre": "Ajustar y normalizar archivo y proceso de adopcion en nomina.",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-19",
+      "fin": "2025-05-26",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 60,
+      "item": "1.1.5.10",
+      "nombre": "Implementar a gran escala en proyectos",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-26",
+      "fin": "2025-06-02",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 61,
+      "item": "1.1.5.11",
+      "nombre": "Gestion de comunicación & capacitación módulo \"Entorno\"",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.001,
+      "inicio": "2025-06-02",
+      "fin": "2025-06-05",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 62,
+      "item": "1.1.5.11",
+      "nombre": "Gestion del cambio módulo \"Entorno\"",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.001,
+      "inicio": "2025-06-06",
+      "fin": "2025-06-20",
+      "responsables": [
+        "Lider ID&TI",
+        "GH"
+      ],
+      "padreFila": 55,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 63,
+      "item": "1.1.6",
+      "nombre": "Gestionar recursos tecnologicos",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-02-05",
+      "fin": "2025-06-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.30416666666666664,
+        "L": 0.15999999999999995
+      }
+    },
+    {
+      "fila": 64,
+      "item": "1.1.6.1",
+      "nombre": "Mesa de trabajo",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-02-05",
+      "fin": "2025-02-09",
+      "responsables": [
+        "Lider ID&TI",
+        "Todas las Areas de la compañía"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 65,
+      "item": "1.1.6.2",
+      "nombre": "Modificacion de matriz de perfiles / usuario del sistema LIBRA",
+      "entregable": "Modificacion F-TI-001",
+      "peso": 0.002,
+      "inicio": "2025-02-12",
+      "fin": "2025-02-16",
+      "responsables": [
+        "Lider ID&TI",
+        "Todas las Areas de la compañía"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 1.0,
+        "L": 0.6
+      }
+    },
+    {
+      "fila": 66,
+      "item": "1.1.6.3",
+      "nombre": "Definición de responsables y esquema de solicitud de creación, eliminación y modificación de perfiles.",
+      "entregable": "Diagrama de flujo del proceso.",
+      "peso": 0.002,
+      "inicio": "2025-02-19",
+      "fin": "2025-02-26",
+      "responsables": [
+        "Lider ID&TI",
+        "Todas las Areas de la compañía"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 1.0,
+        "L": 0.6
+      }
+    },
+    {
+      "fila": 67,
+      "item": "1.1.6.4",
+      "nombre": "Definición de responsables y esquema de solicitud de creación, eliminación, modificación de usuarios.",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-03-01",
+      "fin": "2025-03-08",
+      "responsables": [
+        "Lider ID&TI",
+        "Todas las Areas de la compañía"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 1.0,
+        "L": 0.2
+      }
+    },
+    {
+      "fila": 68,
+      "item": "1.1.6.5",
+      "nombre": "Crear flujo de proceso \"Creacion / Modificacion /Baja de usuario\"",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-03-11",
+      "fin": "2025-03-18",
+      "responsables": [
+        "Lider ID&TI",
+        "Todas las Areas de la compañía"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.375,
+        "L": null
+      }
+    },
+    {
+      "fila": 69,
+      "item": "1.1.6.6",
+      "nombre": "Desarrollo BPM \"Creacion / Modificacion /Baja de usuario\"",
+      "entregable": "BPM Funcionando.",
+      "peso": 0.003,
+      "inicio": "2025-03-21",
+      "fin": "2025-04-11",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 70,
+      "item": "1.1.6.7",
+      "nombre": "Realizar pruebas BPM \"Creacion / Modificacion /Baja de usuario\"",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-04-12",
+      "fin": "2025-04-19",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 71,
+      "item": "1.1.6.7",
+      "nombre": "Gestion de comunicación & capacitacion  \"Creacion / Modificacion / Baja de usuario\"",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.002,
+      "inicio": "2025-04-22",
+      "fin": "2025-04-29",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 72,
+      "item": "1.1.6.7",
+      "nombre": "Gestion del cambio módulo \"Creacion / Modificacion / Baja de usuario\"",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.002,
+      "inicio": "2025-05-02",
+      "fin": "2025-05-09",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 73,
+      "item": "1.1.6.7",
+      "nombre": "Crear flujo de proceso \"Solicitud de recursos TI\"",
+      "entregable": "Diagrama de flujo del proceso.",
+      "peso": 0.003,
+      "inicio": "2025-03-21",
+      "fin": "2025-03-28",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 74,
+      "item": "1.1.6.7",
+      "nombre": "Desarrollo BPM \"Solicitud de recursos TI\"",
+      "entregable": "BPM Funcionando.",
+      "peso": 0.003,
+      "inicio": "2025-04-22",
+      "fin": "2025-05-13",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 75,
+      "item": "1.1.6.7",
+      "nombre": "Pruebas BPM \"Solicitud de recursos TI\"",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-16",
+      "fin": "2025-05-23",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 76,
+      "item": "1.1.6.7",
+      "nombre": "Gestion de comunicación & capacitación módulo \"Entorno\"",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.002,
+      "inicio": "2025-05-26",
+      "fin": "2025-06-02",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 77,
+      "item": "1.1.6.8",
+      "nombre": "Gestion del cambio módulo \"Entorno\"",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.002,
+      "inicio": "2025-06-05",
+      "fin": "2025-06-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 63,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 78,
+      "item": "1.1.7",
+      "nombre": "Gestionar suministros",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-06-12",
+      "fin": "2025-08-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 79,
+      "item": "1.1.7.1",
+      "nombre": "Mesa de trabajo",
+      "entregable": "Diagrama de flujo del proceso.",
+      "peso": 0.005,
+      "inicio": "2025-06-12",
+      "fin": "2025-06-14",
+      "responsables": [
+        "Lider ID&TI",
+        "Compras"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 80,
+      "item": "1.1.7.2",
+      "nombre": "Revisar y ajustar el proceso y flujo de creacion / modificacion y aprobacion de orden de compra.",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-06-17",
+      "fin": "2025-06-21",
+      "responsables": [
+        "Lider ID&TI",
+        "Compras"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 81,
+      "item": "1.1.7.3",
+      "nombre": "Modificacion BPM \"Aprobacion / modificacion orden de compra\"",
+      "entregable": "BPM Funcionando.",
+      "peso": 0.005,
+      "inicio": "2025-07-10",
+      "fin": "2025-07-31",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 82,
+      "item": "1.1.7.4",
+      "nombre": "Ajuste de la opcion de consultas de ordenes de compra en LIBRA",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-08-03",
+      "fin": "2025-08-10",
+      "responsables": [
+        "Lider ID&TI",
+        "Compras",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 83,
+      "item": "1.1.7.5",
+      "nombre": "Gestion de comunicación & capacitación BPM \"Creacion / Modificacion / Aprobacion ordenes de compra\"",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.005,
+      "inicio": "2025-08-13",
+      "fin": "2025-08-17",
+      "responsables": [
+        "Lider ID&TI",
+        "Compras"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 84,
+      "item": "1.1.7.6",
+      "nombre": "Gestion del cambio módulo \"Creacion / Modificacion / Aprobacion ordenes de compra\"",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.005,
+      "inicio": "2025-08-20",
+      "fin": "2025-08-24",
+      "responsables": [
+        "Lider ID&TI",
+        "Compras"
+      ],
+      "padreFila": 78,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 85,
+      "item": "1.1.8",
+      "nombre": "Gestionar equipos y herramientas",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-08-27",
+      "fin": "2025-11-01",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 21,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 86,
+      "item": "1.1.8.1",
+      "nombre": "Mesa de trabajo",
+      "entregable": "Listado de activos depurado.",
+      "peso": 0.003,
+      "inicio": "2025-08-27",
+      "fin": "2025-08-29",
+      "responsables": [
+        "Lider ID&TI",
+        "E&H"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 87,
+      "item": "1.1.8.2",
+      "nombre": "Depuracion del maestro de activos",
+      "entregable": null,
+      "peso": 0.003,
+      "inicio": "2025-09-01",
+      "fin": "2025-09-08",
+      "responsables": [
+        "Lider ID&TI",
+        "E&H"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 88,
+      "item": "1.1.8.3",
+      "nombre": "Asociar los modulos de mantenimiento y logistica de activos",
+      "entregable": "Modulos funcionado.",
+      "peso": 0.005,
+      "inicio": "2025-09-11",
+      "fin": "2025-10-02",
+      "responsables": [
+        "Subcontratista TIC"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 89,
+      "item": "1.1.8.4",
+      "nombre": "Ajuste de informes de OT y hojas de vida del activo",
+      "entregable": "Informe OT & HV",
+      "peso": 0.005,
+      "inicio": "2025-10-05",
+      "fin": "2025-10-12",
+      "responsables": [
+        "Lider ID&TI",
+        "E&H",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 90,
+      "item": "1.1.8.5",
+      "nombre": "Gestion de comunicación & capacitación modulo de mantenimiento y logistica de activos",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.002,
+      "inicio": "2025-10-15",
+      "fin": "2025-10-22",
+      "responsables": [
+        "Lider ID&TI",
+        "E&H"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 91,
+      "item": "1.1.8.6",
+      "nombre": "Gestion del cambio modulo de mantenimiento y logistica de activos",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.002,
+      "inicio": "2025-10-25",
+      "fin": "2025-11-01",
+      "responsables": [
+        "Lider ID&TI",
+        "E&H"
+      ],
+      "padreFila": 85,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 92,
+      "item": "1.2",
+      "nombre": "OPUS HL Fase 2",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-02-26",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 20,
+      "esperado": {
+        "K": 0.05387205387205387,
+        "L": 0.00464285714285714
+      }
+    },
+    {
+      "fila": 93,
+      "item": "1.2.1",
+      "nombre": "Complementos del costo directo",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-04-04",
+      "fin": "2025-06-16",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 92,
+      "esperado": {
+        "K": 0.01290322580645161,
+        "L": 0.009999999999999995
+      }
+    },
+    {
+      "fila": 94,
+      "item": "1.2.1.1",
+      "nombre": "Exploracion de alternativas de afectacion de rendimiento",
+      "entregable": "Informe de diagnostico y de alternativas.",
+      "peso": 0.02,
+      "inicio": "2025-05-26",
+      "fin": "2025-06-16",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 93,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 95,
+      "item": "1.2.1.2",
+      "nombre": "Exploracion de alternativas de variacion cambio de año y TRM",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-04-04",
+      "fin": "2025-04-05",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 93,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 96,
+      "item": "1.2.1.3",
+      "nombre": "Construccion catalogo Republica Dominicana",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-02-26",
+      "fin": "2025-05-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 93,
+      "esperado": {
+        "K": 0.051612903225806445,
+        "L": 0.03999999999999999
+      }
+    },
+    {
+      "fila": 97,
+      "item": "1.2.1.3.1",
+      "nombre": "Propuesta de Rendimientos",
+      "entregable": "BD Rendimientos RD",
+      "peso": 0.002,
+      "inicio": "2025-02-26",
+      "fin": "2025-03-28",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.5161290322580645,
+        "L": 0.3
+      }
+    },
+    {
+      "fila": 98,
+      "item": "1.2.1.3.2",
+      "nombre": "Revisión con Operaciones & Definición",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-03-29",
+      "fin": "2025-03-30",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 99,
+      "item": "1.2.1.3.3",
+      "nombre": "Modificacion hoja de calculo del FSR en OPUS",
+      "entregable": "Tabla salarial RD normalizada.",
+      "peso": 0.002,
+      "inicio": "2025-04-02",
+      "fin": "2025-04-06",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.1
+      }
+    },
+    {
+      "fila": 100,
+      "item": "1.2.1.3.4",
+      "nombre": "Revisión con Gestion humana & Definición",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-09",
+      "fin": "2025-04-13",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 101,
+      "item": "1.2.1.3.5",
+      "nombre": "Migracion insumos y precios mano de obra",
+      "entregable": "Catalogo de conceptos RD.",
+      "peso": 0.002,
+      "inicio": "2025-04-16",
+      "fin": "2025-04-18",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 102,
+      "item": "1.2.1.3.6",
+      "nombre": "Migracion insumos y precios materiales",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-19",
+      "fin": "2025-04-23",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 103,
+      "item": "1.2.1.3.7",
+      "nombre": "Migracion insumos y precios herramientas",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-24",
+      "fin": "2025-04-26",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 104,
+      "item": "1.2.1.3.8",
+      "nombre": "Migracion insumos y precios equipos",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-27",
+      "fin": "2025-05-02",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 105,
+      "item": "1.2.1.3.9",
+      "nombre": "Migracion insumos y precios otros mod",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-03",
+      "fin": "2025-05-07",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 106,
+      "item": "1.2.1.3.10",
+      "nombre": "Migracion insumos y precios subcontratos",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-08",
+      "fin": "2025-05-10",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 107,
+      "item": "1.2.1.3.11",
+      "nombre": "Migracion catalogo de conceptos HL DOMINICANA",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-15",
+      "fin": "2025-05-18",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 108,
+      "item": "1.2.1.3.12",
+      "nombre": "Accesos y restricciones de base de datos principal",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-05-21",
+      "fin": "2025-05-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 96,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 109,
+      "item": "1.2.1.4",
+      "nombre": "Construccion catalogo Perú",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-04-19",
+      "fin": "2025-07-13",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 93,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 110,
+      "item": "1.2.1.4.1",
+      "nombre": "Propuesta de Rendimientos",
+      "entregable": "BD Rendimientos Perú.",
+      "peso": 0.002,
+      "inicio": "2025-04-19",
+      "fin": "2025-04-26",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 111,
+      "item": "1.2.1.4.2",
+      "nombre": "Revisión con Operaciones & Definición",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-27",
+      "fin": "2025-04-27",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 112,
+      "item": "1.2.1.4.3",
+      "nombre": "Exploracion de alternativas de afectacion de rendimiento",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-04-30",
+      "fin": "2025-05-04",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 113,
+      "item": "1.2.1.4.4",
+      "nombre": "Modificacion hoja de calculo del FSR en OPUS",
+      "entregable": "Tabla salarial Peru normalizada.",
+      "peso": 0.002,
+      "inicio": "2025-05-07",
+      "fin": "2025-05-11",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 114,
+      "item": "1.2.1.4.5",
+      "nombre": "Revisión con Gestion humana & Definición",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-14",
+      "fin": "2025-05-18",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 115,
+      "item": "1.2.1.4.6",
+      "nombre": "Migracion insumos y precios mano de obra",
+      "entregable": "Catalogo de conceptos Peru",
+      "peso": 0.002,
+      "inicio": "2025-05-21",
+      "fin": "2025-05-25",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 116,
+      "item": "1.2.1.4.7",
+      "nombre": "Migracion insumos y precios materiales",
+      "entregable": null,
+      "peso": 0.002,
+      "inicio": "2025-05-28",
+      "fin": "2025-06-01",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 117,
+      "item": "1.2.1.4.8",
+      "nombre": "Migracion insumos y precios herramientas",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-06-04",
+      "fin": "2025-06-08",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 118,
+      "item": "1.2.1.4.9",
+      "nombre": "Migracion insumos y precios equipos",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-06-11",
+      "fin": "2025-06-15",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 119,
+      "item": "1.2.1.4.10",
+      "nombre": "Migracion insumos y precios otros mod",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-06-18",
+      "fin": "2025-06-22",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 120,
+      "item": "1.2.1.4.11",
+      "nombre": "Migracion insumos y precios subcontratos",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-06-25",
+      "fin": "2025-06-29",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 121,
+      "item": "1.2.1.4.12",
+      "nombre": "Migracion catalogo de conceptos HL PERU",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-07-02",
+      "fin": "2025-07-06",
+      "responsables": [
+        "Lider ID&TI",
+        "Estimaciones"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 122,
+      "item": "1.2.1.4.13",
+      "nombre": "Accesos y restricciones de base de datos principal",
+      "entregable": null,
+      "peso": 0.001,
+      "inicio": "2025-07-09",
+      "fin": "2025-07-13",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 109,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 123,
+      "item": "1.2.1.5",
+      "nombre": "Otras actividades",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-07-16",
+      "fin": "2025-08-03",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 93,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 124,
+      "item": "1.2.1.5.1",
+      "nombre": "Construccion dashboad Hoja Resumen",
+      "entregable": "Dashboard",
+      "peso": 0.01,
+      "inicio": "2025-07-16",
+      "fin": "2025-07-20",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 123,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 125,
+      "item": "1.2.1.5.2",
+      "nombre": "Gestion de comunicación y de capacitacion",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.005,
+      "inicio": "2025-07-23",
+      "fin": "2025-07-27",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 123,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 126,
+      "item": "1.2.1.5.3",
+      "nombre": "Gestion del cambio",
+      "entregable": "Ajuste Instructivo.",
+      "peso": 0.005,
+      "inicio": "2025-07-30",
+      "fin": "2025-08-03",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 123,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 127,
+      "item": "1.2.2",
+      "nombre": "Implementacion del costo industrial",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-09-15",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 92,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 128,
+      "item": "1.2.2.1",
+      "nombre": "Estructuracion de la plantilla FSR de la mano de obra indirecta",
+      "entregable": "Tabla salarial MOI",
+      "peso": 0.01,
+      "inicio": "2025-09-15",
+      "fin": "2025-09-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 129,
+      "item": "1.2.2.2",
+      "nombre": "Exploracion de alternativas de dilusion de costos indirectos",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-09-22",
+      "fin": "2025-09-26",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 130,
+      "item": "1.2.2.3",
+      "nombre": "Cargue de insumos de la mano de obra indirecta",
+      "entregable": "Plantilla en OPUS de calculo de indirectos e instalaciones temporales.",
+      "peso": 0.01,
+      "inicio": "2025-09-29",
+      "fin": "2025-10-03",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 131,
+      "item": "1.2.2.4",
+      "nombre": "Cargue de insumos de las instalaciones temporales",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-10-06",
+      "fin": "2025-10-10",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 132,
+      "item": "1.2.2.5",
+      "nombre": "Pruebas piloto",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-10-13",
+      "fin": "2025-10-17",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 133,
+      "item": "1.2.2.6",
+      "nombre": "Ajustes de la plantilla presupuestal de excel",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-10-20",
+      "fin": "2025-10-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 134,
+      "item": "1.2.2.7",
+      "nombre": "Implementación del flujo de información desde Libra - Opus y Opus - Libra (Operaciones) RCP",
+      "entregable": "Ajuste plantilla RCP",
+      "peso": 0.01,
+      "inicio": "2025-10-27",
+      "fin": "2025-10-31",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 135,
+      "item": "1.2.2.8",
+      "nombre": "Revisión con Operaciones & Definición",
+      "entregable": "Informe de sacrificios vs ventajas de excel / OPUS.",
+      "peso": 0.01,
+      "inicio": "2025-11-03",
+      "fin": "2025-11-07",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 136,
+      "item": "1.2.2.9",
+      "nombre": "Socialización con los interesados",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-11-10",
+      "fin": "2025-11-14",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 137,
+      "item": "1.2.2.10",
+      "nombre": "Evaluacion eficiencia / versatilidad OPUS / EXCEL",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-11-17",
+      "fin": "2025-11-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 138,
+      "item": "1.2.2.11",
+      "nombre": "Punto de decisión (sacrificios / ventajas)",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-11-24",
+      "fin": "2025-11-28",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 139,
+      "item": "1.2.2.12",
+      "nombre": "Ajustes finales",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-12-01",
+      "fin": "2025-12-05",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 140,
+      "item": "1.2.2.13",
+      "nombre": "Gestion de comunicación y de capacitacion",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.01,
+      "inicio": "2025-12-08",
+      "fin": "2025-12-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 141,
+      "item": "1.2.2.14",
+      "nombre": "Gestion del cambio",
+      "entregable": "Ajuste instructivo.",
+      "peso": 0.01,
+      "inicio": "2025-12-15",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 127,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 142,
+      "item": "1.3",
+      "nombre": "PROCORE Fase 1",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-08-06",
+      "fin": "2025-10-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 20,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 143,
+      "item": "1.3.1",
+      "nombre": "Estandarizacion y formalizacion del uso actual del software",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-08-06",
+      "fin": "2025-09-07",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 142,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 144,
+      "item": "1.3.1.1",
+      "nombre": "Elaboracion de integracion de la matriz de perfiles LIBRA-PROCORE",
+      "entregable": "Matriz de usuarios y perfiles.",
+      "peso": 0.02,
+      "inicio": "2025-08-06",
+      "fin": "2025-08-10",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 143,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 145,
+      "item": "1.3.1.2",
+      "nombre": "Definición de responsables y esquema de solicitud de creación, eliminación y modificación de usuarios.",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-08-13",
+      "fin": "2025-08-17",
+      "responsables": [
+        "Lider ID&TI",
+        "SGI"
+      ],
+      "padreFila": 143,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 146,
+      "item": "1.3.1.3",
+      "nombre": "Analisis exploratorio de la informacion cargada en el software",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-08-20",
+      "fin": "2025-08-24",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 143,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 147,
+      "item": "1.3.1.4",
+      "nombre": "Gestion de comunicación & capacitación de la gestion documental",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.02,
+      "inicio": "2025-08-27",
+      "fin": "2025-08-31",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 143,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 148,
+      "item": "1.3.1.5",
+      "nombre": "Gestion del cambio de la gestion documental",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.02,
+      "inicio": "2025-09-03",
+      "fin": "2025-09-07",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 143,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 149,
+      "item": "1.3.2",
+      "nombre": "Exploracion de herramientas y funcionalidades del software",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-09-10",
+      "fin": "2025-10-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 142,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 150,
+      "item": "1.3.2.1",
+      "nombre": "Investigacion de modulos y/o funcionalidades del software no exploradas ni utilizadas.",
+      "entregable": "Informe de diagnostico, funcionalidades aplicadas a casos reales.",
+      "peso": 0.03,
+      "inicio": "2025-09-10",
+      "fin": "2025-09-14",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 149,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 151,
+      "item": "1.3.2.2",
+      "nombre": "Listar diferentes procesos que se puede implementar con el software.",
+      "entregable": null,
+      "peso": 0.03,
+      "inicio": "2025-09-17",
+      "fin": "2025-09-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 149,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 152,
+      "item": "1.3.2.3",
+      "nombre": "Realizar prueba piloto",
+      "entregable": null,
+      "peso": 0.03,
+      "inicio": "2025-09-24",
+      "fin": "2025-09-28",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 149,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 153,
+      "item": "1.3.2.4",
+      "nombre": "Presentar resultados",
+      "entregable": "Informe evaluacion final.",
+      "peso": 0.03,
+      "inicio": "2025-10-01",
+      "fin": "2025-10-05",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 149,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 154,
+      "item": "1.3.2.5",
+      "nombre": "Implementar a gran escala la herramienta o funcionalidad",
+      "entregable": null,
+      "peso": 0.03,
+      "inicio": "2025-10-08",
+      "fin": "2025-10-12",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 149,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 155,
+      "item": "2",
+      "nombre": "Implementacion de inteligencia artificial (IA).",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-01-15",
+      "fin": "2025-11-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": null,
+      "esperado": {
+        "K": 0.17499999999999996,
+        "L": 0.17500000000000002
+      }
+    },
+    {
+      "fila": 156,
+      "item": "2.1",
+      "nombre": "Adopcion de herramientas comerciales (IA)",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-01-15",
+      "fin": "2025-11-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 155,
+      "esperado": {
+        "K": 0.17500000000000002,
+        "L": 0.17500000000000002
+      }
+    },
+    {
+      "fila": 157,
+      "item": "2.1.1",
+      "nombre": "Elaboracion de lista de necesidades",
+      "entregable": "Lista de priorizacion de actividades a trabajar.",
+      "peso": 0.02,
+      "inicio": "2025-01-15",
+      "fin": "2025-03-01",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 1.0,
+        "L": 1.0
+      }
+    },
+    {
+      "fila": 158,
+      "item": "2.1.2",
+      "nombre": "Evaluacion y priorizacion de las necesidades",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-03-02",
+      "fin": "2025-03-17",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.75,
+        "L": 0.75
+      }
+    },
+    {
+      "fila": 159,
+      "item": "2.1.3",
+      "nombre": "Evaluacion y eleccion de la herramienta de IA a utilizar",
+      "entregable": "Matriz de decisión.",
+      "peso": 0.02,
+      "inicio": "2025-03-18",
+      "fin": "2025-04-17",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 160,
+      "item": "2.1.4",
+      "nombre": "Configuración de escenarios de prueba que simulen situaciones reales de uso",
+      "entregable": "Informe de resultados y recomendaciones.",
+      "peso": 0.02,
+      "inicio": "2025-04-18",
+      "fin": "2025-05-18",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 161,
+      "item": "2.1.5",
+      "nombre": "Recopilación de feedback de usuarios clave que participen en las pruebas",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-05-19",
+      "fin": "2025-06-18",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 162,
+      "item": "2.1.6",
+      "nombre": "Análisis de los resultados de las pruebas para determinar la viabilidad de implementación",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-06-19",
+      "fin": "2025-07-04",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 163,
+      "item": "2.1.7",
+      "nombre": "Ajustes y mejoras basadas en el feedback recibido",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-07-05",
+      "fin": "2025-08-04",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 164,
+      "item": "2.1.8",
+      "nombre": "Recomendaciones y resultados obtenidos",
+      "entregable": null,
+      "peso": 0.02,
+      "inicio": "2025-08-05",
+      "fin": "2025-08-20",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 165,
+      "item": "2.1.9",
+      "nombre": "Implementacion a toda la compañía",
+      "entregable": "Capacitacion, memorias",
+      "peso": 0.02,
+      "inicio": "2025-08-21",
+      "fin": "2025-09-20",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 166,
+      "item": "2.1.10",
+      "nombre": "Gestion de comunicación & capacitación",
+      "entregable": null,
+      "peso": 0.01,
+      "inicio": "2025-09-21",
+      "fin": "2025-10-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 167,
+      "item": "2.1.11",
+      "nombre": "Gestion del cambio",
+      "entregable": "Manual",
+      "peso": 0.01,
+      "inicio": "2025-10-22",
+      "fin": "2025-11-21",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 156,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 168,
+      "item": "2.2",
+      "nombre": "Desarrollo e implementacion de aplicaciones propias de IA (Futuro)",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 155,
+      "esperado": {
+        "K": 0.0,
+        "L": 0.0
+      }
+    },
+    {
+      "fila": 169,
+      "item": "2.2.1",
+      "nombre": "Identificación de áreas clave donde el desarrollo de aplicaciones internas genere un impacto significativo.",
+      "entregable": "Plan de implementacion y desarrollo de aplicación propia de IA.",
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 170,
+      "item": "2.2.2",
+      "nombre": "Revisión de la integridad, consistencia y precisión de los datos",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 171,
+      "item": "2.2.3",
+      "nombre": "Evaluacion de la herramienta de IA a utilizar",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 172,
+      "item": "2.2.4",
+      "nombre": "Entrenamiento de la aplicación de IA con data propia",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 173,
+      "item": "2.2.5",
+      "nombre": "Prueba piloto",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 174,
+      "item": "2.2.6",
+      "nombre": "Evaluacion (Beneficio / Costo)",
+      "entregable": null,
+      "peso": null,
+      "inicio": null,
+      "fin": null,
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": 168,
+      "esperado": {
+        "K": 1.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 175,
+      "item": "3",
+      "nombre": "Renovacion de software & hardware.",
+      "entregable": null,
+      "peso": null,
+      "inicio": "2025-02-28",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI"
+      ],
+      "padreFila": null,
+      "esperado": {
+        "K": 0.04516129032258064,
+        "L": 0.05
+      }
+    },
+    {
+      "fila": 176,
+      "item": "3.1",
+      "nombre": "Elaboracion de inventario de hardware",
+      "entregable": "Lista de inventario de HW & SW.",
+      "peso": 0.005,
+      "inicio": "2025-02-28",
+      "fin": "2025-03-30",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.45161290322580644,
+        "L": 0.5
+      }
+    },
+    {
+      "fila": 177,
+      "item": "3.2",
+      "nombre": "Elaboracion de inventario de software",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-03-31",
+      "fin": "2025-04-15",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 178,
+      "item": "3.3",
+      "nombre": "Identificacion de hardware / software con obsolocencia",
+      "entregable": "Informe de estado de SW & HW y sugerencia de priorizacion de equipos.",
+      "peso": 0.005,
+      "inicio": "2025-04-16",
+      "fin": "2025-05-16",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 179,
+      "item": "3.4",
+      "nombre": "Identificar hardware / software que deba renovar o comprar según requerimientos de las nuevas iniciativas",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-05-17",
+      "fin": "2025-06-16",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 180,
+      "item": "3.5",
+      "nombre": "Elaboracion lista de priorizacion de renovacion de equipos",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-06-17",
+      "fin": "2025-07-17",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 181,
+      "item": "3.6",
+      "nombre": "Punto de decisión.",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-07-18",
+      "fin": "2025-08-17",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 182,
+      "item": "3.7",
+      "nombre": "Realizar renovaciones aprobadas",
+      "entregable": "Implementacion.",
+      "peso": 0.005,
+      "inicio": "2025-08-18",
+      "fin": "2025-09-17",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 183,
+      "item": "3.8",
+      "nombre": "Pruebas y ajustes",
+      "entregable": null,
+      "peso": 0.005,
+      "inicio": "2025-09-18",
+      "fin": "2025-10-18",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 184,
+      "item": "3.9",
+      "nombre": "Gestion de comunicación & capacitación",
+      "entregable": "Capacitacion del buen uso.",
+      "peso": 0.005,
+      "inicio": "2025-10-19",
+      "fin": "2025-11-18",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    },
+    {
+      "fila": 185,
+      "item": "3.10",
+      "nombre": "Gestion del cambio",
+      "entregable": "Manual, Procedimiento",
+      "peso": 0.005,
+      "inicio": "2025-11-19",
+      "fin": "2025-12-19",
+      "responsables": [
+        "Lider ID&TI",
+        "Subcontratista TIC"
+      ],
+      "padreFila": 175,
+      "esperado": {
+        "K": 0.0,
+        "L": null
+      }
+    }
+  ]
+}
