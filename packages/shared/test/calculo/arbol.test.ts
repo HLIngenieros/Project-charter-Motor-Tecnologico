@@ -41,6 +41,12 @@ describe('construirArbol', () => {
     expect(() => construirArbol([a('a', 'nadie', 1)])).toThrow('padre_inexistente')
   })
 
+  it('lanza id_duplicado si dos actividades comparten id', () => {
+    expect(() => construirArbol([a('r', null, 0), a('x', 'r', 1), a('x', 'r', 2)])).toThrow(
+      'id_duplicado',
+    )
+  })
+
   it('lanza ciclo si hay un ciclo', () => {
     expect(() => construirArbol([a('r', null, 0), a('a', 'b', 1), a('b', 'a', 2)])).toThrow('ciclo')
     expect(() => construirArbol([a('a', 'a', 1)])).toThrow('ciclo')

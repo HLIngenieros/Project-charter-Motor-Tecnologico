@@ -29,7 +29,7 @@
 ### Pendientes de la revisión de la Fase 2
 
 - [ ] Límite de intentos por IP también en `POST /auth/registro`.
-- [ ] Motor: `pct` no numérico se trata como 0 (hoy lanza) y `construirArbol` rechaza ids repetidos (`id_duplicado`). Hacerlo antes del `PUT` del cronograma (T4.1).
+- [x] Motor: `pct` no numérico (o no finito) cuenta como 0 y `construirArbol` rechaza ids repetidos (`id_duplicado`) — 2026-11-09
 - [ ] La prueba de zona horaria debe verificar que `TZ` sí se aplicó (hoy no podría fallar).
 - [x] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts` — 2026-11-09
 - [x] Contraste: el color de la categoría solo va en el punto y el fondo del chip; el texto es `tinta` (T3.2) — 2026-11-09
@@ -82,7 +82,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** Fase 4. Antes del `PUT` del cronograma (T4.1), los dos ajustes del motor pendientes de la revisión de la Fase 2 (`pct` no numérico y `id_duplicado`). Después, plan detallado `docs/planes/fase-4.md`.
+**Próxima tarea sugerida:** Fase 4: plan detallado `docs/planes/fase-4.md` y luego T4.1 (el `PUT` del cronograma debe responder 400 si el motor lanza `id_duplicado`, `padre_inexistente` o `ciclo`).
 
 ## Registro de sesiones
 

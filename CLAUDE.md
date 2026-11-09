@@ -73,7 +73,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
-- **Fase 3 cerrada (2026-11-09).** Siguiente: Fase 4 (cronograma y cortes), empezando por los ajustes del motor pendientes y su plan detallado.
+- **Fase 3 cerrada (2026-11-09).** Siguiente: Fase 4 (cronograma y cortes), empezando por su plan detallado. Los ajustes del motor de la revisión de la Fase 2 ya están hechos.
 - La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
 - Pruebas web: `test/simular-api.ts` simula `fetch` (la sesión de Ana va por defecto).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.

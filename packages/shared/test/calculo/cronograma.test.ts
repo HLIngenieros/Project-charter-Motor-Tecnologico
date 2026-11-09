@@ -28,6 +28,14 @@ function sinNumerosRaros(n: ResultadoNodo) {
 }
 
 describe('calcularCronograma · hoja', () => {
+  it('un pct no numérico cuenta como 0', () => {
+    for (const pct of [NaN, Infinity, '0.5' as unknown as number, null as unknown as number]) {
+      const n = unaHoja('2025-03-05', pct).nodos.h!
+      expect(n.ev).toBe(0)
+      sinNumerosRaros(n)
+    }
+  })
+
   it('a mitad de plazo con 30 % real: 20 puntos de brecha, en atención', () => {
     const h = unaHoja('2025-03-05', 0.3).nodos.h!
     expect(h.dur).toBe(10)

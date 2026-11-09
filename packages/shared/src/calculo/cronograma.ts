@@ -80,6 +80,8 @@ const VACIO: Acumulado = {
 }
 
 const recortar = (x: number) => Math.min(1, Math.max(0, x))
+/** Un % real que no sea un número finito (dato corrupto o faltante) cuenta como 0. */
+const pctValido = (x: unknown) => (typeof x === 'number' && Number.isFinite(x) ? recortar(x) : 0)
 
 function combinar(a: Acumulado, b: Acumulado): Acumulado {
   return {
@@ -186,7 +188,7 @@ export function calcularCronograma(
     const dur = fin - ini + 1
     const pv = recortar((t - ini + 1) / dur)
     const avance = avances[n.id]
-    const ev = recortar(avance?.pct ?? 0)
+    const ev = pctValido(avance?.pct)
     const desv = (ev - pv) * dur
     const forecast =
       ev >= 1 - EPS

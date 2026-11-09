@@ -3,10 +3,12 @@ import type { ActividadEntrada, NodoArbol } from './tipos'
 /**
  * Arma el árbol de actividades. Devuelve las raíces ordenadas por `orden`
  * y numera cada nodo por su posición ('1', '1.2', '1.2.3').
+ * Lanza `id_duplicado`, `padre_inexistente` o `ciclo` si la entrada no forma un árbol.
  */
 export function construirArbol(actividades: ActividadEntrada[]): NodoArbol[] {
   const nodos = new Map<string, NodoArbol>()
   for (const a of actividades) {
+    if (nodos.has(a.id)) throw new Error('id_duplicado')
     nodos.set(a.id, { ...a, item: '', nivel: 0, esHoja: true, hijos: [] })
   }
 
