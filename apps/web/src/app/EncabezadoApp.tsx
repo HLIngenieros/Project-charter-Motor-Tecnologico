@@ -3,10 +3,16 @@ import { Link } from 'react-router'
 import { Marca } from '../componentes/Marca'
 
 /** Banda institucional con la marca; `derecha` recibe el usuario y sus acciones. */
-export function EncabezadoApp({ derecha }: { derecha?: ReactNode }) {
+export function EncabezadoApp({
+  derecha,
+  ancho = 'max-w-6xl',
+}: {
+  derecha?: ReactNode
+  ancho?: string
+}) {
   return (
     <header className="reticula text-white">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className={`mx-auto flex h-16 ${ancho} items-center justify-between gap-4 px-4 sm:px-6`}>
         <Link to="/" className="rounded-sello focus-visible:outline-white">
           <Marca />
         </Link>

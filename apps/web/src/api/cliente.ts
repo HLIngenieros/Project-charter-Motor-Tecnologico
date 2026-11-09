@@ -39,7 +39,16 @@ export async function api<T>(
   }
 
   const texto = await respuesta.text()
-  const datos: unknown = texto ? JSON.parse(texto) : undefined
+  let datos: unknown
+  try {
+    datos = texto ? JSON.parse(texto) : undefined
+  } catch {
+    throw new ErrorCliente(
+      respuesta.status,
+      'respuesta_invalida',
+      'El servidor respondió algo inesperado. Intenta de nuevo.',
+    )
+  }
   if (!respuesta.ok) {
     const error = (datos as Partial<RespuestaError> | undefined)?.error
     throw new ErrorCliente(
