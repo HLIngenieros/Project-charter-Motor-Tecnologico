@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan ID & TI 2025 · Project Charters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css?v=2">
+<style>
+  .estado { position: sticky; top: 0; z-index: 20; background: var(--sup); border-bottom: 1px solid var(--linea); box-shadow: 0 1px 0 rgb(11 31 51 / 0.02); }
+  .estado-in { max-width: 1360px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 24px; }
+  .estado h1 { font-size: 19px; white-space: nowrap; }
+  .titulo { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .datos { display: flex; align-items: center; gap: 22px; padding-left: 24px; border-left: 1px solid var(--linea); }
+  .dato { display: flex; flex-direction: column; line-height: 1.25; white-space: nowrap; }
+  .dato span { font-size: 12px; color: var(--t2); }
+  .dato b { font: 600 17px Sora, sans-serif; color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .dato a { color: var(--venc-t); text-decoration: none; }
+  .dato a:hover { text-decoration: underline; }
+  .acciones { margin-left: auto; display: flex; gap: 8px; }
+
+  .cuerpo { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: 216px minmax(0, 1fr); gap: 32px; padding: 28px 24px 0; }
+  .indice { position: sticky; top: 96px; align-self: start; display: flex; flex-direction: column; gap: 2px; }
+  .indice a { display: flex; justify-content: space-between; align-items: center; padding: 7px 12px; border-radius: var(--r-control); font-size: 14px; color: var(--t2); text-decoration: none; transition: background 0.15s, color 0.15s; }
+  .indice a:hover { background: rgb(255 255 255 / 0.7); color: var(--tinta); }
+  .indice a.act { background: var(--sup); color: var(--inst); font-weight: 600; box-shadow: var(--sombra); }
+  .indice small { font: 500 12px 'JetBrains Mono', monospace; color: var(--t2); }
+  .guardado { margin-top: 16px; padding: 0 12px; font-size: 12.5px; color: var(--t2); display: flex; align-items: center; gap: 6px; }
+  .guardado i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+
+  .pagina { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r-tarjeta); padding: 30px 40px 44px; display: flex; flex-direction: column; gap: 32px; }
+  .pagina h2 { font-size: 18px; margin-bottom: 12px; }
+  .pagina h2 .sub { font: 500 13px 'Plus Jakarta Sans', sans-serif; color: var(--t2); margin-left: 8px; letter-spacing: 0; }
+  .encabezado h2.nombre { font-size: 26px; margin-bottom: 4px; }
+  .encabezado .codigo { font-size: 13px; color: var(--t2); }
+  .ficha { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--linea); border-radius: var(--r-control); margin-top: 20px; }
+  .ficha > div { padding: 10px 14px; border-right: 1px solid var(--linea); min-width: 0; }
+  .ficha > div:last-child { border-right: 0; }
+  .ficha span { display: block; font-size: 12px; color: var(--t2); }
+  .ficha b { font-weight: 600; color: var(--tinta); font-size: 14px; }
+  .editable { border-radius: 6px; padding: 1px 4px; margin: -1px -4px; cursor: text; transition: background 0.15s, box-shadow 0.15s; }
+  .editable:hover { background: #f4f7fa; box-shadow: inset 0 -1px 0 #c3cfdd; }
+  .editable:focus { outline: none; background: #fff; box-shadow: 0 0 0 2px var(--acento); }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .lect { max-width: 70ch; }
+  ol.lista, ul.lista { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .lista li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; padding: 9px 0; border-top: 1px solid var(--linea-2); }
+  .lista li:first-child { border-top: 0; }
+  .lista li > span:first-child { font: 600 13px 'JetBrains Mono', monospace; color: var(--t2); padding-top: 1px; }
+  .sig { margin-top: 24px; }
+  .objetivos { display: flex; flex-direction: column; }
+  .agregar { margin: 6px 0 0 -12px; padding: 0 12px; align-self: flex-start; color: var(--inst); }
+
+  /* Gantt */
+  .crono-cab { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .crono-cab h2 { margin: 0; }
+  .ayuda { font-size: 13px; color: var(--t2); }
+  .crono-cab .segmento, .cs-cab .segmento { margin-left: auto; } .segmento { display: inline-flex; padding: 3px; background: var(--fondo); border-radius: var(--r-control); }
+  .segmento button { border: 0; background: transparent; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: var(--t2); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+  .segmento button[aria-pressed="true"] { background: var(--sup); color: var(--tinta); box-shadow: var(--sombra); }
+  .gantt { border: 1px solid var(--linea); border-radius: var(--r-control); overflow: hidden; font-size: 13px; }
+  .g-fila { display: grid; grid-template-columns: 68px minmax(220px, 1fr) 70px 112px minmax(380px, 1.35fr); align-items: center; min-height: 36px; border-top: 1px solid var(--linea-2); transition: background 0.2s var(--ease); }
+  .g-fila > div { padding: 0 10px; min-width: 0; }
+  .g-cab { background: var(--fondo); color: var(--t2); font-size: 12px; font-weight: 600; min-height: 32px; border-top: 0; position: sticky; top: 0; }
+  .g-fila.ag { color: var(--tinta); font-weight: 600; }
+  .g-fila.f-vencida { background: #fbf3f4; }
+  .g-fila.f-en_atencion { background: #fdf9ec; }
+  .g-fila.f-en_riesgo { background: #fdf4ec; }
+  .g-fila.f-atrasada { background: #fbf1ef; }
+  .g-fila.sel { box-shadow: inset 0 0 0 2px var(--acento); }
+  .g-fila.destello { animation: destello 1.2s var(--ease); }
+  @keyframes destello { from { background: rgb(0 169 224 / 0.16); } }
+  .nom { display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; }
+  .nom span { overflow: hidden; text-overflow: ellipsis; }
+  .plegar { flex: none; width: 22px; height: 22px; border: 0; border-radius: 5px; background: transparent; color: var(--t2); cursor: pointer; display: grid; place-items: center; }
+  .plegar:hover { background: var(--fondo); color: var(--tinta); }
+  .plegar svg { width: 14px; height: 14px; transition: transform 0.2s var(--ease); }
+  .plegar[aria-expanded="false"] svg { transform: rotate(-90deg); }
+  .item { font: 500 12.5px 'JetBrains Mono', monospace; color: var(--t2); }
+  .ag .item { color: var(--tinta); font-weight: 600; }
+  .pista { position: relative; height: 36px; overflow: hidden; }
+  .g-cab .pista { height: 32px; }
+  .mesl { position: absolute; top: 8px; font-size: 11.5px; color: var(--t2); padding-left: 5px; }
+  .mesr { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--linea-2); }
+  .corte { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--acento); z-index: 2; pointer-events: none; }
+  .g-cab .corte::after { content: '13 mar'; position: absolute; top: 7px; left: 6px; font: 600 11px 'Plus Jakarta Sans', sans-serif; color: #00759c; white-space: nowrap; background: var(--fondo); padding: 0 4px; border-radius: 3px; }
+  .barra { position: absolute; top: 11px; height: 14px; min-width: 5px; border-radius: 4px; background: var(--barra); cursor: grab; touch-action: none; z-index: 1; transition: box-shadow 0.15s; }
+  .barra:hover { box-shadow: 0 0 0 2px rgb(0 51 102 / 0.18); }
+  .barra:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+  .barra.arrastrando { cursor: grabbing; box-shadow: var(--sombra-flota); }
+  .barra .av { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+  .barra::before, .barra::after { content: ''; position: absolute; top: 2px; bottom: 2px; width: 3px; border-radius: 2px; background: var(--inst); opacity: 0; transition: opacity 0.15s; }
+  .barra::before { left: 2px; } .barra::after { right: 2px; }
+  .barra:hover::before, .barra:hover::after, .barra.arrastrando::before, .barra.arrastrando::after { opacity: 0.55; }
+  .ag .barra { top: 15px; height: 7px; background: rgb(11 31 51 / 0.18); cursor: default; }
+  .ag .barra .av { background: var(--tinta); }
+  .ag .barra::before, .ag .barra::after { display: none; }
+  .p-terminada { background: var(--ok); } .p-al_dia { background: var(--ok); } .p-en_atencion { background: var(--am); } .p-en_riesgo { background: var(--na); } .p-atrasada { background: var(--rojo); } .p-vencida { background: var(--venc); } .p-por_iniciar { background: transparent; }
+  .peso { font: 500 12.5px 'JetBrains Mono', monospace; color: var(--texto); text-align: right; white-space: nowrap; }
+  .detalle { display: none; grid-column: 1 / -1; padding: 14px 16px 16px 78px !important; background: #f7f9fc; border-top: 1px solid var(--linea-2); }
+  .g-fila.abierta + .detalle { display: grid; grid-template-columns: 90px 160px 160px minmax(0, 1fr); gap: 12px; }
+  .detalle .ancha { grid-column: span 3; }
+  .detalle .ancha + .ancha { grid-column: span 1; }
+  .detalle .campo { min-width: 0; }
+  .detalle .entrada { width: 100%; min-width: 0; }
+  .g-agregar { border-top: 1px solid var(--linea-2); padding: 8px 10px; display: flex; gap: 10px; align-items: center; }
+  .tip { position: fixed; z-index: 50; pointer-events: none; background: var(--tinta); color: #fff; font-size: 12.5px; padding: 6px 10px; border-radius: 6px; box-shadow: var(--sombra-flota); opacity: 0; transform: translateY(4px); transition: opacity 0.12s, transform 0.12s var(--ease); white-space: nowrap; }
+  .tip.ver { opacity: 1; transform: none; }
+  .tip b { font-weight: 600; }
+  .leyenda { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--t2); margin-top: 10px; }
+  .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .leyenda i { width: 14px; height: 8px; border-radius: 2px; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .t th { text-align: left; font-size: 12px; font-weight: 600; color: var(--t2); padding: 8px 12px; background: var(--fondo); }
+  .t th:first-child { border-radius: 6px 0 0 6px; } .t th:last-child { border-radius: 0 6px 6px 0; }
+  .t td { padding: 11px 12px; border-bottom: 1px solid var(--linea-2); vertical-align: top; }
+  .t td.der, .t th.der { text-align: right; }
+  .t tfoot td { font-weight: 700; color: var(--tinta); border-bottom: 0; }
+  .medida { display: flex; align-items: center; gap: 10px; }
+  .medida .pista-m { flex: 1; height: 8px; border-radius: 4px; background: var(--fondo); position: relative; min-width: 80px; }
+  .medida .pista-m u { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--inst); }
+  .medida .pista-m s { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--tinta); }
+
+
+  /* Curva S protagonista */
+  .curva-s { margin: 0 -40px; padding: 30px 40px 26px; background: #f7f9fc; border-top: 1px solid var(--linea-2); border-bottom: 1px solid var(--linea-2); }
+  .cs-cab { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  .cs-cab h2 { margin: 0; font-size: 22px; }
+  .cs-lectura { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; margin-bottom: 8px; min-height: 58px; }
+  .cs-lectura .dato b { font-size: 24px; }
+  .cs-fecha { display: flex; flex-direction: column; line-height: 1.25; min-width: 150px; }
+  .cs-fecha span { font-size: 12px; color: var(--t2); }
+  .cs-fecha b { font: 600 15px Sora, sans-serif; color: var(--tinta); }
+  .cs-estado { display: flex; align-items: center; gap: 8px; padding-bottom: 4px; }
+  .cs-venc { font-size: 12.5px; font-weight: 600; color: var(--venc-t); }
+  .cs-fin { margin-left: auto; text-align: right; }
+  .cs-lienzo { position: relative; }
+  .cs-svg { display: block; width: 100%; overflow: visible; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .cs-grid line { stroke: #e3e8ef; }
+  .cs-y { font: 500 11.5px 'JetBrains Mono', monospace; fill: var(--t2); text-anchor: end; }
+  .cs-meses text { font-size: 11.5px; fill: var(--t2); }
+  .cs-futuro { fill: rgb(11 31 51 / 0.025); }
+  .cs-plan { fill: none; stroke: var(--inst); stroke-width: 2.5; stroke-linejoin: round; }
+  .cs-real { fill: none; stroke: var(--acento); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+  .cs-proy { fill: none; stroke: var(--acento); stroke-width: 2; stroke-dasharray: 2 6; stroke-linecap: round; opacity: 0; animation: aparecer 0.5s 1.2s var(--ease) forwards; }
+  .cs-corte { stroke: var(--acento); stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .cs-corte-t { font-size: 12px; font-weight: 600; fill: #00759c; }
+  .cs-fin-t { font-size: 12px; font-weight: 600; fill: var(--t2); text-anchor: end; }
+  .cs-brecha path { fill-opacity: 0.22; opacity: 0; animation: aparecer 0.6s 0.9s var(--ease) forwards; }
+  .g-al_dia, .g-terminada { fill: var(--ok); } .g-en_atencion { fill: var(--am); } .g-en_riesgo { fill: var(--na); } .g-atrasada { fill: var(--rojo); } .g-vencida { fill: var(--venc); }
+  .cs-punto { stroke: #fff; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: brotar 0.45s var(--ease) both; }
+  .cs-punto.con-vencidas { stroke: var(--venc); stroke-width: 2; }
+  .f-al_dia, .f-terminada { fill: var(--ok); } .f-en_atencion { fill: var(--am); } .f-en_riesgo { fill: var(--na); } .f-atrasada { fill: var(--rojo); } .f-vencida { fill: var(--venc); } .f-por_iniciar { fill: var(--t3); }
+  .cs-tira-fut { fill: var(--linea); }
+  .cs-tira-t { font-size: 11.5px; font-weight: 600; fill: var(--t2); text-anchor: end; }
+  .cs-cruz { stroke: var(--tinta); stroke-width: 1; stroke-dasharray: 3 3; pointer-events: none; transition: opacity 0.15s; }
+  .cs-dot-plan { fill: #fff; stroke: var(--inst); stroke-width: 2.5; pointer-events: none; transition: opacity 0.15s; }
+  .cs-dot-real { fill: var(--acento); stroke: #fff; stroke-width: 2.5; pointer-events: none; transition: opacity 0.15s; }
+  .cs-dot-real.proy { fill: #fff; stroke: var(--acento); }
+  .cs-capa { fill: transparent; cursor: crosshair; }
+  .dibujar { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trazo 1.1s var(--ease) forwards; }
+  .cs-real.dibujar { animation-delay: 0.35s; }
+  .lista .cs-plan, .lista .cs-real, .lista .cs-proy, .lista .cs-brecha path { transition: d 0.55s var(--ease); }
+  .lista .cs-punto { transition: cx 0.55s var(--ease), cy 0.55s var(--ease), fill 0.3s; }
+  .lista .cs-dot-plan, .lista .cs-dot-real { transition: cx 0.08s linear, cy 0.08s linear, opacity 0.15s; }
+  .lista .cs-tira rect, .lista .cs-futuro { transition: x 0.55s var(--ease), width 0.55s var(--ease), fill 0.3s; }
+  .lista .cs-grid line, .lista .cs-grid text, .lista .cs-meses text, .lista .cs-corte, .lista .cs-corte-t, .lista .cs-fin-t { transition: transform 0.55s var(--ease), opacity 0.3s; }
+  @keyframes trazo { to { stroke-dashoffset: 0; } }
+  @keyframes aparecer { to { opacity: 1; } }
+  @keyframes brotar { from { transform: scale(0); } to { transform: scale(1); } }
+  .historial { width: 100%; }
+  .cortes { display: flex; flex-direction: column; }
+  .corte-f { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 11px 0; border-top: 1px solid var(--linea-2); }
+  .corte-f:first-child { border-top: 0; }
+  .corte-f b { color: var(--tinta); font-weight: 600; }
+  .corte-f p { grid-column: 1 / -1; font-size: 13px; color: var(--t2); }
+  .corte-f .cifras { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--texto); }
+  .fichas { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; padding: 4px 6px; min-height: 38px; }
+  .fichas input { border: 0; outline: 0; font: inherit; min-width: 60px; flex: 1; background: transparent; }
+  .ficha-r { display: inline-flex; align-items: center; gap: 2px; padding: 1px 4px 1px 8px; border-radius: 6px; background: var(--fondo); font-size: 13px; font-weight: 600; }
+  .ficha-r button { border: 0; background: none; color: var(--t2); cursor: pointer; display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border-radius: 4px; }
+  .ficha-r button:hover { background: var(--linea); color: var(--tinta); }
+  .t td.cifra, .medida .cifra { white-space: nowrap; }
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #fff; font-size: 10.5pt; }
+    .banda, .estado .acciones, .indice, .g-agregar, .agregar, .segmento, .ayuda, .pie-maqueta, .tip, .plegar { display: none !important; }
+    .estado { position: static; border: 0; }
+    .cuerpo { display: block; padding: 0; }
+    .pagina { border: 0; padding: 0; gap: 22px; }
+    .pagina section { break-inside: avoid-page; }
+    .g-fila { break-inside: avoid; grid-template-columns: 52px minmax(0, 1fr) 52px 96px 38%; min-height: 26px; font-size: 9pt; }
+    .g-fila > div { padding: 0 6px; }
+    .pista { height: 26px; }
+    .barra { top: 7px; height: 11px; }
+    .ag .barra { top: 10px; height: 6px; }
+    .barra { cursor: default; }
+    .detalle { display: none !important; }
+    .g-fila.sel { box-shadow: none; }
+  }
+
+  @media screen and (max-width: 1180px) {
+    .datos .opcional { display: none; }
+  }
+  @media screen and (max-width: 960px) {
+    html { scroll-padding-top: 170px; }
+    .estado-in { flex-wrap: wrap; gap: 10px 16px; padding: 12px 16px; }
+    .estado { position: static; }
+    .datos { order: 3; width: 100%; padding: 0; border: 0; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+    .datos .opcional { display: flex; }
+    .cuerpo { grid-template-columns: 1fr; padding: 0 0 0; gap: 0; }
+    html { scroll-padding-top: 60px; }
+    .indice { position: sticky; top: 0; z-index: 15; flex-direction: row; overflow-x: auto; scrollbar-width: none; background: var(--fondo); padding: 8px 16px; gap: 4px; border-bottom: 1px solid var(--linea); }
+    .indice a { white-space: nowrap; padding: 6px 12px; }
+    .indice small, .guardado { display: none; }
+    .pagina { border-radius: 0; border-width: 0; padding: 24px 16px 32px; gap: 36px; }
+    .dos { grid-template-columns: 1fr; gap: 28px; }
+    .curva-s { margin: 0 -16px; padding: 22px 16px 18px; }
+    .cs-lectura { gap: 12px 20px; }
+    .cs-lectura .dato b { font-size: 19px; }
+    .cs-fin { margin-left: 0; text-align: left; }
+    .cs-cab .segmento { margin-left: 0; }
+    .ficha { grid-template-columns: 1fr 1fr; }
+    .ficha > div:nth-child(2) { border-right: 0; }
+    .ficha > div:nth-child(-n+2) { border-bottom: 1px solid var(--linea); }
+    .g-fila { grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr); }
+    .g-agregar, .g-cab .corte::after { display: none; }
+    .datos { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 10px 24px; overflow: visible; }
+    .medida { flex-wrap: wrap; gap: 4px 10px; }
+    .g-fila > .c-item, .g-fila > .c-peso, .g-fila > .c-estado { display: none; }
+    .barra { cursor: default; }
+    .barra::before, .barra::after { display: none; }
+    .crono-cab .segmento { margin-left: 0; }
+    .t .opcional { display: none; }
+  }
+  @media screen and (max-width: 520px) {
+    .acciones .btn.fantasma { display: none; }
+    .acciones { margin-left: auto; }
+    .estado h1 { font-size: 17px; white-space: normal; }
+    .encabezado h2.nombre { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<header class="banda reticula">
+  <div class="banda-in">
+    <a class="marca" href="portafolio.html" aria-label="Ir a mis charters"><span class="sello">HL</span></a>
+    <nav class="miga" aria-label="Ruta"><a href="portafolio.html">Mis charters</a> / <b>Plan ID &amp; TI 2025</b></nav>
+    <div class="usuario"><span>Juan David Urbina</span><span class="avatar" aria-hidden="true">JU</span></div>
+  </div>
+</header>
+
+<div class="estado">
+  <div class="estado-in">
+    <div class="titulo"><h1>Plan ID &amp; TI 2025</h1><span id="chip-proyecto"></span></div>
+    <div class="datos" aria-live="polite">
+      <div class="dato"><span>Planeado</span><b id="d-pv">—</b></div>
+      <div class="dato"><span>Real</span><b id="d-ev">—</b></div>
+      <div class="dato opcional"><span>Brecha</span><b id="d-brecha">—</b></div>
+      <div class="dato"><span>Vencidas</span><b><a href="#cronograma" id="d-venc">—</a></b></div>
+      <div class="dato opcional"><span>Último corte</span><b>13 mar 2025</b></div>
+    </div>
+    <div class="acciones">
+      <button class="btn fantasma" type="button" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Imprimir A4</button>
+      <a class="btn p" href="corte.html">Registrar corte</a>
+    </div>
+  </div>
+</div>
+
+<div class="cuerpo">
+  <nav class="indice" aria-label="Secciones del charter">
+    <a href="#encabezado" class="act">Encabezado</a>
+    <a href="#razon">Razón de ser</a>
+    <a href="#objetivos">Objetivos <small>4</small></a>
+    <a href="#curva-s">Curva S</a>
+    <a href="#cronograma">Cronograma <small id="n-act"></small></a>
+    <a href="#supuestos">Supuestos y éxito <small>6</small></a>
+    <a href="#indicadores">Indicadores <small>2</small></a>
+    <a href="#riesgos">Riesgos <small>3</small></a>
+    <a href="#presupuesto">Presupuesto</a>
+    <a href="#avance">Historial de cortes <small>5</small></a>
+    <p class="guardado"><i></i>Guardado hace un momento</p>
+  </nav>
+
+  <main class="pagina">
+    <section id="encabezado" class="encabezado">
+      <h2 class="nombre"><span class="editable" contenteditable="true" spellcheck="false">Potenciación de herramientas de software actuales</span></h2>
+      <p class="codigo">Charter de Transformación Digital · creado el 15 ene 2025</p>
+      <div class="ficha">
+        <div><span>Responsable</span><b class="editable" contenteditable="true">Líder ID&amp;TI</b></div>
+        <div><span>Patrocinador</span><b class="editable" contenteditable="true">Gerencia General</b></div>
+        <div><span>Categoría</span><b>Sin categoría</b></div>
+        <div><span>Revisión</span><b>B · 15 ene 2025</b></div>
+      </div>
+    </section>
+
+    <section id="razon" class="dos">
+      <div>
+        <h2>Razón de ser</h2><p class="lect editable" contenteditable="true">Las áreas usan el ERP Libra por debajo de su capacidad. Se requiere capacitar a los usuarios, priorizar las mejoras y llevar a BPM los procesos de CRM, recursos humanos, recursos tecnológicos y suministros.</p>
+        <h2 class="sig">Objetivo general</h2><p class="lect editable" contenteditable="true">Aumentar el uso efectivo del ERP Libra y automatizar en BPM los procesos priorizados antes del 19 de diciembre de 2025.</p>
+      </div>
+      <div id="objetivos" class="objetivos">
+      <h2>Objetivos específicos</h2>
+      <ol class="lista">
+        <li><span>1</span><span class="editable" contenteditable="true">Capacitar a los usuarios activos de LIBRA según la matriz de uso.</span></li>
+        <li><span>2</span><span class="editable" contenteditable="true">Implementar el módulo CRM para el área Comercial.</span></li>
+        <li><span>3</span><span class="editable" contenteditable="true">Automatizar la creación y baja de usuarios y empleados en BPM.</span></li>
+        <li><span>4</span><span class="editable" contenteditable="true">Estandarizar las requisiciones de suministros en LIBRA.</span></li>
+      </ol>
+      <button class="btn fantasma agregar" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Agregar objetivo</button>
+      </div>
+    </section>
+
+
+
+    <section id="curva-s" class="curva-s">
+      <div class="cs-cab">
+        <h2>Curva S</h2>
+        <p class="ayuda">Pasa el puntero sobre la curva para leer cualquier fecha. Cada corte lleva el color de su semáforo.</p>
+        <div class="segmento" role="group" aria-label="Zoom de la curva">
+          <button type="button" data-zoom="proyecto" aria-pressed="true">Todo el proyecto</button>
+          <button type="button" data-zoom="cortes" aria-pressed="false">Cortes</button>
+        </div>
+      </div>
+      <div class="cs-lectura" aria-live="polite">
+        <div class="cs-fecha"><span id="cs-etiqueta">Último corte</span><b id="cs-fecha">—</b></div>
+        <div class="dato"><span>Planeado</span><b id="cs-pv">—</b></div>
+        <div class="dato"><span id="cs-ev-t">Real</span><b id="cs-ev">—</b></div>
+        <div class="dato"><span>Brecha</span><b id="cs-br">—</b></div>
+        <div class="cs-estado" id="cs-chip"></div>
+        <div class="dato cs-fin"><span>Fin al ritmo actual</span><b id="cs-finp" style="font-size:15px">—</b></div>
+      </div>
+      <div class="cs-lienzo" id="cs"></div>
+      <div class="leyenda">
+        <span><i style="background:var(--inst);height:3px"></i>Planeado (línea base)</span>
+        <span><i style="background:var(--acento);height:3px"></i>Real en cada corte</span>
+        <span><i style="background:repeating-linear-gradient(90deg,var(--acento) 0 3px,transparent 3px 7px);height:3px"></i>Proyección al ritmo actual</span>
+        <span><i style="background:var(--ok);opacity:.4"></i>Brecha, del color del semáforo</span>
+        <span><i style="background:linear-gradient(90deg,var(--ok) 0 33%,var(--am) 33% 66%,var(--ok) 66%)"></i>Franja inferior: semáforo de cada corte</span>
+      </div>
+    </section>
+
+    <section id="cronograma">
+      <div class="crono-cab">
+        <h2>Cronograma</h2>
+        <p class="ayuda" id="ayuda-gantt">Arrastra una barra para mover sus fechas; sus extremos cambian el inicio o el fin.</p>
+        <div class="segmento" role="group" aria-label="Escala">
+          <button type="button" data-rango="trimestre" aria-pressed="false">Trimestre</button>
+          <button type="button" data-rango="semestre" aria-pressed="true">Semestre</button>
+          <button type="button" data-rango="anio" aria-pressed="false">Año</button>
+        </div>
+      </div>
+      <div class="gantt" id="gantt"></div>
+      <div class="leyenda">
+        <span><i style="background:var(--barra)"></i>Línea base</span>
+        <span><i style="background:var(--ok)"></i>Al día o terminada</span>
+        <span><i style="background:var(--am)"></i>En atención</span>
+        <span><i style="background:var(--na)"></i>En riesgo</span>
+        <span><i style="background:var(--rojo)"></i>Atrasada</span>
+        <span><i style="background:var(--venc)"></i>Vencida</span>
+        <span><i style="background:var(--acento);width:3px"></i>Fecha de corte</span>
+      </div>
+    </section>
+
+    <section id="supuestos" class="dos">
+      <div>
+        <h2>Supuestos</h2>
+        <ul class="lista">
+          <li><span>1</span><span>El subcontratista TIC mantiene el equipo asignado hasta julio.</span></li>
+          <li><span>2</span><span>Cada área designa un responsable por proceso.</span></li>
+          <li><span>3</span><span>LIBRA 453 no tiene actualizaciones mayores en 2025.</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Criterios de éxito</h2>
+        <ul class="lista">
+          <li><span>1</span><span>CRM en producción y usado por Comercial antes del 1 de julio.</span></li>
+          <li><span>2</span><span>Creación y baja de usuarios y empleados funcionando en BPM.</span></li>
+          <li><span>3</span><span>90 % de los usuarios activos capacitados.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="indicadores">
+      <h2>Indicadores <span class="sub">Última medición: mar 2025</span></h2>
+      <table class="t">
+        <thead><tr><th>Indicador</th><th class="opcional">Fórmula</th><th class="der">Meta</th><th>Medición frente a la meta</th></tr></thead>
+        <tbody>
+          <tr><td>Procesos automatizados en BPM</td><td class="opcional">Procesos en producción ÷ procesos priorizados</td><td class="der cifra">100 %</td><td><div class="medida"><span class="cifra">1 de 5</span><div class="pista-m"><u style="width:20%"></u><s style="left:calc(100% - 2px)"></s></div></div></td></tr>
+          <tr><td>Usuarios capacitados en LIBRA</td><td class="opcional">Capacitados ÷ usuarios activos</td><td class="der cifra">90 %</td><td><div class="medida"><span class="cifra">42 %</span><div class="pista-m"><u style="width:42%"></u><s style="left:90%"></s></div></div></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="riesgos">
+      <h2>Riesgos</h2>
+      <table class="t">
+        <thead><tr><th>Riesgo</th><th class="opcional">Causa</th><th>Mitigación</th></tr></thead>
+        <tbody>
+          <tr><td>Las áreas no firman la matriz de perfiles a tiempo</td><td class="opcional">Carga operativa del cierre contable</td><td>Mesa de firma con cada jefe de área y fecha límite en comité</td></tr>
+          <tr><td>Retraso del subcontratista en el CRM</td><td class="opcional">Equipo compartido con otros clientes</td><td>Seguimiento semanal y pruebas por entregas</td></tr>
+          <tr><td>Baja adopción de los flujos BPM</td><td class="opcional">Costumbre de solicitar por correo</td><td>Gestión del cambio y cierre del canal por correo</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="presupuesto">
+      <h2>Presupuesto <span class="sub">Valores de ejemplo</span></h2>
+      <table class="t">
+        <thead><tr><th>Rubro</th><th class="der">Valor (COP)</th></tr></thead>
+        <tbody>
+          <tr><td>Desarrollo del módulo CRM</td><td class="der cifra">48.000.000</td></tr>
+          <tr><td>Desarrollo BPM (3 procesos)</td><td class="der cifra">36.000.000</td></tr>
+          <tr><td>Dispositivos biométricos</td><td class="der cifra">12.500.000</td></tr>
+          <tr><td>Capacitación y gestión del cambio</td><td class="der cifra">4.000.000</td></tr>
+        </tbody>
+        <tfoot><tr><td>Total</td><td class="der cifra">100.500.000</td></tr></tfoot>
+      </table>
+    </section>
+
+    <section id="avance">
+      <h2>Historial de cortes</h2>
+      <table class="t historial">
+        <thead><tr><th>Corte</th><th>Estado</th><th class="der">Planeado</th><th class="der">Real</th><th class="opcional">Nota</th></tr></thead>
+        <tbody id="cortes"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<p class="pie-maqueta">Maqueta T1.3 · actividades tomadas del Excel ID &amp; TI 2025; el grupo 1.2, indicadores, riesgos y presupuesto son de ejemplo.</p>
+<div class="tip" id="tip" role="status"></div>
+
+<script src="maqueta.js?v=2"></script>
+<script src="curva.js?v=3"></script>
+<script>
+(() => {
+  const { ARBOL, hojas, calcular, avancesActuales, curvaPlaneada, curvaS, aDia, aISO, fmtFecha, fmtPct, fmtPts, chip, MESES, CORTE, CORTES } = M
+  const avances = avancesActuales()
+  const tCorte = aDia(CORTE)
+  const RANGOS = { trimestre: ['2025-02-01', '2025-04-30'], semestre: ['2025-01-01', '2025-06-30'], anio: ['2025-01-01', '2025-12-31'] }
+  let rango = RANGOS.semestre.map(aDia)
+  const plegados = new Set(['1.1.4', '1.1.5', '1.2'])
+  let res = calcular(avances, CORTE)
+  const $ = (s) => document.querySelector(s)
+  const gantt = $('#gantt')
+  const tip = $('#tip')
+  const pct = (d) => ((d - rango[0]) / (rango[1] - rango[0] + 1)) * 100
+  const chev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>'
+  const esMovil = () => matchMedia('(max-width: 960px)').matches
+
+  $('#n-act').textContent = hojas.length
+
+  function cabecera() {
+    let meses = ''
+    for (let m = 0; m < 12; m++) {
+      const d = aDia(`2025-${String(m + 1).padStart(2, '0')}-01`)
+      if (d < rango[0] || d > rango[1]) continue
+      const choca = !esMovil() && pct(d) > pct(tCorte) - 9 && pct(d) < pct(tCorte) + 8
+      meses += `<span class="mesr" style="left:${pct(d)}%"></span>${choca ? '' : `<span class="mesl" style="left:${pct(d)}%">${MESES[m]}</span>`}`
+    }
+    return `<div class="g-fila g-cab"><div class="c-item">Ítem</div><div>Actividad</div><div class="c-peso peso">Peso</div><div class="c-estado">Estado</div><div class="pista">${meses}<span class="corte" style="left:${pct(tCorte)}%"></span></div></div>`
+  }
+
+  function fila(n) {
+    const r = res[n.id]
+    const ag = n.hijos.length > 0
+    const sangria = `padding-left:${10 + Math.max(0, n.nivel - 1) * 16}px`
+    const est = ag ? (r.vencidas ? chip('vencida', r.vencidas === 1 ? '1 vencida' : `${r.vencidas} vencidas`) : chip(r.estado)) : chip(r.estado)
+    const izq = pct(r.ini), anc = ((r.fin - r.ini + 1) / (rango[1] - rango[0] + 1)) * 100
+    const barra = ag
+      ? `<span class="barra" style="left:${izq}%;width:${anc}%"><span class="av" style="width:${r.ev * 100}%"></span></span>`
+      : `<span class="barra" tabindex="0" role="slider" aria-label="Fechas de ${n.nombre}" aria-valuetext="${fmtFecha(n.inicio)} a ${fmtFecha(n.fin)}" data-id="${n.id}" style="left:${izq}%;width:${anc}%"><span class="av p-${r.estado}" style="width:${r.ev * 100}%"></span></span>`
+    const toggle = ag ? `<button class="plegar" type="button" aria-expanded="${!plegados.has(n.id)}" aria-label="Plegar ${n.nombre}" data-plegar="${n.id}">${chev}</button>` : '<span style="width:22px;flex:none"></span>'
+    const peso = ag ? fmtPct(r.peso, 1) : fmtPct(n.peso, 1)
+    let html = `<div class="g-fila ${ag ? 'ag' : ''} f-${ag ? (r.vencidas ? 'vencida' : '') : r.estado}" data-fila="${n.id}">
+      <div class="c-item item">${n.item}</div>
+      <div class="nom" style="${sangria}">${toggle}<span title="${n.nombre}">${n.nombre}</span></div>
+      <div class="c-peso peso">${peso}</div>
+      <div class="c-estado">${est}</div>
+      <div class="pista"><span class="corte" style="left:${pct(tCorte)}%"></span>${barra}</div></div>`
+    if (!ag) html += `<div class="detalle" aria-label="Detalle de ${n.item}">
+      <label class="campo ancha">Actividad<input class="entrada" value="${n.nombre}"></label>
+      <label class="campo ancha">Entregable<input class="entrada" value="${n.entregable}" placeholder="Sin entregable"></label>
+      <label class="campo">Peso (%)<input class="entrada cifra" value="${(n.peso * 100).toFixed(1).replace('.', ',')}"></label>
+      <label class="campo">Inicio<input class="entrada" type="date" value="${n.inicio}"></label>
+      <label class="campo">Fin<input class="entrada" type="date" value="${n.fin}"></label>
+      <div class="campo">Responsables<div class="entrada fichas">${n.resp.split(', ').map((r) => `<span class="ficha-r">${r}<button type="button" aria-label="Quitar ${r}"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>`).join('')}<input aria-label="Agregar responsable" placeholder="Agregar"></div></div></div>`
+    if (ag && !plegados.has(n.id)) html += n.hijos.map(fila).join('')
+    return html
+  }
+
+  function pintar() {
+    gantt.innerHTML = cabecera() + ARBOL[0].hijos.map(fila).join('') + `<div class="g-agregar"><button class="btn fantasma" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Agregar actividad</button><span class="ayuda">Tab sangra la fila (la vuelve hija de la anterior); Mayús + Tab la saca.</span></div>`
+    if (seleccion) gantt.querySelector(`[data-fila="${seleccion}"]`)?.classList.add('sel', 'abierta')
+  }
+
+  let animando = {}
+  function contar(el, hasta, fmt) {
+    const desde = animando[el.id] ?? hasta
+    animando[el.id] = hasta
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || desde === hasta) { el.textContent = fmt(hasta); return }
+    const t0 = performance.now()
+    const paso = (t) => { const k = Math.min(1, (t - t0) / 260); const e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(desde + (hasta - desde) * e); if (k < 1) requestAnimationFrame(paso) }
+    requestAnimationFrame(paso)
+  }
+  function estado() {
+    const p = res.proyecto
+    $('#chip-proyecto').innerHTML = chip(p.estado)
+    contar($('#d-pv'), p.pv, (x) => fmtPct(x))
+    contar($('#d-ev'), p.ev, (x) => fmtPct(x))
+    contar($('#d-brecha'), p.pv - p.ev, (x) => fmtPts(x))
+    $('#d-venc').textContent = p.vencidas
+  }
+
+  function recalcular() {
+    res = calcular(avances, CORTE)
+    CORTES.forEach((c) => { c.res = calcular(c.avances, c.fecha) })
+    estado(); curva.actualizar(); historial()
+  }
+
+  /* Plegar, seleccionar y abrir detalle. */
+  let seleccion = null
+  gantt.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-plegar]')
+    if (b) { const id = b.dataset.plegar; plegados.has(id) ? plegados.delete(id) : plegados.add(id); pintar(); return }
+    if (e.target.closest('.barra') || e.target.closest('.detalle')) return
+    const f = e.target.closest('.g-fila[data-fila]')
+    if (!f || f.classList.contains('ag')) return
+    seleccion = seleccion === f.dataset.fila ? null : f.dataset.fila
+    pintar()
+  })
+
+  /* Arrastre de barras. */
+  const nodo = (id) => hojas.find((n) => n.id === id)
+  let drag = null
+  const mostrarTip = (x, y, html) => { tip.innerHTML = html; tip.style.left = Math.min(x + 14, innerWidth - tip.offsetWidth - 12) + 'px'; tip.style.top = y - 44 + 'px'; tip.classList.add('ver') }
+  const textoFechas = (i, f) => `<b>${fmtFecha(aISO(i), false)} – ${fmtFecha(aISO(f))}</b> · ${f - i + 1} días`
+  gantt.addEventListener('pointerdown', (e) => {
+    const b = e.target.closest('.barra[data-id]')
+    if (!b || esMovil()) return
+    const rect = b.getBoundingClientRect()
+    const off = e.clientX - rect.left
+    const modo = off < 7 ? 'ini' : rect.right - e.clientX < 7 ? 'fin' : 'mover'
+    const n = nodo(b.dataset.id)
+    drag = { b, n, modo, x0: e.clientX, ini: aDia(n.inicio), fin: aDia(n.fin), ancho: b.parentElement.clientWidth }
+    b.setPointerCapture(e.pointerId)
+    b.classList.add('arrastrando')
+    b.style.cursor = modo === 'mover' ? 'grabbing' : 'ew-resize'
+    e.preventDefault()
+  })
+  gantt.addEventListener('pointermove', (e) => {
+    const b = e.target.closest('.barra[data-id]')
+    if (!drag) {
+      if (b && !esMovil()) { const r = b.getBoundingClientRect(); b.style.cursor = e.clientX - r.left < 7 || r.right - e.clientX < 7 ? 'ew-resize' : 'grab'; const n = nodo(b.dataset.id); mostrarTip(e.clientX, e.clientY, `${textoFechas(aDia(n.inicio), aDia(n.fin))} · real ${fmtPct(avances[n.id], 0)}`) }
+      else tip.classList.remove('ver')
+      return
+    }
+    const dd = Math.round(((e.clientX - drag.x0) / drag.ancho) * (rango[1] - rango[0] + 1))
+    let i = drag.ini, f = drag.fin
+    if (drag.modo === 'mover') { i += dd; f += dd } else if (drag.modo === 'ini') { i = Math.min(drag.ini + dd, f) } else { f = Math.max(drag.fin + dd, i) }
+    drag.nuevo = [i, f]
+    drag.b.style.left = pct(i) + '%'
+    drag.b.style.width = ((f - i + 1) / (rango[1] - rango[0] + 1)) * 100 + '%'
+    mostrarTip(e.clientX, e.clientY, textoFechas(i, f))
+  })
+  const soltar = () => {
+    if (!drag) return
+    tip.classList.remove('ver')
+    if (drag.nuevo) { aplicarFechas(drag.n, ...drag.nuevo) } else drag.b.classList.remove('arrastrando')
+    drag = null
+  }
+  gantt.addEventListener('pointerup', soltar)
+  gantt.addEventListener('pointercancel', soltar)
+  gantt.addEventListener('keydown', (e) => {
+    const b = e.target.closest('.barra[data-id]')
+    if (!b || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return
+    e.preventDefault()
+    const n = nodo(b.dataset.id), d = e.key === 'ArrowRight' ? 1 : -1
+    let i = aDia(n.inicio), f = aDia(n.fin)
+    if (e.shiftKey) f = Math.max(i, f + d); else { i += d; f += d }
+    aplicarFechas(n, i, f)
+    gantt.querySelector(`.barra[data-id="${n.id}"]`)?.focus()
+  })
+  function aplicarFechas(n, i, f) {
+    n.inicio = aISO(i); n.fin = aISO(f)
+    recalcular(); pintar()
+    const fila = gantt.querySelector(`[data-fila="${n.id}"]`)
+    fila?.classList.add('destello')
+    $('.guardado').innerHTML = '<i></i>Guardado · ' + n.item + ' movida'
+  }
+
+  document.querySelectorAll('[data-rango]').forEach((btn) => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-rango]').forEach((x) => x.setAttribute('aria-pressed', x === btn))
+    rango = RANGOS[btn.dataset.rango].map(aDia); pintar()
+  }))
+
+  /* Índice con la sección visible. */
+  const enlaces = [...document.querySelectorAll('.indice a')]
+  const obs = new IntersectionObserver((ents) => ents.forEach((en) => { if (en.isIntersecting) enlaces.forEach((a) => a.classList.toggle('act', a.getAttribute('href') === '#' + en.target.id)) }), { rootMargin: '-30% 0px -60% 0px' })
+  document.querySelectorAll('.pagina > section').forEach((s) => obs.observe(s))
+
+  /* Curva S e historial de cortes. */
+  const curva = CurvaS($('#cs'), { calcular, CORTES, aDia, aISO, fmtFecha, fmtPct, fmtPts, chip, MESES, lectura: (l) => {
+    $('#cs-etiqueta').textContent = l.etiqueta; $('#cs-fecha').textContent = l.fecha
+    $('#cs-pv').textContent = l.pv; $('#cs-ev').textContent = l.ev; $('#cs-ev-t').textContent = l.evTitulo
+    $('#cs-br').textContent = l.brecha; $('#cs-chip').innerHTML = l.chip; $('#cs-finp').textContent = l.finProy
+  } })
+  document.querySelectorAll('[data-zoom]').forEach((btn) => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-zoom]').forEach((x) => x.setAttribute('aria-pressed', x === btn))
+    curva.zoom(btn.dataset.zoom)
+  }))
+  function historial() {
+    $('#cortes').innerHTML = CORTES.slice().reverse().map((c, i) => `<tr><td><b style="color:var(--tinta)">${fmtFecha(c.fecha)}</b>${i === 0 ? ' · último' : ''}</td><td>${chip(c.res.proyecto.estado)}</td><td class="der cifra">${fmtPct(c.res.proyecto.pv)}</td><td class="der cifra">${fmtPct(c.res.proyecto.ev)}</td><td class="opcional">${c.nota}</td></tr>`).join('')
+  }
+  historial()
+
+  if (esMovil()) $('#ayuda-gantt').textContent = 'En el celular el cronograma es de consulta; las fechas se ajustan en el escritorio.'
+  estado(); pintar()
+})()
+</script>
+</body>
+</html>

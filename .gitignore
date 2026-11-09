@@ -42,3 +42,7 @@ data/*.db*
 .superpowers/
 !.env.ejemplo
 .playwright-mcp/
+
+# Impeccable: capturas de revisión (temporales)
+.impeccable/review/
+.playwright-mcp/

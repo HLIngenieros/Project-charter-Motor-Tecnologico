@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vista celular · Project Charters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css?v=2">
+<style>
+  .marco { max-width: 1360px; margin: 0 auto; padding: 32px 24px 0; }
+  h1 { font-size: 28px; }
+  .intro { color: var(--t2); margin-top: 6px; max-width: 70ch; }
+  .telefonos { display: flex; gap: 36px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+  figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .tel { width: 414px; height: 868px; padding: 12px; border-radius: 48px; background: var(--tinta); box-shadow: 0 30px 60px -24px rgb(11 31 51 / 0.45); }
+  .tel iframe { width: 390px; height: 844px; border: 0; border-radius: 36px; background: var(--fondo); display: block; }
+  figcaption { text-align: center; max-width: 360px; }
+  figcaption b { display: block; font: 600 15px Sora, sans-serif; color: var(--tinta); }
+  figcaption span { font-size: 13.5px; color: var(--t2); }
+  @media (max-width: 760px) {
+    .marco { padding: 20px 16px 0; }
+    .tel { transform: scale(0.82); transform-origin: top center; margin-bottom: -150px; }
+  }
+</style>
+</head>
+<body>
+<header class="banda reticula">
+  <div class="banda-in">
+    <a class="marca" href="index.html"><span class="sello">HL</span><span><small>Grupo HL</small><b>Project Charters</b></span></a>
+    <nav class="miga" aria-label="Ruta"><a href="index.html">Maquetas</a> / <b>Vista celular</b></nav>
+  </div>
+</header>
+<main class="marco">
+  <h1>Vista celular</h1>
+  <p class="intro">En el celular se consulta el estado y se registra el corte; el cronograma se arma en el escritorio. Son las mismas páginas a 390 px de ancho: puedes tocarlas y navegar dentro de cada teléfono.</p>
+  <div class="telefonos">
+    <figure><div class="tel"><iframe src="portafolio.html" title="Portafolio en el celular"></iframe></div><figcaption><b>Mis charters</b><span>Lista apilada: nombre, avance, estado y último corte. Los filtros pasan a una fila.</span></figcaption></figure>
+    <figure><div class="tel"><iframe src="ficha.html" title="Ficha en el celular"></iframe></div><figcaption><b>Ficha</b><span>Estado arriba, índice como fila deslizable y Gantt de consulta (actividad y barra).</span></figcaption></figure>
+    <figure><div class="tel"><iframe src="corte.html" title="Registrar corte en el celular"></iframe></div><figcaption><b>Registrar corte</b><span>Una actividad por fila con su campo de %; el resultado y «Guardar» quedan fijos abajo.</span></figcaption></figure>
+  </div>
+</main>
+<p class="pie-maqueta">Maqueta T1.3.</p>
+</body>
+</html>

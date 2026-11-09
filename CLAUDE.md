@@ -18,6 +18,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
   2. Actualizar PENDIENTES.md y la documentación afectada.
   3. Hacer commit en español, en imperativo y breve.
 - **No hacer push:** el usuario lo hace manualmente desde GitHub Desktop.
+- **Impeccable, austero:** una ronda de capturas propia y listo; sin revisor final, re-revisiones ni documentador salvo que el usuario lo pida (ahorro de tokens).
 - **Ejecución de planes:** directa (sin subagente por tarea), con superpowers para pensar y skills de front para diseño y animaciones. Las pruebas se escriben con cada tarea; la verificación formal (suite completa, lint, build y navegador) es al cerrar cada fase.
 
 ## Repositorio
@@ -36,6 +37,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 | `docs/analisis-plantilla-excel.md` | Análisis del Excel, errores encontrados y **especificación de cálculos** (§4) |
 | `docs/referencias/` | Excel y PDF fuente |
 | `PENDIENTES.md` | Fases, tareas y registro de sesiones |
+| `PRODUCT.md` / `DESIGN.md` | Contexto de producto y sistema visual (Impeccable); `.impeccable/` guarda su configuración y el contrato de dirección |
+| `docs/pantallas.md` y `docs/maquetas/` | Flujos aprobados (T1.3) y maquetas HTML navegables con port mínimo del motor |
 | `packages/shared/` | Motor de cálculo (`src/calculo`) y esquemas Zod (`src/esquemas`); fixture del Excel en `test/fixtures/id-ti.json` |
 | `apps/api/` | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/acceso.ts` (único control de acceso), `cli/admin.ts` |
 | `apps/web/` | React: `componentes/`, `pantallas/`, `app/` (rutas, layout), `api/` (cliente y sesión), `estilos/tokens.css` |
@@ -59,13 +62,16 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Una hoja con fin antes del inicio cuenta como sin programar y da aviso · Claude.
 - 2026-11-09 · Texto de error en `alerta-texto` `#A63F2C` (el `#C4513C` no llega a 4,5:1); cifras grandes en Sora, mono solo en tablas y códigos · Claude.
 - 2026-11-09 · `CONFIAR_PROXY=true` solo detrás de IIS; el `.env` de la raíz lo cargan la API y el CLI · Claude (revisión).
+- 2026-11-09 · Ficha = **documento vivo** en el orden de la hoja ID & TI; cronograma capturado como **Gantt interactivo** (arrastrar barras); corte "solo lo que toca"; portafolio con avance, semáforo, mini curva S y último corte · Usuario.
+- 2026-11-09 · **Curva S protagonista** antes del cronograma: a todo el ancho, animada, con lectura por fecha, semáforo por corte, brecha sombreada y proyección al ritmo actual · Usuario.
+- 2026-11-09 · Acento `#00A9E0` = lo medido en cortes (línea de corte y serie Real), selección y foco · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
-- **Fase 2 completa (2026-11-09)** y regla de estado nueva aplicada (134 pruebas, lint en verde). Siguiente sesión: 1) `/impeccable init` (PRODUCT.md) y `document` (DESIGN.md desde T2.8), 2) T1.3 (maquetas), 3) demo del semáforo en el resumen visual, 4) plan de la Fase 3.
-- Skill **Impeccable** instalada global (2026-11-09) con su hook de diseño en `~/.claude/settings.json`; usarla para maquetas, críticas y pulido de UI.
-- Resumen visual de la propuesta (artefacto privado, con diagrama de arquitectura interactivo y demo del cálculo): https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC. Su semáforo aún usa la regla vieja por días: pendiente actualizarlo.
+- **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
+- Siguiente sesión: 1) plan detallado de la Fase 3 (`docs/planes/fase-3.md`) siguiendo las maquetas; 2) actualizar la demo del semáforo en el resumen visual (https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC, aún con la regla vieja por días).
+- Fase 3 debe pasar a `tokens.css` los colores del semáforo de las maquetas (amarillo, naranja, vinotinto, `--barra`) y alinear botón/campo con la app (DESIGN.md lista las diferencias).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
 ## Comandos
@@ -80,6 +86,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - En Git Bash los heredocs largos con JSX/plantillas fallan a veces; usar Write para archivos de código.
 - Prettier no debe tocar el fixture ni las migraciones (`.prettierignore`).
 - Vite puede quedar con un módulo a medio editar en caché: reiniciar `npm run dev`.
+- Con Playwright, `locator.click()` desplaza la página para centrar el elemento: para medir el scroll usar `element.click()` dentro de `evaluate`.
+- Las maquetas cargan los scripts con `?v=n`: subir el número al cambiarlos, o el navegador muestra la versión en caché.
 - `drizzle-kit generate` en SQLite recrea la tabla y copia **todas** las columnas, incluso las nuevas que no existen en la vieja: revisar el `INSERT … SELECT` de cada migración antes de commitear.
 
 ## Glosario

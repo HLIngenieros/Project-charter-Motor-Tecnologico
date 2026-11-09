@@ -1,0 +1,47 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-11-09T19:41:08.498Z",
+        "reason": "Brand commitment: Plus Jakarta Sans is the Informe global body face (README §6, PRODUCT.md Brand Commitments, apps/web tokens)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "sora",
+        "createdAt": "2026-11-09T19:50:14.377Z",
+        "reason": "Same face as DESIGN.md: app loads it via fontsource as '<name> Variable', mockups load it from Google Fonts"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-11-09T19:50:15.001Z",
+        "reason": "Same face as DESIGN.md: app loads it via fontsource as '<name> Variable', mockups load it from Google Fonts"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "jakarta sans\",\"segoe ui\",system-ui,sans-serif",
+        "createdAt": "2026-11-09T19:50:15.537Z",
+        "reason": "Same face as DESIGN.md: app loads it via fontsource as '<name> Variable', mockups load it from Google Fonts"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "jetbrains mono",
+        "createdAt": "2026-11-09T19:50:16.132Z",
+        "reason": "Same face as DESIGN.md: app loads it via fontsource as '<name> Variable', mockups load it from Google Fonts"
+      },
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "docs/maquetas/comun.css"
+        ],
+        "createdAt": "2026-11-09T19:50:16.721Z",
+        "reason": "DESIGN.md 'Single Ornament': the plan grid on the institutional band is the incumbent brand device from apps/web global.css (.reticula)"
+      }
+    ]
+  }
+}

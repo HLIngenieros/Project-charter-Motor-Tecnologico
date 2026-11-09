@@ -1,0 +1,733 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-09T00:00:00Z",
+  "title": "Design System: Project Charters · Grupo HL",
+  "extensions": {
+    "colorMeta": {
+      "institucional": {
+        "role": "primary",
+        "displayName": "Azul institucional",
+        "canonical": "#003366",
+        "tonalRamp": [
+          "#040c16",
+          "#15263b",
+          "#294364",
+          "#3e6390",
+          "#5685be",
+          "#81a8d8",
+          "#aeccf2",
+          "#dbf1ff"
+        ]
+      },
+      "institucional-2": {
+        "role": "primary",
+        "displayName": "Azul institucional claro",
+        "canonical": "#0a3f73",
+        "tonalRamp": [
+          "#040c16",
+          "#14263b",
+          "#274464",
+          "#3c6390",
+          "#5485be",
+          "#80a8d8",
+          "#adccf2",
+          "#dbf1ff"
+        ]
+      },
+      "acento": {
+        "role": "secondary",
+        "displayName": "Cian de corte",
+        "canonical": "#00a9e0",
+        "tonalRamp": [
+          "#000d17",
+          "#002a3d",
+          "#004967",
+          "#006b95",
+          "#008fc4",
+          "#51b1dd",
+          "#8fd4f6",
+          "#c8f7ff"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Verde al día",
+        "canonical": "#15a06a",
+        "tonalRamp": [
+          "#000f06",
+          "#002e1a",
+          "#004f31",
+          "#00744a",
+          "#0b9a65",
+          "#61ba8d",
+          "#99dab7",
+          "#cffbe1"
+        ]
+      },
+      "ok-suave": {
+        "role": "tertiary",
+        "displayName": "Verde al día suave",
+        "canonical": "#e3f4ec",
+        "tonalRamp": [
+          "#090c0b",
+          "#212724",
+          "#3c4440",
+          "#59645f",
+          "#77867f",
+          "#9ca9a3",
+          "#c2ccc7",
+          "#e9f0ed"
+        ]
+      },
+      "ok-texto": {
+        "role": "tertiary",
+        "displayName": "Verde al día texto",
+        "canonical": "#0e6e48",
+        "tonalRamp": [
+          "#030e08",
+          "#0e2c1d",
+          "#1d4d36",
+          "#2e7050",
+          "#42956d",
+          "#76b593",
+          "#a6d6bb",
+          "#d7f8e5"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "amarillo": {
+        "role": "tertiary",
+        "displayName": "Amarillo en atención",
+        "canonical": "#d9a400",
+        "tonalRamp": [
+          "#120900",
+          "#342100",
+          "#593c00",
+          "#815900",
+          "#ab7800",
+          "#c89f3e",
+          "#e5c582",
+          "#ffecbe"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "amarillo-suave": {
+        "role": "tertiary",
+        "displayName": "Amarillo en atención suave",
+        "canonical": "#fbf3d9",
+        "tonalRamp": [
+          "#0c0b07",
+          "#28251d",
+          "#464235",
+          "#67614f",
+          "#89826b",
+          "#aba592",
+          "#cec9ba",
+          "#f2eee4"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "amarillo-texto": {
+        "role": "tertiary",
+        "displayName": "Amarillo en atención texto",
+        "canonical": "#7a5c00",
+        "tonalRamp": [
+          "#100a02",
+          "#2e2308",
+          "#513f15",
+          "#765e22",
+          "#9d7e34",
+          "#bba269",
+          "#dbc79c",
+          "#fbedcf"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "naranja": {
+        "role": "tertiary",
+        "displayName": "Naranja en riesgo",
+        "canonical": "#e07b1f",
+        "tonalRamp": [
+          "#170600",
+          "#3d1a00",
+          "#683100",
+          "#964900",
+          "#c66400",
+          "#e08f52",
+          "#fab98c",
+          "#ffe4c5"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "naranja-suave": {
+        "role": "tertiary",
+        "displayName": "Naranja en riesgo suave",
+        "canonical": "#fcebdc",
+        "tonalRamp": [
+          "#0d0b08",
+          "#29241f",
+          "#494039",
+          "#6b5f54",
+          "#8e7f72",
+          "#afa297",
+          "#d1c7be",
+          "#f4ede7"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "naranja-texto": {
+        "role": "tertiary",
+        "displayName": "Naranja en riesgo texto",
+        "canonical": "#9a4a0a",
+        "tonalRamp": [
+          "#150702",
+          "#3a1c09",
+          "#633415",
+          "#8f4e23",
+          "#bc6a35",
+          "#d8936a",
+          "#f3bc9c",
+          "#ffe5cf"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "alerta": {
+        "role": "tertiary",
+        "displayName": "Rojo atrasada",
+        "canonical": "#c4513c",
+        "tonalRamp": [
+          "#180503",
+          "#40160f",
+          "#6c2b1f",
+          "#9b4130",
+          "#cc5a45",
+          "#e78774",
+          "#ffb3a3",
+          "#ffe0d4"
+        ]
+      },
+      "alerta-suave": {
+        "role": "tertiary",
+        "displayName": "Rojo atrasada suave",
+        "canonical": "#f8e9e5",
+        "tonalRamp": [
+          "#0d0b0a",
+          "#292423",
+          "#48403e",
+          "#695f5c",
+          "#8c7f7b",
+          "#ada29f",
+          "#d0c7c4",
+          "#f3edeb"
+        ]
+      },
+      "alerta-texto": {
+        "role": "tertiary",
+        "displayName": "Rojo atrasada texto",
+        "canonical": "#a63f2c",
+        "tonalRamp": [
+          "#170503",
+          "#3e1811",
+          "#692d22",
+          "#974535",
+          "#c75e4a",
+          "#e28a78",
+          "#fbb5a6",
+          "#ffe1d6"
+        ]
+      },
+      "vencida": {
+        "role": "tertiary",
+        "displayName": "Vinotinto vencida",
+        "canonical": "#7a1f2b",
+        "tonalRamp": [
+          "#160607",
+          "#3c191b",
+          "#652f32",
+          "#92464b",
+          "#c16166",
+          "#dc8b8e",
+          "#f7b6b7",
+          "#ffe1e1"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "vencida-suave": {
+        "role": "tertiary",
+        "displayName": "Vinotinto vencida suave",
+        "canonical": "#f4e4e6",
+        "tonalRamp": [
+          "#0d0a0b",
+          "#292424",
+          "#484041",
+          "#695e5f",
+          "#8c7e80",
+          "#aea2a3",
+          "#d0c6c8",
+          "#f3eced"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      },
+      "info": {
+        "role": "tertiary",
+        "displayName": "Azul informativo",
+        "canonical": "#1f6fd1",
+        "tonalRamp": [
+          "#020b1c",
+          "#092448",
+          "#154179",
+          "#2360ae",
+          "#3581e4",
+          "#6ba7f8",
+          "#9dccff",
+          "#d0f1ff"
+        ]
+      },
+      "info-suave": {
+        "role": "tertiary",
+        "displayName": "Azul informativo suave",
+        "canonical": "#e6effb",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#222529",
+          "#3e4248",
+          "#5c626a",
+          "#7b838e",
+          "#9fa6af",
+          "#c4cad1",
+          "#ebeff4"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#0b1f33",
+        "tonalRamp": [
+          "#080c10",
+          "#1e262f",
+          "#364351",
+          "#516377",
+          "#6e859e",
+          "#94a7bc",
+          "#bccbdb",
+          "#e5f0fb"
+        ]
+      },
+      "texto": {
+        "role": "neutral",
+        "displayName": "Pizarra",
+        "canonical": "#3b4b5e",
+        "tonalRamp": [
+          "#080b0f",
+          "#1f262d",
+          "#39434f",
+          "#556373",
+          "#738499",
+          "#98a7b8",
+          "#bfcad8",
+          "#e7eff9"
+        ]
+      },
+      "texto-2": {
+        "role": "neutral",
+        "displayName": "Pizarra media",
+        "canonical": "#5b6c7e",
+        "tonalRamp": [
+          "#080b0f",
+          "#1f262c",
+          "#39434e",
+          "#556371",
+          "#738497",
+          "#98a7b6",
+          "#bfcbd7",
+          "#e7eff8"
+        ]
+      },
+      "texto-3": {
+        "role": "neutral",
+        "displayName": "Pizarra clara",
+        "canonical": "#7c8ca1",
+        "tonalRamp": [
+          "#090b0f",
+          "#20262d",
+          "#3a434e",
+          "#566273",
+          "#748498",
+          "#99a6b8",
+          "#c0cad8",
+          "#e8eff9"
+        ]
+      },
+      "neutro": {
+        "role": "neutral",
+        "displayName": "Pizarra clara (neutro)",
+        "canonical": "#7c8ca1",
+        "tonalRamp": [
+          "#090b0f",
+          "#20262d",
+          "#3a434e",
+          "#566273",
+          "#748498",
+          "#99a6b8",
+          "#c0cad8",
+          "#e8eff9"
+        ]
+      },
+      "linea": {
+        "role": "neutral",
+        "displayName": "Línea",
+        "canonical": "#dce3ec",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232528",
+          "#3f4247",
+          "#5d6268",
+          "#7d838b",
+          "#a0a6ac",
+          "#c5c9cf",
+          "#eceff2"
+        ]
+      },
+      "linea-2": {
+        "role": "neutral",
+        "displayName": "Línea fina",
+        "canonical": "#e3e8ef",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#242527",
+          "#404246",
+          "#5e6166",
+          "#7e8389",
+          "#a2a5ab",
+          "#c6c9cd",
+          "#eceff1"
+        ]
+      },
+      "fondo": {
+        "role": "neutral",
+        "displayName": "Fondo",
+        "canonical": "#eef2f6",
+        "tonalRamp": [
+          "#090b0e",
+          "#222528",
+          "#3f4246",
+          "#5e6265",
+          "#7f8386",
+          "#a2a5a9",
+          "#c6cacd",
+          "#ebeff3"
+        ]
+      },
+      "superficie": {
+        "role": "neutral",
+        "displayName": "Superficie",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "barra": {
+        "role": "neutral",
+        "displayName": "Barra de plan",
+        "canonical": "#c9d6e5",
+        "tonalRamp": [
+          "#090b0e",
+          "#21252a",
+          "#3c434a",
+          "#59626d",
+          "#788491",
+          "#9ca6b2",
+          "#c2cad3",
+          "#eaeff5"
+        ],
+        "source": "docs/maquetas/comun.css (pendiente en apps/web/src/estilos/tokens.css, Fase 3)"
+      }
+    },
+    "typographyMeta": {
+      "titular": {
+        "displayName": "Titular",
+        "purpose": "Título de pantalla y nombre del charter (24 a 28 px; 22 px en celular)."
+      },
+      "titulo": {
+        "displayName": "Título",
+        "purpose": "Encabezado de cada sección de la hoja."
+      },
+      "titulo-sm": {
+        "displayName": "Título pequeño",
+        "purpose": "Título de tarjeta y de grupo; nombre del charter en el portafolio."
+      },
+      "cifra-grande": {
+        "displayName": "Cifra grande",
+        "purpose": "Planeado, real y brecha en la banda de estado y el resumen del corte."
+      },
+      "cuerpo": {
+        "displayName": "Cuerpo",
+        "purpose": "Texto corrido, campos y botones de la app; máximo 70ch en lectura."
+      },
+      "cuerpo-sm": {
+        "displayName": "Cuerpo pequeño",
+        "purpose": "Tablas, pestañas, ayudas y notas de corte."
+      },
+      "etiqueta": {
+        "displayName": "Etiqueta",
+        "purpose": "Rótulos de dato y cabeceras de tabla y Gantt, en texto-2 y caja de oración."
+      },
+      "cifra": {
+        "displayName": "Cifra",
+        "purpose": "Ítems, pesos y porcentajes de tabla en JetBrains Mono tabular."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-dialogo",
+        "value": "0 24px 48px -12px rgb(11 31 51 / 0.28)",
+        "purpose": "Diálogos y la tarjeta de acceso sobre la banda."
+      },
+      {
+        "name": "shadow-foco",
+        "value": "0 0 0 3px rgb(0 169 224 / 0.35)",
+        "purpose": "Anillo de foco de campos, junto al borde acento."
+      },
+      {
+        "name": "sombra",
+        "value": "0 1px 2px rgb(11 31 51 / 0.06), 0 2px 8px -2px rgb(11 31 51 / 0.06)",
+        "purpose": "Realce del elemento elegido (índice activo, segmento presionado). Solo en maquetas; pendiente en tokens.css."
+      },
+      {
+        "name": "sombra-flota",
+        "value": "0 12px 32px -8px rgb(11 31 51 / 0.28)",
+        "purpose": "Barra del Gantt arrastrada y tooltip de fechas. Solo en maquetas; pendiente en tokens.css."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-salida",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Curva por defecto de entradas, diálogos y transiciones de estado."
+      },
+      {
+        "name": "estado",
+        "value": "150ms",
+        "purpose": "Cambios de color, borde y sombra en controles."
+      },
+      {
+        "name": "entrada",
+        "value": "320ms opacity 0→1, y 8px→0",
+        "purpose": "Entrada única de una vista."
+      },
+      {
+        "name": "escalonado",
+        "value": "280ms, y 6px→0, retraso 35ms × i (i ≤ 12)",
+        "purpose": "Elementos de una lista."
+      },
+      {
+        "name": "dialogo",
+        "value": "200ms, y 12px→0, scale 0.98→1; velo 150ms",
+        "purpose": "Apertura de diálogo."
+      },
+      {
+        "name": "ruta",
+        "value": "200ms easeOut entrada / 120ms easeIn salida",
+        "purpose": "Cambio entre pantallas."
+      },
+      {
+        "name": "pestana",
+        "value": "spring stiffness 500, damping 40",
+        "purpose": "Línea de la pestaña activa."
+      },
+      {
+        "name": "destello",
+        "value": "1.2s fondo acento al 16% → nada",
+        "purpose": "Señalar la fila del Gantt a la que se saltó (maquetas)."
+      },
+      {
+        "name": "movimiento-reducido",
+        "value": "prefers-reduced-motion: duraciones 0.01ms y variantes vacías",
+        "purpose": "Obligatorio en toda animación."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "celular-estrecho",
+        "value": "520px"
+      },
+      {
+        "name": "sm (Tailwind, app)",
+        "value": "640px"
+      },
+      {
+        "name": "celular",
+        "value": "760px"
+      },
+      {
+        "name": "tableta-corte",
+        "value": "900px"
+      },
+      {
+        "name": "tableta-ficha",
+        "value": "960px"
+      },
+      {
+        "name": "portafolio-compacto",
+        "value": "1080px"
+      },
+      {
+        "name": "estado-compacto",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "boton-primario",
+      "description": "Acción principal de una zona: entrar, guardar el corte, crear charter.",
+      "html": "<button class=\"ds-btn-primario\">Registrar corte</button>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-btn-primario { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; padding:0 16px; border-radius:var(--radius-control,8px); font:600 0.9375rem var(--font-texto,'Plus Jakarta Sans',sans-serif); cursor:pointer; transition:background-color .15s, border-color .15s, color .15s; border:0; background:var(--color-institucional,#003366); color:#fff; } .ds-btn-primario:hover { background:var(--color-institucional-2,#0a3f73); } .ds-btn-primario:active { background:var(--color-tinta,#0b1f33); } .ds-btn-primario:focus-visible { outline:2px solid var(--color-acento,#00a9e0); outline-offset:2px; }"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "boton-secundario",
+      "description": "Acción alterna junto a una primaria.",
+      "html": "<button class=\"ds-btn-secundario\">Cancelar</button>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-btn-secundario { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; padding:0 16px; border-radius:var(--radius-control,8px); font:600 0.9375rem var(--font-texto,'Plus Jakarta Sans',sans-serif); cursor:pointer; transition:background-color .15s, border-color .15s, color .15s; border:1px solid var(--color-linea,#dce3ec); background:var(--color-superficie,#fff); color:var(--color-tinta,#0b1f33); } .ds-btn-secundario:hover { border-color:var(--color-texto-3,#7c8ca1); background:rgb(238 242 246 / 0.6); } .ds-btn-secundario:focus-visible { outline:2px solid var(--color-acento,#00a9e0); outline-offset:2px; }"
+    },
+    {
+      "name": "Botón fantasma",
+      "kind": "button",
+      "refersTo": "boton-fantasma",
+      "description": "Acciones de agregar o de baja prioridad (Imprimir A4, Agregar actividad).",
+      "html": "<button class=\"ds-btn-fantasma\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.25\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>Agregar actividad</button>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-btn-fantasma { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; padding:0 16px; border-radius:var(--radius-control,8px); font:600 0.9375rem var(--font-texto,'Plus Jakarta Sans',sans-serif); cursor:pointer; transition:background-color .15s, border-color .15s, color .15s; border:0; background:transparent; color:var(--color-institucional,#003366); } .ds-btn-fantasma:hover { background:rgb(0 51 102 / 0.06); } .ds-btn-fantasma:focus-visible { outline:2px solid var(--color-acento,#00a9e0); outline-offset:2px; } .ds-btn-fantasma svg { width:16px; height:16px; }"
+    },
+    {
+      "name": "Botón de peligro",
+      "kind": "button",
+      "refersTo": "boton-peligro",
+      "description": "Acción destructiva confirmada (eliminar).",
+      "html": "<button class=\"ds-btn-peligro\">Eliminar</button>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-btn-peligro { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; padding:0 16px; border-radius:var(--radius-control,8px); font:600 0.9375rem var(--font-texto,'Plus Jakarta Sans',sans-serif); cursor:pointer; transition:background-color .15s, border-color .15s, color .15s; border:0; background:var(--color-alerta,#c4513c); color:#fff; } .ds-btn-peligro:hover { background:#a9432f; } .ds-btn-peligro:focus-visible { outline:2px solid var(--color-acento,#00a9e0); outline-offset:2px; }"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Etiqueta encima, campo de 44 px, foco cian con anillo, error en alerta-texto.",
+      "html": "<label class=\"ds-campo\">Correo<input class=\"ds-entrada\" placeholder=\"nombre@hlingenieros.com\"></label>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-campo { display:flex; flex-direction:column; gap:6px; font:600 0.875rem var(--font-texto,'Plus Jakarta Sans',sans-serif); color:var(--color-tinta,#0b1f33); } .ds-entrada { min-height:44px; padding:0 12px; border:1px solid var(--color-linea,#dce3ec); border-radius:var(--radius-control,8px); background:var(--color-superficie,#fff); color:var(--color-tinta,#0b1f33); font:400 0.9375rem var(--font-texto,'Plus Jakarta Sans',sans-serif); transition:border-color .15s, box-shadow .15s; } .ds-entrada::placeholder { color:var(--color-texto-3,#7c8ca1); } .ds-entrada:hover { border-color:var(--color-texto-3,#7c8ca1); } .ds-entrada:focus { outline:none; border-color:var(--color-acento,#00a9e0); box-shadow:var(--shadow-foco,0 0 0 3px rgb(0 169 224 / 0.35)); }"
+    },
+    {
+      "name": "Chips de semáforo",
+      "kind": "chip",
+      "refersTo": "chip-al-dia",
+      "description": "Estado con punto en tono base, fondo suave y texto accesible.",
+      "html": "<span class=\"ds-chip ds-ok\"><i></i>Al día</span> <span class=\"ds-chip ds-am\"><i></i>En atención</span> <span class=\"ds-chip ds-na\"><i></i>En riesgo</span> <span class=\"ds-chip ds-rojo\"><i></i>Atrasada</span> <span class=\"ds-chip ds-venc\"><i></i>Vencida</span> <span class=\"ds-chip ds-gris\"><i></i>Por iniciar</span>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-chip { display:inline-flex; align-items:center; gap:6px; padding:2px 10px; border-radius:999px; font:600 12.5px/1.6 var(--font-texto,'Plus Jakarta Sans',sans-serif); white-space:nowrap; } .ds-chip i { width:7px; height:7px; border-radius:50%; } .ds-ok { background:#e3f4ec; color:#0e6e48; } .ds-ok i { background:#15a06a; } .ds-am { background:#fbf3d9; color:#7a5c00; } .ds-am i { background:#d9a400; } .ds-na { background:#fcebdc; color:#9a4a0a; } .ds-na i { background:#e07b1f; } .ds-rojo { background:#f8e9e5; color:#a63f2c; } .ds-rojo i { background:#c4513c; } .ds-venc { background:#f4e4e6; color:#7a1f2b; } .ds-venc i { background:#7a1f2b; } .ds-gris { background:#eef2f6; color:#5b6c7e; } .ds-gris i { background:#7c8ca1; }"
+    },
+    {
+      "name": "Tarjeta",
+      "kind": "card",
+      "refersTo": "tarjeta",
+      "description": "Hoja blanca plana con borde; borde superior de 3 px con el color de la categoría cuando aplica.",
+      "html": "<section class=\"ds-tarjeta\"><h3>Riesgos</h3><p>Dependencia del proveedor del CRM para la migración de datos.</p></section>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-tarjeta { background:var(--color-superficie,#fff); border:1px solid var(--color-linea,#dce3ec); border-top:3px solid #0a9c9b; border-radius:var(--radius-tarjeta,12px); padding:20px; font:400 0.9375rem/1.55 var(--font-texto,'Plus Jakarta Sans',sans-serif); color:var(--color-texto,#3b4b5e); max-width:360px; } .ds-tarjeta h3 { margin:0 0 12px; font:600 1rem/1.2 var(--font-titulo,'Sora',sans-serif); letter-spacing:-0.015em; color:var(--color-tinta,#0b1f33); } .ds-tarjeta p { margin:0; }"
+    },
+    {
+      "name": "Banda institucional",
+      "kind": "nav",
+      "description": "Banda de 60 px con retícula de plano, sello HL y miga.",
+      "html": "<header class=\"ds-banda\"><span class=\"ds-sello\">HL</span><span class=\"ds-marca\"><small>Grupo HL</small><b>Project Charters</b></span><nav class=\"ds-miga\"><a href=\"#\">Mis charters</a> / <b>CRM Comercial</b></nav></header>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-banda { display:flex; align-items:center; gap:16px; height:60px; padding:0 24px; color:#fff; background-color:var(--color-institucional,#003366); background-image:linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px), linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px); background-size:96px 96px, 96px 96px, 24px 24px, 24px 24px; background-position:-1px -1px; font-family:var(--font-texto,'Plus Jakarta Sans',sans-serif); } .ds-sello { width:36px; height:36px; border-radius:var(--radius-sello,10px); background:#fff; color:var(--color-institucional,#003366); display:grid; place-items:center; font:700 14px var(--font-titulo,'Sora',sans-serif); } .ds-marca small { display:block; font-size:11px; color:rgb(255 255 255 / 0.72); } .ds-marca b { font:600 15px var(--font-titulo,'Sora',sans-serif); } .ds-miga { font-size:14px; color:rgb(255 255 255 / 0.78); } .ds-miga a { color:inherit; text-decoration:none; } .ds-miga a:hover { color:#fff; text-decoration:underline; } .ds-miga a:focus-visible { outline:2px solid #00a9e0; outline-offset:2px; } .ds-miga b { color:#fff; font-weight:600; }"
+    },
+    {
+      "name": "Pestañas",
+      "kind": "nav",
+      "refersTo": "pestana-activa",
+      "description": "Pestañas con línea institucional de 2 px bajo la activa.",
+      "html": "<div class=\"ds-pestanas\" role=\"tablist\"><button role=\"tab\" aria-selected=\"true\">Cronograma</button><button role=\"tab\" aria-selected=\"false\">Cortes</button><button role=\"tab\" aria-selected=\"false\">Riesgos</button></div>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-pestanas { display:flex; gap:4px; border-bottom:1px solid var(--color-linea,#dce3ec); } .ds-pestanas button { position:relative; border:0; background:none; padding:8px 12px 10px; font:600 0.875rem var(--font-texto,'Plus Jakarta Sans',sans-serif); color:var(--color-texto-2,#5b6c7e); cursor:pointer; transition:color .15s; } .ds-pestanas button:hover { color:var(--color-tinta,#0b1f33); } .ds-pestanas button:focus-visible { outline:2px solid #00a9e0; outline-offset:2px; } .ds-pestanas button[aria-selected='true'] { color:var(--color-institucional,#003366); } .ds-pestanas button[aria-selected='true']::after { content:''; position:absolute; left:8px; right:8px; bottom:-1px; height:2px; border-radius:999px; background:var(--color-institucional,#003366); }"
+    },
+    {
+      "name": "Fila del Gantt",
+      "kind": "custom",
+      "description": "Fila de columnas fijas con barra de plan, avance por estado, asas y línea de corte cian.",
+      "html": "<div class=\"ds-gfila\"><span class=\"ds-item\">1.3.2</span><span>Migración de datos</span><span class=\"ds-peso\">8,0 %</span><div class=\"ds-pista\"><div class=\"ds-barra\" tabindex=\"0\"><u></u></div><i class=\"ds-corte\"></i></div></div>",
+      "css": ":host, .ds-root { --color-institucional:#003366; --color-institucional-2:#0a3f73; --color-tinta:#0b1f33; --color-texto:#3b4b5e; --color-texto-2:#5b6c7e; --color-texto-3:#7c8ca1; --color-linea:#dce3ec; --color-linea-2:#e3e8ef; --color-fondo:#eef2f6; --color-superficie:#ffffff; --color-acento:#00a9e0; --color-alerta:#c4513c; --color-alerta-texto:#a63f2c; --font-titulo:'Sora Variable','Segoe UI',system-ui,sans-serif; --font-texto:'Plus Jakarta Sans Variable','Segoe UI',system-ui,sans-serif; --font-cifra:'JetBrains Mono Variable',ui-monospace,monospace; --radius-control:0.5rem; --radius-tarjeta:0.75rem; --radius-sello:0.625rem; --shadow-dialogo:0 24px 48px -12px rgb(11 31 51 / 0.28); --shadow-foco:0 0 0 3px rgb(0 169 224 / 0.35); --ease-salida:cubic-bezier(0.22,1,0.36,1); } .ds-gfila { display:grid; grid-template-columns:68px minmax(160px,1fr) 70px minmax(240px,1.35fr); align-items:center; min-height:36px; border:1px solid var(--color-linea,#dce3ec); border-radius:var(--radius-control,8px); background:#fdf9ec; font:400 13px var(--font-texto,'Plus Jakarta Sans',sans-serif); color:var(--color-texto,#3b4b5e); } .ds-gfila > * { padding:0 10px; } .ds-item, .ds-peso { font:500 12.5px var(--font-cifra,'JetBrains Mono',monospace); color:var(--color-texto-2,#5b6c7e); font-variant-numeric:tabular-nums; } .ds-peso { text-align:right; color:var(--color-texto,#3b4b5e); } .ds-pista { position:relative; height:36px; } .ds-barra { position:absolute; top:11px; left:15%; width:55%; height:14px; border-radius:4px; background:#c9d6e5; cursor:grab; transition:box-shadow .15s; } .ds-barra u { position:absolute; inset:0 auto 0 0; width:40%; border-radius:4px; background:#d9a400; } .ds-barra:hover { box-shadow:0 0 0 2px rgb(0 51 102 / 0.18); } .ds-barra:focus-visible { outline:2px solid #00a9e0; outline-offset:2px; } .ds-barra:active { cursor:grabbing; box-shadow:0 12px 32px -8px rgb(11 31 51 / 0.28); } .ds-corte { position:absolute; top:0; bottom:0; left:48%; width:2px; background:var(--color-acento,#00a9e0); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El charter A4 vivo",
+    "overview": "El sistema es el del Informe global de priorización llevado a pantalla: una banda institucional azul con retícula de plano arriba, un fondo gris azulado frío y hojas blancas con borde fino donde vive el contenido. Se lee como un documento técnico de ingeniería, no como un tablero: títulos en Sora, texto en Plus Jakarta Sans, cifras de tabla e ítems en JetBrains Mono, y todo el color fuerte reservado para decir el estado.\n\nLa densidad es de herramienta de oficina: texto base de 15 px, controles de 40 a 44 px, filas de 36 px en el Gantt y tablas con cifras tabulares alineadas a la derecha. La profundidad es mínima: bordes linea hacen la estructura y las sombras solo aparecen en lo que flota (diálogos, tooltips, barras arrastradas). El movimiento es corto, con salida suave, y desaparece con prefers-reduced-motion.\n\nEl semáforo (verde, amarillo, naranja, rojo y vinotinto para vencida) es el único sistema cromático expresivo. Cada estado tiene tres piezas: tono base para puntos y barras, fondo suave para chips y filas, y una variante de texto que cumple 4,5:1.",
+    "keyCharacteristics": [
+      "Banda institucional `#003366` con retícula de plano como único elemento decorativo.",
+      "Hojas blancas con borde de 1 px y radio de 12 px sobre fondo `fondo`.",
+      "Plano por defecto: borde en reposo, sombra solo en lo que flota.",
+      "Semáforo de cinco estados con tono, fondo suave y texto accesible.",
+      "Acento cian solo para lo medido, la selección y el foco.",
+      "Cifras tabulares siempre; Sora para las grandes, mono para las de tabla."
+    ],
+    "rules": [
+      {
+        "name": "The Acento Medido Rule",
+        "body": "El cian `acento` marca lo que se midió en un corte, la selección y el foco. Nunca es decorativo ni de marca.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three-Piece Semáforo Rule",
+        "body": "Todo estado usa sus tres piezas: tono base para puntos y barras, fondo suave para el chip o la fila, y la variante `-texto` para cualquier letra. Un tono base nunca se usa como color de texto.",
+        "section": "colors"
+      },
+      {
+        "name": "The Category Stays Quiet Rule",
+        "body": "El color de una categoría (catálogo editable, valor libre) solo aparece en el borde superior de 3 px de una tarjeta y en el chip de categoría. Nunca pinta barras, filas ni cifras, que son del semáforo.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cifra Rule",
+        "body": "Toda cifra es tabular. Las grandes (17 px o más, en bandas y resúmenes) van en Sora; la mono queda para tablas, ítems y códigos.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Rótulos, cabeceras y botones van en caja de oración. No hay mayúsculas sostenidas ni tracking abierto en ningún rótulo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Hojas, tarjetas y tablas están planas en reposo, con borde de 1 px. Una sombra indica que algo flota, está elegido o se está arrastrando.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Single Ornament Rule",
+        "body": "La retícula de plano es el único elemento decorativo y solo aparece sobre el azul institucional.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** usar `institucional` para la acción primaria y `acento` solo para lo medido, la selección y el foco.",
+      "**Do** escribir texto de estado con la variante `-texto` (`ok-texto`, `amarillo-texto`, `naranja-texto`, `alerta-texto`, `vencida`) para cumplir 4,5:1.",
+      "**Do** separar con bordes `linea` de 1 px y dejar las hojas planas; usar `shadow-dialogo` solo en lo que flota.",
+      "**Do** poner toda cifra en tabular: Sora para las grandes, JetBrains Mono para tablas, ítems y pesos.",
+      "**Do** dibujar íconos como SVG en línea de 16 px, con trazo de 2 a 2,5 y `currentColor`.",
+      "**Do** respetar `prefers-reduced-motion` con `useVariantes` y el bloque global de reducción."
+    ],
+    "donts": [
+      "**Don't** usar `acento` como color decorativo o de marca.",
+      "**Don't** usar el tono base de un estado (`amarillo`, `naranja`, `ok`) como color de texto.",
+      "**Don't** dejar que el color de una categoría pinte barras, filas o cifras.",
+      "**Don't** añadir ornamentos fuera de la retícula de plano de la banda institucional.",
+      "**Don't** poner rótulos en mayúsculas sostenidas con tracking abierto, ni antetítulos sobre los títulos.",
+      "**Don't** usar caracteres tipográficos (×, ✓, →) como íconos.",
+      "**Don't** usar `texto-3` para texto esencial: no llega a 4,5:1 sobre el fondo."
+    ]
+  }
+}

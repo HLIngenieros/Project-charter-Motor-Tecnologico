@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrar corte · Plan ID & TI 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css?v=2">
+<style>
+  .marco { max-width: 1180px; margin: 0 auto; padding: 28px 24px 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
+  .cab { grid-column: 1 / -1; display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .cab h1 { font-size: 26px; }
+  .cab p { color: var(--t2); margin-top: 4px; }
+  .fecha { margin-left: auto; display: flex; gap: 16px; align-items: flex-end; }
+  .fecha .anterior { font-size: 13px; color: var(--t2); padding-bottom: 9px; }
+
+  .grupo { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r-tarjeta); margin-bottom: 16px; overflow: hidden; }
+  .grupo > header { display: flex; align-items: baseline; gap: 10px; padding: 14px 18px 10px; }
+  .grupo h2 { font-size: 16px; }
+  .grupo header p { font-size: 13px; color: var(--t2); }
+  .fila { display: grid; grid-template-columns: minmax(0, 1fr) 80px 200px 116px; gap: 14px; align-items: center; padding: 12px 18px; border-top: 1px solid var(--linea-2); transition: background 0.2s var(--ease); }
+  .fila.cambio { background: #f5fbfe; }
+  .act b { display: block; color: var(--tinta); font-weight: 600; line-height: 1.35; }
+  .act span { font-size: 12.5px; color: var(--t2); }
+  .act .item { font: 500 12px 'JetBrains Mono', monospace; }
+  .ant { font-size: 12.5px; color: var(--t2); text-align: right; line-height: 1.35; }
+  .ant b { display: block; font: 500 14px 'JetBrains Mono', monospace; color: var(--texto); }
+  .valor { display: flex; align-items: center; gap: 6px; }
+  .valor input { width: 84px; text-align: right; font-family: 'JetBrains Mono', monospace; padding-right: 28px; -moz-appearance: textfield; }
+  .valor input::-webkit-inner-spin-button, .valor input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .valor .u { margin-left: -28px; width: 22px; font-size: 13px; color: var(--t2); pointer-events: none; }
+  .valor button { min-height: 32px; padding: 0 8px; font-size: 12.5px; color: var(--ok-t); gap: 4px; }
+  .valor button svg { width: 14px; height: 14px; }
+  .barra-p { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--fondo); position: relative; margin-top: -4px; }
+  .barra-p u, .barra-p s { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 3px; text-decoration: none; }
+  .barra-p s { background: transparent; border-right: 2px solid var(--inst); border-radius: 0; }
+  .barra-p u { transition: width 0.25s var(--ease), background 0.25s; }
+  .p-terminada, .p-al_dia { background: var(--ok); } .p-en_atencion { background: var(--am); } .p-en_riesgo { background: var(--na); } .p-atrasada { background: var(--rojo); } .p-vencida { background: var(--venc); } .p-por_iniciar { background: var(--barra); }
+  .resto { width: 100%; justify-content: flex-start; border: 0; border-top: 1px solid var(--linea-2); border-radius: 0; padding: 12px 18px; min-height: 46px; color: var(--inst); }
+  .vacio { padding: 18px; color: var(--t2); border-top: 1px solid var(--linea-2); }
+
+  .resumen { position: sticky; top: 20px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r-tarjeta); padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .resumen h2 { font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+  .cifras { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--linea); border-radius: var(--r-control); }
+  .cifras div { padding: 10px 12px; border-right: 1px solid var(--linea); }
+  .cifras div:last-child { border-right: 0; }
+  .cifras span { display: block; font-size: 12px; color: var(--t2); }
+  .cifras b { font: 600 17px Sora, sans-serif; color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .mini { border-radius: var(--r-control); background: #f7f9fc; padding: 8px 10px 4px; }
+  .mini p { font-size: 12px; color: var(--t2); }
+  .botones { display: flex; gap: 8px; }
+  .botones .p { flex: 1; }
+  .barra-movil { display: none; }
+
+  @media (max-width: 900px) {
+    .marco { grid-template-columns: 1fr; padding: 20px 16px 0; gap: 16px; }
+    .fecha { margin-left: 0; width: 100%; }
+    .fila { grid-template-columns: minmax(0, 1fr) 132px; gap: 8px 12px; padding: 12px 14px; }
+    .ant { display: block; grid-column: 1; grid-row: 3; text-align: left; }
+    .barra-p { grid-row: 4; }
+    .ant b { display: inline; margin-left: 4px; font-size: 13px; }
+    .fila > .chip-c { grid-column: 1; grid-row: 2; }
+    .valor { grid-column: 2; grid-row: 1 / span 3; flex-direction: column; align-items: stretch; position: relative; }
+    .valor .u { position: absolute; right: 12px; top: 9px; margin: 0; width: auto; }
+    .valor input { width: 100%; }
+    .resumen { position: static; }
+    .resumen .botones { display: none; }
+    .barra-movil { display: flex; position: sticky; bottom: 0; z-index: 10; background: var(--sup); border-top: 1px solid var(--linea); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); gap: 12px; align-items: center; box-shadow: 0 -8px 24px -12px rgb(11 31 51 / 0.2); }
+    .barra-movil .txt { font-size: 13px; color: var(--t2); line-height: 1.3; }
+    .barra-movil .txt b { color: var(--tinta); font-variant-numeric: tabular-nums; }
+    .barra-movil .btn { margin-left: auto; }
+  }
+</style>
+</head>
+<body>
+<header class="banda reticula">
+  <div class="banda-in">
+    <a class="marca" href="portafolio.html" aria-label="Ir a mis charters"><span class="sello">HL</span></a>
+    <nav class="miga" aria-label="Ruta"><a href="portafolio.html">Mis charters</a> / <a href="ficha.html">Plan ID &amp; TI 2025</a> / <b>Registrar corte</b></nav>
+    <div class="usuario"><span>Juan David Urbina</span><span class="avatar" aria-hidden="true">JU</span></div>
+  </div>
+</header>
+
+<form class="marco" id="form" onsubmit="event.preventDefault(); location.href='ficha.html#avance'">
+  <div class="cab">
+    <div>
+      <h1>Registrar corte</h1>
+      <p>Solo te mostramos lo que debería moverse a esta fecha. Lo demás sigue como estaba.</p>
+    </div>
+    <div class="fecha">
+      <label class="campo">Fecha de corte<input class="entrada" type="date" id="fecha" value="2025-03-27" min="2025-03-14"></label>
+      <span class="anterior">Corte anterior: 13 mar 2025</span>
+    </div>
+  </div>
+
+  <div id="listas"></div>
+
+  <aside class="resumen" aria-live="polite">
+    <h2>Así queda el charter <span id="chip"></span></h2>
+    <div class="cifras">
+      <div><span>Planeado</span><b id="r-pv">—</b></div>
+      <div><span>Real</span><b id="r-ev">—</b></div>
+      <div><span>Brecha</span><b id="r-br">—</b></div>
+    </div>
+    <div class="mini"><div id="mini"></div><p>Curva S con este corte</p></div>
+    <label class="campo">Nota del corte<textarea class="entrada" placeholder="Qué pasó en este periodo, qué bloquea, qué sigue">Validación del CRM cerrada con Comercial. Desarrollo BPM arrancó con una semana de retraso.</textarea></label>
+    <div class="botones"><a class="btn" href="ficha.html">Cancelar</a><button class="btn p" type="submit">Guardar corte</button></div>
+  </aside>
+</form>
+<div class="barra-movil"><p class="txt">Real <b id="m-ev">—</b> de <b id="m-pv">—</b> planeado<br><span id="m-chip"></span></p><button class="btn p" type="submit" form="form">Guardar corte</button></div>
+<p class="pie-maqueta">Maqueta T1.3 · el corte anterior y los valores que propone son de ejemplo.</p>
+
+<script src="maqueta.js?v=2"></script>
+<script>
+(() => {
+  const { hojas, calcular, avancesActuales, curvaPlaneada, curvaS, aDia, fmtFecha, fmtPct, fmtPts, chip, CORTES } = M
+  const previo = avancesActuales()
+  const nuevo = { ...previo, '1.1.2.3': 1, '1.1.3.3': 1, '1.1.3.5': 0.6, '1.1.2.4': 0.5 }
+  const $ = (s) => document.querySelector(s)
+  let mostrarResto = false
+
+  function clasificar(fecha) {
+    const t = aDia(fecha)
+    const g = { vencidas: [], curso: [], resto: [] }
+    hojas.forEach((n) => {
+      const ini = aDia(n.inicio), fin = aDia(n.fin)
+      if (previo[n.id] >= 1) g.resto.push(n)
+      else if (fin < t) g.vencidas.push(n)
+      else if (ini <= t) g.curso.push(n)
+      else g.resto.push(n)
+    })
+    return g
+  }
+
+  const fila = (n, r) => `<div class="fila" data-id="${n.id}">
+      <div class="act"><b>${n.nombre}</b><span><span class="item">${n.item}</span> · ${n.resp} · fin ${fmtFecha(n.fin, false)}</span></div>
+      <div class="ant">Anterior<b>${fmtPct(previo[n.id], 0)}</b></div>
+      <div class="valor"><input class="entrada" type="number" inputmode="numeric" min="0" max="100" step="5" value="${Math.round(nuevo[n.id] * 100)}" aria-label="Real de ${n.nombre}, en porcentaje"><span class="u">%</span><button class="btn fantasma completar" type="button" data-cien><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Completar</button></div>
+      <div class="chip-c">${chip(r.estado)}</div>
+      <div class="barra-p" aria-hidden="true"><u class="p-${r.estado}" style="width:${r.ev * 100}%"></u><s style="width:${r.pv * 100}%"></s></div>
+    </div>`
+
+  function pintar() {
+    const fecha = $('#fecha').value
+    const res = calcular(nuevo, fecha)
+    const g = clasificar(fecha)
+    const seccion = (titulo, ayuda, lista) => `<section class="grupo"><header><h2>${titulo}</h2><p>${ayuda}</p></header>${lista.length ? lista.map((n) => fila(n, res[n.id])).join('') : '<p class="vacio">Nada aquí a esta fecha.</p>'}</section>`
+    $('#listas').innerHTML =
+      seccion(`Vencidas · ${g.vencidas.length}`, 'Su fin ya pasó y no llegan al 100 %.', g.vencidas) +
+      seccion(`En curso · ${g.curso.length}`, 'La línea indica cuánto deberían llevar a la fecha de corte.', g.curso) +
+      `<section class="grupo">${mostrarResto ? g.resto.map((n) => fila(n, res[n.id])).join('') : ''}<button class="btn resto" type="button" id="resto">${mostrarResto ? 'Ocultar' : 'Mostrar'} las ${g.resto.length} restantes (terminadas o por iniciar)</button></section>`
+    resumen(res, fecha)
+  }
+
+  function resumen(res, fecha) {
+    const p = res.proyecto
+    $('#chip').innerHTML = chip(p.estado)
+    $('#m-chip').innerHTML = chip(p.estado, p.vencidas ? `${M.ESTADO[p.estado]} · ${p.vencidas} vencida${p.vencidas > 1 ? 's' : ''}` : undefined)
+    $('#r-pv').textContent = $('#m-pv').textContent = fmtPct(p.pv)
+    $('#r-ev').textContent = $('#m-ev').textContent = fmtPct(p.ev)
+    $('#r-br').textContent = fmtPts(p.pv - p.ev)
+    const real = [{ d: aDia('2025-01-14'), v: 0 }, ...CORTES.map((c) => ({ d: aDia(c.fecha), v: c.res.proyecto.ev })), { d: aDia(fecha), v: p.ev }]
+    $('#mini').innerHTML = curvaS({ planeada: curvaPlaneada(), real, w: 300, h: 70, mini: true })
+  }
+
+  function actualizarFila(el) {
+    const fecha = $('#fecha').value
+    const res = calcular(nuevo, fecha)
+    const r = res[el.dataset.id]
+    el.querySelector('.chip-c').innerHTML = chip(r.estado)
+    const u = el.querySelector('.barra-p u')
+    u.className = 'p-' + r.estado
+    u.style.width = r.ev * 100 + '%'
+    el.classList.toggle('cambio', nuevo[el.dataset.id] !== previo[el.dataset.id])
+    resumen(res, fecha)
+  }
+
+  $('#listas').addEventListener('input', (e) => {
+    const el = e.target.closest('.fila')
+    if (!el || e.target.type !== 'number') return
+    nuevo[el.dataset.id] = Math.min(100, Math.max(0, +e.target.value || 0)) / 100
+    actualizarFila(el)
+  })
+  $('#listas').addEventListener('click', (e) => {
+    if (e.target.id === 'resto') { mostrarResto = !mostrarResto; pintar(); return }
+    if (e.target.matches('[data-cien]')) {
+      const el = e.target.closest('.fila')
+      el.querySelector('input').value = 100
+      nuevo[el.dataset.id] = 1
+      actualizarFila(el)
+    }
+  })
+  $('#fecha').addEventListener('change', pintar)
+  pintar()
+  document.querySelectorAll('.fila').forEach((el) => el.classList.toggle('cambio', nuevo[el.dataset.id] !== previo[el.dataset.id]))
+})()
+</script>
+</body>
+</html>

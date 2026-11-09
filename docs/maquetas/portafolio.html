@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis charters · Project Charters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css?v=2">
+<style>
+  .marco { max-width: 1280px; margin: 0 auto; padding: 32px 24px 0; }
+  .cab { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .cab h1 { font-size: 28px; }
+  .cab p { color: var(--t2); margin-top: 4px; }
+  .cab .btn { margin-left: auto; }
+  .filtros { display: flex; gap: 10px; margin: 24px 0 14px; flex-wrap: wrap; align-items: center; }
+  .buscar { position: relative; flex: 1 1 260px; max-width: 360px; }
+  .buscar svg { position: absolute; left: 11px; top: 11px; width: 16px; height: 16px; color: var(--t2); }
+  .buscar input { width: 100%; padding-left: 34px; }
+  select.entrada { padding-right: 30px; appearance: none; background: var(--sup) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6C7E' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 14px; }
+  .cuenta { margin-left: auto; font-size: 13px; color: var(--t2); }
+
+  .lista { background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r-tarjeta); overflow: hidden; }
+  .fila { display: grid; grid-template-columns: minmax(0, 1fr) 210px 150px 140px 150px; gap: 20px; align-items: center; padding: 16px 20px; border-top: 1px solid var(--linea-2); color: inherit; text-decoration: none; transition: background 0.15s var(--ease); }
+  a.fila:hover { background: #f7f9fc; }
+  a.fila:hover .nombre { color: var(--inst); }
+  .fila.cab-l { padding-top: 10px; padding-bottom: 10px; border-top: 0; background: var(--fondo); font-size: 12px; font-weight: 600; color: var(--t2); }
+  .nombre { font: 600 15.5px/1.35 Sora, sans-serif; color: var(--tinta); transition: color 0.15s; }
+  .meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; font-size: 13px; color: var(--t2); flex-wrap: wrap; }
+  .cat { display: inline-flex; align-items: center; gap: 6px; padding: 1px 9px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+  .cat i { width: 6px; height: 6px; border-radius: 50%; }
+  .avance-c { font-size: 12.5px; color: var(--t2); }
+  .avance-c b { font: 600 15px 'JetBrains Mono', monospace; color: var(--tinta); margin-right: 4px; }
+  .c-estado { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .venc { font-size: 12.5px; font-weight: 600; color: var(--venc-t); padding-left: 10px; }
+  .pista { height: 6px; border-radius: 3px; background: var(--fondo); position: relative; margin-top: 6px; }
+  .pista u, .pista s { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 3px; text-decoration: none; }
+  .pista s { border-right: 2px solid var(--inst); border-radius: 0; }
+  .p-al_dia, .p-terminada { background: var(--ok); } .p-en_atencion { background: var(--am); } .p-en_riesgo { background: var(--na); } .p-atrasada { background: var(--rojo); } .p-vencida { background: var(--venc); } .p-sin_cortes { background: transparent; }
+  .spark { height: 40px; }
+  .spark svg { display: block; }
+  .ultimo { font-size: 13.5px; color: var(--tinta); line-height: 1.35; }
+  .ultimo span { display: block; font-size: 12.5px; color: var(--t2); }
+  .ultimo .viejo { color: var(--am-t); font-weight: 600; }
+  .vacio { text-align: center; padding: 64px 24px 72px; }
+  .vacio svg { width: 120px; height: 72px; margin-bottom: 18px; }
+  .vacio h2 { font-size: 20px; }
+  .vacio p { color: var(--t2); max-width: 52ch; margin: 8px auto 20px; }
+  .demo { margin-top: 16px; font-size: 13px; color: var(--t2); display: flex; gap: 8px; align-items: center; }
+  .demo button { font: inherit; color: var(--inst); background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; padding: 0; }
+
+  @media (max-width: 1080px) {
+    .fila { grid-template-columns: minmax(0, 1fr) 180px 130px 130px; }
+    .c-spark { display: none; }
+  }
+  @media (max-width: 760px) {
+    .marco { padding: 20px 16px 0; }
+    .cab h1 { font-size: 24px; }
+    .cab .btn { margin-left: 0; width: 100%; }
+    .filtros { margin-top: 18px; }
+    .buscar { max-width: none; flex-basis: 100%; }
+    .cuenta { display: none; }
+    .filtros label:not(.buscar) { flex: 1 1 40%; }
+    .filtros select { width: 100%; }
+    .fila > .c-estado { align-items: flex-end; }
+    .fila.cab-l { display: none; }
+    .fila { grid-template-columns: 1fr auto; gap: 10px 12px; padding: 14px 16px; }
+    .fila > .c-nombre { grid-column: 1 / -1; }
+    .fila > .c-avance { grid-column: 1; }
+    .fila > .c-estado { grid-column: 2; grid-row: 2; justify-self: end; }
+    .fila > .c-ultimo { grid-column: 1; grid-row: 3; align-self: center; }
+    .fila > .c-spark { display: block; grid-column: 2; grid-row: 3; width: 96px; height: 28px; justify-self: end; }
+    .c-spark svg { height: 28px; }
+    .ultimo, .ultimo span { display: inline; }
+    .ultimo span::before { content: ' · '; }
+  }
+</style>
+</head>
+<body>
+<header class="banda reticula">
+  <div class="banda-in">
+    <a class="marca" href="portafolio.html"><span class="sello">HL</span><span><small>Grupo HL</small><b>Project Charters</b></span></a>
+    <div class="usuario"><span>Juan David Urbina</span><span class="avatar" aria-hidden="true">JU</span></div>
+  </div>
+</header>
+
+<main class="marco">
+  <div class="cab">
+    <div>
+      <h1>Mis charters</h1>
+      <p>Avance al último corte de cada uno.</p>
+    </div>
+    <a class="btn p" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nuevo charter</a>
+  </div>
+
+  <div class="filtros">
+    <label class="buscar"><span class="oculto">Buscar</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="entrada" type="search" placeholder="Buscar por nombre o responsable" id="q"></label>
+    <label><span class="oculto">Categoría</span><select class="entrada" id="f-cat"><option value="">Todas las categorías</option><option>Automatización</option><option>Análisis de Data</option><option>Gestión del Conocimiento</option><option value="-">Sin categoría</option></select></label>
+    <label><span class="oculto">Estado</span><select class="entrada" id="f-est"><option value="">Todos los estados</option><option value="al_dia">Al día</option><option value="en_atencion">En atención</option><option value="en_riesgo">En riesgo</option><option value="vencida">Con vencidas</option><option value="sin_cortes">Sin cortes</option></select></label>
+    <span class="cuenta" id="cuenta"></span>
+  </div>
+
+  <div class="lista" id="lista"></div>
+  <p class="demo">Maqueta: <button type="button" id="alternar">ver el estado sin charters</button></p>
+</main>
+<p class="pie-maqueta">Maqueta T1.3 · el Plan ID &amp; TI usa datos del Excel; A1, D1 y C1 son las iniciativas del Comité con avances de ejemplo. Hoy = 13 mar 2025.</p>
+
+<script src="maqueta.js?v=2"></script>
+<script>
+(() => {
+  const { calcular, avancesActuales, curvaPlaneada, curvaS, aDia, fmtFecha, fmtPct, chip, CORTES, CORTE } = M
+  const HOY = aDia('2025-03-13')
+  const CATS = { 'Automatización': ['#D98A00', '#FBF1DF', '#8A5700'], 'Análisis de Data': ['#6A55D8', '#EEEBFB', '#4E3BB0'], 'Gestión del Conocimiento': ['#0A9C9B', '#E1F4F3', '#06706F'] }
+
+  const p = calcular(avancesActuales(), CORTE).proyecto
+  const plan = curvaPlaneada()
+  const realId = [{ d: aDia('2025-01-14'), v: 0 }, ...CORTES.map((c) => ({ d: aDia(c.fecha), v: c.res.proyecto.ev }))]
+  const curva = (pts) => pts.map(([d, v]) => ({ d: aDia(d), v }))
+  const s = (k) => plan.map((x) => ({ d: x.d, v: Math.min(1, x.v * k) }))
+
+  const charters = [
+    { id: 'id', nombre: 'Plan ID & TI 2025', cat: null, resp: 'Juan David Urbina', pv: p.pv, ev: p.ev, estado: p.estado, venc: p.vencidas, corte: CORTE, plan, real: realId, href: 'ficha.html' },
+    { id: 'a1', nombre: 'A1 · Nivelación de costos en el informe económico', cat: 'Automatización', resp: 'Juan David Urbina', pv: 0.36, ev: 0.22, estado: 'en_atencion', venc: 0, corte: '2025-03-07', plan: s(1.9), real: curva([['2025-01-14', 0], ['2025-02-07', 0.09], ['2025-03-07', 0.22]]) },
+    { id: 'd1', nombre: 'D1 · Plataforma de control diario de obra · Captura digital en campo', cat: 'Análisis de Data', resp: 'Juan David Urbina', pv: 0.41, ev: 0.08, estado: 'en_riesgo', venc: 2, corte: '2025-02-14', plan: s(2.2), real: curva([['2025-01-14', 0], ['2025-01-31', 0.05], ['2025-02-14', 0.08]]) },
+    { id: 'c1', nombre: 'C1 · Consulta rápida de especificaciones técnicas', cat: 'Gestión del Conocimiento', resp: 'Juan David Urbina', pv: 0, ev: 0, estado: 'sin_cortes', venc: 0, corte: null, creado: '2025-03-10', plan: s(0.6), real: [] },
+  ]
+
+  const $ = (q) => document.querySelector(q)
+  let vacio = false
+
+  const fila = (c) => {
+    const cat = c.cat ? `<span class="cat" style="background:${CATS[c.cat][1]};color:${CATS[c.cat][2]}"><i style="background:${CATS[c.cat][0]}"></i>${c.cat}</span>` : '<span>Sin categoría</span>'
+    const dias = c.corte ? HOY - aDia(c.corte) : null
+    const hace = dias === 0 ? 'hoy' : dias === 1 ? 'ayer' : `hace ${dias} días`
+    const ultimo = c.corte ? `${fmtFecha(c.corte)}<span class="${dias > 21 ? 'viejo' : ''}">${hace}</span>` : `Sin cortes<span>creado el ${fmtFecha(c.creado, false)}</span>`
+    const estado = chip(c.estado) + (c.venc ? `<span class="venc">${c.venc} vencida${c.venc > 1 ? 's' : ''}</span>` : '')
+    const avance = c.corte ? `<b>${fmtPct(c.ev)}</b> real de ${fmtPct(c.pv)}` : 'Registra el primer corte'
+    return `<a class="fila" href="${c.href ?? '#'}">
+      <div class="c-nombre"><div class="nombre">${c.nombre}</div><div class="meta">${cat}<span>${c.resp}</span></div></div>
+      <div class="c-avance avance-c">${avance}<div class="pista"><u class="p-${c.estado}" style="width:${c.ev * 100}%"></u><s style="width:${c.pv * 100}%"></s></div></div>
+      <div class="c-spark spark" aria-hidden="true">${curvaS({ planeada: c.plan, real: c.real, w: 150, h: 40, mini: true })}</div>
+      <div class="c-estado">${estado}</div>
+      <div class="c-ultimo ultimo">${ultimo}</div></a>`
+  }
+
+  function pintar() {
+    if (vacio) {
+      $('#lista').innerHTML = `<div class="vacio">
+        <svg viewBox="0 0 120 72" fill="none"><rect x="1" y="1" width="118" height="70" rx="8" stroke="#DCE3EC" stroke-width="2"/><path d="M14 54 C40 52 52 40 64 30 S92 14 106 12" stroke="#003366" stroke-width="2.5" stroke-linecap="round"/><path d="M14 54 C26 53 34 50 42 46" stroke="#00A9E0" stroke-width="3" stroke-linecap="round"/><line x1="42" y1="10" x2="42" y2="62" stroke="#00A9E0" stroke-dasharray="3 3"/></svg>
+        <h2>Aún no tienes charters</h2>
+        <p>Crea el primero con el nombre y la razón de ser; el cronograma lo armas después sobre el Gantt, o lo pegas desde el Excel.</p>
+        <a class="btn p" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nuevo charter</a></div>`
+      $('#cuenta').textContent = ''
+      return
+    }
+    const q = $('#q').value.trim().toLowerCase(), fc = $('#f-cat').value, fe = $('#f-est').value
+    const vis = charters.filter((c) => (!q || (c.nombre + c.resp).toLowerCase().includes(q)) && (!fc || (fc === '-' ? !c.cat : c.cat === fc)) && (!fe || (fe === 'vencida' ? c.venc > 0 : c.estado === fe)))
+    $('#cuenta').textContent = `${vis.length} de ${charters.length} charters`
+    $('#lista').innerHTML = `<div class="fila cab-l"><div>Charter</div><div>Avance</div><div class="c-spark">Curva S</div><div>Estado</div><div>Último corte</div></div>` +
+      (vis.length ? vis.map(fila).join('') : '<div class="vacio" style="padding:40px 24px"><h2>Ningún charter coincide</h2><p>Prueba con otro nombre o quita los filtros.</p></div>')
+  }
+  ;['#q', '#f-cat', '#f-est'].forEach((id) => $(id).addEventListener('input', pintar))
+  $('#alternar').addEventListener('click', (e) => { vacio = !vacio; e.target.textContent = vacio ? 'ver con charters' : 'ver el estado sin charters'; pintar() })
+  pintar()
+})()
+</script>
+</body>
+</html>

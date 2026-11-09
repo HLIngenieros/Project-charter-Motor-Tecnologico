@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquetas · Project Charters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comun.css?v=2">
+<style>
+  .marco { max-width: 880px; margin: 0 auto; padding: 40px 24px 0; }
+  h1 { font-size: 30px; }
+  .intro { color: var(--t2); margin-top: 8px; max-width: 64ch; }
+  .lista { margin-top: 28px; background: var(--sup); border: 1px solid var(--linea); border-radius: var(--r-tarjeta); overflow: hidden; }
+  .lista a { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 18px 22px; border-top: 1px solid var(--linea-2); text-decoration: none; color: inherit; transition: background 0.15s var(--ease); }
+  .lista a:first-child { border-top: 0; }
+  .lista a:hover { background: #f7f9fc; }
+  .lista b { font: 600 16px Sora, sans-serif; color: var(--tinta); }
+  .lista a:hover b { color: var(--inst); }
+  .lista span { grid-column: 1; font-size: 14px; color: var(--t2); }
+  .lista em { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-style: normal; font-size: 13px; color: var(--t2); }
+  @media (max-width: 760px) { .marco { padding: 24px 16px 0; } .lista em { display: none; } }
+</style>
+</head>
+<body>
+<header class="banda reticula">
+  <div class="banda-in"><span class="marca"><span class="sello">HL</span><span><small>Grupo HL</small><b>Project Charters</b></span></span></div>
+</header>
+<main class="marco">
+  <h1>Maquetas de pantallas</h1>
+  <p class="intro">T1.3. Son HTML estáticos con el motor de cálculo mínimo: lo que mueves recalcula de verdad. La descripción de flujos y estados está en <code>docs/pantallas.md</code>.</p>
+  <nav class="lista">
+    <a href="portafolio.html"><b>Mis charters</b><span>Portafolio con avance, estado, mini curva S y último corte. Filtros y estado vacío.</span><em>Escritorio y celular</em></a>
+    <a href="ficha.html"><b>Ficha del charter</b><span>Documento vivo en el orden del Excel, con el Gantt para capturar el cronograma arrastrando barras.</span><em>Escritorio y celular</em></a>
+    <a href="corte.html"><b>Registrar corte</b><span>Solo lo que toca a la fecha: vencidas y en curso, con el semáforo recalculando al escribir.</span><em>Escritorio y celular</em></a>
+    <a href="celular.html"><b>Vista celular</b><span>Las tres pantallas a 390 px, navegables.</span><em>Celular</em></a>
+  </nav>
+</main>
+<p class="pie-maqueta">Entrar y registro ya están construidos en <code>apps/web</code> (Fase 2) y no tienen maqueta aparte.</p>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* Maquetas T1.3 · identidad del Informe global (tokens de apps/web/src/estilos/tokens.css). */
+:root {
+  --inst: #003366;
+  --inst-2: #0a3f73;
+  --tinta: #0b1f33;
+  --texto: #3b4b5e;
+  --t2: #5b6c7e;
+  --t3: #7c8ca1;
+  --linea: #dce3ec;
+  --linea-2: #e3e8ef;
+  --fondo: #eef2f6;
+  --sup: #ffffff;
+  --acento: #00a9e0;
+  --barra: #c9d6e5;
+
+  /* Semáforo: fondo suave + texto con 4,5:1 sobre ese fondo. */
+  --ok: #15a06a;      --ok-s: #e3f4ec;   --ok-t: #0e6e48;
+  --am: #d9a400;      --am-s: #fbf3d9;   --am-t: #7a5c00;
+  --na: #e07b1f;      --na-s: #fcebdc;   --na-t: #9a4a0a;
+  --rojo: #c4513c;    --rojo-s: #f8e9e5; --rojo-t: #a63f2c;
+  --venc: #7a1f2b;    --venc-s: #f4e4e6; --venc-t: #7a1f2b;
+  --gris-s: #eef2f6;
+
+  --r-control: 8px;
+  --r-tarjeta: 12px;
+  --sombra: 0 1px 2px rgb(11 31 51 / 0.06), 0 2px 8px -2px rgb(11 31 51 / 0.06);
+  --sombra-flota: 0 12px 32px -8px rgb(11 31 51 / 0.28);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 150px; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 15px/1.55 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: Sora, 'Segoe UI', sans-serif; color: var(--tinta); letter-spacing: -0.015em; line-height: 1.2; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--inst); text-underline-offset: 3px; }
+::selection { background: rgb(0 169 224 / 0.22); }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.cifra { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.num { font-variant-numeric: tabular-nums; }
+.oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+* { scrollbar-width: thin; scrollbar-color: #b9c6d6 transparent; }
+
+/* Banda institucional con retícula de plano. */
+.reticula {
+  background-color: var(--inst);
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+}
+.banda { color: #fff; }
+.banda-in { max-width: 1360px; margin: 0 auto; height: 60px; display: flex; align-items: center; gap: 16px; padding: 0 24px; }
+.marca { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; border-radius: 10px; }
+.sello { width: 36px; height: 36px; border-radius: 10px; background: #fff; color: var(--inst); display: grid; place-items: center; font: 700 14px Sora, sans-serif; flex: none; }
+.marca small { display: block; font-size: 11px; color: rgb(255 255 255 / 0.72); line-height: 1.2; }
+.marca b { font: 600 15px Sora, sans-serif; }
+.miga { font-size: 14px; color: rgb(255 255 255 / 0.78); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.miga a { color: rgb(255 255 255 / 0.78); text-decoration: none; }
+.miga a:hover { color: #fff; text-decoration: underline; }
+.miga b { color: #fff; font-weight: 600; }
+.usuario { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgb(255 255 255 / 0.85); white-space: nowrap; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: rgb(255 255 255 / 0.16); display: grid; place-items: center; font: 600 12px Sora, sans-serif; color: #fff; }
+
+/* Botones. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 38px; padding: 0 16px; border-radius: var(--r-control);
+  font: 600 14px 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+  border: 1px solid var(--linea); background: var(--sup); color: var(--tinta);
+  text-decoration: none; white-space: nowrap;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.btn:hover { background: #f6f8fb; border-color: #c8d3e0; }
+.btn:active { background: var(--fondo); }
+.btn.p { background: var(--inst); border-color: var(--inst); color: #fff; }
+.btn.p:hover { background: var(--inst-2); }
+.btn.fantasma { border-color: transparent; background: transparent; }
+.btn.fantasma:hover { background: rgb(11 31 51 / 0.05); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn svg { width: 16px; height: 16px; }
+
+/* Chips de estado. */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 600; white-space: nowrap; line-height: 1.6; }
+.chip i { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.e-al_dia { background: var(--ok-s); color: var(--ok-t); } .e-al_dia i { background: var(--ok); }
+.e-terminada { background: var(--ok-s); color: var(--ok-t); } .e-terminada i { background: var(--ok); }
+.e-en_atencion { background: var(--am-s); color: var(--am-t); } .e-en_atencion i { background: var(--am); }
+.e-en_riesgo { background: var(--na-s); color: var(--na-t); } .e-en_riesgo i { background: var(--na); }
+.e-atrasada { background: var(--rojo-s); color: var(--rojo-t); } .e-atrasada i { background: var(--rojo); }
+.e-vencida { background: var(--venc-s); color: var(--venc-t); } .e-vencida i { background: var(--venc); }
+.e-por_iniciar, .e-sin_programar, .e-sin_cortes { background: var(--gris-s); color: var(--t2); } .e-por_iniciar i, .e-sin_programar i, .e-sin_cortes i { background: var(--t3); }
+
+/* Campos. */
+.campo { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--tinta); }
+.entrada {
+  min-height: 38px; padding: 0 12px; border: 1px solid var(--linea); border-radius: var(--r-control);
+  font: 500 14px 'Plus Jakarta Sans', sans-serif; color: var(--tinta); background: var(--sup);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.entrada:hover { border-color: #c3cfdd; }
+.entrada:focus { outline: none; border-color: var(--acento); box-shadow: 0 0 0 3px rgb(0 169 224 / 0.25); }
+textarea.entrada { padding: 10px 12px; min-height: 76px; resize: vertical; line-height: 1.5; }
+
+.pie-maqueta { max-width: 1360px; margin: 40px auto 24px; padding: 0 24px; font-size: 12.5px; color: var(--t2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 760px) {
+  .banda-in { height: 56px; padding: 0 16px; gap: 12px; }
+  .usuario span { display: none; }
+  .pie-maqueta { padding: 0 16px; }
+}

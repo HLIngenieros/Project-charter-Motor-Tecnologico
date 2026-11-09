@@ -12,7 +12,7 @@
 
 - [x] T1.1 · Arquitectura ([docs/arquitectura.md](docs/arquitectura.md)) — 2026-11-09
 - [x] T1.2 · Plan general ([docs/plan-implementacion.md](docs/plan-implementacion.md)) — 2026-11-09
-- [ ] T1.3 · Pantallas y flujos con maquetas (antes de T3.2)
+- [x] T1.3 · Pantallas y flujos con maquetas · aprobadas el 2026-11-09 con la curva S como protagonista (`docs/maquetas/`, `docs/pantallas.md`)
 
 ## Fase 2 · Cimientos
 
@@ -80,7 +80,7 @@
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** 1) `/impeccable init` y `document` (PRODUCT.md y DESIGN.md); 2) T1.3 con Impeccable; 3) actualizar la demo del semáforo en el resumen visual; 4) plan detallado de la Fase 3 (`docs/planes/fase-3.md`), que es donde se crean los charters.
+**Próxima tarea sugerida:** 1) plan detallado de la Fase 3 (`docs/planes/fase-3.md`) siguiendo `docs/pantallas.md`; 2) actualizar la demo del semáforo en el resumen visual.
 
 ## Registro de sesiones
 
@@ -91,3 +91,4 @@
 | 2026-11-09 | T2.1–T2.9 | Fase 2 completa: monorepo, fixture del Excel, motor validado (12,51 % / 12,47 % y columna K hoja por hoja), esquemas Zod, base con 15 tablas, auth por dominio con sesiones y CSRF, aislamiento por dueño, sistema de diseño y pantallas de acceso. Revisión final: 0 críticos; corregidos fechas inexistentes, `CONFIAR_PROXY` y carga del `.env`. 129 pruebas, lint y build en verde. Commits f67264d…c80ad68. Después: clave mínima de 8 caracteres (usuario) y corrección de procesos de desarrollo huérfanos (EADDRINUSE). El usuario decidió ajustar la regla de estado en la próxima sesión |
 | 2026-11-09 | — | Resumen visual de la propuesta publicado como artefacto privado: problema, demo del cálculo con Gantt y curva S, diagrama de arquitectura interactivo (5 escenarios y modo local/servidor), plan por fases y stack. Sin cambios de código |
 | 2026-11-09 | Regla de estado | Semáforo por brecha en puntos (verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50) y estado `vencida` (vinotinto); agrupadoras cuentan sus hojas vencidas. Migración 0001 con umbrales 10/25/50 (corregido el `INSERT` que generó drizzle-kit). 134 pruebas y lint en verde. Commit 03aed49. Instalada la skill Impeccable (global, con hook) para las maquetas |
+| 2026-11-09 | T1.3 | PRODUCT.md (líder de proyecto, éxito = dejar el Excel). Ficha elegida entre tres estructuras: documento vivo. Maquetas de portafolio, ficha (Gantt arrastrable, detalle A–J en línea, impresión A4), registro de corte "solo lo que toca" y vista celular, con port mínimo del motor. Tres rondas de revisión y DESIGN.md. Al aprobar, el usuario pidió la curva S protagonista (animada, con semáforo por corte, brecha, proyección y zoom). Desde ahora, Impeccable austero en validación |
