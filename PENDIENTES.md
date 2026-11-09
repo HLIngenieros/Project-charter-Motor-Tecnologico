@@ -80,7 +80,7 @@
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** 1) actualizar la demo del semáforo en el resumen visual; 2) T1.3 (pantallas y flujos con maquetas); 3) plan detallado de la Fase 3 (`docs/planes/fase-3.md`), que es donde se crean los charters.
+**Próxima tarea sugerida:** 1) `/impeccable init` y `document` (PRODUCT.md y DESIGN.md); 2) T1.3 con Impeccable; 3) actualizar la demo del semáforo en el resumen visual; 4) plan detallado de la Fase 3 (`docs/planes/fase-3.md`), que es donde se crean los charters.
 
 ## Registro de sesiones
 
@@ -90,3 +90,4 @@
 | 2026-11-09 | T1.1–T1.2 | Decisiones cerradas (independiente de HH, registro por dominio, Admin de solo lectura, sin aprobación, local primero). Arquitectura, plan general y plan detallado de la Fase 2 aprobados. Jerarquía del Excel verificada por fórmulas de peso (12,51 % / 12,47 %) |
 | 2026-11-09 | T2.1–T2.9 | Fase 2 completa: monorepo, fixture del Excel, motor validado (12,51 % / 12,47 % y columna K hoja por hoja), esquemas Zod, base con 15 tablas, auth por dominio con sesiones y CSRF, aislamiento por dueño, sistema de diseño y pantallas de acceso. Revisión final: 0 críticos; corregidos fechas inexistentes, `CONFIAR_PROXY` y carga del `.env`. 129 pruebas, lint y build en verde. Commits f67264d…c80ad68. Después: clave mínima de 8 caracteres (usuario) y corrección de procesos de desarrollo huérfanos (EADDRINUSE). El usuario decidió ajustar la regla de estado en la próxima sesión |
 | 2026-11-09 | — | Resumen visual de la propuesta publicado como artefacto privado: problema, demo del cálculo con Gantt y curva S, diagrama de arquitectura interactivo (5 escenarios y modo local/servidor), plan por fases y stack. Sin cambios de código |
+| 2026-11-09 | Regla de estado | Semáforo por brecha en puntos (verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50) y estado `vencida` (vinotinto); agrupadoras cuentan sus hojas vencidas. Migración 0001 con umbrales 10/25/50 (corregido el `INSERT` que generó drizzle-kit). 134 pruebas y lint en verde. Commit 03aed49. Instalada la skill Impeccable (global, con hook) para las maquetas |

@@ -63,7 +63,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 ## Estado actual
 
-- **Fase 2 completa (2026-11-09)** y regla de estado nueva aplicada (134 pruebas, lint en verde). Siguiente: 1) demo del semáforo en el resumen visual, 2) T1.3 (maquetas), 3) plan de la Fase 3 (crear charters).
+- **Fase 2 completa (2026-11-09)** y regla de estado nueva aplicada (134 pruebas, lint en verde). Siguiente sesión: 1) `/impeccable init` (PRODUCT.md) y `document` (DESIGN.md desde T2.8), 2) T1.3 (maquetas), 3) demo del semáforo en el resumen visual, 4) plan de la Fase 3.
+- Skill **Impeccable** instalada global (2026-11-09) con su hook de diseño en `~/.claude/settings.json`; usarla para maquetas, críticas y pulido de UI.
 - Resumen visual de la propuesta (artefacto privado, con diagrama de arquitectura interactivo y demo del cálculo): https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC. Su semáforo aún usa la regla vieja por días: pendiente actualizarlo.
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
@@ -79,6 +80,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - En Git Bash los heredocs largos con JSX/plantillas fallan a veces; usar Write para archivos de código.
 - Prettier no debe tocar el fixture ni las migraciones (`.prettierignore`).
 - Vite puede quedar con un módulo a medio editar en caché: reiniciar `npm run dev`.
+- `drizzle-kit generate` en SQLite recrea la tabla y copia **todas** las columnas, incluso las nuevas que no existen en la vieja: revisar el `INSERT … SELECT` de cada migración antes de commitear.
 
 ## Glosario
 
