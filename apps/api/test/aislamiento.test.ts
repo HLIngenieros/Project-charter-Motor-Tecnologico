@@ -2,7 +2,7 @@ import { v7 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 import type { UsuarioSesion } from '../src/auth/sesiones'
 import { crearDb } from '../src/db/conexion'
-import { charter } from '../src/db/esquema'
+import { charter, usuario as tablaUsuario } from '../src/db/esquema'
 import { ErrorApi } from '../src/errores'
 import { cargarCharter, type ModoAcceso } from '../src/modulos/charters/acceso'
 import { exigirSesion } from '../src/auth/guardas'
@@ -20,13 +20,9 @@ function escenario() {
   const a = usuario('a')
   const b = usuario('b')
   const admin = usuario('admin', true)
-  for (const u of [a, b, admin]) {
-    db.$client
-      .prepare(
-        "insert into usuario (id, correo, nombre, hash_clave, es_admin, creado_en, actualizado_en) values (?, ?, ?, 'x', ?, '', '')",
-      )
-      .run(u.id, u.correo, u.nombre, u.esAdmin ? 1 : 0)
-  }
+  db.insert(tablaUsuario)
+    .values([a, b, admin].map((u) => ({ ...u, hashClave: 'x' })))
+    .run()
   const nuevoCharter = (dueno: UsuarioSesion, estado: 'activo' | 'cerrado' = 'activo') => {
     const id = v7()
     db.insert(charter)
