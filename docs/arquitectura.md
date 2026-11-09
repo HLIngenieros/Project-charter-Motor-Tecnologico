@@ -190,7 +190,7 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 
 ## 8. Autenticación y seguridad
 
-- **Clave:** mínimo 10 caracteres, sin otras reglas de composición *(criterio técnico)*. Se guarda con argon2id.
+- **Clave:** mínimo 8 caracteres, sin otras reglas de composición *(decisión del usuario, 2026-11-09)*. Se guarda con argon2id.
 - **Sesión:** token aleatorio en una cookie `charter_sesion` con `HttpOnly`, `SameSite=Lax`, `Path=/` y `Secure` cuando corre en HTTPS. En la base se guarda solo el hash del token. La sesión dura 7 días y se renueva con el uso *(criterio técnico)*. Logout, desactivación y cambio de clave borran las sesiones.
 - **CSRF:** la web y la API se sirven en el mismo origen. Con `SameSite=Lax`, y como las mutaciones exigen `Content-Type: application/json` y una cabecera `X-Requested-With`, no hace falta un token adicional.
 - **Fuerza bruta:** se limita el login a 10 intentos por 15 minutos por correo y por IP (`@fastify/rate-limit`).

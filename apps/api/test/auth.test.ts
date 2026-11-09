@@ -55,13 +55,13 @@ describe('registro', () => {
     })
   })
 
-  it('una clave de 9 caracteres da 400 con el campo clave', async () => {
+  it('una clave de 7 caracteres da 400 con el campo clave', async () => {
     const { app } = await nuevaApp()
-    const r = await registrar(app, { ...datosRegistro, clave: '123456789' })
+    const r = await registrar(app, { ...datosRegistro, clave: '1234567' })
     expect(r.statusCode).toBe(400)
     expect(r.json().error).toMatchObject({
       codigo: 'datos_invalidos',
-      campos: { clave: 'La clave debe tener al menos 10 caracteres' },
+      campos: { clave: 'La clave debe tener al menos 8 caracteres' },
     })
   })
 

@@ -74,7 +74,7 @@ export function Registro() {
           etiqueta="Clave"
           type="password"
           autoComplete="new-password"
-          ayuda="Mínimo 10 caracteres."
+          ayuda="Mínimo 8 caracteres."
           value={clave}
           onChange={(e) => setClave(e.target.value)}
           error={campos.clave}

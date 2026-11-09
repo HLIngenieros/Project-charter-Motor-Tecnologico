@@ -22,7 +22,7 @@ const correo = z
 
 const claveNueva = z
   .string({ error: 'Escribe una clave' })
-  .min(10, { error: 'La clave debe tener al menos 10 caracteres' })
+  .min(8, { error: 'La clave debe tener al menos 8 caracteres' })
   .max(200, { error: 'La clave puede tener máximo 200 caracteres' })
 
 export const registroEntrada = z.object({

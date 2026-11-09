@@ -54,6 +54,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Registro libre con correo `@hlingenieros.com` (solo valida dominio). Perfiles: usuario y Admin (lectura de todo + parametrización) · Usuario.
 - 2026-11-09 · Sin aprobación de charters; línea base editable y cada corte guarda una foto · Usuario / Claude.
 - 2026-11-09 · Local primero, después servidor interno. Web responsive · Usuario.
+- 2026-11-09 · Clave mínima de 8 caracteres (antes 10) · Usuario.
 - 2026-11-09 · Hooks de React con prefijo `use…` (la regla de lint lo exige), no `usar…` · Claude.
 - 2026-11-09 · Una hoja con fin antes del inicio cuenta como sin programar y da aviso · Claude.
 - 2026-11-09 · Texto de error en `alerta-texto` `#A63F2C` (el `#C4513C` no llega a 4,5:1); cifras grandes en Sora, mono solo en tablas y códigos · Claude.

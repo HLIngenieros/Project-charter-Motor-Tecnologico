@@ -18,7 +18,7 @@
 - Porcentajes y pesos como fracción 0–1. Montos `INTEGER` COP.
 - IDs: UUID v7 (`v7()` del paquete `uuid`).
 - Dominio permitido por defecto: `hlingenieros.com` (variable de entorno `DOMINIO_PERMITIDO`).
-- Clave: mínimo 10 caracteres, hash con argon2id.
+- Clave: mínimo 8 caracteres (antes 10; cambiado por el usuario el 2026-11-09), hash con argon2id.
 - Sesión: cookie `charter_sesion`, `HttpOnly`, `SameSite=Lax`, `Path=/`, `Secure` si `COOKIE_SEGURA=true`. Dura 7 días y se renueva con el uso. En la base se guarda el SHA-256 del token.
 - Mutaciones (`POST`, `PUT`, `PATCH`, `DELETE`) exigen la cabecera `X-Requested-With: charter`; si falta, responden 403 `csrf`.
 - Errores: `{ error: { codigo, mensaje, campos? } }`.

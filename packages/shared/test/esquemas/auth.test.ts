@@ -43,11 +43,15 @@ describe('registroEntrada', () => {
     })
   })
 
-  it('rechaza una clave de 9 caracteres con mensaje en español', () => {
-    const r = registroEntrada.safeParse({ ...valido, clave: '012345678' })
+  it('acepta una clave de 8 caracteres', () => {
+    expect(registroEntrada.safeParse({ ...valido, clave: '01234567' }).success).toBe(true)
+  })
+
+  it('rechaza una clave de 7 caracteres con mensaje en español', () => {
+    const r = registroEntrada.safeParse({ ...valido, clave: '0123456' })
     expect(r.success).toBe(false)
     const error = r.error!.issues.find((i) => i.path[0] === 'clave')
-    expect(error?.message).toBe('La clave debe tener al menos 10 caracteres')
+    expect(error?.message).toBe('La clave debe tener al menos 8 caracteres')
   })
 
   it('rechaza un nombre de una letra y un correo mal formado', () => {
