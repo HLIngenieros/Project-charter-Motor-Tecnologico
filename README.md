@@ -2,7 +2,7 @@
 
 Plataforma web donde **cualquier persona crea y lleva su propio Project Charter**: llena la información del proyecto, construye su cronograma y registra avances reales con historial. Cada usuario trabaja en su espacio, aislado de los demás.
 
-> **Estado:** definición (nov-2026). Diseño y cálculos en [docs/analisis-plantilla-excel.md](docs/analisis-plantilla-excel.md). Tareas en [PENDIENTES.md](PENDIENTES.md).
+> **Estado:** definición (nov-2026). Arquitectura en [docs/arquitectura.md](docs/arquitectura.md), plan en [docs/plan-implementacion.md](docs/plan-implementacion.md), cálculos en [docs/analisis-plantilla-excel.md](docs/analisis-plantilla-excel.md). Tareas en [PENDIENTES.md](PENDIENTES.md).
 
 ---
 
@@ -18,9 +18,10 @@ Hoy el charter se lleva en Excel ([Project Charter TI 2025 Rev.B.xlsx](docs/refe
 
 ## 3. Usuarios y aislamiento
 
-- Inicio de sesión **muy sencillo y cuidado visualmente**: usuario + contraseña, sesión con cookie segura.
-- Cada usuario ve y edita **solo sus charters**. El backend filtra todo por propietario; el aislamiento no depende del frontend.
-- Más adelante (opcional): compartir un charter en modo lectura o con otro editor.
+- **Sistema independiente:** no comparte base de datos, usuarios ni despliegue con HorasHombre ni con otro sistema. Es multiárea y no tiene flujos de aprobación.
+- **Registro libre** con correo `@hlingenieros.com` y clave; solo se valida el dominio.
+- **Dos perfiles:** usuario (crea y sigue sus propios charters) y **Admin** (ve todos los charters en solo lectura y parametriza catálogos y cuentas).
+- El backend filtra todo por propietario; el aislamiento no depende del frontend.
 
 ## 4. Contenido del charter
 
@@ -64,14 +65,16 @@ Principios:
 - **Gráficas potentes:** curva S con zoom y tooltip, Gantt interactivo con línea de corte, avance por grupo, semáforos e indicadores frente a la meta.
 - **Exportable:** cada charter se imprime en A4 con el estilo del Informe global.
 
-## 7. Arquitectura propuesta
+## 7. Arquitectura
+
+Definición completa en [docs/arquitectura.md](docs/arquitectura.md). Resumen:
 
 | Capa | Tecnología |
 |---|---|
 | Frontend | React + Vite + TypeScript + Tailwind CSS |
 | Animación | Motion (Framer Motion) |
 | Gráficas | Apache ECharts (curva S, Gantt, indicadores) |
-| Backend | Node + Fastify + Drizzle ORM (mismo stack de HorasHombre) |
+| Backend | Node + Fastify + Drizzle ORM |
 | Base de datos | SQLite (archivo local); se puede migrar a PostgreSQL con Drizzle |
 | Autenticación | Usuario + contraseña con hash (argon2), sesión en cookie httpOnly |
 | Tipos y validación | Zod, compartido |
@@ -92,22 +95,11 @@ ProjectCharter/
 └── README.md
 ```
 
-### Modelo de datos (borrador)
+## 8. Decisiones cerradas
 
-- `usuario`: usuario, nombre, hash de contraseña.
-- `categoria`: nombre y color (catálogo editable).
-- `charter`: propietario, nombre, categoría, responsable, patrocinador, razón de ser, objetivo general, estado, revisión.
-- `objetivo_especifico`, `supuesto`, `criterio_exito`: listas ordenadas.
-- `actividad`: árbol (padre, orden), actividad, entregable, peso, inicio, fin, responsables. El ítem se genera desde el árbol.
-- `corte` y `avance_actividad`: fecha de corte, nota, % real por actividad.
-- `indicador` y `medicion_indicador`: fórmula, meta (operador, valor y unidad), valor por periodo.
-- `riesgo` y `presupuesto_item`.
-
-## 8. Decisiones abiertas
-
-- ¿Registro libre de usuarios o los crea un administrador?
-- ¿La línea base se congela al aprobar el charter y solo cambia con control de cambios?
-- ¿Despliegue: local, servidor interno o junto a controloperativo.grupo-hl.com?
+- Registro libre con dominio `@hlingenieros.com`, sin confirmación por correo.
+- Sin aprobación de charters ni congelamiento de la línea base: cada corte guarda una foto de pesos y fechas.
+- Despliegue local por ahora; después, servidor interno.
 
 ## 9. Historial
 

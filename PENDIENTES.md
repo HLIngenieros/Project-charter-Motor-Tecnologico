@@ -1,6 +1,6 @@
 # Pendientes
 
-**Estados:** `[ ]` pendiente · `[~]` en curso · `[x]` hecha
+**Estados:** `[ ]` pendiente · `[~]` en curso · `[x]` hecha. Detalle y criterios de terminado de cada tarea en [docs/plan-implementacion.md](docs/plan-implementacion.md).
 
 ## Fase 0 · Arranque
 
@@ -10,32 +10,69 @@
 
 ## Fase 1 · Diseño
 
-- [ ] T1.1 · Brainstorming y spec: flujos (login, portafolio, crear charter, cronograma, cortes), pantallas y modelo de datos
-- [ ] T1.2 · Resolver las decisiones abiertas: registro de usuarios, congelamiento de la línea base, despliegue
-- [ ] T1.3 · Plan de implementación
+- [x] T1.1 · Arquitectura ([docs/arquitectura.md](docs/arquitectura.md)) — 2026-11-09
+- [x] T1.2 · Plan general ([docs/plan-implementacion.md](docs/plan-implementacion.md)) — 2026-11-09
+- [ ] T1.3 · Pantallas y flujos con maquetas (antes de T3.2)
 
-## Fase 2 · Base técnica
+## Fase 2 · Cimientos
 
 - [ ] T2.1 · Monorepo (apps/api, apps/web, packages/shared)
-- [ ] T2.2 · Motor de cálculo con pruebas contra el Excel (docs §4.9)
-- [ ] T2.3 · API con autenticación y aislamiento por usuario
-- [ ] T2.4 · Sistema de diseño (tokens, tipografías, animaciones)
+- [ ] T2.2 · Fixture del Excel en JSON
+- [ ] T2.3 · Motor de cálculo con prueba de aceptación (12,51 % / 12,47 %)
+- [ ] T2.4 · Esquemas Zod compartidos
+- [ ] T2.5 · Base de datos y migraciones
+- [ ] T2.6 · Autenticación (registro por dominio, sesiones, CLI de Admin)
+- [ ] T2.7 · Aislamiento por dueño y lectura del Admin
+- [ ] T2.8 · Sistema de diseño
+- [ ] T2.9 · Pantallas de acceso
 
-## Fase 3 · Funcionalidades
+## Fase 3 · Charter básico
 
-- [ ] T3.1 · Login y registro
-- [ ] T3.2 · Portafolio del usuario
-- [ ] T3.3 · Crear y editar el charter (secciones de texto y listas)
-- [ ] T3.4 · Cronograma A–J editable, Gantt
-- [ ] T3.5 · Registro de cortes, curva S y semáforos
-- [ ] T3.6 · Indicadores, riesgos y presupuesto
-- [ ] T3.7 · Exportar a PDF (A4, estilo del Informe global)
-- [ ] T3.8 · Cargar A1, D1 y C1 como charters de prueba
+- [ ] T3.1 · API de charters y listas
+- [ ] T3.2 · Portafolio
+- [ ] T3.3 · Ficha · Definición
 
-**Próxima tarea sugerida:** T1.1
+## Fase 4 · Cronograma y cortes
+
+- [ ] T4.1 · API de cronograma
+- [ ] T4.2 · Editor de cronograma A–J con cálculo vivo
+- [ ] T4.3 · API de cortes con foto de línea base
+- [ ] T4.4 · Pantalla de cortes
+- [ ] T4.5 · Hito: primer charter real del líder de TI
+
+## Fase 5 · Visualización
+
+- [ ] T5.1 · Resumen con KPIs y selector de corte
+- [ ] T5.2 · Curva S
+- [ ] T5.3 · Gantt
+- [ ] T5.4 · Avance por grupo y semáforos
+- [ ] T5.5 · Portafolio con avance
+
+## Fase 6 · Complementos
+
+- [ ] T6.1 · Indicadores y mediciones
+- [ ] T6.2 · Riesgos
+- [ ] T6.3 · Presupuesto con desglose
+
+## Fase 7 · Admin
+
+- [ ] T7.1 · Cuentas
+- [ ] T7.2 · Catálogos (categorías y áreas)
+- [ ] T7.3 · Lectura global de charters
+
+## Fase 8 · Cierre v1.0
+
+- [ ] T8.1 · Exportar a PDF
+- [ ] T8.2 · Charters de prueba A1, D1 y C1
+- [ ] T8.3 · Pulido responsive y de movimiento
+- [ ] T8.4 · Pruebas E2E
+- [ ] T8.5 · Build de producción y guía de despliegue
+
+**Próxima tarea sugerida:** ejecutar la Fase 2 con [docs/planes/fase-2.md](docs/planes/fase-2.md), desde la Task 1 (monorepo). T1.3 antes de la Fase 3.
 
 ## Registro de sesiones
 
 | Fecha | Tareas | Resumen |
 |---|---|---|
 | 2026-11-09 | T0.1–T0.3 | Repo movido a la raíz, análisis del Excel (hallados doble conteo de pesos y la fila 1.2 mal calculada), README y especificación de cálculos. Commit 05596eb |
+| 2026-11-09 | T1.1–T1.2 | Decisiones cerradas (independiente de HH, registro por dominio, Admin de solo lectura, sin aprobación, local primero). Arquitectura, plan general y plan detallado de la Fase 2 aprobados. Jerarquía del Excel verificada por fórmulas de peso (12,51 % / 12,47 %) |
