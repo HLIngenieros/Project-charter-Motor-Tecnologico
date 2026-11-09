@@ -7,7 +7,10 @@ const FORMATO = /^(\d{4})-(\d{2})-(\d{2})$/
 export function aDia(f: FechaISO): number {
   const m = FORMATO.exec(f)
   if (!m) throw new Error(`fecha_invalida: ${f}`)
-  return Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])) / MS_DIA
+  const dia = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])) / MS_DIA
+  // Date.UTC desborda las fechas inexistentes (2025-02-30 → 2025-03-02): se rechazan.
+  if (aISO(dia) !== f) throw new Error(`fecha_invalida: ${f}`)
+  return dia
 }
 
 /** Inverso de aDia. */

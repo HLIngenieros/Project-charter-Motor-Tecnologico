@@ -76,3 +76,14 @@ describe('actividadEntrada y respuestaError', () => {
     expect(respuestaError.parse(cuerpo)).toEqual(cuerpo)
   })
 })
+
+describe('fechaISO', () => {
+  it('rechaza fechas que no existen y acepta las reales', async () => {
+    const { fechaISO } = await import('../../src/esquemas/actividad')
+    expect(fechaISO.safeParse('2025-02-29').success).toBe(false)
+    expect(fechaISO.safeParse('2025-02-30').success).toBe(false)
+    expect(fechaISO.safeParse('2024-02-29').success).toBe(true)
+    const r = fechaISO.safeParse('2025-02-30')
+    expect(r.error?.issues[0]?.message).toBe('La fecha no existe')
+  })
+})

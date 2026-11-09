@@ -14,7 +14,7 @@ export interface OpcionesApp {
 }
 
 export async function construirApp({ db, config }: OpcionesApp): Promise<FastifyInstance> {
-  const app = Fastify({ logger: false })
+  const app = Fastify({ logger: false, trustProxy: config.confiarProxy })
   app.decorate('config', config)
   app.decorate('db', db ?? crearDb(':memory:'))
   app.decorateRequest('usuario', undefined)

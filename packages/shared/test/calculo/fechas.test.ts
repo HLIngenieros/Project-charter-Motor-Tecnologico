@@ -42,3 +42,16 @@ describe.each([undefined, 'America/Bogota', 'Pacific/Kiritimati'])('fechas con T
     expect(sumarDias('2025-03-01', -1)).toBe('2025-02-28')
   })
 })
+
+describe('fechas inexistentes', () => {
+  it.each(['2025-02-29', '2025-02-30', '2025-13-01', '2025-04-31', '2025-00-10'])(
+    'aDia rechaza %s en vez de correr el día',
+    (f) => {
+      expect(() => aDia(f)).toThrow('fecha_invalida')
+    },
+  )
+
+  it('aDia acepta el 29 de febrero de un año bisiesto', () => {
+    expect(aISO(aDia('2024-02-29'))).toBe('2024-02-29')
+  })
+})

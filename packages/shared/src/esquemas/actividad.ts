@@ -1,8 +1,20 @@
+import { aDia } from '../calculo/fechas'
 import { z } from './zod'
+
+/** true si la fecha existe en el calendario (rechaza 2025-02-29 o 2025-04-31). */
+function existe(f: string): boolean {
+  try {
+    aDia(f)
+    return true
+  } catch {
+    return false
+  }
+}
 
 export const fechaISO = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, { error: 'Usa el formato AAAA-MM-DD' })
+  .refine(existe, { error: 'La fecha no existe' })
 
 export const actividadEntrada = z.object({
   id: z.string().min(1),

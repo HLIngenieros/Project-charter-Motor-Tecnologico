@@ -1,8 +1,10 @@
 import { resolve } from 'node:path'
 import { construirApp } from './app'
-import { leerConfig } from './config'
+import { cargarEntorno, leerConfig } from './config'
 import { crearDb } from './db/conexion'
 
+// El .env vive en la raíz del monorepo; la API se ejecuta desde apps/api.
+cargarEntorno(resolve('../../.env'))
 const config = leerConfig()
 const rutaDb = resolve(config.rutaDb)
 const app = await construirApp({ config, db: crearDb(rutaDb) })

@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { promoverAdmin } from '../auth/cuentas'
-import { leerConfig } from '../config'
+import { cargarEntorno, leerConfig } from '../config'
 import { crearDb } from '../db/conexion'
 
 const USO = 'Uso: npm run admin -- --promover <correo> | --quitar <correo>'
@@ -11,6 +11,7 @@ if (!correo || (opcion !== '--promover' && opcion !== '--quitar')) {
   process.exit(1)
 }
 
+cargarEntorno(resolve('../../.env'))
 const db = crearDb(resolve(leerConfig().rutaDb))
 try {
   await promoverAdmin(db, correo, opcion === '--promover')
