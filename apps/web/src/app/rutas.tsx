@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { Entrar } from '../pantallas/Entrar'
+import { Ficha } from '../pantallas/ficha/Ficha'
 import { Muestra } from '../pantallas/Muestra'
 import { Portafolio } from '../pantallas/portafolio/Portafolio'
 import { Registro } from '../pantallas/Registro'
@@ -29,6 +30,14 @@ export function Rutas() {
         element={
           <RutaProtegida>
             <Portafolio />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/charters/:id"
+        element={
+          <RutaProtegida>
+            <Ficha />
           </RutaProtegida>
         }
       />

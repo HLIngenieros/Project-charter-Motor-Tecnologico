@@ -8,7 +8,7 @@ export interface SelectorProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 /** Flecha del `select` pintada como fondo (el control nativo se aplana con `appearance-none`). */
-const FLECHA =
+export const FLECHA =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6C7E' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")"
 
 export const CLASE_SELECTOR = [
