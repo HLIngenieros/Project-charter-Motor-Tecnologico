@@ -9,9 +9,7 @@
       "peso": null,
       "inicio": "2025-01-15",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": null,
       "esperado": {
         "K": 0.07900378837125713,
@@ -26,9 +24,7 @@
       "peso": null,
       "inicio": "2025-01-15",
       "fin": "2025-11-01",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 20,
       "esperado": {
         "K": 0.23784417297046626,
@@ -43,9 +39,7 @@
       "peso": 0.08,
       "inicio": "2025-01-15",
       "fin": "2025-04-30",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 21,
       "esperado": {
         "K": 0.5471698113207547,
@@ -60,9 +54,7 @@
       "peso": 0.01,
       "inicio": "2025-01-15",
       "fin": "2025-01-23",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 1.0,
@@ -77,9 +69,7 @@
       "peso": 0.01,
       "inicio": "2025-01-23",
       "fin": "2025-01-25",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 1.0,
@@ -94,9 +84,7 @@
       "peso": 0.01,
       "inicio": "2025-01-25",
       "fin": "2025-01-26",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 1.0,
@@ -111,9 +99,7 @@
       "peso": null,
       "inicio": "2025-02-07",
       "fin": "2025-07-01",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 0.13118279569892471,
@@ -128,11 +114,7 @@
       "peso": 0.001,
       "inicio": "2025-02-07",
       "fin": "2025-02-08",
-      "responsables": [
-        "SGI",
-        "GG",
-        "Lider ID&TI"
-      ],
+      "responsables": ["SGI", "GG", "Lider ID&TI"],
       "padreFila": 26,
       "esperado": {
         "K": 1.0,
@@ -147,10 +129,7 @@
       "peso": 0.001,
       "inicio": "2025-02-08",
       "fin": "2025-02-12",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI"],
       "padreFila": 26,
       "esperado": {
         "K": 1.0,
@@ -165,10 +144,7 @@
       "peso": 0.002,
       "inicio": "2025-02-12",
       "fin": "2025-03-14",
-      "responsables": [
-        "Lider ID&TI",
-        "Comercial"
-      ],
+      "responsables": ["Lider ID&TI", "Comercial"],
       "padreFila": 26,
       "esperado": {
         "K": 0.967741935483871,
@@ -183,11 +159,7 @@
       "peso": 0.002,
       "inicio": "2025-03-14",
       "fin": "2025-03-21",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -202,11 +174,7 @@
       "peso": 0.002,
       "inicio": "2025-03-21",
       "fin": "2025-03-22",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -221,11 +189,7 @@
       "peso": 0.001,
       "inicio": "2025-03-28",
       "fin": "2025-03-29",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -240,11 +204,7 @@
       "peso": 0.001,
       "inicio": "2025-04-04",
       "fin": "2025-04-05",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -259,11 +219,7 @@
       "peso": 0.001,
       "inicio": "2025-04-11",
       "fin": "2025-04-12",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -278,11 +234,7 @@
       "peso": 0.001,
       "inicio": "2025-04-18",
       "fin": "2025-04-19",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -297,12 +249,7 @@
       "peso": 0.001,
       "inicio": "2025-04-25",
       "fin": "2025-04-26",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -317,12 +264,7 @@
       "peso": 0.001,
       "inicio": "2025-05-02",
       "fin": "2025-05-03",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -337,12 +279,7 @@
       "peso": 0.001,
       "inicio": "2025-05-09",
       "fin": "2025-05-10",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -357,12 +294,7 @@
       "peso": 0.002,
       "inicio": "2025-05-16",
       "fin": "2025-05-17",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -377,12 +309,7 @@
       "peso": 0.002,
       "inicio": "2025-05-23",
       "fin": "2025-05-24",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -397,12 +324,7 @@
       "peso": 0.003,
       "inicio": "2025-05-30",
       "fin": "2025-05-31",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -417,12 +339,7 @@
       "peso": 0.003,
       "inicio": "2025-06-06",
       "fin": "2025-06-07",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -437,12 +354,7 @@
       "peso": 0.003,
       "inicio": "2025-06-13",
       "fin": "2025-06-18",
-      "responsables": [
-        "Subcontratista TIC",
-        "Lider ID&TI",
-        "Comercial",
-        "Edisa"
-      ],
+      "responsables": ["Subcontratista TIC", "Lider ID&TI", "Comercial", "Edisa"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -457,9 +369,7 @@
       "peso": 0.001,
       "inicio": "2025-06-20",
       "fin": "2025-06-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -474,9 +384,7 @@
       "peso": 0.001,
       "inicio": "2025-06-27",
       "fin": "2025-07-01",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 26,
       "esperado": {
         "K": 0.0,
@@ -491,9 +399,7 @@
       "peso": null,
       "inicio": "2025-05-05",
       "fin": "2025-07-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 0.0,
@@ -508,9 +414,7 @@
       "peso": null,
       "inicio": "2025-05-26",
       "fin": "2025-07-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 46,
       "esperado": {
         "K": 0.0,
@@ -525,11 +429,7 @@
       "peso": 0.003,
       "inicio": "2025-06-12",
       "fin": "2025-06-19",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC", "GH"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -544,11 +444,7 @@
       "peso": 0.003,
       "inicio": "2025-06-19",
       "fin": "2025-06-26",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC", "GH"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -563,10 +459,7 @@
       "peso": 0.003,
       "inicio": "2025-06-26",
       "fin": "2025-07-03",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -581,9 +474,7 @@
       "peso": 0.002,
       "inicio": "2025-05-26",
       "fin": "2025-06-16",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -598,11 +489,7 @@
       "peso": 0.001,
       "inicio": "2025-07-03",
       "fin": "2025-07-10",
-      "responsables": [
-        "Lider ID&TI",
-        "GH",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "GH", "Subcontratista TIC"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -617,10 +504,7 @@
       "peso": 0.0015,
       "inicio": "2025-07-10",
       "fin": "2025-07-17",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -635,10 +519,7 @@
       "peso": 0.0015,
       "inicio": "2025-07-17",
       "fin": "2025-07-24",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 47,
       "esperado": {
         "K": 0.0,
@@ -653,9 +534,7 @@
       "peso": null,
       "inicio": "2025-05-05",
       "fin": "2025-06-20",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 46,
       "esperado": {
         "K": 0.0,
@@ -670,10 +549,7 @@
       "peso": 0.003,
       "inicio": "2025-05-05",
       "fin": "2025-05-07",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -688,10 +564,7 @@
       "peso": 0.003,
       "inicio": "2025-05-05",
       "fin": "2025-05-09",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -706,11 +579,7 @@
       "peso": 0.003,
       "inicio": "2025-05-12",
       "fin": "2025-05-19",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -725,11 +594,7 @@
       "peso": 0.002,
       "inicio": "2025-05-19",
       "fin": "2025-05-26",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -744,11 +609,7 @@
       "peso": 0.002,
       "inicio": "2025-05-26",
       "fin": "2025-06-02",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -763,10 +624,7 @@
       "peso": 0.001,
       "inicio": "2025-06-02",
       "fin": "2025-06-05",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -781,10 +639,7 @@
       "peso": 0.001,
       "inicio": "2025-06-06",
       "fin": "2025-06-20",
-      "responsables": [
-        "Lider ID&TI",
-        "GH"
-      ],
+      "responsables": ["Lider ID&TI", "GH"],
       "padreFila": 55,
       "esperado": {
         "K": 0.0,
@@ -799,9 +654,7 @@
       "peso": null,
       "inicio": "2025-02-05",
       "fin": "2025-06-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 0.30416666666666664,
@@ -816,10 +669,7 @@
       "peso": 0.002,
       "inicio": "2025-02-05",
       "fin": "2025-02-09",
-      "responsables": [
-        "Lider ID&TI",
-        "Todas las Areas de la compañía"
-      ],
+      "responsables": ["Lider ID&TI", "Todas las Areas de la compañía"],
       "padreFila": 63,
       "esperado": {
         "K": 1.0,
@@ -834,10 +684,7 @@
       "peso": 0.002,
       "inicio": "2025-02-12",
       "fin": "2025-02-16",
-      "responsables": [
-        "Lider ID&TI",
-        "Todas las Areas de la compañía"
-      ],
+      "responsables": ["Lider ID&TI", "Todas las Areas de la compañía"],
       "padreFila": 63,
       "esperado": {
         "K": 1.0,
@@ -852,10 +699,7 @@
       "peso": 0.002,
       "inicio": "2025-02-19",
       "fin": "2025-02-26",
-      "responsables": [
-        "Lider ID&TI",
-        "Todas las Areas de la compañía"
-      ],
+      "responsables": ["Lider ID&TI", "Todas las Areas de la compañía"],
       "padreFila": 63,
       "esperado": {
         "K": 1.0,
@@ -870,10 +714,7 @@
       "peso": 0.002,
       "inicio": "2025-03-01",
       "fin": "2025-03-08",
-      "responsables": [
-        "Lider ID&TI",
-        "Todas las Areas de la compañía"
-      ],
+      "responsables": ["Lider ID&TI", "Todas las Areas de la compañía"],
       "padreFila": 63,
       "esperado": {
         "K": 1.0,
@@ -888,10 +729,7 @@
       "peso": 0.003,
       "inicio": "2025-03-11",
       "fin": "2025-03-18",
-      "responsables": [
-        "Lider ID&TI",
-        "Todas las Areas de la compañía"
-      ],
+      "responsables": ["Lider ID&TI", "Todas las Areas de la compañía"],
       "padreFila": 63,
       "esperado": {
         "K": 0.375,
@@ -906,9 +744,7 @@
       "peso": 0.003,
       "inicio": "2025-03-21",
       "fin": "2025-04-11",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -923,10 +759,7 @@
       "peso": 0.001,
       "inicio": "2025-04-12",
       "fin": "2025-04-19",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -941,9 +774,7 @@
       "peso": 0.002,
       "inicio": "2025-04-22",
       "fin": "2025-04-29",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -958,9 +789,7 @@
       "peso": 0.002,
       "inicio": "2025-05-02",
       "fin": "2025-05-09",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -975,9 +804,7 @@
       "peso": 0.003,
       "inicio": "2025-03-21",
       "fin": "2025-03-28",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -992,9 +819,7 @@
       "peso": 0.003,
       "inicio": "2025-04-22",
       "fin": "2025-05-13",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -1009,10 +834,7 @@
       "peso": 0.001,
       "inicio": "2025-05-16",
       "fin": "2025-05-23",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -1027,9 +849,7 @@
       "peso": 0.002,
       "inicio": "2025-05-26",
       "fin": "2025-06-02",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -1044,9 +864,7 @@
       "peso": 0.002,
       "inicio": "2025-06-05",
       "fin": "2025-06-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 63,
       "esperado": {
         "K": 0.0,
@@ -1061,9 +879,7 @@
       "peso": null,
       "inicio": "2025-06-12",
       "fin": "2025-08-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 0.0,
@@ -1078,10 +894,7 @@
       "peso": 0.005,
       "inicio": "2025-06-12",
       "fin": "2025-06-14",
-      "responsables": [
-        "Lider ID&TI",
-        "Compras"
-      ],
+      "responsables": ["Lider ID&TI", "Compras"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1096,10 +909,7 @@
       "peso": 0.005,
       "inicio": "2025-06-17",
       "fin": "2025-06-21",
-      "responsables": [
-        "Lider ID&TI",
-        "Compras"
-      ],
+      "responsables": ["Lider ID&TI", "Compras"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1114,9 +924,7 @@
       "peso": 0.005,
       "inicio": "2025-07-10",
       "fin": "2025-07-31",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1131,11 +939,7 @@
       "peso": 0.005,
       "inicio": "2025-08-03",
       "fin": "2025-08-10",
-      "responsables": [
-        "Lider ID&TI",
-        "Compras",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Compras", "Subcontratista TIC"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1150,10 +954,7 @@
       "peso": 0.005,
       "inicio": "2025-08-13",
       "fin": "2025-08-17",
-      "responsables": [
-        "Lider ID&TI",
-        "Compras"
-      ],
+      "responsables": ["Lider ID&TI", "Compras"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1168,10 +969,7 @@
       "peso": 0.005,
       "inicio": "2025-08-20",
       "fin": "2025-08-24",
-      "responsables": [
-        "Lider ID&TI",
-        "Compras"
-      ],
+      "responsables": ["Lider ID&TI", "Compras"],
       "padreFila": 78,
       "esperado": {
         "K": 0.0,
@@ -1186,9 +984,7 @@
       "peso": null,
       "inicio": "2025-08-27",
       "fin": "2025-11-01",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 21,
       "esperado": {
         "K": 0.0,
@@ -1203,10 +999,7 @@
       "peso": 0.003,
       "inicio": "2025-08-27",
       "fin": "2025-08-29",
-      "responsables": [
-        "Lider ID&TI",
-        "E&H"
-      ],
+      "responsables": ["Lider ID&TI", "E&H"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1221,10 +1014,7 @@
       "peso": 0.003,
       "inicio": "2025-09-01",
       "fin": "2025-09-08",
-      "responsables": [
-        "Lider ID&TI",
-        "E&H"
-      ],
+      "responsables": ["Lider ID&TI", "E&H"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1239,9 +1029,7 @@
       "peso": 0.005,
       "inicio": "2025-09-11",
       "fin": "2025-10-02",
-      "responsables": [
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Subcontratista TIC"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1256,11 +1044,7 @@
       "peso": 0.005,
       "inicio": "2025-10-05",
       "fin": "2025-10-12",
-      "responsables": [
-        "Lider ID&TI",
-        "E&H",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "E&H", "Subcontratista TIC"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1275,10 +1059,7 @@
       "peso": 0.002,
       "inicio": "2025-10-15",
       "fin": "2025-10-22",
-      "responsables": [
-        "Lider ID&TI",
-        "E&H"
-      ],
+      "responsables": ["Lider ID&TI", "E&H"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1293,10 +1074,7 @@
       "peso": 0.002,
       "inicio": "2025-10-25",
       "fin": "2025-11-01",
-      "responsables": [
-        "Lider ID&TI",
-        "E&H"
-      ],
+      "responsables": ["Lider ID&TI", "E&H"],
       "padreFila": 85,
       "esperado": {
         "K": 0.0,
@@ -1311,9 +1089,7 @@
       "peso": null,
       "inicio": "2025-02-26",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 20,
       "esperado": {
         "K": 0.05387205387205387,
@@ -1328,9 +1104,7 @@
       "peso": null,
       "inicio": "2025-04-04",
       "fin": "2025-06-16",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 92,
       "esperado": {
         "K": 0.01290322580645161,
@@ -1345,9 +1119,7 @@
       "peso": 0.02,
       "inicio": "2025-05-26",
       "fin": "2025-06-16",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 93,
       "esperado": {
         "K": 0.0,
@@ -1362,9 +1134,7 @@
       "peso": 0.02,
       "inicio": "2025-04-04",
       "fin": "2025-04-05",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 93,
       "esperado": {
         "K": 0.0,
@@ -1379,9 +1149,7 @@
       "peso": null,
       "inicio": "2025-02-26",
       "fin": "2025-05-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 93,
       "esperado": {
         "K": 0.051612903225806445,
@@ -1396,10 +1164,7 @@
       "peso": 0.002,
       "inicio": "2025-02-26",
       "fin": "2025-03-28",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.5161290322580645,
@@ -1414,10 +1179,7 @@
       "peso": 0.002,
       "inicio": "2025-03-29",
       "fin": "2025-03-30",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1432,9 +1194,7 @@
       "peso": 0.002,
       "inicio": "2025-04-02",
       "fin": "2025-04-06",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1449,9 +1209,7 @@
       "peso": 0.002,
       "inicio": "2025-04-09",
       "fin": "2025-04-13",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1466,10 +1224,7 @@
       "peso": 0.002,
       "inicio": "2025-04-16",
       "fin": "2025-04-18",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1484,10 +1239,7 @@
       "peso": 0.002,
       "inicio": "2025-04-19",
       "fin": "2025-04-23",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1502,10 +1254,7 @@
       "peso": 0.002,
       "inicio": "2025-04-24",
       "fin": "2025-04-26",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1520,10 +1269,7 @@
       "peso": 0.002,
       "inicio": "2025-04-27",
       "fin": "2025-05-02",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1538,10 +1284,7 @@
       "peso": 0.001,
       "inicio": "2025-05-03",
       "fin": "2025-05-07",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1556,10 +1299,7 @@
       "peso": 0.001,
       "inicio": "2025-05-08",
       "fin": "2025-05-10",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1574,9 +1314,7 @@
       "peso": 0.001,
       "inicio": "2025-05-15",
       "fin": "2025-05-18",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1591,9 +1329,7 @@
       "peso": 0.001,
       "inicio": "2025-05-21",
       "fin": "2025-05-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 96,
       "esperado": {
         "K": 0.0,
@@ -1608,9 +1344,7 @@
       "peso": null,
       "inicio": "2025-04-19",
       "fin": "2025-07-13",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 93,
       "esperado": {
         "K": 0.0,
@@ -1625,10 +1359,7 @@
       "peso": 0.002,
       "inicio": "2025-04-19",
       "fin": "2025-04-26",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1643,10 +1374,7 @@
       "peso": 0.002,
       "inicio": "2025-04-27",
       "fin": "2025-04-27",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1661,9 +1389,7 @@
       "peso": 0.002,
       "inicio": "2025-04-30",
       "fin": "2025-05-04",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1678,9 +1404,7 @@
       "peso": 0.002,
       "inicio": "2025-05-07",
       "fin": "2025-05-11",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1695,9 +1419,7 @@
       "peso": 0.002,
       "inicio": "2025-05-14",
       "fin": "2025-05-18",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1712,10 +1434,7 @@
       "peso": 0.002,
       "inicio": "2025-05-21",
       "fin": "2025-05-25",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1730,10 +1449,7 @@
       "peso": 0.002,
       "inicio": "2025-05-28",
       "fin": "2025-06-01",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1748,10 +1464,7 @@
       "peso": 0.001,
       "inicio": "2025-06-04",
       "fin": "2025-06-08",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1766,10 +1479,7 @@
       "peso": 0.001,
       "inicio": "2025-06-11",
       "fin": "2025-06-15",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1784,10 +1494,7 @@
       "peso": 0.001,
       "inicio": "2025-06-18",
       "fin": "2025-06-22",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1802,10 +1509,7 @@
       "peso": 0.001,
       "inicio": "2025-06-25",
       "fin": "2025-06-29",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1820,10 +1524,7 @@
       "peso": 0.001,
       "inicio": "2025-07-02",
       "fin": "2025-07-06",
-      "responsables": [
-        "Lider ID&TI",
-        "Estimaciones"
-      ],
+      "responsables": ["Lider ID&TI", "Estimaciones"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1838,9 +1539,7 @@
       "peso": 0.001,
       "inicio": "2025-07-09",
       "fin": "2025-07-13",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 109,
       "esperado": {
         "K": 0.0,
@@ -1855,9 +1554,7 @@
       "peso": null,
       "inicio": "2025-07-16",
       "fin": "2025-08-03",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 93,
       "esperado": {
         "K": 0.0,
@@ -1872,9 +1569,7 @@
       "peso": 0.01,
       "inicio": "2025-07-16",
       "fin": "2025-07-20",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 123,
       "esperado": {
         "K": 0.0,
@@ -1889,9 +1584,7 @@
       "peso": 0.005,
       "inicio": "2025-07-23",
       "fin": "2025-07-27",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 123,
       "esperado": {
         "K": 0.0,
@@ -1906,9 +1599,7 @@
       "peso": 0.005,
       "inicio": "2025-07-30",
       "fin": "2025-08-03",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 123,
       "esperado": {
         "K": 0.0,
@@ -1923,9 +1614,7 @@
       "peso": null,
       "inicio": "2025-09-15",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 92,
       "esperado": {
         "K": 0.0,
@@ -1940,9 +1629,7 @@
       "peso": 0.01,
       "inicio": "2025-09-15",
       "fin": "2025-09-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -1957,9 +1644,7 @@
       "peso": 0.02,
       "inicio": "2025-09-22",
       "fin": "2025-09-26",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -1974,9 +1659,7 @@
       "peso": 0.01,
       "inicio": "2025-09-29",
       "fin": "2025-10-03",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -1991,9 +1674,7 @@
       "peso": 0.01,
       "inicio": "2025-10-06",
       "fin": "2025-10-10",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2008,9 +1689,7 @@
       "peso": 0.01,
       "inicio": "2025-10-13",
       "fin": "2025-10-17",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2025,9 +1704,7 @@
       "peso": 0.01,
       "inicio": "2025-10-20",
       "fin": "2025-10-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2042,9 +1719,7 @@
       "peso": 0.01,
       "inicio": "2025-10-27",
       "fin": "2025-10-31",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2059,9 +1734,7 @@
       "peso": 0.01,
       "inicio": "2025-11-03",
       "fin": "2025-11-07",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2076,9 +1749,7 @@
       "peso": 0.01,
       "inicio": "2025-11-10",
       "fin": "2025-11-14",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2093,9 +1764,7 @@
       "peso": 0.01,
       "inicio": "2025-11-17",
       "fin": "2025-11-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2110,9 +1779,7 @@
       "peso": 0.01,
       "inicio": "2025-11-24",
       "fin": "2025-11-28",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2127,9 +1794,7 @@
       "peso": 0.01,
       "inicio": "2025-12-01",
       "fin": "2025-12-05",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2144,9 +1809,7 @@
       "peso": 0.01,
       "inicio": "2025-12-08",
       "fin": "2025-12-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2161,9 +1824,7 @@
       "peso": 0.01,
       "inicio": "2025-12-15",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 127,
       "esperado": {
         "K": 0.0,
@@ -2178,9 +1839,7 @@
       "peso": null,
       "inicio": "2025-08-06",
       "fin": "2025-10-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 20,
       "esperado": {
         "K": 0.0,
@@ -2195,9 +1854,7 @@
       "peso": null,
       "inicio": "2025-08-06",
       "fin": "2025-09-07",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 142,
       "esperado": {
         "K": 0.0,
@@ -2212,9 +1869,7 @@
       "peso": 0.02,
       "inicio": "2025-08-06",
       "fin": "2025-08-10",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 143,
       "esperado": {
         "K": 0.0,
@@ -2229,10 +1884,7 @@
       "peso": 0.02,
       "inicio": "2025-08-13",
       "fin": "2025-08-17",
-      "responsables": [
-        "Lider ID&TI",
-        "SGI"
-      ],
+      "responsables": ["Lider ID&TI", "SGI"],
       "padreFila": 143,
       "esperado": {
         "K": 0.0,
@@ -2247,9 +1899,7 @@
       "peso": 0.02,
       "inicio": "2025-08-20",
       "fin": "2025-08-24",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 143,
       "esperado": {
         "K": 0.0,
@@ -2264,9 +1914,7 @@
       "peso": 0.02,
       "inicio": "2025-08-27",
       "fin": "2025-08-31",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 143,
       "esperado": {
         "K": 0.0,
@@ -2281,9 +1929,7 @@
       "peso": 0.02,
       "inicio": "2025-09-03",
       "fin": "2025-09-07",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 143,
       "esperado": {
         "K": 0.0,
@@ -2298,9 +1944,7 @@
       "peso": null,
       "inicio": "2025-09-10",
       "fin": "2025-10-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 142,
       "esperado": {
         "K": 0.0,
@@ -2315,9 +1959,7 @@
       "peso": 0.03,
       "inicio": "2025-09-10",
       "fin": "2025-09-14",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 149,
       "esperado": {
         "K": 0.0,
@@ -2332,9 +1974,7 @@
       "peso": 0.03,
       "inicio": "2025-09-17",
       "fin": "2025-09-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 149,
       "esperado": {
         "K": 0.0,
@@ -2349,9 +1989,7 @@
       "peso": 0.03,
       "inicio": "2025-09-24",
       "fin": "2025-09-28",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 149,
       "esperado": {
         "K": 0.0,
@@ -2366,9 +2004,7 @@
       "peso": 0.03,
       "inicio": "2025-10-01",
       "fin": "2025-10-05",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 149,
       "esperado": {
         "K": 0.0,
@@ -2383,9 +2019,7 @@
       "peso": 0.03,
       "inicio": "2025-10-08",
       "fin": "2025-10-12",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 149,
       "esperado": {
         "K": 0.0,
@@ -2400,9 +2034,7 @@
       "peso": null,
       "inicio": "2025-01-15",
       "fin": "2025-11-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": null,
       "esperado": {
         "K": 0.17499999999999996,
@@ -2417,9 +2049,7 @@
       "peso": null,
       "inicio": "2025-01-15",
       "fin": "2025-11-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 155,
       "esperado": {
         "K": 0.17500000000000002,
@@ -2434,9 +2064,7 @@
       "peso": 0.02,
       "inicio": "2025-01-15",
       "fin": "2025-03-01",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 1.0,
@@ -2451,9 +2079,7 @@
       "peso": 0.02,
       "inicio": "2025-03-02",
       "fin": "2025-03-17",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.75,
@@ -2468,9 +2094,7 @@
       "peso": 0.02,
       "inicio": "2025-03-18",
       "fin": "2025-04-17",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2485,9 +2109,7 @@
       "peso": 0.02,
       "inicio": "2025-04-18",
       "fin": "2025-05-18",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2502,9 +2124,7 @@
       "peso": 0.02,
       "inicio": "2025-05-19",
       "fin": "2025-06-18",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2519,9 +2139,7 @@
       "peso": 0.02,
       "inicio": "2025-06-19",
       "fin": "2025-07-04",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2536,9 +2154,7 @@
       "peso": 0.02,
       "inicio": "2025-07-05",
       "fin": "2025-08-04",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2553,9 +2169,7 @@
       "peso": 0.02,
       "inicio": "2025-08-05",
       "fin": "2025-08-20",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2570,9 +2184,7 @@
       "peso": 0.02,
       "inicio": "2025-08-21",
       "fin": "2025-09-20",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2587,9 +2199,7 @@
       "peso": 0.01,
       "inicio": "2025-09-21",
       "fin": "2025-10-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2604,9 +2214,7 @@
       "peso": 0.01,
       "inicio": "2025-10-22",
       "fin": "2025-11-21",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 156,
       "esperado": {
         "K": 0.0,
@@ -2621,9 +2229,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 155,
       "esperado": {
         "K": 0.0,
@@ -2638,9 +2244,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2655,9 +2259,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2672,9 +2274,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2689,9 +2289,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2706,9 +2304,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2723,9 +2319,7 @@
       "peso": null,
       "inicio": null,
       "fin": null,
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": 168,
       "esperado": {
         "K": 1.0,
@@ -2740,9 +2334,7 @@
       "peso": null,
       "inicio": "2025-02-28",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI"
-      ],
+      "responsables": ["Lider ID&TI"],
       "padreFila": null,
       "esperado": {
         "K": 0.04516129032258064,
@@ -2757,10 +2349,7 @@
       "peso": 0.005,
       "inicio": "2025-02-28",
       "fin": "2025-03-30",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.45161290322580644,
@@ -2775,10 +2364,7 @@
       "peso": 0.005,
       "inicio": "2025-03-31",
       "fin": "2025-04-15",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2793,10 +2379,7 @@
       "peso": 0.005,
       "inicio": "2025-04-16",
       "fin": "2025-05-16",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2811,10 +2394,7 @@
       "peso": 0.005,
       "inicio": "2025-05-17",
       "fin": "2025-06-16",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2829,10 +2409,7 @@
       "peso": 0.005,
       "inicio": "2025-06-17",
       "fin": "2025-07-17",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2847,10 +2424,7 @@
       "peso": 0.005,
       "inicio": "2025-07-18",
       "fin": "2025-08-17",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2865,10 +2439,7 @@
       "peso": 0.005,
       "inicio": "2025-08-18",
       "fin": "2025-09-17",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2883,10 +2454,7 @@
       "peso": 0.005,
       "inicio": "2025-09-18",
       "fin": "2025-10-18",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2901,10 +2469,7 @@
       "peso": 0.005,
       "inicio": "2025-10-19",
       "fin": "2025-11-18",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
@@ -2919,10 +2484,7 @@
       "peso": 0.005,
       "inicio": "2025-11-19",
       "fin": "2025-12-19",
-      "responsables": [
-        "Lider ID&TI",
-        "Subcontratista TIC"
-      ],
+      "responsables": ["Lider ID&TI", "Subcontratista TIC"],
       "padreFila": 175,
       "esperado": {
         "K": 0.0,
