@@ -1,0 +1,38 @@
+/* Identidad del Informe global (README §6). */
+@theme {
+  --color-institucional: #003366;
+  --color-institucional-2: #0a3f73;
+  --color-tinta: #0b1f33;
+  --color-texto: #3b4b5e;
+  --color-texto-2: #5b6c7e;
+  /* Solo para elementos no esenciales: no llega a 4,5:1 sobre el fondo. */
+  --color-texto-3: #7c8ca1;
+  --color-linea: #dce3ec;
+  --color-linea-2: #e3e8ef;
+  --color-fondo: #eef2f6;
+  --color-superficie: #ffffff;
+  --color-acento: #00a9e0;
+
+  --color-ok: #15a06a;
+  --color-info: #1f6fd1;
+  --color-neutro: #7c8ca1;
+  --color-alerta: #c4513c;
+  --color-ok-suave: #e3f4ec;
+  --color-info-suave: #e6effb;
+  --color-alerta-suave: #f8e9e5;
+  /* Alerta para texto: 4,5:1 o más sobre fondo y blanco. */
+  --color-alerta-texto: #a63f2c;
+
+  --font-titulo: 'Sora Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-texto: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-cifra: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', monospace;
+
+  --radius-control: 0.5rem;
+  --radius-tarjeta: 0.75rem;
+  --radius-sello: 0.625rem;
+
+  --shadow-dialogo: 0 24px 48px -12px rgb(11 31 51 / 0.28);
+  --shadow-foco: 0 0 0 3px rgb(0 169 224 / 0.35);
+
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+}
