@@ -2,12 +2,7 @@ import { aDia, aISO } from './fechas'
 import type { FechaISO, NodoArbol } from './tipos'
 
 export type Estado =
-  | 'sin_programar'
-  | 'por_iniciar'
-  | 'terminada'
-  | 'al_dia'
-  | 'en_atencion'
-  | 'atrasada'
+  'sin_programar' | 'por_iniciar' | 'terminada' | 'al_dia' | 'en_atencion' | 'atrasada'
 
 export interface AvanceHoja {
   /** Avance real, fracción 0–1. */
@@ -110,12 +105,7 @@ function sinProgramar(id: string, item: string, extra: Partial<ResultadoNodo> = 
 }
 
 /** Resultado de un nodo a partir del acumulado de sus hojas programadas. */
-function resultadoDe(
-  id: string,
-  item: string,
-  acc: Acumulado,
-  u: Umbrales,
-): ResultadoNodo {
+function resultadoDe(id: string, item: string, acc: Acumulado, u: Umbrales): ResultadoNodo {
   if (acc.peso <= 0) return sinProgramar(id, item)
   const dur = acc.fin - acc.ini + 1
   const pv = acc.pesoPv / acc.peso

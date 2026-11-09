@@ -9,9 +9,7 @@ describe('aceptación contra la hoja ID & TI del Excel', () => {
     fixture.filas.map((f) => [idDe(f.fila), { pct: f.esperado.L ?? 0 }]),
   )
   const r = calcularCronograma(raices, avances, fixture.corte)
-  const programadas = recorrerHojas(raices).filter(
-    (h) => r.nodos[h.id]!.estado !== 'sin_programar',
-  )
+  const programadas = recorrerHojas(raices).filter((h) => r.nodos[h.id]!.estado !== 'sin_programar')
 
   it('el proyecto da 12,51 % planeado y 12,47 % real al 2025-03-13', () => {
     expect(fixture.corte).toBe('2025-03-13')
