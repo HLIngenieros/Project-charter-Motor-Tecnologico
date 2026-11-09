@@ -1,9 +1,31 @@
+# Dependencias y builds
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+
+# Base de datos local (SQLite)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+data/*.db
+
+# Variables de entorno / secretos
+.env
+.env.*
+!.env.example
+
+
 # Sistema operativo
 Thumbs.db
+desktop.ini
 Desktop.ini
 .DS_Store
 
-# Archivos temporales de Office
+# Temporales de Office
 ~$*
 *.tmp
 
@@ -11,6 +33,6 @@ Desktop.ini
 .vscode/
 .idea/
 
-# Variables de entorno / secretos
-.env
-.env.*
+# Logs
+*.log
+npm-debug.log*
