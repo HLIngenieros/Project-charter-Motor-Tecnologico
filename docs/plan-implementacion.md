@@ -83,7 +83,7 @@ Plan general por fases y tareas. La arquitectura está en [arquitectura.md](arqu
 
 | Tarea | Entregable | Terminada cuando |
 |---|---|---|
-| T7.1 · Cuentas | Listado, desactivar o reactivar, restablecer clave (temporal con cambio obligatorio), otorgar o quitar Admin | Pruebas de API y flujo en la web |
+| T7.1 · Cuentas | Listado, desactivar o reactivar, restablecer clave (temporal con cambio obligatorio), otorgar o quitar Admin | Pruebas de API y flujo en la web. Desactivar y restablecer clave llaman a `cerrarSesionesDe` (prueba: reactivar no revive una cookie vieja) |
 | T7.2 · Catálogos | CRUD de categorías (con color) y áreas; desactivar si están en uso | Los cambios se reflejan en los formularios |
 | T7.3 · Lectura global | `/admin/charters` con filtros por dueño, área, categoría y estado; ficha en modo solo lectura | El Admin ve todo y no ve ningún control de edición; la API rechaza sus escrituras |
 
@@ -95,7 +95,7 @@ Plan general por fases y tareas. La arquitectura está en [arquitectura.md](arqu
 | T8.2 · Charters de prueba | Semilla con A1, D1 y C1 (datos del Informe global) | Se cargan con un comando |
 | T8.3 · Pulido responsive y de movimiento | Revisión en 360, 768 y 1440 px, `prefers-reduced-motion` y accesibilidad básica (foco y contraste) | Sin desbordes ni elementos ilegibles |
 | T8.4 · E2E | Playwright: registro → charter → cronograma → corte → curva S; y Admin en solo lectura | Pasan en local |
-| T8.5 · Producción | Build en un solo proceso, `.env.ejemplo`, comando de respaldo y guía `docs/despliegue.md` para el servidor interno | La app corre con `npm start` desde el build |
+| T8.5 · Producción | Build en un solo proceso, comando de respaldo y guía `docs/despliegue.md` para el servidor interno. Además (revisión de la Fase 2): `@fastify/helmet` con CSP, argon2id con 19 MiB y t = 2, purga de sesiones vencidas, dominio permitido expuesto a la web, host de escucha configurable y división del bundle por rutas | La app corre con `npm start` desde el build |
 
 ---
 

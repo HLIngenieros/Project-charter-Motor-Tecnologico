@@ -36,6 +36,10 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 | `docs/analisis-plantilla-excel.md` | Análisis del Excel, errores encontrados y **especificación de cálculos** (§4) |
 | `docs/referencias/` | Excel y PDF fuente |
 | `PENDIENTES.md` | Fases, tareas y registro de sesiones |
+| `packages/shared/` | Motor de cálculo (`src/calculo`) y esquemas Zod (`src/esquemas`); fixture del Excel en `test/fixtures/id-ti.json` |
+| `apps/api/` | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/acceso.ts` (único control de acceso), `cli/admin.ts` |
+| `apps/web/` | React: `componentes/`, `pantallas/`, `app/` (rutas, layout), `api/` (cliente y sesión), `estilos/tokens.css` |
+| `scripts/extraer_fixture.py` | Regenera el fixture desde el Excel |
 
 ## Decisiones
 
@@ -50,11 +54,28 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Registro libre con correo `@hlingenieros.com` (solo valida dominio). Perfiles: usuario y Admin (lectura de todo + parametrización) · Usuario.
 - 2026-11-09 · Sin aprobación de charters; línea base editable y cada corte guarda una foto · Usuario / Claude.
 - 2026-11-09 · Local primero, después servidor interno. Web responsive · Usuario.
+- 2026-11-09 · Hooks de React con prefijo `use…` (la regla de lint lo exige), no `usar…` · Claude.
+- 2026-11-09 · Una hoja con fin antes del inicio cuenta como sin programar y da aviso · Claude.
+- 2026-11-09 · Texto de error en `alerta-texto` `#A63F2C` (el `#C4513C` no llega a 4,5:1); cifras grandes en Sora, mono solo en tablas y códigos · Claude.
+- 2026-11-09 · `CONFIAR_PROXY=true` solo detrás de IIS; el `.env` de la raíz lo cargan la API y el CLI · Claude (revisión).
 
 ## Estado actual
 
-- Arquitectura, plan general y plan detallado de la Fase 2 aprobados (2026-11-09). Siguiente: ejecutar `docs/planes/fase-2.md` desde la Task 1; T1.3 (maquetas) antes de la Fase 3.
+- **Fase 2 completa (2026-11-09):** 129 pruebas, lint y build en verde; revisión final sin críticos. Siguiente: T1.3 (maquetas) y plan de la Fase 3. Hay una pregunta abierta sobre la regla de estado en PENDIENTES.md.
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
+
+## Comandos
+
+- `npm run dev` (API 3100 + web 5173) · `npm test` · `npm run lint` · `npm run build`.
+- Admin: registrar la cuenta y luego `npm run admin -- --promover <correo>` (`--quitar` lo retira).
+- Si un puerto queda ocupado por un `tsx watch` huérfano, matar el proceso que escucha en 3100/5173.
+
+## Aprendido
+
+- npm 11 bloquea scripts de instalación: no hace falta aprobarlos (better-sqlite3 trae binario; esbuild usa su paquete de plataforma).
+- En Git Bash los heredocs largos con JSX/plantillas fallan a veces; usar Write para archivos de código.
+- Prettier no debe tocar el fixture ni las migraciones (`.prettierignore`).
+- Vite puede quedar con un módulo a medio editar en caché: reiniciar `npm run dev`.
 
 ## Glosario
 

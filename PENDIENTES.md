@@ -26,6 +26,16 @@
 - [x] T2.8 · Sistema de diseño — 2026-11-09
 - [x] T2.9 · Pantallas de acceso — 2026-11-09
 
+### Pendientes de la revisión de la Fase 2
+
+- [ ] Límite de intentos por IP también en `POST /auth/registro`.
+- [ ] Motor: `pct` no numérico se trata como 0 (hoy lanza) y `construirArbol` rechaza ids repetidos (`id_duplicado`). Hacerlo antes del `PUT` del cronograma (T4.1).
+- [ ] La prueba de zona horaria debe verificar que `TZ` sí se aplicó (hoy no podría fallar).
+- [ ] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts`.
+- [ ] Contraste: los títulos de categoría en su color (p. ej. `#D98A00`) no llegan a 4,5:1. Resolver en el portafolio (T3.2).
+- [ ] **Pregunta abierta:** con umbrales −3/−10, una hoja de ≤ 10 días nunca queda "atrasada", y una hoja vencida al 99,9 % sale "al día". Decidir si se ajusta la regla de estado.
+- Seguridad y despliegue (helmet, argon2, purga de sesiones, dominio en la web, bundle) quedaron en T8.5; cerrar sesiones al desactivar, en T7.1.
+
 ## Fase 3 · Charter básico
 
 - [ ] T3.1 · API de charters y listas
@@ -68,7 +78,7 @@
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** ejecutar la Fase 2 con [docs/planes/fase-2.md](docs/planes/fase-2.md), desde la Task 1 (monorepo). T1.3 antes de la Fase 3.
+**Próxima tarea sugerida:** T1.3 (pantallas y flujos con maquetas) y luego el plan detallado de la Fase 3 (`docs/planes/fase-3.md`). Antes, decidir la pregunta abierta de la regla de estado.
 
 ## Registro de sesiones
 
@@ -76,3 +86,4 @@
 |---|---|---|
 | 2026-11-09 | T0.1–T0.3 | Repo movido a la raíz, análisis del Excel (hallados doble conteo de pesos y la fila 1.2 mal calculada), README y especificación de cálculos. Commit 05596eb |
 | 2026-11-09 | T1.1–T1.2 | Decisiones cerradas (independiente de HH, registro por dominio, Admin de solo lectura, sin aprobación, local primero). Arquitectura, plan general y plan detallado de la Fase 2 aprobados. Jerarquía del Excel verificada por fórmulas de peso (12,51 % / 12,47 %) |
+| 2026-11-09 | T2.1–T2.9 | Fase 2 completa: monorepo, fixture del Excel, motor validado (12,51 % / 12,47 % y columna K hoja por hoja), esquemas Zod, base con 15 tablas, auth por dominio con sesiones y CSRF, aislamiento por dueño, sistema de diseño y pantallas de acceso. Revisión final: 0 críticos; corregidos fechas inexistentes, `CONFIAR_PROXY` y carga del `.env`. 129 pruebas, lint y build en verde. Commits f67264d…c80ad68 |

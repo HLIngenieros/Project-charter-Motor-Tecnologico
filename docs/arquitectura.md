@@ -236,11 +236,12 @@ Se usa una ruta de impresión con CSS `@page { size: A4 }`, al estilo del Inform
 
 - `npm install` y `npm run dev` levantan la API (puerto 3100) y Vite (5173) con proxy de `/api`.
 - La base queda en `data/charters.db` y las migraciones se aplican al arrancar.
+- El perfil Admin se otorga con `npm run admin -- --promover <correo>` (la cuenta debe estar registrada) y se retira con `--quitar`.
 
 ### Después: servidor interno
 
 - `npm run build` genera la web estática, y Fastify la sirve junto con la API en **un solo proceso y un solo puerto**.
-- Se configura por variables de entorno (`.env`): `PUERTO`, `RUTA_DB`, `DOMINIO_PERMITIDO=hlingenieros.com`, `COOKIE_SEGURA`.
+- Se configura con un `.env` en la raíz (plantilla en `.env.ejemplo`; la API y el CLI lo cargan al arrancar): `PUERTO`, `RUTA_DB`, `DOMINIO_PERMITIDO=hlingenieros.com`, `COOKIE_SEGURA` y `CONFIAR_PROXY`. Detrás de IIS, `CONFIAR_PROXY=true` para que el límite de intentos use la IP real del cliente y no la del proxy.
 - En Windows Server se corre como servicio (NSSM o PM2) detrás de IIS o de otro proxy con HTTPS.
 - **Respaldo:** `npm run respaldo` usa la API de backup de SQLite para copiar la base en caliente. En el servidor se programa a diario.
 - **Migración a PostgreSQL:** solo si el uso lo exige. Drizzle lo permite cambiando el dialecto y regenerando las migraciones.
