@@ -63,6 +63,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 ## Estado actual
 
 - **Fase 2 completa (2026-11-09):** 129 pruebas, lint y build en verde; revisión final sin críticos. Siguiente sesión: 1) ajustar la regla de estado (decidido por el usuario; detalle en PENDIENTES.md), 2) T1.3 (maquetas), 3) plan de la Fase 3 (crear charters).
+- Resumen visual de la propuesta (artefacto privado, con diagrama de arquitectura interactivo y demo del cálculo): https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC. Su semáforo usa la regla actual; actualizarlo cuando cambie.
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
 
 ## Comandos
