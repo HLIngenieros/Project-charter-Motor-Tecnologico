@@ -34,6 +34,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 | `docs/arquitectura.md` | Arquitectura: perfiles, stack, modelo de datos, API, motor, despliegue |
 | `docs/plan-implementacion.md` | Plan general por fases y tareas con criterios de terminado |
 | `docs/planes/fase-N.md` | Plan detallado de cada fase (pasos, interfaces y pruebas) |
+| `docs/superpowers/specs/` | Diseños aprobados antes de cada plan (Fase 5 en adelante) |
 | `docs/analisis-plantilla-excel.md` | Análisis del Excel, errores encontrados y **especificación de cálculos** (§4) |
 | `docs/referencias/` | Excel y PDF fuente |
 | `PENDIENTES.md` | Fases, tareas y registro de sesiones |
@@ -73,13 +74,17 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-10 · PUT sobre una fecha con corte = editarlo (cambia % y nota, conserva la foto). Un corte nuevo no puede ser futuro ni anterior al último · Claude (plan aprobado).
 - 2026-11-10 · Gantt: la escala es una ventana de 3, 6 o 12 meses alrededor del corte; en el campo Actividad, Enter agrega debajo, Tab sangra y Mayús + Tab saca de nivel · Claude.
 - 2026-11-10 · Registrar corte: los grupos se rearman al cambiar la fecha, no al escribir; al editar, «Antes» es el corte anterior y se trabaja sobre la foto; la brecha mostrada no baja de 0 · Claude.
+- 2026-11-10 · Fase 5: el corte se elige en la banda, en la curva S o en el historial (`?corte=`); la ficha en un corte pasado queda en solo lectura con la foto. Sin bloque de avance por grupo (basta el Gantt con «Plegar a grupos») · Usuario.
+- 2026-11-10 · Un corte registrado no cambia aunque se mueva el cronograma; la vista actual recalcula en vivo y avisa «Línea base modificada desde el corte». Fin proyectado = el del motor en todas partes · Usuario / Claude.
+- 2026-11-10 · Gráficas en SVG propio con Motion, sin ECharts. Naranja `#de781c` (3:1 sobre blanco); el amarillo no llega a 3:1 y en la curva lleva borde `amarillo-texto` · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
 - **Fase 3 cerrada (2026-11-09).**
-- **Fase 4 cerrada (2026-11-10).** Queda T4.5 (primer charter real, lo hace el líder de TI). Siguiente: plan de la Fase 5.
+- **Fase 4 cerrada (2026-11-10).** T4.5 (primer charter real) se omitió por ahora.
+- **Fase 5 en curso:** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. Sesión 1 (Tasks 1–3) hecha; sigue la sesión 2 (Tasks 4–6: corte elegido y modo histórico, curva S, Gantt).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
 - Cortes web: historial en `pantallas/ficha/SeccionHistorial.tsx`; pantalla en `pantallas/corte/` (`RegistrarCorte` prepara las filas y monta `Formulario` con `key`; `clasificar.ts` puro; `FilaAvance`). Al guardar navega a la ficha con `state.aviso`. `Cifra` anima números con un `MotionValue`.
 - La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
@@ -115,6 +120,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 - En Windows, vitest puede cargar dos copias de un módulo (letra de unidad en mayúscula y minúscula): en pruebas, no comparar errores con `instanceof`, sino por `name`.
 - Un `sr-only` (absoluto) dentro de un contenedor con `overflow-x-auto` se sale y estira la página si el contenedor no es `relative`: revisar `scrollWidth` a 390 px.
+- Vitest no entrega el CSS crudo con `?raw`: para leer `tokens.css` en una prueba, `readFileSync(resolve(__dirname, …))` (ver `contraste.test.ts`).
+- Los escapes (`\s`) se pierden al pasar código por heredoc, `sed` o Python en Bash: para expresiones regulares usar Edit.
 - Las capturas de Playwright solo se pueden guardar dentro del repo (`.playwright-mcp/`, ignorado), no en el scratchpad.
 
 ## Glosario

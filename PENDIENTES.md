@@ -35,7 +35,7 @@
 - [x] Contraste: el color de la categoría solo va en el punto y el fondo del chip; el texto es `tinta` (T3.2) — 2026-11-09
 - [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
 - [x] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) con la regla por brecha — 2026-11-09
-- [ ] T5.4: fijar los tonos de amarillo, naranja y vinotinto del semáforo con prueba de contraste.
+- [x] T5.4: tonos del semáforo con prueba de contraste (naranja `#de781c`; amarillo con borde en la curva) — 2026-11-10
 - Seguridad y despliegue (helmet, argon2, purga de sesiones, dominio en la web, bundle) quedaron en T8.5; cerrar sesiones al desactivar, en T7.1.
 
 ## Fase 3 · Charter básico
@@ -56,10 +56,12 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 
 ## Fase 5 · Visualización
 
+Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md). Plan: [docs/planes/fase-5.md](docs/planes/fase-5.md). Sesiones: datos (Tasks 1–3, hecha) · ficha (Tasks 4–6) · portafolio y cierre (Tasks 7–9).
+
 - [ ] T5.1 · Resumen con KPIs y selector de corte
 - [ ] T5.2 · Curva S
 - [ ] T5.3 · Gantt
-- [ ] T5.4 · Avance por grupo y semáforos
+- [~] T5.4 · Semáforos (tonos y umbrales del charter hechos; sin bloque de avance por grupo, decisión del usuario)
 - [ ] T5.5 · Portafolio con avance
 
 ## Fase 6 · Complementos
@@ -82,7 +84,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** T4.5 (primer charter real, lo hace el líder de TI; anotar aquí los ajustes) y luego plan de la Fase 5 (curva S, KPIs y selector de corte). Pendientes menores vistos en la ronda: en el Gantt la etiqueta del corte («10 nov») se monta sobre la del mes; el aviso «Corte guardado» queda en el historial del navegador (reaparece al recargar). La prueba del portafolio «sin charters invita a crear el primero» no volvió a fallar; si reaparece, revisar si es el mismo problema de módulos duplicados.
+**Próxima tarea sugerida:** sesión 2 de la Fase 5 (Tasks 4–6 de [docs/planes/fase-5.md](docs/planes/fase-5.md)): selector de corte y modo histórico, curva S y Gantt. T4.5 se omitió por decisión del usuario. Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
 
 ## Registro de sesiones
 
@@ -99,3 +101,4 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 | 2026-11-09 | T3.3, cierre Fase 3 | Tasks 7–9: listas ordenables (teclado, botones y animación de Motion) para objetivos, supuestos y criterios, con contadores en el índice; menú de estado en la banda (cerrar y cancelar con confirmación), solo lectura con «Reabrir», vista de Admin y eliminar; la cola atiende 401 (a `/entrar`) y 409 `charter_cerrado` (solo lectura con el mensaje). Recorrido en el navegador a 1440 y 390 px: corregidos íconos SVG sin `<svg>` y el ícono apilado en `Boton` (preflight pone `svg` en bloque). 210 pruebas (84 shared · 68 API · 58 web), lint y build en verde. Commits 2cf872b, aa678da y 9c02708. Después, ajustes del motor de la revisión de la Fase 2 (`pct` no numérico = 0 e `id_duplicado`), 212 pruebas, commit bb4f4a9 |
 | 2026-11-10 | T4.1, T4.3, T4.2 | Plan de la Fase 4 (9 tareas en tres sesiones). Sesión 1: esquemas y cálculos de cortes (12,51 % / 12,47 % con la foto), API del cronograma (PUT del árbol completo, versión entera `cronograma_version` con 409, 400 por árbol inválido, más de 6 niveles o ids ajenos) y API de cortes (foto de la línea base, crear o editar por fecha, `fecha_futura`, `corte_anterior`, hojas eliminadas conservadas). Sesión 2: Gantt en la ficha con detalle A–J en línea, guardado automático a 800 ms, arrastre, teclado y escala Trimestre/Semestre/Año. 277 pruebas (99 shared · 92 API · 86 web), tipos y lint en verde; build y navegador quedan para la Task 9. Commits 637f872…ffae5c4 |
 | 2026-11-10 | T4.2, T4.4, cierre Fase 4 | Tasks 7–9: banda con cifras animadas (`Cifra`, Motion) y estado del proyecto, historial de cortes con editar y eliminar, pantalla Registrar corte (vencidas / en curso / resto, reclasifica al cambiar la fecha, aviso si baja el %, editar sobre la foto con «actividad eliminada», barra fija en celular). El borrador del cronograma sube a la ficha para que banda y Gantt compartan cálculo. Ronda de navegador a 1440 y 390 px: arreglado el desborde horizontal por un `sr-only` absoluto dentro de la tabla y cifras partidas. Prueba intermitente de aislamiento: `instanceof ErrorApi` fallaba por módulo duplicado en Windows; ahora compara por nombre. 291 pruebas, lint y build en verde |
+| 2026-11-10 | Fase 5 · sesión 1 | Diseño de la Fase 5 con compañero visual (selector de corte en banda, curva e historial; ficha a una fecha en solo lectura; sin bloque de avance por grupo; cortes guardados inmutables) y plan de 9 tareas. Tasks 1–3: proyección y lectura de la curva en el motor, resumen del portafolio con estado, vencidas y serie de cortes, umbrales en el detalle y en la ficha, prueba de contraste del semáforo (naranja `#de781c`). 314 pruebas y lint en verde. Commits 681d883…a29a80d |
