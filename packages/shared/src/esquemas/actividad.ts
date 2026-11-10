@@ -30,7 +30,16 @@ export const actividadEntrada = z.object({
     .optional(),
   inicio: fechaISO.nullable().optional(),
   fin: fechaISO.nullable().optional(),
-  responsables: z.array(z.string().trim().min(1)).optional(),
+  responsables: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(1)
+        .max(120, { error: 'El responsable puede tener máximo 120 caracteres' }),
+    )
+    .max(5, { error: 'Una actividad admite hasta 5 responsables' })
+    .optional(),
 })
 
 export type ActividadEntradaEsquema = z.infer<typeof actividadEntrada>
