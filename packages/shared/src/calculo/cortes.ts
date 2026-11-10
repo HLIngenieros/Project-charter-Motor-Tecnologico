@@ -41,17 +41,9 @@ export function terminacionesPorHoja(
   return fechas
 }
 
-/**
- * Totales del proyecto con la foto de un corte. Cada fila va como raíz suelta: el proyecto
- * pondera sobre las hojas, así que da lo mismo que el árbol completo.
- */
-export function totalesDeFoto(
-  foto: FilaFoto[],
-  fecha: FechaISO,
-  terminadas: Record<string, FechaISO> = {},
-  umbrales?: Umbrales,
-): ResultadoNodo {
-  const raices = construirArbol(
+/** Cada fila de la foto como raíz suelta: el proyecto pondera sobre las hojas, así que basta. */
+export function raicesDeFoto(foto: FilaFoto[]): NodoArbol[] {
+  return construirArbol(
     foto.map((f, i) => ({
       id: f.actividadId,
       padreId: null,
@@ -62,6 +54,19 @@ export function totalesDeFoto(
       fin: f.fin,
     })),
   )
+}
+
+/**
+ * Totales del proyecto con la foto de un corte. Cada fila va como raíz suelta: el proyecto
+ * pondera sobre las hojas, así que da lo mismo que el árbol completo.
+ */
+export function totalesDeFoto(
+  foto: FilaFoto[],
+  fecha: FechaISO,
+  terminadas: Record<string, FechaISO> = {},
+  umbrales?: Umbrales,
+): ResultadoNodo {
+  const raices = raicesDeFoto(foto)
   const avances: AvancesPorHoja = Object.fromEntries(
     foto.map((f) => [
       f.actividadId,

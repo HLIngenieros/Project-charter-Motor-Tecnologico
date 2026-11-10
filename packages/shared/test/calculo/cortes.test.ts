@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { construirArbol, recorrerHojas } from '../../src/calculo/arbol'
-import { hojasProgramadas, terminacionesPorHoja, totalesDeFoto } from '../../src/calculo/cortes'
+import {
+  hojasProgramadas,
+  raicesDeFoto,
+  terminacionesPorHoja,
+  totalesDeFoto,
+} from '../../src/calculo/cortes'
 import { actividadesFixture, fixture, idDe } from './fixture'
 
 describe('totalesDeFoto', () => {
@@ -88,5 +93,35 @@ describe('hojasProgramadas', () => {
       },
     ])
     expect(hojasProgramadas(raices).map((h) => h.id)).toEqual(['ok'])
+  })
+})
+
+describe('raicesDeFoto', () => {
+  it('pone cada fila como hoja suelta', () => {
+    const foto = [
+      {
+        actividadId: 'a',
+        item: '1.1',
+        nombre: 'A',
+        pct: 0.5,
+        peso: 0.4,
+        inicio: '2026-01-01',
+        fin: '2026-01-31',
+      },
+      {
+        actividadId: 'b',
+        item: '1.2',
+        nombre: 'B',
+        pct: 0,
+        peso: 0.6,
+        inicio: '2026-02-01',
+        fin: '2026-02-28',
+      },
+    ]
+    const raices = raicesDeFoto(foto)
+    expect(raices).toHaveLength(2)
+    expect(raices.every((r) => r.esHoja && r.nivel === 1)).toBe(true)
+    expect(raices.map((r) => r.id)).toEqual(['a', 'b'])
+    expect(raices[1]!.peso).toBe(0.6)
   })
 })

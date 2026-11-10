@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { construirArbol } from '../../src/calculo/arbol'
 import { calcularCronograma } from '../../src/calculo/cronograma'
-import { avancePorGrupo, curvaSPlaneada, curvaSReal } from '../../src/calculo/curvas'
+import {
+  avancePorGrupo,
+  curvaSPlaneada,
+  curvaSReal,
+  lecturaEn,
+  proyeccionAlRitmo,
+} from '../../src/calculo/curvas'
 import { aDia } from '../../src/calculo/fechas'
 import { actividadesFixture, fixture, idDe } from './fixture'
 
@@ -65,5 +71,83 @@ describe('avancePorGrupo', () => {
     })
     expect(grupos[0]!.pv).toBeCloseTo(r.nodos[idDe(20)]!.pv, 12)
     expect(grupos[0]!.ev).toBeCloseTo(r.nodos[idDe(20)]!.ev, 12)
+  })
+})
+
+describe('proyeccionAlRitmo', () => {
+  // Planeada lineal: 0 el 1 de enero, 1 el 31 de enero.
+  const planeada = Array.from({ length: 31 }, (_, i) => ({
+    fecha: `2026-01-${String(i + 1).padStart(2, '0')}`,
+    pv: i / 30,
+  }))
+
+  it('arranca en el último real y termina en el forecast', () => {
+    const p = proyeccionAlRitmo(
+      planeada,
+      { fecha: '2026-01-16', ev: 0.25 },
+      '2026-02-10',
+      '2026-01-31',
+    )
+    expect(p[0]).toEqual({ fecha: '2026-01-16', pv: 0.25 })
+    expect(p.at(-1)).toEqual({ fecha: '2026-02-10', pv: 1 })
+    for (let i = 1; i < p.length; i++) {
+      expect(aDia(p[i]!.fecha)).toBeGreaterThan(aDia(p[i - 1]!.fecha))
+      expect(p[i]!.pv).toBeGreaterThanOrEqual(p[i - 1]!.pv)
+    }
+  })
+
+  it('no proyecta un proyecto terminado ni sin forecast', () => {
+    expect(
+      proyeccionAlRitmo(planeada, { fecha: '2026-01-16', ev: 1 }, '2026-01-16', '2026-01-31'),
+    ).toEqual([])
+    expect(
+      proyeccionAlRitmo(planeada, { fecha: '2026-01-16', ev: 0.2 }, null, '2026-01-31'),
+    ).toEqual([])
+  })
+})
+
+describe('lecturaEn', () => {
+  const planeada = [
+    { fecha: '2026-01-01', pv: 0 },
+    { fecha: '2026-01-31', pv: 1 },
+  ]
+  const real = (fecha: string, ev: number) => ({
+    fecha,
+    pv: 0,
+    ev,
+    estado: 'al_dia' as const,
+    vencidas: 0,
+  })
+  const reales = [real('2026-01-10', 0.2), real('2026-01-20', 0.4)]
+  const proyeccion = [
+    { fecha: '2026-01-20', pv: 0.4 },
+    { fecha: '2026-02-20', pv: 1 },
+  ]
+
+  it('en un corte da sus datos', () => {
+    const l = lecturaEn('2026-01-10', planeada, reales, proyeccion)
+    expect(l.tipo).toBe('corte')
+    expect(l.ev).toBe(0.2)
+    expect(l.corte?.fecha).toBe('2026-01-10')
+  })
+
+  it('entre cortes interpola', () => {
+    const l = lecturaEn('2026-01-15', planeada, reales, proyeccion)
+    expect(l.tipo).toBe('entre_cortes')
+    expect(l.ev).toBeCloseTo(0.3, 6)
+    expect(l.pv).toBeCloseTo(14 / 30, 6)
+  })
+
+  it('antes del primer corte no hay real', () => {
+    const l = lecturaEn('2026-01-05', planeada, reales, proyeccion)
+    expect(l.tipo).toBe('plan')
+    expect(l.ev).toBeNull()
+  })
+
+  it('después del último sigue la proyección', () => {
+    const l = lecturaEn('2026-02-04', planeada, reales, proyeccion)
+    expect(l.tipo).toBe('proyeccion')
+    expect(l.ev).toBeCloseTo(0.4 + (0.6 * 15) / 31, 6)
+    expect(l.pv).toBe(1)
   })
 })
