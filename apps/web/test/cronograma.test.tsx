@@ -104,6 +104,23 @@ async function seccion() {
 }
 
 describe('cronograma de la ficha', () => {
+  it('usa los umbrales del charter para el semáforo', async () => {
+    // Al 16 ene el plan va en 51,6 % y el real en 45 %: brecha de 6,6 puntos.
+    const cronograma: CronogramaRespuesta = {
+      version: 1,
+      actividades: [
+        hoja('A', { nombre: 'Diseño', peso: 1, inicio: '2026-01-01', fin: '2026-01-31' }),
+      ],
+      ultimoCorte: { fecha: '2026-01-16', avances: { A: { pct: 0.45, terminadaEn: null } } },
+    }
+    abrir({
+      cronograma,
+      detalleCharter: { ...detalle, umbrales: { atencion: 5, riesgo: 25, atraso: 50 } },
+    })
+    const s = await seccion()
+    expect(s.getByText('En atención')).toBeInTheDocument()
+  })
+
   it('arma un árbol con el teclado y lo guarda en un solo PUT', async () => {
     const { llamadas, usuario } = abrir()
     const s = await seccion()

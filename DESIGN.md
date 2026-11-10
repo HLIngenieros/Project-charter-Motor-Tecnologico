@@ -23,7 +23,7 @@ colors:
   amarillo: "#d9a400"
   amarillo-suave: "#fbf3d9"
   amarillo-texto: "#7a5c00"
-  naranja: "#e07b1f"
+  naranja: "#de781c"
   naranja-suave: "#fcebdc"
   naranja-texto: "#9a4a0a"
   alerta: "#c4513c"

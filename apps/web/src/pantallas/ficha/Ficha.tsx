@@ -103,7 +103,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
   const soloLectura = !charter.permisos.editar
   /** Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). */
   const avisoAlVolver = (useLocation().state as { aviso?: string } | null)?.aviso
-  const borrador = useBorradorCronograma(charter.id, cola.encolar)
+  const borrador = useBorradorCronograma(charter.id, cola.encolar, charter.umbrales)
   const cortes = useCortes(charter.id)
   const esDueno = sesion.data?.id === charter.propietario.id
   const aviso = !esDueno ? (
