@@ -85,6 +85,7 @@ Pedido del usuario al aprobar (2026-11-09): más grande, dinámica, antes del cr
 - **Resumen a la derecha (fijo):** cómo queda el charter (chip, planeado, real, brecha), mini curva S con el nuevo punto, nota del corte, «Cancelar» y «Guardar corte».
 - Al cambiar la fecha se reclasifican las listas.
 - **Celular:** una columna; el resumen pasa a una barra fija abajo con real/planeado, estado y «Guardar corte».
+- **Como quedó al construirlo (Fase 4):** la fecha no puede ir antes del día siguiente al último corte ni después de hoy; si ya hay corte hoy, la pantalla ofrece editarlo. Las listas se reclasifican al cambiar la fecha, no al escribir (una fila no salta al llegar a 100). **Editar** (`?fecha=`, desde el historial) usa la foto del corte: fecha fija, actividades borradas rotuladas «actividad eliminada» y «Antes» = el corte inmediatamente anterior. Si el % baja frente al anterior, la fila avisa. La mini curva S del resumen queda para la Fase 5.
 
 ## 4. Vista celular (`celular.html`)
 
@@ -94,5 +95,5 @@ Las tres pantallas a 390 px, navegables dentro de marcos de teléfono.
 
 - Crear charter (flujo corto: nombre, categoría, razón de ser; el resto en la ficha).
 - Pegar el cronograma desde el Excel sobre el Gantt.
-- Ver la foto de un corte anterior desde el historial.
+- ~~Ver la foto de un corte anterior desde el historial~~ (hecho en la Fase 4: «Editar» abre su foto).
 - Vista de Admin (todos los charters, solo lectura) y catálogos.

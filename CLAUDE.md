@@ -72,14 +72,16 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-10 · Fase 4: el cronograma se guarda solo (800 ms tras el último cambio, por la cola de la ficha), no con botón; concurrencia con `charter.cronograma_version` entera (409 `cronograma_desactualizado`), no con `actualizado_en` · Claude (plan aprobado).
 - 2026-11-10 · PUT sobre una fecha con corte = editarlo (cambia % y nota, conserva la foto). Un corte nuevo no puede ser futuro ni anterior al último · Claude (plan aprobado).
 - 2026-11-10 · Gantt: la escala es una ventana de 3, 6 o 12 meses alrededor del corte; en el campo Actividad, Enter agrega debajo, Tab sangra y Mayús + Tab saca de nivel · Claude.
+- 2026-11-10 · Registrar corte: los grupos se rearman al cambiar la fecha, no al escribir; al editar, «Antes» es el corte anterior y se trabaja sobre la foto; la brecha mostrada no baja de 0 · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
 - **Fase 3 cerrada (2026-11-09).**
-- **Fase 4 en curso (2026-11-10):** plan en `docs/planes/fase-4.md`; Tasks 1–6 hechas (API de cronograma y cortes, Gantt en la ficha). Siguen las Tasks 7–9: banda con cifras e historial, pantalla Registrar corte y cierre de fase (al cerrar, actualizar `docs/arquitectura.md` §5.3, §6 y §7).
-- Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
+- **Fase 4 cerrada (2026-11-10).** Queda T4.5 (primer charter real, lo hace el líder de TI). Siguiente: plan de la Fase 5.
+- Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
+- Cortes web: historial en `pantallas/ficha/SeccionHistorial.tsx`; pantalla en `pantallas/corte/` (`RegistrarCorte` prepara las filas y monta `Formulario` con `key`; `clasificar.ts` puro; `FilaAvance`). Al guardar navega a la ficha con `state.aviso`. `Cifra` anima números con un `MotionValue`.
 - La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
 - Pruebas web: `test/simular-api.ts` simula `fetch` (la sesión de Ana va por defecto).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
@@ -110,6 +112,10 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Reordenar nodos con React (`insertBefore`) les quita el foco: tras mover, reenfocar explícitamente (ver `ListaEditable`).
 - Lint `react-hooks/set-state-in-effect`: nada de `setState` dentro de `useEffect`; derivar el estado o actualizarlo durante el render comparando con el valor previo (ver `DetalleActividad`).
 - Pruebas con debounce: `vi.useFakeTimers({ shouldAdvanceTime: true })` + `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })` y `act(() => vi.advanceTimersByTimeAsync(800))`. jsdom no trae `PointerEvent`: en la prueba se usa `MouseEvent`.
+
+- En Windows, vitest puede cargar dos copias de un módulo (letra de unidad en mayúscula y minúscula): en pruebas, no comparar errores con `instanceof`, sino por `name`.
+- Un `sr-only` (absoluto) dentro de un contenedor con `overflow-x-auto` se sale y estira la página si el contenedor no es `relative`: revisar `scrollWidth` a 390 px.
+- Las capturas de Playwright solo se pueden guardar dentro del repo (`.playwright-mcp/`, ignorado), no en el scratchpad.
 
 ## Glosario
 

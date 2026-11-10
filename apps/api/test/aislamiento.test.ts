@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { UsuarioSesion } from '../src/auth/sesiones'
 import { crearDb } from '../src/db/conexion'
 import { charter, usuario as tablaUsuario } from '../src/db/esquema'
-import { ErrorApi } from '../src/errores'
+import type { ErrorApi } from '../src/errores'
 import { cargarCharter, type ModoAcceso } from '../src/modulos/charters/acceso'
 import { exigirSesion } from '../src/auth/guardas'
 import { conSesion, cookieDe, datosRegistro, nuevaApp, registrar } from './ayudas'
@@ -38,7 +38,9 @@ async function errorDe(p: Promise<unknown>): Promise<ErrorApi> {
     () => null,
     (x: unknown) => x,
   )
-  expect(e).toBeInstanceOf(ErrorApi)
+  // Por nombre y no con instanceof: en Windows vitest a veces carga dos copias del módulo
+  // (la letra de unidad llega en mayúscula por una ruta y en minúscula por otra).
+  expect((e as Error).name).toBe('ErrorApi')
   return e as ErrorApi
 }
 

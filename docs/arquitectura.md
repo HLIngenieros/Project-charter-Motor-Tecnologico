@@ -123,6 +123,8 @@ Convenciones: identificadores `TEXT` con UUID v7 *(criterio técnico: ordenables
 | `corte` | id, charter_id, fecha (única por charter), nota, pv_proyecto, ev_proyecto, desv_proyecto |
 | `avance` | corte_id, actividad_id (sin clave foránea), item, nombre, pct_real, peso, inicio, fin |
 
+`charter.cronograma_version` (entero) sube con cada `PUT` del cronograma y sirve para detectar ediciones simultáneas (ver §7).
+
 - **Árbol:** `padre_id` + `orden`. El ítem (1, 1.1, 1.1.1…) se calcula, no se guarda. Una actividad sin hijas es **hoja**; con hijas, **agrupadora**. Peso, fechas y % real solo aplican a hojas; en una agrupadora esos campos se ignoran.
 - **Responsables:** texto libre (personas o roles); no son usuarios del sistema.
 - **Un corte es completo:** guarda el % real de **todas** las hojas programadas en ese momento. El formulario se precarga con los valores del corte anterior.
@@ -160,6 +162,9 @@ curvaSReal(cortes)                           → { fecha, ev }[]   // usa las fo
 avancePorGrupo(resultado)                    → PV vs EV por agrupadora de nivel 1
 validarCronograma(arbol)                     → avisos (suma de pesos, fechas, sin programar)
 cumplimientoIndicador(meta, valor)           → { pct, estado }
+hojasProgramadas(arbol)                      → hojas con peso > 0 y fechas válidas (las que entran en un corte)
+totalesDeFoto(foto, fecha, terminadas)       → totales del proyecto con la foto de un corte
+terminacionesPorHoja(cortes)                 → fecha del primer corte en que cada hoja llegó al 100 %
 ```
 
 - **Fechas:** se trabaja en días enteros desde una época, sin zona horaria. No se usa `Date` local para restar fechas.
@@ -185,7 +190,8 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 
 - **Guardado por bloques** *(criterio técnico)*: listas, cronograma, riesgos, indicadores y presupuesto se envían completos con `PUT`. Simplifica la edición en línea y el reordenamiento. El volumen es pequeño (un cronograma grande tiene unas 200 filas).
 - **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`. Con `modo = 'escritura'` exige que el usuario sea el dueño. Con `modo = 'lectura'` acepta al dueño o a un Admin. Si el charter es de otro, responde **404** (no 403), para no revelar que existe. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
-- **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `actualizado_en`; si no coincide, la API responde 409 y la web pide recargar. Esto cubre el caso de dos pestañas abiertas.
+- **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `version` (`charter.cronograma_version`); si no coincide, la API responde 409 `cronograma_desactualizado` y la web muestra «El cronograma cambió en otra pestaña» con «Recargar». No se usa `actualizado_en` porque los `PATCH` del encabezado lo cambian y darían falsos 409.
+- **Cortes:** `PUT /cortes/:fecha` crea el corte con la foto de la línea base vigente o, si ya existe en esa fecha, edita su % y su nota sin tocar la foto. Códigos propios: `fecha_futura`, `corte_anterior` (un corte nuevo no puede ir antes del último), `sin_hojas_programadas`, `actividad_invalida`; en el cronograma, `id_invalido` (id de otro charter).
 - **Errores:** formato único `{ error: { codigo, mensaje, campos? } }`, con mensajes en español.
 
 ## 8. Autenticación y seguridad
@@ -206,7 +212,8 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 | `/entrar`, `/registro` | Login y registro: una tarjeta centrada con la marca e ingreso animado |
 | `/` | **Portafolio:** tarjetas de mis charters con categoría, área, % real frente al planeado, semáforo y último corte. Filtros por estado, categoría y área |
 | `/charters/nuevo` | Creación rápida (nombre, categoría, área); después se completa en la ficha |
-| `/charters/:id` | **Ficha del charter**, con pestañas: Resumen · Definición · Cronograma · Cortes · Indicadores · Riesgos · Presupuesto |
+| `/charters/:id` | **Ficha del charter**: documento vivo en el orden de la hoja ID & TI, con índice lateral (ver `docs/pantallas.md`) |
+| `/charters/:id/corte` | **Registrar corte**; con `?fecha=` edita ese corte sobre su foto |
 | `/charters/:id/imprimir` | Vista A4 para exportar a PDF |
 | `/cuenta` | Cambiar nombre y clave |
 | `/admin/charters` | Todos los charters, en solo lectura (reutiliza la ficha sin controles de edición) |
@@ -218,8 +225,8 @@ La disposición y el detalle visual de cada pantalla se definen en la tarea T1.3
 
 - **Portafolio:** cada tarjeta muestra la situación **al último corte** (planeado y real a esa misma fecha, para no inventar atrasos). Si el último corte tiene más de 14 días o no hay cortes, se muestra una etiqueta "corte desactualizado". La API calcula y devuelve estos datos en `GET /charters` a partir de los totales guardados *(criterio técnico)*.
 - **Resumen:** KPIs animados (planeado, real, desviación, fecha proyectada), curva S, avance por grupo, Gantt compacto y selector de fecha de corte que recalcula todo en el cliente.
-- **Cronograma:** tabla-árbol editable en línea (crear, indentar, sacar de nivel, mover, eliminar), con columnas A–J editables y K–N calculadas al instante. El Gantt queda al lado y se sincroniza. Los avisos de validación se muestran en línea. Se guarda con un botón explícito y un indicador de "cambios sin guardar" *(criterio técnico: evita estados intermedios del árbol en la base)*.
-- **Cortes:** lista de cortes con su variación. Al registrar un corte se elige la fecha y se ve la lista de hojas precargada con el % anterior y su % planeado a esa fecha.
+- **Cronograma:** tabla-árbol editable en línea (crear, indentar, sacar de nivel, mover, eliminar), con columnas A–J editables y K–N calculadas al instante. El Gantt queda al lado y se sincroniza (arrastre de barras y extremos). Los avisos de validación se muestran en línea. Se **guarda solo**: el árbol completo se envía 800 ms después del último cambio por la cola de guardado de la ficha, y cada `PUT` lleva la versión que devolvió el anterior *(cambio en la Fase 4: la ficha es documento vivo y el Gantt se edita arrastrando)*.
+- **Cortes:** historial al final de la ficha (fecha, estado, planeado, real, brecha, nota; editar y eliminar). Registrar un corte muestra «solo lo que toca»: vencidas y en curso a la fecha elegida, el resto plegado, cada hoja precargada con el % del corte anterior y su planeado a esa fecha, y un resumen en vivo. La banda de la ficha muestra la situación actual (línea base vigente + avances del último corte, a la fecha de ese corte).
 - **Modo lectura:** el mismo componente de ficha recibe `soloLectura` y oculta los controles. Lo usan el Admin y los charters cerrados o cancelados.
 - **Indicadores:** el semáforo usa umbrales fijos (≥ 100 % verde, 80–99 % atención, < 80 % rojo); no se configuran por charter en la v1 *(criterio técnico)*.
 - **Responsive:** desde 360 px. En el celular la ficha usa pestañas deslizables, el cronograma muestra columnas reducidas y el Gantt se desplaza en horizontal. Registrar un corte debe ser cómodo en el celular.
@@ -275,6 +282,7 @@ Se usa una ruta de impresión con CSS `@page { size: A4 }`, al estilo del Inform
 | 2026-11-09 | Área como catálogo administrado; el Admin también puede tener charters propios | Claude |
 | 2026-11-09 | El Admin restablece claves (no hay correo) | Claude |
 | 2026-11-09 | Guardado por bloques con PUT; cronograma con guardado explícito | Claude |
+| 2026-11-10 | Cronograma con guardado automático (800 ms) y concurrencia por `cronograma_version`; reemplaza el guardado explícito | Claude |
 | 2026-11-09 | PDF por impresión del navegador | Claude |
 | 2026-11-09 | Cortes pasados usan su foto; situación actual y curva planeada usan la línea base vigente | Claude |
 | 2026-11-09 | Portafolio muestra la situación al último corte, con aviso si tiene más de 14 días | Claude |

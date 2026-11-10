@@ -62,7 +62,7 @@ export function SeccionHistorial({
       id: 'nota',
       titulo: 'Nota',
       celda: (c) => (
-        <span title={c.nota || undefined} className="block max-w-[28ch] truncate text-texto-2">
+        <span title={c.nota || undefined} className="block max-w-[22ch] truncate text-texto-2">
           {c.nota}
         </span>
       ),

@@ -19,7 +19,7 @@ export interface TablaProps<T> {
 
 export function Tabla<T>({ columnas, filas, claveFila, titulo, vacio }: TablaProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-tarjeta border border-linea bg-superficie">
+    <div className="relative overflow-x-auto rounded-tarjeta border border-linea bg-superficie">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">{titulo}</caption>
         <thead>
@@ -28,7 +28,7 @@ export function Tabla<T>({ columnas, filas, claveFila, titulo, vacio }: TablaPro
               <th
                 key={c.id}
                 scope="col"
-                className={`px-4 py-2.5 font-semibold text-texto-2 ${c.numerica ? 'text-right' : ''}`}
+                className={`px-4 py-2.5 font-semibold whitespace-nowrap text-texto-2 ${c.numerica ? 'text-right' : ''}`}
               >
                 {c.titulo}
               </th>
@@ -51,7 +51,7 @@ export function Tabla<T>({ columnas, filas, claveFila, titulo, vacio }: TablaPro
                 {columnas.map((c) => (
                   <td
                     key={c.id}
-                    className={`px-4 py-2.5 text-texto ${c.numerica ? 'cifra text-right text-tinta' : ''}`}
+                    className={`px-4 py-2.5 text-texto ${c.numerica ? 'cifra text-right whitespace-nowrap text-tinta' : ''}`}
                   >
                     {c.celda(f)}
                   </td>

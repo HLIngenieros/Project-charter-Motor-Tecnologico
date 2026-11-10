@@ -246,8 +246,12 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
                 className="flex min-h-11 w-full items-center border-t border-linea-2 px-4.5 text-left text-sm font-semibold text-institucional hover:bg-fondo/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-acento"
               >
                 {mostrarResto
-                  ? 'Ocultar las restantes'
-                  : `Mostrar las ${grupos.resto.length} restantes (terminadas o por iniciar)`}
+                  ? grupos.resto.length === 1
+                    ? 'Ocultar la restante'
+                    : 'Ocultar las restantes'
+                  : grupos.resto.length === 1
+                    ? 'Mostrar la restante (terminada o por iniciar)'
+                    : `Mostrar las ${grupos.resto.length} restantes (terminadas o por iniciar)`}
               </button>
             </Grupo>
           )}
@@ -306,7 +310,11 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
             Real <b className="text-tinta tabular-nums">{pct(proyecto.ev)}</b> de{' '}
             <b className="text-tinta tabular-nums">{pct(proyecto.pv)}</b> planeado
           </p>
-          <Boton type="submit" cargando={guardar.isPending} className="ml-auto">
+          <Boton
+            type="submit"
+            cargando={guardar.isPending}
+            className="ml-auto shrink-0 whitespace-nowrap"
+          >
             Guardar corte
           </Boton>
         </div>

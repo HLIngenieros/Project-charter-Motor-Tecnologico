@@ -49,9 +49,9 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 ## Fase 4 · Cronograma y cortes
 
 - [x] T4.1 · API de cronograma
-- [ ] T4.2 · Editor de cronograma A–J con cálculo vivo (hecho; falta la ronda de navegador de la Task 9)
+- [x] T4.2 · Editor de cronograma A–J con cálculo vivo — 2026-11-10
 - [x] T4.3 · API de cortes con foto de línea base
-- [ ] T4.4 · Pantalla de cortes
+- [x] T4.4 · Pantalla de cortes (banda con cifras, historial y Registrar corte) — 2026-11-10
 - [ ] T4.5 · Hito: primer charter real del líder de TI
 
 ## Fase 5 · Visualización
@@ -82,7 +82,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** Fase 4, sesión 3 de [docs/planes/fase-4.md](docs/planes/fase-4.md): Tasks 7 (banda con cifras e historial), 8 (Registrar corte, T4.4) y 9 (cierre: suite, build y ronda de navegador del Gantt). Revisar la prueba intermitente del portafolio «sin charters invita a crear el primero» (falló una vez en la suite completa).
+**Próxima tarea sugerida:** T4.5 (primer charter real, lo hace el líder de TI; anotar aquí los ajustes) y luego plan de la Fase 5 (curva S, KPIs y selector de corte). Pendientes menores vistos en la ronda: en el Gantt la etiqueta del corte («10 nov») se monta sobre la del mes; el aviso «Corte guardado» queda en el historial del navegador (reaparece al recargar). La prueba del portafolio «sin charters invita a crear el primero» no volvió a fallar; si reaparece, revisar si es el mismo problema de módulos duplicados.
 
 ## Registro de sesiones
 
@@ -98,3 +98,4 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 | 2026-11-09 | T3.2, T3.3 (parcial) | Fase 3, Tasks 4–6: tokens del semáforo, chips, formato es-CO, cliente de charters y aviso de conexión; portafolio con filtros en la URL, estados vacíos y diálogo de nuevo charter; ficha con banda fija, índice, edición en su sitio y cola de guardado serial (reintentar y aviso al cerrar). Sin semáforo ni curva en el portafolio hasta T5.5. 44 pruebas web, tipos, lint y build en verde. Commits 763ba0f, d8a46c1, 3e529e8. Revisado también el uso de agentes y del plugin superpowers: el usuario decidió no cambiar la configuración por ahora |
 | 2026-11-09 | T3.3, cierre Fase 3 | Tasks 7–9: listas ordenables (teclado, botones y animación de Motion) para objetivos, supuestos y criterios, con contadores en el índice; menú de estado en la banda (cerrar y cancelar con confirmación), solo lectura con «Reabrir», vista de Admin y eliminar; la cola atiende 401 (a `/entrar`) y 409 `charter_cerrado` (solo lectura con el mensaje). Recorrido en el navegador a 1440 y 390 px: corregidos íconos SVG sin `<svg>` y el ícono apilado en `Boton` (preflight pone `svg` en bloque). 210 pruebas (84 shared · 68 API · 58 web), lint y build en verde. Commits 2cf872b, aa678da y 9c02708. Después, ajustes del motor de la revisión de la Fase 2 (`pct` no numérico = 0 e `id_duplicado`), 212 pruebas, commit bb4f4a9 |
 | 2026-11-10 | T4.1, T4.3, T4.2 | Plan de la Fase 4 (9 tareas en tres sesiones). Sesión 1: esquemas y cálculos de cortes (12,51 % / 12,47 % con la foto), API del cronograma (PUT del árbol completo, versión entera `cronograma_version` con 409, 400 por árbol inválido, más de 6 niveles o ids ajenos) y API de cortes (foto de la línea base, crear o editar por fecha, `fecha_futura`, `corte_anterior`, hojas eliminadas conservadas). Sesión 2: Gantt en la ficha con detalle A–J en línea, guardado automático a 800 ms, arrastre, teclado y escala Trimestre/Semestre/Año. 277 pruebas (99 shared · 92 API · 86 web), tipos y lint en verde; build y navegador quedan para la Task 9. Commits 637f872…ffae5c4 |
+| 2026-11-10 | T4.2, T4.4, cierre Fase 4 | Tasks 7–9: banda con cifras animadas (`Cifra`, Motion) y estado del proyecto, historial de cortes con editar y eliminar, pantalla Registrar corte (vencidas / en curso / resto, reclasifica al cambiar la fecha, aviso si baja el %, editar sobre la foto con «actividad eliminada», barra fija en celular). El borrador del cronograma sube a la ficha para que banda y Gantt compartan cálculo. Ronda de navegador a 1440 y 390 px: arreglado el desborde horizontal por un `sr-only` absoluto dentro de la tabla y cifras partidas. Prueba intermitente de aislamiento: `instanceof ErrorApi` fallaba por módulo duplicado en Windows; ahora compara por nombre. 291 pruebas, lint y build en verde |
