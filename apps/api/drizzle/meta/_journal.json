@@ -15,6 +15,13 @@
       "when": 1794251197289,
       "tag": "0001_umbrales_por_brecha",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1794317225187,
+      "tag": "0002_cronograma_version",
+      "breakpoints": true
     }
   ]
 }

@@ -89,6 +89,8 @@ export const charter = sqliteTable(
     umbralAtencion: real('umbral_atencion').notNull().default(10),
     umbralRiesgo: real('umbral_riesgo').notNull().default(25),
     umbralAtraso: real('umbral_atraso').notNull().default(50),
+    // Sube con cada PUT del cronograma; detecta ediciones desde otra pestaña (409).
+    cronogramaVersion: integer('cronograma_version').notNull().default(0),
     ...tiempos,
   },
   (t) => [index('charter_propietario_idx').on(t.propietarioId)],

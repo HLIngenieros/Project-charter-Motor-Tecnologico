@@ -8,6 +8,7 @@ import { crearDb, type BaseDatos } from './db/conexion'
 import { ErrorApi, registrarErrores } from './errores'
 import { rutasCatalogos } from './modulos/catalogos/rutas'
 import { rutasCharters } from './modulos/charters/rutas'
+import { rutasCronograma } from './modulos/cronograma/rutas'
 
 export interface OpcionesApp {
   /** Por defecto, una base en memoria (útil en pruebas). */
@@ -36,6 +37,7 @@ export async function construirApp({ db, config }: OpcionesApp): Promise<Fastify
       await api.register(rutasAuth, { prefix: '/auth' })
       await api.register(rutasCatalogos)
       await api.register(rutasCharters, { prefix: '/charters' })
+      await api.register(rutasCronograma, { prefix: '/charters' })
     },
     { prefix: '/api' },
   )
