@@ -1,7 +1,7 @@
 import type { CharterDetalle, CharterEditar, EstadoCharter } from '@charter/shared'
 import { useQueryClient } from '@tanstack/react-query'
 import { Fragment, useCallback, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useLocation, useParams } from 'react-router'
 import { CLAVES, useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
 import { ErrorCliente } from '../../api/cliente'
 import { CLAVE_SESION, useSesion } from '../../api/sesion'
@@ -101,6 +101,8 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
     [encolar, mutateAsync],
   )
   const soloLectura = !charter.permisos.editar
+  /** Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). */
+  const avisoAlVolver = (useLocation().state as { aviso?: string } | null)?.aviso
   const borrador = useBorradorCronograma(charter.id, cola.encolar)
   const cortes = useCortes(charter.id)
   const esDueno = sesion.data?.id === charter.propietario.id
@@ -161,6 +163,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
             )}
           />
           <article className="flex min-w-0 flex-col gap-8 rounded-tarjeta border border-linea bg-superficie px-10 pt-7.5 pb-11 max-lg:-mx-4 max-lg:rounded-none max-lg:border-x-0 max-lg:px-4 max-lg:pt-6 max-lg:pb-8 max-sm:gap-9">
+            {avisoAlVolver && <Aviso tono="ok">{avisoAlVolver}</Aviso>}
             {aviso}
             <EstadoGuardadoMovil />
             {/* Al pasar a solo lectura o volver, los campos se rehacen desde los datos de la API. */}

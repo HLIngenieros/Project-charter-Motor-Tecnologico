@@ -6,7 +6,7 @@ import { aPorcentaje, diasPorPixel, type Rango } from './escala'
 export type Extremo = 'ambos' | 'inicio' | 'fin'
 
 /** Avance real de una hoja, del color de su semáforo. */
-const COLOR_AVANCE: Record<string, string> = {
+export const COLOR_AVANCE: Record<string, string> = {
   terminada: 'bg-ok',
   al_dia: 'bg-ok',
   en_atencion: 'bg-amarillo',

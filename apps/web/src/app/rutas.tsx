@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router'
+import { RegistrarCorte } from '../pantallas/corte/RegistrarCorte'
 import { Entrar } from '../pantallas/Entrar'
 import { Ficha } from '../pantallas/ficha/Ficha'
 import { Muestra } from '../pantallas/Muestra'
@@ -38,6 +39,14 @@ export function Rutas() {
         element={
           <RutaProtegida>
             <Ficha />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/charters/:id/corte"
+        element={
+          <RutaProtegida>
+            <RegistrarCorte />
           </RutaProtegida>
         }
       />
