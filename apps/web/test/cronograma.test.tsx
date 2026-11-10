@@ -1,11 +1,14 @@
 import type { ActividadEntrada, CharterDetalle, CronogramaRespuesta } from '@charter/shared'
-import { act, render, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Proveedores } from '../src/app/Proveedores'
 import { Rutas } from '../src/app/rutas'
 import { simularApi, type Llamada, type Respuesta } from './simular-api'
+
+// jsdom no trae PointerEvent: MouseEvent conserva clientX, que es lo que usa el arrastre.
+window.PointerEvent ??= MouseEvent as unknown as typeof PointerEvent
 
 beforeEach(() => vi.useFakeTimers({ shouldAdvanceTime: true }))
 afterEach(() => {
@@ -219,5 +222,60 @@ describe('cronograma de la ficha', () => {
     expect(s.queryByRole('button', { name: 'Agregar actividad' })).not.toBeInTheDocument()
     await usuario.click(s.getByText('Uno'))
     expect(s.queryByRole('textbox')).not.toBeInTheDocument()
+  })
+})
+
+describe('pista del Gantt', () => {
+  const programada = (): CronogramaRespuesta => ({
+    version: 2,
+    actividades: [
+      hoja('a', { nombre: 'Diseño', peso: 1, inicio: '2026-02-01', fin: '2026-02-20' }),
+    ],
+    ultimoCorte: { fecha: '2026-02-10', avances: {} },
+  })
+  const enviado = (llamadas: Llamada[]) =>
+    (puts(llamadas).at(-1)!.cuerpo as { actividades: ActividadEntrada[] }).actividades[0]!
+
+  it('con el teclado: flecha mueve la barra, Mayús + flecha cambia el fin', async () => {
+    const { llamadas, usuario } = abrir({ cronograma: programada() })
+    const s = await seccion()
+    const barra = s.getByRole('slider', { name: 'Fechas de Diseño' })
+    barra.focus()
+    await usuario.keyboard('{ArrowRight}')
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    expect(enviado(llamadas)).toMatchObject({ inicio: '2026-02-02', fin: '2026-02-21' })
+
+    await usuario.keyboard('{Shift>}{ArrowLeft}{/Shift}')
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(2))
+    expect(enviado(llamadas)).toMatchObject({ inicio: '2026-02-02', fin: '2026-02-20' })
+  })
+
+  it('arrastrar el extremo derecho cambia solo el fin', async () => {
+    const rect = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockReturnValue({ width: 1000, left: 0, top: 0, right: 1000, bottom: 36 } as DOMRect)
+    const { llamadas } = abrir({ cronograma: programada() })
+    const s = await seccion()
+    const asa = s.getByTestId('asa-fin-a')
+    fireEvent.pointerDown(asa, { clientX: 400, pointerId: 1, button: 0 })
+    fireEvent.pointerMove(asa, { clientX: 600, pointerId: 1 })
+    fireEvent.pointerUp(asa, { clientX: 600, pointerId: 1 })
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    const a = enviado(llamadas)
+    expect(a.inicio).toBe('2026-02-01')
+    expect(a.fin! > '2026-02-20').toBe(true)
+    rect.mockRestore()
+  })
+
+  it('en solo lectura la barra no se mueve', async () => {
+    abrir({
+      detalleCharter: { ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true } },
+      cronograma: programada(),
+    })
+    const s = await seccion()
+    expect(s.queryByRole('slider')).not.toBeInTheDocument()
   })
 })

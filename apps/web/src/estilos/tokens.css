@@ -44,6 +44,21 @@
 
   --shadow-dialogo: 0 24px 48px -12px rgb(11 31 51 / 0.28);
   --shadow-foco: 0 0 0 3px rgb(0 169 224 / 0.35);
+  --shadow-flota: 0 8px 20px -6px rgb(11 31 51 / 0.3);
 
   --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Fila del Gantt recién movida. */
+  --animate-destello: destello 1.2s var(--ease-salida);
+  @keyframes destello {
+    from {
+      background-color: rgb(0 169 224 / 0.16);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-destello {
+    animation: none;
+  }
 }

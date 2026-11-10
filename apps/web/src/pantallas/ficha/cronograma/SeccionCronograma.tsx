@@ -1,13 +1,16 @@
-import { aDia, type NodoArbol } from '@charter/shared'
-import { Fragment, useCallback, useMemo, useState, type KeyboardEvent } from 'react'
+import type { NodoArbol } from '@charter/shared'
+import { Fragment, useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react'
 import { v7 } from 'uuid'
 import { Aviso } from '../../../componentes/Aviso'
 import { Boton } from '../../../componentes/Boton'
 import { Cargando } from '../../../componentes/Cargando'
 import { Dialogo } from '../../../componentes/Dialogo'
+import { fechaCorta } from '../../../formato'
 import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
+import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
 import * as op from './operaciones'
+import { PistaGantt } from './PistaGantt'
 import { useBorradorCronograma } from './useBorradorCronograma'
 
 /** Filas visibles en preorden: las hijas de una agrupadora plegada no se muestran. */
@@ -52,11 +55,19 @@ export function SeccionCronograma({
   const filas = useMemo(() => visibles(b.arbol, plegadas), [b.arbol, plegadas])
   const avisoPesos = b.avisos.find((a) => a.codigo === 'pesos_no_suman_100')
 
-  const rango = useMemo(() => {
-    const p = b.calculo.proyecto
-    if (!p.inicio || !p.fin) return null
-    return { desde: aDia(p.inicio), dias: aDia(p.fin) - aDia(p.inicio) + 1 }
-  }, [b.calculo.proyecto])
+  const [escala, setEscala] = useState<Escala>('semestre')
+  const [destello, setDestello] = useState<string | null>(null)
+  const rango = useMemo(
+    () => rangoVisible(b.calculo.proyecto, escala, b.fechaCalculo),
+    [b.calculo.proyecto, escala, b.fechaCalculo],
+  )
+  const marcas = useMemo(() => marcasDe(rango, escala), [rango, escala])
+  const corte = aPorcentaje(b.fechaCalculo, rango)
+  useEffect(() => {
+    if (!destello) return
+    const t = setTimeout(() => setDestello(null), 1200)
+    return () => clearTimeout(t)
+  }, [destello])
 
   const agregar = useCallback(
     (despuesDe: string | null) => {
@@ -112,25 +123,20 @@ export function SeccionCronograma({
     )
   }
 
-  const pista = (n: NodoArbol) => {
-    const r = b.calculo.nodos[n.id]
-    if (!rango || !r?.inicio || !r.fin) return null
-    const izq = ((aDia(r.inicio) - rango.desde) / rango.dias) * 100
-    const ancho = ((aDia(r.fin) - aDia(r.inicio) + 1) / rango.dias) * 100
-    return (
-      <div className="relative h-full min-h-9">
-        <span
-          className={`absolute rounded ${n.esHoja ? 'top-[11px] h-3.5 bg-barra' : 'top-[15px] h-[7px] bg-tinta/18'}`}
-          style={{ left: `${izq}%`, width: `${ancho}%` }}
-        >
-          <span
-            className="absolute inset-y-0 left-0 rounded bg-tinta/70"
-            style={{ width: `${r.ev * 100}%` }}
-          />
-        </span>
-      </div>
-    )
-  }
+  const pista = (n: NodoArbol) => (
+    <PistaGantt
+      nodo={n}
+      resultado={b.calculo.nodos[n.id]}
+      rango={rango}
+      fechaCorte={b.fechaCalculo}
+      marcas={marcas}
+      soloLectura={soloLectura}
+      alMover={(dias, extremo) => {
+        aplicar((a) => op.moverFechas(a, n.id, dias, extremo))
+        setDestello(n.id)
+      }}
+    />
+  )
 
   return (
     <section id="cronograma" aria-labelledby="titulo-cronograma" className="scroll-mt-28">
@@ -140,9 +146,32 @@ export function SeccionCronograma({
         </h2>
         {!soloLectura && (
           <p className="text-[0.8125rem] text-texto-2 max-md:hidden">
-            Haz clic en una actividad para editar su detalle.
+            Arrastra una barra para mover sus fechas; sus extremos cambian el inicio o el fin.
           </p>
         )}
+        <div
+          role="group"
+          aria-label="Escala"
+          className="ml-auto inline-flex rounded-control bg-fondo p-[3px]"
+        >
+          {(
+            [
+              ['trimestre', 'Trimestre'],
+              ['semestre', 'Semestre'],
+              ['anio', 'Año'],
+            ] as const
+          ).map(([valor, texto]) => (
+            <button
+              key={valor}
+              type="button"
+              aria-pressed={escala === valor}
+              onClick={() => setEscala(valor)}
+              className="rounded-[6px] px-3 py-1 text-[0.8125rem] font-semibold text-texto-2 aria-pressed:bg-superficie aria-pressed:text-tinta aria-pressed:shadow-sm focus-visible:outline-2 focus-visible:outline-acento"
+            >
+              {texto}
+            </button>
+          ))}
+        </div>
       </div>
 
       {b.conflicto && (
@@ -174,7 +203,36 @@ export function SeccionCronograma({
             <div className="px-2.5">Actividad</div>
             <div className="px-2.5 text-right max-md:hidden">Peso</div>
             <div className="px-2.5 max-md:hidden">Estado</div>
-            <div className="px-2.5">Fechas</div>
+            <div className="relative h-8 overflow-hidden" aria-label="Fechas">
+              <span className="sr-only">Fechas</span>
+              {marcas.map((m) => (
+                <Fragment key={m.fecha}>
+                  <span
+                    aria-hidden
+                    className="absolute inset-y-0 border-l border-linea-2"
+                    style={{ left: `${aPorcentaje(m.fecha, rango)}%` }}
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute top-2 pl-1.5 text-[0.71875rem] font-normal"
+                    style={{ left: `${aPorcentaje(m.fecha, rango)}%` }}
+                  >
+                    {m.etiqueta}
+                  </span>
+                </Fragment>
+              ))}
+              {corte >= 0 && corte <= 100 && (
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 z-[2] -ml-px w-0.5 bg-acento"
+                  style={{ left: `${corte}%` }}
+                >
+                  <span className="absolute top-[7px] left-1.5 rounded-[3px] bg-fondo px-1 text-[0.6875rem] font-semibold whitespace-nowrap text-[#00759c]">
+                    {fechaCorta(b.fechaCalculo).replace(/ \d{4}$/, '')}
+                  </span>
+                </span>
+              )}
+            </div>
           </div>
 
           {filas.length === 0 && (
@@ -190,7 +248,7 @@ export function SeccionCronograma({
                 avisos={b.avisos.filter((a) => a.actividadId === n.id)}
                 abierta={abierta === n.id}
                 plegada={plegadas.has(n.id)}
-                destello={false}
+                destello={destello === n.id}
                 pista={pista(n)}
                 alAbrir={() => setAbierta((x) => (x === n.id ? null : n.id))}
                 alPlegar={() =>
