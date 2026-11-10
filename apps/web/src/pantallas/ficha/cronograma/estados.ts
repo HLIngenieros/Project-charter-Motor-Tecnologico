@@ -17,7 +17,10 @@ export function tonoDe(estado: Estado): TonoChip {
 }
 
 /** Una agrupadora con hojas vencidas lo dice antes que su estado. */
-export function chipDe(r: ResultadoNodo, esHoja: boolean): { tono: TonoChip; texto: string } {
+export function chipDe(
+  r: Pick<ResultadoNodo, 'estado' | 'vencidas'>,
+  esHoja: boolean,
+): { tono: TonoChip; texto: string } {
   if (!esHoja && r.vencidas > 0) {
     return { tono: 'vencida', texto: r.vencidas === 1 ? '1 vencida' : `${r.vencidas} vencidas` }
   }

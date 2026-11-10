@@ -1,10 +1,5 @@
-import type {
-  CharterDetalle,
-  CharterEditar,
-  CronogramaRespuesta,
-  EstadoCharter,
-} from '@charter/shared'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import type { CharterDetalle, CharterEditar, EstadoCharter } from '@charter/shared'
+import { useQueryClient } from '@tanstack/react-query'
 import { Fragment, useCallback, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { CLAVES, useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
@@ -18,14 +13,21 @@ import { BandaEstado } from './BandaEstado'
 import { ContextoGuardado, useColaGuardado, type AlFallar } from './colaGuardado'
 import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFicha'
 import { MenuCharter } from './MenuCharter'
+import { useCortes } from '../../api/cronograma'
 import { SeccionCronograma } from './cronograma/SeccionCronograma'
+import { useBorradorCronograma } from './cronograma/useBorradorCronograma'
+import { SeccionHistorial } from './SeccionHistorial'
 import { SeccionEncabezado } from './SeccionEncabezado'
 import { SeccionObjetivos } from './SeccionObjetivos'
 import { SeccionRazon } from './SeccionRazon'
 import { SeccionSupuestos } from './SeccionSupuestos'
 
 /** Solo las secciones ya construidas; las de fases siguientes se suman aquí. */
-function secciones({ listas }: CharterDetalle, actividades?: number): SeccionIndice[] {
+function secciones(
+  { listas }: CharterDetalle,
+  actividades?: number,
+  cortes?: number,
+): SeccionIndice[] {
   return [
     { id: 'encabezado', titulo: 'Encabezado' },
     { id: 'razon', titulo: 'Razón de ser' },
@@ -36,6 +38,7 @@ function secciones({ listas }: CharterDetalle, actividades?: number): SeccionInd
       titulo: 'Supuestos y éxito',
       cuenta: listas.supuesto.length + listas.criterio_exito.length,
     },
+    { id: 'cortes', titulo: 'Cortes', cuenta: cortes },
   ]
 }
 
@@ -81,11 +84,6 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
     [cliente, charter.id],
   )
   const cola = useColaGuardado(alFallar)
-  // Solo lee la caché que llena la sección Cronograma (no hace su propia petición).
-  const cronograma = useQuery<CronogramaRespuesta>({
-    queryKey: CLAVES.cronograma(charter.id),
-    enabled: false,
-  })
   const { encolar } = cola
   const { mutateAsync } = editar
 
@@ -103,6 +101,8 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
     [encolar, mutateAsync],
   )
   const soloLectura = !charter.permisos.editar
+  const borrador = useBorradorCronograma(charter.id, cola.encolar)
+  const cortes = useCortes(charter.id)
   const esDueno = sesion.data?.id === charter.propietario.id
   const aviso = !esDueno ? (
     <Aviso>Charter de {charter.propietario.nombre} · solo lectura</Aviso>
@@ -133,6 +133,12 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
         arriba={
           <BandaEstado
             nombre={charter.nombre}
+            situacion={
+              borrador.arbol.length > 0
+                ? { proyecto: borrador.calculo.proyecto, fechaCorte: borrador.fechaCorte }
+                : undefined
+            }
+            registrarCorte={soloLectura ? undefined : `/charters/${charter.id}/corte`}
             acciones={
               esDueno && (
                 <MenuCharter
@@ -147,7 +153,13 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
         }
       >
         <div className="grid gap-8 lg:grid-cols-[216px_minmax(0,1fr)]">
-          <IndiceFicha secciones={secciones(charter, cronograma.data?.actividades.length)} />
+          <IndiceFicha
+            secciones={secciones(
+              charter,
+              borrador.cargando ? undefined : borrador.acts.length,
+              cortes.data?.length,
+            )}
+          />
           <article className="flex min-w-0 flex-col gap-8 rounded-tarjeta border border-linea bg-superficie px-10 pt-7.5 pb-11 max-lg:-mx-4 max-lg:rounded-none max-lg:border-x-0 max-lg:px-4 max-lg:pt-6 max-lg:pb-8 max-sm:gap-9">
             {aviso}
             <EstadoGuardadoMovil />
@@ -166,8 +178,9 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
                 soloLectura={soloLectura}
                 derecha={<SeccionObjetivos charter={charter} soloLectura={soloLectura} />}
               />
-              <SeccionCronograma charterId={charter.id} soloLectura={soloLectura} />
+              <SeccionCronograma borrador={borrador} soloLectura={soloLectura} />
               <SeccionSupuestos charter={charter} soloLectura={soloLectura} />
+              <SeccionHistorial charterId={charter.id} soloLectura={soloLectura} />
             </Fragment>
           </article>
         </div>

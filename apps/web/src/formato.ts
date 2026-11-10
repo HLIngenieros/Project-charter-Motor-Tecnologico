@@ -32,6 +32,11 @@ export function porcentaje(fraccion: number, decimales = 1): string {
   return `${texto} %`
 }
 
+/** Brecha en puntos porcentuales: `0.175` → `'17,5 pts'`. */
+export function puntos(fraccion: number): string {
+  return porcentaje(Math.abs(fraccion)).replace(' %', ' pts')
+}
+
 /** Fecha de hoy en el navegador, `YYYY-MM-DD`. */
 export function hoyISO(): string {
   return fechaLocal(new Date())

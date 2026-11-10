@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ErrorCliente } from '../../../api/cliente'
 import { useCronograma, useGuardarCronograma } from '../../../api/cronograma'
 import { hoyISO } from '../../../formato'
-import { useGuardado } from '../colaGuardado'
+import type { ColaGuardado } from '../colaGuardado'
 
 /** Espera tras el último cambio antes de enviar el árbol (una ráfaga de arrastres = un PUT). */
 export const ESPERA_GUARDADO = 800
@@ -27,6 +27,8 @@ export interface BorradorCronograma {
   avisos: Aviso[]
   avances: AvancesPorHoja
   fechaCalculo: FechaISO
+  /** Fecha del último corte; null si aún no hay cortes. */
+  fechaCorte: FechaISO | null
   aplicar(op: (a: ActividadEntrada[]) => ActividadEntrada[]): void
   conflicto: boolean
   recargar(): void
@@ -34,12 +36,14 @@ export interface BorradorCronograma {
 
 /**
  * Copia local del cronograma: se edita al instante y se guarda completa por la cola de la
- * ficha. La versión vigente vive en un ref, así cada PUT usa la que devolvió el anterior.
+ * ficha (`encolar`). La versión vigente vive en un ref, así cada PUT usa la que devolvió el anterior.
  */
-export function useBorradorCronograma(id: string): BorradorCronograma {
+export function useBorradorCronograma(
+  id: string,
+  encolar: ColaGuardado['encolar'],
+): BorradorCronograma {
   const consulta = useCronograma(id)
   const { mutateAsync } = useGuardarCronograma(id)
-  const { encolar } = useGuardado()
   /** Lo editado aquí; null mientras manda lo que trae la API (al cargar o recargar). */
   const [local, setLocal] = useState<ActividadEntrada[] | null>(null)
   const [conflicto, setConflicto] = useState(false)
@@ -127,6 +131,7 @@ export function useBorradorCronograma(id: string): BorradorCronograma {
     avisos,
     avances,
     fechaCalculo,
+    fechaCorte: ultimoCorte?.fecha ?? null,
     aplicar,
     conflicto,
     recargar,

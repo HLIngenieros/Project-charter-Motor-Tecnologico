@@ -18,6 +18,17 @@ const VARIANTES: Record<VarianteBoton, string> = {
   peligro: 'bg-alerta text-white hover:bg-[#a9432f] disabled:bg-alerta/60',
 }
 
+/** Clases de un botón, para usarlas también en enlaces con forma de botón. */
+export function clasesBoton(variante: VarianteBoton = 'primario', className = ''): string {
+  return [
+    'relative inline-flex min-h-10 items-center justify-center gap-2 rounded-control px-4',
+    'text-[0.9375rem] font-semibold transition-colors duration-150 disabled:cursor-not-allowed',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento',
+    VARIANTES[variante],
+    className,
+  ].join(' ')
+}
+
 export function Boton({
   variante = 'primario',
   cargando = false,

@@ -11,7 +11,7 @@ import { COLUMNAS, FilaGantt } from './FilaGantt'
 import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
 import * as op from './operaciones'
 import { PistaGantt } from './PistaGantt'
-import { useBorradorCronograma } from './useBorradorCronograma'
+import type { BorradorCronograma } from './useBorradorCronograma'
 
 /** Filas visibles en preorden: las hijas de una agrupadora plegada no se muestran. */
 function visibles(arbol: NodoArbol[], plegadas: Set<string>): NodoArbol[] {
@@ -39,13 +39,12 @@ const Mas = () => (
 )
 
 export function SeccionCronograma({
-  charterId,
+  borrador: b,
   soloLectura,
 }: {
-  charterId: string
+  borrador: BorradorCronograma
   soloLectura: boolean
 }) {
-  const b = useBorradorCronograma(charterId)
   const [abierta, setAbierta] = useState<string | null>(null)
   const [enfocar, setEnfocar] = useState<string | null>(null)
   const [plegadas, setPlegadas] = useState<Set<string>>(new Set())

@@ -15,6 +15,11 @@ const TONOS: Record<TonoChip, { fondo: string; texto: string; punto: string }> =
   neutro: { fondo: 'bg-fondo', texto: 'text-texto-2', punto: 'bg-texto-3' },
 }
 
+/** Color de texto legible del tono (para cifras que acompañan al semáforo). */
+export function textoTono(tono: TonoChip): string {
+  return tono === 'neutro' ? 'text-tinta' : TONOS[tono].texto
+}
+
 const BASE =
   'inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[0.78125rem] leading-5 font-semibold'
 
