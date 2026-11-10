@@ -14,6 +14,9 @@ import { api } from './cliente'
 export const CLAVES = {
   charters: ['charters'] as const,
   charter: (id: string) => ['charter', id] as const,
+  cronograma: (id: string) => ['cronograma', id] as const,
+  cortes: (id: string) => ['cortes', id] as const,
+  corte: (id: string, fecha: string) => ['corte', id, fecha] as const,
   categorias: ['categorias'] as const,
   areas: ['areas'] as const,
 }
