@@ -30,6 +30,7 @@ function charter(p: Partial<CharterResumen> & { id: string; nombre: string }): C
     area: null,
     actualizadoEn: '2026-11-01T10:00:00.000Z',
     ultimoCorte: null,
+    cortes: [],
     ...p,
   }
 }
@@ -40,7 +41,13 @@ const tres = [
     id: 'c2',
     nombre: 'Plataforma de control de obra',
     responsable: 'Luis Gómez',
-    ultimoCorte: { fecha: sumarDias(hoyISO(), -30), pv: 0.4, ev: 0.2 },
+    ultimoCorte: {
+      fecha: sumarDias(hoyISO(), -30),
+      pv: 0.4,
+      ev: 0.2,
+      estado: 'en_riesgo',
+      vencidas: 0,
+    },
   }),
   charter({ id: 'c3', nombre: 'Consulta de especificaciones', codigo: 'C1' }),
 ]

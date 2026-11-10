@@ -243,3 +243,29 @@ describe('acceso a los cortes', () => {
     expect((await guardarCorte(id, '2026-02-16', { avances: [] }, beto)).statusCode).toBe(404)
   })
 })
+
+describe('resumen del portafolio', () => {
+  const resumen = async (id: string) =>
+    (await app.inject({ method: 'GET', url: '/api/charters', headers: ana }))
+      .json<CharterResumen[]>()
+      .find((c) => c.id === id)!
+
+  it('trae estado, vencidas y la serie de cortes guardados', async () => {
+    const id = await conCronograma()
+    await guardarCorte(id, '2026-02-01', { avances: [{ actividadId: 'A', pct: 0.2 }] })
+    await guardarCorte(id, '2026-03-15', { avances: [{ actividadId: 'A', pct: 0.5 }] })
+    const c = await resumen(id)
+    expect(c.cortes.map((k) => k.fecha)).toEqual(['2026-02-01', '2026-03-15'])
+    // A venció el 28 feb sin el 100 %.
+    expect(c.ultimoCorte).toMatchObject({ fecha: '2026-03-15', estado: 'atrasada', vencidas: 1 })
+  })
+
+  it('un cambio del cronograma no altera lo guardado', async () => {
+    const id = await conCronograma()
+    await guardarCorte(id, '2026-02-01', { avances: [{ actividadId: 'A', pct: 0.2 }] })
+    const antes = (await resumen(id)).ultimoCorte!
+    const cambiado = base().map((a) => (a.id === 'A' ? { ...a, fin: '2026-06-30' } : a))
+    await guardarCronograma(id, cambiado)
+    expect((await resumen(id)).ultimoCorte).toEqual(antes)
+  })
+})

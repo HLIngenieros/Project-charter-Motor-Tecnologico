@@ -41,6 +41,7 @@ const base: CharterDetalle = {
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
+  umbrales: { atencion: 10, riesgo: 25, atraso: 50 },
 }
 
 /** Simula la API de un charter: GET devuelve el detalle y PATCH lo actualiza. */

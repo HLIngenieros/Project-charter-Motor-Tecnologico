@@ -23,6 +23,7 @@ import {
   type FilaCharter,
 } from '../../db/esquema'
 import { ErrorApi } from '../../errores'
+import { listarCortes } from '../cortes/servicio'
 
 const ESTADOS_CERRADOS = new Set<FilaCharter['estado']>(['cerrado', 'cancelado'])
 
@@ -87,8 +88,8 @@ export function listarMisCharters(db: BaseDatos, usuarioId: string): CharterResu
     .all()
   if (filas.length === 0) return []
 
-  // El primer corte de cada charter en orden descendente de fecha es el último.
-  const ultimos = new Map<string, CharterResumen['ultimoCorte']>()
+  // Planeado y real guardados; estado y vencidas salen de la foto de cada corte.
+  const series = new Map<string, CharterResumen['cortes']>()
   const cortes = db
     .select({
       charterId: corte.charterId,
@@ -103,10 +104,18 @@ export function listarMisCharters(db: BaseDatos, usuarioId: string): CharterResu
         filas.map((f) => f.charter.id),
       ),
     )
-    .orderBy(desc(corte.fecha))
+    .orderBy(asc(corte.fecha))
     .all()
   for (const c of cortes) {
-    if (!ultimos.has(c.charterId)) ultimos.set(c.charterId, { fecha: c.fecha, pv: c.pv, ev: c.ev })
+    const serie = series.get(c.charterId) ?? []
+    serie.push({ fecha: c.fecha, pv: c.pv, ev: c.ev })
+    series.set(c.charterId, serie)
+  }
+  const ultimoDe = (c: FilaCharter): CharterResumen['ultimoCorte'] => {
+    const ultimo = series.get(c.id)?.at(-1)
+    if (!ultimo) return null
+    const r = listarCortes(db, c).find((k) => k.fecha === ultimo.fecha)
+    return { ...ultimo, estado: r?.estado ?? 'sin_programar', vencidas: r?.vencidas ?? 0 }
   }
 
   return filas.map(({ charter: c, categoria: cat, area: ar }) => ({
@@ -118,7 +127,8 @@ export function listarMisCharters(db: BaseDatos, usuarioId: string): CharterResu
     categoria: cat ? aCategoria(cat) : null,
     area: ar ? aArea(ar) : null,
     actualizadoEn: c.actualizadoEn,
-    ultimoCorte: ultimos.get(c.id) ?? null,
+    ultimoCorte: ultimoDe(c),
+    cortes: series.get(c.id) ?? [],
   }))
 }
 
@@ -180,6 +190,11 @@ export function detalleCharter(
     propietario,
     listas,
     permisos: { editar: esDueno && !cerrado, reabrir: esDueno && cerrado },
+    umbrales: {
+      atencion: fila.umbralAtencion,
+      riesgo: fila.umbralRiesgo,
+      atraso: fila.umbralAtraso,
+    },
   }
 }
 

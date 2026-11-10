@@ -160,7 +160,24 @@ describe('listar charters', () => {
       ])
       .run()
     const [c] = (await pedir('GET', '/api/charters', ana)).json<CharterResumen[]>()
-    expect(c!.ultimoCorte).toEqual({ fecha: '2026-11-01', pv: 0.4, ev: 0.3 })
+    expect(c!.ultimoCorte).toMatchObject({ fecha: '2026-11-01', pv: 0.4, ev: 0.3, vencidas: 0 })
+    expect(c!.cortes).toEqual([
+      { fecha: '2026-10-01', pv: 0.2, ev: 0.2 },
+      { fecha: '2026-11-01', pv: 0.4, ev: 0.3 },
+    ])
+  })
+
+  it('sin cortes trae la serie vacía', async () => {
+    await crearCharterPrueba(app, ana)
+    const [c] = (await pedir('GET', '/api/charters', ana)).json<CharterResumen[]>()
+    expect(c!.ultimoCorte).toBeNull()
+    expect(c!.cortes).toEqual([])
+  })
+
+  it('el detalle trae los umbrales del charter', async () => {
+    const id = await crearCharterPrueba(app, ana)
+    const d = (await pedir('GET', `/api/charters/${id}`, ana)).json<CharterDetalle>()
+    expect(d.umbrales).toEqual({ atencion: 10, riesgo: 25, atraso: 50 })
   })
 })
 

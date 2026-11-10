@@ -1,3 +1,5 @@
+import type { Estado, Umbrales } from '../calculo/cronograma'
+import type { FechaISO } from '../calculo/tipos'
 import { z } from './zod'
 
 export const ESTADOS_CHARTER = ['activo', 'pausado', 'cerrado', 'cancelado'] as const
@@ -104,7 +106,16 @@ export interface CharterResumen {
   categoria: CategoriaPublica | null
   area: AreaPublica | null
   actualizadoEn: string
-  ultimoCorte: { fecha: string; pv: number; ev: number } | null
+  /** Totales guardados del último corte (no se recalculan con el cronograma actual). */
+  ultimoCorte: {
+    fecha: FechaISO
+    pv: number
+    ev: number
+    estado: Estado
+    vencidas: number
+  } | null
+  /** Planeado y real guardados de cada corte, por fecha ascendente. */
+  cortes: { fecha: FechaISO; pv: number; ev: number }[]
 }
 
 export interface CharterDetalle {
@@ -124,4 +135,6 @@ export interface CharterDetalle {
   propietario: { id: string; nombre: string }
   listas: Record<TipoLista, ItemLista[]>
   permisos: { editar: boolean; reabrir: boolean }
+  /** Umbrales del semáforo, en puntos de brecha. */
+  umbrales: Umbrales
 }
