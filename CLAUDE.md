@@ -69,12 +69,17 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-09 · Repartir cada fase en sesiones equilibradas · Usuario.
 - 2026-11-09 · Portafolio: con corte, estado vacío y barra neutra hasta T5.5; sin corte, «editado el …» (el resumen no trae `creadoEn`). En celular el estado de guardado se ve sobre la hoja para poder reintentar · Claude.
 - 2026-11-09 · Listas de la ficha con campos propios (no `TextoEditable`): necesitan Enter, Retroceso y Alt + flechas; un ítem vacío desaparece al salir · Claude.
+- 2026-11-10 · Fase 4: el cronograma se guarda solo (800 ms tras el último cambio, por la cola de la ficha), no con botón; concurrencia con `charter.cronograma_version` entera (409 `cronograma_desactualizado`), no con `actualizado_en` · Claude (plan aprobado).
+- 2026-11-10 · PUT sobre una fecha con corte = editarlo (cambia % y nota, conserva la foto). Un corte nuevo no puede ser futuro ni anterior al último · Claude (plan aprobado).
+- 2026-11-10 · Gantt: la escala es una ventana de 3, 6 o 12 meses alrededor del corte; en el campo Actividad, Enter agrega debajo, Tab sangra y Mayús + Tab saca de nivel · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
-- **Fase 3 cerrada (2026-11-09).** Siguiente: Fase 4 (cronograma y cortes), empezando por su plan detallado. Los ajustes del motor de la revisión de la Fase 2 ya están hechos.
+- **Fase 3 cerrada (2026-11-09).**
+- **Fase 4 en curso (2026-11-10):** plan en `docs/planes/fase-4.md`; Tasks 1–6 hechas (API de cronograma y cortes, Gantt en la ficha). Siguen las Tasks 7–9: banda con cifras e historial, pantalla Registrar corte y cierre de fase (al cerrar, actualizar `docs/arquitectura.md` §5.3, §6 y §7).
+- Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
 - La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
 - Pruebas web: `test/simular-api.ts` simula `fetch` (la sesión de Ana va por defecto).
 - Hallazgo: en el Excel la jerarquía se deduce de las fórmulas de peso (G), no del esquema de filas (roto en 1.3.1 y 1.3.2). Con esa regla da 12,51 % / 12,47 %.
@@ -103,6 +108,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Tailwind: nada de clases armadas con plantillas ni `bg-[url(...)]` con comillas; la flecha del `select` va en `style` (`FLECHA` de `Selector.tsx`).
 - El preflight de Tailwind pone `svg` en `display: block`: un ícono junto a texto necesita un contenedor flex (`Boton` ya lo trae). Un `<path>` suelto fuera de `<svg>` solo se nota en la consola («tag unrecognized»): revisarla en la ronda de navegador.
 - Reordenar nodos con React (`insertBefore`) les quita el foco: tras mover, reenfocar explícitamente (ver `ListaEditable`).
+- Lint `react-hooks/set-state-in-effect`: nada de `setState` dentro de `useEffect`; derivar el estado o actualizarlo durante el render comparando con el valor previo (ver `DetalleActividad`).
+- Pruebas con debounce: `vi.useFakeTimers({ shouldAdvanceTime: true })` + `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })` y `act(() => vi.advanceTimersByTimeAsync(800))`. jsdom no trae `PointerEvent`: en la prueba se usa `MouseEvent`.
 
 ## Glosario
 
