@@ -4,7 +4,7 @@ import Fastify, { type FastifyInstance } from 'fastify'
 import { exigirCabeceraCsrf } from './auth/guardas'
 import { rutasAuth } from './auth/rutas'
 import type { Config } from './config'
-import { crearDb, type BaseDatos } from './db/conexion'
+import type { BaseDatos } from './db/conexion'
 import { ErrorApi, registrarErrores } from './errores'
 import { rutasCatalogos } from './modulos/catalogos/rutas'
 import { rutasCharters } from './modulos/charters/rutas'
@@ -13,15 +13,14 @@ import { rutasCortes } from './modulos/cortes/rutas'
 import { rutasCronograma } from './modulos/cronograma/rutas'
 
 export interface OpcionesApp {
-  /** Por defecto, una base en memoria (útil en pruebas). */
-  db?: BaseDatos
+  db: BaseDatos
   config: Config
 }
 
 export async function construirApp({ db, config }: OpcionesApp): Promise<FastifyInstance> {
   const app = Fastify({ logger: false, trustProxy: config.confiarProxy })
   app.decorate('config', config)
-  app.decorate('db', db ?? crearDb(':memory:'))
+  app.decorate('db', db)
   app.decorateRequest('usuario', undefined)
 
   registrarErrores(app)

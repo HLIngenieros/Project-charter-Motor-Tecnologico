@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { construirApp } from '../src/app'
 import { cargarEntorno, leerConfig } from '../src/config'
-import { crearDb } from '../src/db/conexion'
+import { crearDbPrueba } from './ayudas'
 
 describe('base de datos', () => {
   it('sin DATABASE_URL usa PGlite en data/pglite; con ella, esa URL', () => {
@@ -21,7 +21,7 @@ describe('confiar en el proxy', () => {
 
   it('con CONFIAR_PROXY=true, el límite de login es por IP real del cliente', async () => {
     const app = await construirApp({
-      db: await crearDb(':memory:'),
+      db: await crearDbPrueba(),
       config: leerConfig({ CONFIAR_PROXY: 'true' }),
     })
     // Todas las peticiones llegan desde el proxy (127.0.0.1) con IPs de cliente distintas.

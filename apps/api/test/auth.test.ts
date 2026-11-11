@@ -55,6 +55,14 @@ describe('registro', () => {
     })
   })
 
+  it('registro concurrente con el mismo correo da un 201 y un 409', async () => {
+    const { app } = await nuevaApp()
+    const respuestas = await Promise.all([registrar(app), registrar(app)])
+    expect(respuestas.map((r) => r.statusCode).sort()).toEqual([201, 409])
+    const rechazo = respuestas.find((r) => r.statusCode === 409)!
+    expect(rechazo.json().error.codigo).toBe('registro_rechazado')
+  })
+
   it('una clave de 7 caracteres da 400 con el campo clave', async () => {
     const { app } = await nuevaApp()
     const r = await registrar(app, { ...datosRegistro, clave: '1234567' })
@@ -69,10 +77,10 @@ describe('registro', () => {
     const { app, db } = await nuevaApp()
     const r = await registrar(app)
     const token = cookieDe(r)!.value
-    const u = db.select().from(usuario).get()!
-    expect(u.hashClave).not.toContain(datosRegistro.clave)
-    expect(u.hashClave).toMatch(/^\$argon2id\$/)
-    const sesiones = db.select().from(sesion).all()
+    const [u] = await db.select().from(usuario)
+    expect(u!.hashClave).not.toContain(datosRegistro.clave)
+    expect(u!.hashClave).toMatch(/^\$argon2id\$/)
+    const sesiones = await db.select().from(sesion)
     expect(sesiones).toHaveLength(1)
     expect(sesiones[0]!.id).not.toBe(token)
     expect(JSON.stringify(sesiones)).not.toContain(token)
@@ -100,7 +108,7 @@ describe('login', () => {
   it('una cuenta inactiva da 403 cuenta_inactiva', async () => {
     const { app, db } = await nuevaApp()
     await registrar(app)
-    db.update(usuario).set({ activo: false }).run()
+    await db.update(usuario).set({ activo: false })
     const r = await entrar(app, datosRegistro.correo, datosRegistro.clave)
     expect(r.statusCode).toBe(403)
     expect(r.json().error.codigo).toBe('cuenta_inactiva')
@@ -149,7 +157,7 @@ describe('sesiones inválidas', () => {
   it('una sesión vencida da 401 y borra la cookie', async () => {
     const { app, db } = await nuevaApp()
     const token = cookieDe(await registrar(app))!.value
-    db.update(sesion).set({ expiraEn: '2000-01-01T00:00:00.000Z' }).run()
+    await db.update(sesion).set({ expiraEn: '2000-01-01T00:00:00.000Z' })
     await esperar401(app, token)
   })
 
@@ -169,7 +177,7 @@ describe('sesiones inválidas', () => {
   it('una cuenta desactivada da 401', async () => {
     const { app, db } = await nuevaApp()
     const token = cookieDe(await registrar(app))!.value
-    db.update(usuario).set({ activo: false }).run()
+    await db.update(usuario).set({ activo: false })
     await esperar401(app, token)
   })
 
@@ -182,16 +190,16 @@ describe('sesiones inválidas', () => {
     const { app, db } = await nuevaApp()
     const token = cookieDe(await registrar(app))!.value
     const hace2h = new Date(Date.now() - 2 * 3600_000).toISOString()
-    db.update(sesion)
+    await db
+      .update(sesion)
       .set({ ultimoUso: hace2h, expiraEn: new Date(Date.now() + 3600_000).toISOString() })
-      .run()
 
     const r = await app.inject({ method: 'GET', url: '/api/auth/yo', headers: conSesion(token) })
     expect(r.statusCode).toBe(200)
     expect(cookieDe(r)?.value).toBe(token)
-    const s = db.select().from(sesion).get()!
-    expect(new Date(s.expiraEn).getTime()).toBeGreaterThan(Date.now() + 6 * 86_400_000)
-    expect(s.ultimoUso > hace2h).toBe(true)
+    const [s] = await db.select().from(sesion)
+    expect(new Date(s!.expiraEn).getTime()).toBeGreaterThan(Date.now() + 6 * 86_400_000)
+    expect(s!.ultimoUso > hace2h).toBe(true)
   })
 })
 
@@ -215,7 +223,7 @@ describe('cambio de clave obligatorio', () => {
     })
     const r = await registrar(app)
     const token = cookieDe(r)!.value
-    db.update(usuario).set({ debeCambiarClave: true }).run()
+    await db.update(usuario).set({ debeCambiarClave: true })
 
     const bloqueada = await app.inject({
       method: 'GET',
@@ -251,10 +259,11 @@ describe('cambio de clave obligatorio', () => {
       headers: conSesion(token),
     })
     expect(libre.statusCode).toBe(200)
-    expect(
-      db.select().from(usuario).where(eq(usuario.correo, datosRegistro.correo)).get()
-        ?.debeCambiarClave,
-    ).toBe(false)
+    const [cambiado] = await db
+      .select()
+      .from(usuario)
+      .where(eq(usuario.correo, datosRegistro.correo))
+    expect(cambiado?.debeCambiarClave).toBe(false)
   })
 
   it('cambiar la clave cierra las demás sesiones', async () => {

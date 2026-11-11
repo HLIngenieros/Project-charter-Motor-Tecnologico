@@ -32,14 +32,12 @@ export function aUsuarioSesion(u: FilaUsuario): UsuarioSesion {
 export async function crearSesion(db: BaseDatos, usuarioId: string): Promise<string> {
   const token = randomBytes(32).toString('base64url')
   const ahora = Date.now()
-  db.insert(sesion)
-    .values({
-      id: hashToken(token),
-      usuarioId,
-      expiraEn: new Date(ahora + DURACION_MS).toISOString(),
-      ultimoUso: new Date(ahora).toISOString(),
-    })
-    .run()
+  await db.insert(sesion).values({
+    id: hashToken(token),
+    usuarioId,
+    expiraEn: new Date(ahora + DURACION_MS).toISOString(),
+    ultimoUso: new Date(ahora).toISOString(),
+  })
   return token
 }
 
@@ -52,40 +50,38 @@ export interface SesionValida {
  * Busca la sesión del token. Devuelve null si no existe, venció o la cuenta está inactiva
  * (las sesiones vencidas se borran). Renueva la sesión si su último uso tiene más de 1 hora.
  */
-export function validarSesion(db: BaseDatos, token: string): SesionValida | null {
+export async function validarSesion(db: BaseDatos, token: string): Promise<SesionValida | null> {
   const id = hashToken(token)
-  const fila = db
+  const [fila] = await db
     .select({ sesion, usuario })
     .from(sesion)
     .innerJoin(usuario, eq(sesion.usuarioId, usuario.id))
     .where(eq(sesion.id, id))
-    .get()
+    .limit(1)
   if (!fila) return null
 
   const ahora = Date.now()
   if (new Date(fila.sesion.expiraEn).getTime() <= ahora) {
-    db.delete(sesion).where(eq(sesion.id, id)).run()
+    await db.delete(sesion).where(eq(sesion.id, id))
     return null
   }
   if (!fila.usuario.activo) return null
 
   const renovada = ahora - new Date(fila.sesion.ultimoUso).getTime() > RENOVAR_TRAS_MS
   if (renovada) {
-    db.update(sesion)
+    await db
+      .update(sesion)
       .set({
         ultimoUso: new Date(ahora).toISOString(),
         expiraEn: new Date(ahora + DURACION_MS).toISOString(),
       })
       .where(eq(sesion.id, id))
-      .run()
   }
   return { usuario: aUsuarioSesion(fila.usuario), renovada }
 }
 
-export function cerrarSesion(db: BaseDatos, token: string): void {
-  db.delete(sesion)
-    .where(eq(sesion.id, hashToken(token)))
-    .run()
+export async function cerrarSesion(db: BaseDatos, token: string): Promise<void> {
+  await db.delete(sesion).where(eq(sesion.id, hashToken(token)))
 }
 
 /** Cierra todas las sesiones del usuario, salvo la del token indicado. */
@@ -97,7 +93,7 @@ export async function cerrarSesionesDe(
   const condicion = exceptoToken
     ? and(eq(sesion.usuarioId, usuarioId), ne(sesion.id, hashToken(exceptoToken)))
     : eq(sesion.usuarioId, usuarioId)
-  db.delete(sesion).where(condicion).run()
+  await db.delete(sesion).where(condicion)
 }
 
 export function ponerCookie(reply: FastifyReply, token: string): void {

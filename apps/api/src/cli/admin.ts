@@ -1,7 +1,7 @@
 import { resolve } from 'node:path'
 import { promoverAdmin } from '../auth/cuentas'
 import { cargarEntorno, leerConfig } from '../config'
-import { crearDb } from '../db/conexion'
+import { cerrarDb, crearDb, esUrlPostgres } from '../db/conexion'
 
 const USO = 'Uso: npm run admin -- --promover <correo> | --quitar <correo>'
 
@@ -12,14 +12,18 @@ if (!correo || (opcion !== '--promover' && opcion !== '--quitar')) {
 }
 
 cargarEntorno(resolve('../../.env'))
-const db = crearDb(resolve(leerConfig().rutaDb))
+const { urlDb } = leerConfig()
+const db = await crearDb(esUrlPostgres(urlDb) ? urlDb : resolve(urlDb))
 try {
   await promoverAdmin(db, correo, opcion === '--promover')
   console.log(opcion === '--promover' ? `${correo} ahora es Admin.` : `${correo} ya no es Admin.`)
 } catch (error) {
   if (error instanceof Error && error.message === 'usuario_inexistente') {
     console.error(`No hay una cuenta registrada con ${correo}.`)
-    process.exit(1)
+    process.exitCode = 1
+  } else {
+    throw error
   }
-  throw error
+} finally {
+  await cerrarDb(db)
 }

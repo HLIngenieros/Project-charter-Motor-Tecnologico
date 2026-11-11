@@ -8,9 +8,9 @@ describe('promoverAdmin', () => {
     const { app, db } = await nuevaApp()
     await registrar(app)
     await promoverAdmin(db, ' ANA@hlingenieros.com ', true)
-    expect(db.select().from(usuario).get()?.esAdmin).toBe(true)
+    expect((await db.select().from(usuario))[0]?.esAdmin).toBe(true)
     await promoverAdmin(db, 'ana@hlingenieros.com', false)
-    expect(db.select().from(usuario).get()?.esAdmin).toBe(false)
+    expect((await db.select().from(usuario))[0]?.esAdmin).toBe(false)
   })
 
   it('lanza usuario_inexistente con un correo no registrado', async () => {

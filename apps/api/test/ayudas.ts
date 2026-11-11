@@ -2,7 +2,8 @@ import type { FastifyInstance, LightMyRequestResponse } from 'fastify'
 import { eq } from 'drizzle-orm'
 import { construirApp } from '../src/app'
 import { leerConfig } from '../src/config'
-import { crearDb, type BaseDatos } from '../src/db/conexion'
+import type { PGlite } from '@electric-sql/pglite'
+import { envolverPglite, prepararDb, type BaseDatos } from '../src/db/conexion'
 import { usuario as tablaUsuario } from '../src/db/esquema'
 
 export const CSRF = { 'x-requested-with': 'charter' }
@@ -12,10 +13,23 @@ export interface Contexto {
   db: BaseDatos
 }
 
+/** Base migrada una sola vez por archivo de prueba; cada caso trabaja sobre un clon. */
+let plantilla: Promise<PGlite> | undefined
+
+export async function crearDbPrueba(): Promise<BaseDatos> {
+  plantilla ??= (async () => {
+    const { PGlite } = await import('@electric-sql/pglite')
+    const cliente = new PGlite()
+    await prepararDb(await envolverPglite(cliente))
+    return cliente
+  })()
+  return envolverPglite((await (await plantilla).clone()) as PGlite)
+}
+
 export async function nuevaApp(
   preparar?: (app: FastifyInstance) => void | Promise<void>,
 ): Promise<Contexto> {
-  const db = crearDb(':memory:')
+  const db = await crearDbPrueba()
   const app = await construirApp({ db, config: leerConfig({}) })
   await preparar?.(app)
   await app.ready()
@@ -70,7 +84,7 @@ export async function sesionDe(
   const r = await registrar(app, { correo, nombre: `${nombre} Prueba`, clave: 'clave-segura-1' })
   if (r.statusCode !== 201) throw new Error(`No se pudo registrar ${correo}: ${r.body}`)
   if (admin) {
-    app.db.update(tablaUsuario).set({ esAdmin: true }).where(eq(tablaUsuario.correo, correo)).run()
+    await app.db.update(tablaUsuario).set({ esAdmin: true }).where(eq(tablaUsuario.correo, correo))
   }
   return { ...conSesion(r), ...CSRF }
 }

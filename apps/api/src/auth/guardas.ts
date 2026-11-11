@@ -14,7 +14,7 @@ export async function exigirCabeceraCsrf(request: FastifyRequest): Promise<void>
 /** preHandler: exige una sesión válida y deja el usuario en `request.usuario`. */
 export async function exigirSesion(request: FastifyRequest, reply: FastifyReply): Promise<void> {
   const token = request.cookies[COOKIE_SESION]
-  const valida = token ? validarSesion(request.server.db, token) : null
+  const valida = token ? await validarSesion(request.server.db, token) : null
   if (!token || !valida) {
     borrarCookie(reply)
     throw new ErrorApi(401, 'no_autenticado', 'Tu sesión terminó. Entra de nuevo.')

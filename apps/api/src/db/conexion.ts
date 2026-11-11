@@ -71,3 +71,11 @@ export async function crearDb(destino: string): Promise<BaseDatos> {
   await prepararDb(db)
   return db
 }
+
+/** Cierra el pool de `pg` o la instancia de PGlite (el CLI lo necesita para terminar). */
+export async function cerrarDb(db: BaseDatos): Promise<void> {
+  const cliente = (
+    db as unknown as { $client: { end?: () => Promise<void>; close?: () => Promise<void> } }
+  ).$client
+  await (cliente.end?.() ?? cliente.close?.())
+}

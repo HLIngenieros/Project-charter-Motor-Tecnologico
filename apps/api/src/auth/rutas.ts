@@ -8,6 +8,7 @@ import {
 import { eq } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import { v7 } from 'uuid'
+import { esViolacionUnica } from '../db/errores'
 import { usuario } from '../db/esquema'
 import { ErrorApi } from '../errores'
 import { cifrarClave, hashDeRelleno, verificarClave } from './claves'
@@ -46,25 +47,27 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
     }
     const rechazado = () =>
       new ErrorApi(409, 'registro_rechazado', 'No fue posible crear la cuenta con ese correo')
-    if (db.select({ id: usuario.id }).from(usuario).where(eq(usuario.correo, datos.correo)).get()) {
-      throw rechazado()
-    }
+    const [existente] = await db
+      .select({ id: usuario.id })
+      .from(usuario)
+      .where(eq(usuario.correo, datos.correo))
+      .limit(1)
+    if (existente) throw rechazado()
 
     const hashClave = await cifrarClave(datos.clave)
     let fila
     try {
-      fila = db
+      ;[fila] = await db
         .insert(usuario)
         .values({ id: v7(), correo: datos.correo, nombre: datos.nombre, hashClave })
         .returning()
-        .get()
     } catch (error) {
-      if (String(error).includes('UNIQUE')) throw rechazado()
+      if (esViolacionUnica(error)) throw rechazado()
       throw error
     }
 
-    ponerCookie(reply, await crearSesion(db, fila.id))
-    return reply.status(201).send(publico(aUsuarioSesion(fila)))
+    ponerCookie(reply, await crearSesion(db, fila!.id))
+    return reply.status(201).send(publico(aUsuarioSesion(fila!)))
   })
 
   app.post(
@@ -74,7 +77,11 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
       const datos = loginEntrada.parse(request.body)
       limiteCorreo.registrar(datos.correo)
 
-      const fila = db.select().from(usuario).where(eq(usuario.correo, datos.correo)).get()
+      const [fila] = await db
+        .select()
+        .from(usuario)
+        .where(eq(usuario.correo, datos.correo))
+        .limit(1)
       const valida = await verificarClave(fila?.hashClave ?? (await hashDeRelleno()), datos.clave)
       if (!fila || !valida) throw credencialesInvalidas()
       if (!fila.activo) {
@@ -92,7 +99,7 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
 
   app.post('/logout', async (request, reply) => {
     const token = request.cookies[COOKIE_SESION]
-    if (token) cerrarSesion(db, token)
+    if (token) await cerrarSesion(db, token)
     borrarCookie(reply)
     return reply.status(204).send()
   })
@@ -102,16 +109,16 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
   app.post('/cambiar-clave', { preHandler: exigirSesion }, async (request, reply) => {
     const datos = cambiarClaveEntrada.parse(request.body)
     const yo = request.usuario!
-    const fila = db.select().from(usuario).where(eq(usuario.id, yo.id)).get()
+    const [fila] = await db.select().from(usuario).where(eq(usuario.id, yo.id)).limit(1)
     if (!fila || !(await verificarClave(fila.hashClave, datos.claveActual))) {
       throw new ErrorApi(400, 'clave_incorrecta', 'La clave actual no es correcta', {
         claveActual: 'La clave actual no es correcta',
       })
     }
-    db.update(usuario)
+    await db
+      .update(usuario)
       .set({ hashClave: await cifrarClave(datos.claveNueva), debeCambiarClave: false })
       .where(eq(usuario.id, yo.id))
-      .run()
     await cerrarSesionesDe(db, yo.id, request.cookies[COOKIE_SESION])
     return reply.status(204).send()
   })

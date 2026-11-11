@@ -5,10 +5,10 @@ import { usuario } from '../db/esquema'
 
 /** Da o quita el perfil Admin. Lanza 'usuario_inexistente' si el correo no está registrado. */
 export async function promoverAdmin(db: BaseDatos, correo: string, valor: boolean): Promise<void> {
-  const r = db
+  const filas = await db
     .update(usuario)
     .set({ esAdmin: valor })
     .where(eq(usuario.correo, normalizarCorreo(correo)))
-    .run()
-  if (r.changes === 0) throw new Error('usuario_inexistente')
+    .returning({ id: usuario.id })
+  if (filas.length === 0) throw new Error('usuario_inexistente')
 }
