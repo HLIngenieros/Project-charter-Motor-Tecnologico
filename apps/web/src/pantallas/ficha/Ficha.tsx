@@ -15,6 +15,7 @@ import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFi
 import { MenuCharter } from './MenuCharter'
 import { fechaCorta } from '../../formato'
 import { SeccionCronograma } from './cronograma/SeccionCronograma'
+import { SeccionCurvaS } from './curva/SeccionCurvaS'
 import { SelectorCorte } from './SelectorCorte'
 import { useVistaCronograma } from './useVistaCronograma'
 import { useBorradorCronograma } from './cronograma/useBorradorCronograma'
@@ -34,6 +35,7 @@ function secciones(
     { id: 'encabezado', titulo: 'Encabezado' },
     { id: 'razon', titulo: 'Razón de ser' },
     { id: 'objetivos', titulo: 'Objetivos', cuenta: listas.objetivo.length },
+    { id: 'curva', titulo: 'Curva S' },
     { id: 'cronograma', titulo: 'Cronograma', cuenta: actividades },
     {
       id: 'supuestos',
@@ -215,6 +217,12 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
                 guardar={guardar}
                 soloLectura={soloLectura}
                 derecha={<SeccionObjetivos charter={charter} soloLectura={soloLectura} />}
+              />
+              <SeccionCurvaS
+                vista={vista}
+                cortes={vista.cortes}
+                elegirCorte={vista.elegirCorte}
+                umbrales={charter.umbrales}
               />
               <SeccionCronograma
                 borrador={vista}

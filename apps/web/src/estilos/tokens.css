@@ -57,8 +57,26 @@
   }
 }
 
+/* Curva S: al recalcular o hacer zoom, la geometría se transforma en vez de saltar. */
+.curva-geo {
+  transition:
+    d 0.55s var(--ease-salida),
+    transform 0.55s var(--ease-salida),
+    opacity 0.3s;
+}
+.curva-punto {
+  transition:
+    left 0.55s var(--ease-salida),
+    top 0.55s var(--ease-salida),
+    opacity 0.3s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-destello {
     animation: none;
+  }
+  .curva-geo,
+  .curva-punto {
+    transition: none;
   }
 }
