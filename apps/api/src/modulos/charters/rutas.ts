@@ -2,6 +2,7 @@ import { charterCrear, charterEditar, listaEntrada, tipoLista } from '@charter/s
 import type { FastifyInstance } from 'fastify'
 import { exigirSesion } from '../../auth/guardas'
 import { cargarCharter } from './acceso'
+import { exportarCharter } from './exportar'
 import {
   crearCharter,
   detalleCharter,
@@ -51,6 +52,11 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
     const { items } = listaEntrada.parse(request.body)
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
     return reemplazarLista(db, fila.id, tipo, items)
+  })
+
+  app.get<ConId & { Querystring: { corte?: string } }>('/:id/exportar', async (request) => {
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'lectura')
+    return exportarCharter(db, fila, request.usuario!, request.query.corte || undefined)
   })
 
   app.delete<ConId>('/:id', async (request, reply) => {
