@@ -1,5 +1,4 @@
 import {
-  REGLAS_POR_DEFECTO,
   calcularCronograma,
   construirArbol,
   validarCronograma,
@@ -9,7 +8,7 @@ import {
   type FechaISO,
   type NodoArbol,
   type ResultadoCronograma,
-  type Umbrales,
+  type Reglas,
 } from '@charter/shared'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ErrorCliente } from '../../../api/cliente'
@@ -43,7 +42,7 @@ export interface BorradorCronograma {
 export function useBorradorCronograma(
   id: string,
   encolar: ColaGuardado['encolar'],
-  umbrales: Umbrales,
+  reglas: Reglas,
 ): BorradorCronograma {
   const consulta = useCronograma(id)
   const { mutateAsync } = useGuardarCronograma(id)
@@ -129,13 +128,10 @@ export function useBorradorCronograma(
     const arbol = construirArbol(lista)
     return {
       arbol,
-      calculo: calcularCronograma(arbol, avances, fechaCalculo, {
-        ...REGLAS_POR_DEFECTO,
-        umbrales,
-      }),
-      avisos: lista.length ? validarCronograma(arbol) : [],
+      calculo: calcularCronograma(arbol, avances, fechaCalculo, reglas),
+      avisos: lista.length ? validarCronograma(arbol, reglas) : [],
     }
-  }, [lista, avances, fechaCalculo, umbrales])
+  }, [lista, avances, fechaCalculo, reglas])
 
   return {
     cargando: acts === null && !consulta.isError,

@@ -125,6 +125,26 @@ describe('cronograma de la ficha', () => {
     expect(s.getByText('En atención')).toBeInTheDocument()
   })
 
+  it('con «repartir», una hoja sin peso muestra su peso efectivo y la marca auto', async () => {
+    const fechas = { inicio: '2026-01-01', fin: '2026-01-31' }
+    abrir({
+      cronograma: {
+        version: 1,
+        actividades: [
+          hoja('A', { nombre: 'Diseño', orden: 0, peso: 0.8, ...fechas }),
+          hoja('B', { nombre: 'Pruebas', orden: 1, ...fechas }),
+        ],
+        ultimoCorte: null,
+      },
+      detalleCharter: { ...detalle, reglas: { ...REGLAS_POR_DEFECTO, sinPeso: 'repartir' } },
+    })
+    const s = await seccion()
+    const fila = s.getByRole('button', { name: 'Pruebas' }).closest('[data-fila]') as HTMLElement
+    const peso = within(fila).getByTitle('Peso repartido automáticamente')
+    expect(peso).toHaveTextContent('20,0 %')
+    expect(peso).toHaveTextContent('auto')
+  })
+
   it('arma un árbol con el teclado y lo guarda en un solo PUT', async () => {
     const { llamadas, usuario } = abrir()
     const s = await seccion()

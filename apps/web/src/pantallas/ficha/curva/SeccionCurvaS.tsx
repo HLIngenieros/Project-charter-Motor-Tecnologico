@@ -7,7 +7,7 @@ import {
   type CorteResumen,
   type FechaISO,
   type PuntoReal,
-  type Umbrales,
+  type Reglas,
 } from '@charter/shared'
 import { useDeferredValue, useMemo, useState, type ReactNode } from 'react'
 import { Cargando } from '../../../componentes/Cargando'
@@ -39,13 +39,13 @@ export function SeccionCurvaS({
   vista,
   cortes,
   elegirCorte,
-  umbrales,
+  reglas,
 }: {
   vista: VistaCronograma
   /** Del más viejo al más reciente. */
   cortes: CorteResumen[]
   elegirCorte(fecha: FechaISO | null): void
-  umbrales: Umbrales
+  reglas: Reglas
 }) {
   const [zoom, setZoom] = useState<Zoom>('proyecto')
   const [puntero, setPuntero] = useState<FechaISO | null>(null)
@@ -56,7 +56,10 @@ export function SeccionCurvaS({
   const arbol = useDeferredValue(vista.arbol)
 
   // Una pasada del motor por semana del proyecto: solo cuando cambia el cronograma.
-  const planeada = useMemo(() => curvaSPlaneada(foto ? raicesDeFoto(foto) : arbol), [foto, arbol])
+  const planeada = useMemo(
+    () => curvaSPlaneada(foto ? raicesDeFoto(foto) : arbol, reglas),
+    [foto, arbol, reglas],
+  )
 
   const guardados = useMemo<PuntoReal[]>(
     () =>
@@ -120,7 +123,7 @@ export function SeccionCurvaS({
   const chip = corteLeido
     ? chipDe(corteLeido, true)
     : ev !== null
-      ? chipDe({ estado: estadoPorBrecha(pv, ev, umbrales), vencidas: 0 }, true)
+      ? chipDe({ estado: estadoPorBrecha(pv, ev, reglas.umbrales), vencidas: 0 }, true)
       : null
   const etiquetaLectura = corteLeido
     ? corteLeido.fecha === fechaCorte

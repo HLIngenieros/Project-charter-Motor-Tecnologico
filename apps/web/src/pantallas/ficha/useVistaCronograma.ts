@@ -1,12 +1,11 @@
 import {
-  REGLAS_POR_DEFECTO,
   arbolHistorico,
   calcularCronograma,
   construirArbol,
   type AvanceFoto,
   type CorteResumen,
   type FechaISO,
-  type Umbrales,
+  type Reglas,
 } from '@charter/shared'
 import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
@@ -51,7 +50,7 @@ const NADA = () => {}
 export function useVistaCronograma(
   charterId: string,
   borrador: BorradorCronograma,
-  umbrales: Umbrales,
+  reglas: Reglas,
 ): VistaCronograma & ControlCorte {
   const [params, setParams] = useSearchParams()
   const consulta = useCortes(charterId)
@@ -86,10 +85,7 @@ export function useVistaCronograma(
     if (!elegido) return null
     const h = arbolHistorico(borrador.acts, foto ?? [])
     const arbol = construirArbol(h.acts)
-    const calculo = calcularCronograma(arbol, h.avances, elegido.fecha, {
-      ...REGLAS_POR_DEFECTO,
-      umbrales,
-    })
+    const calculo = calcularCronograma(arbol, h.avances, elegido.fecha, reglas)
     const { pv, ev, desv, estado, vencidas } = elegido
     return {
       acts: h.acts,
@@ -106,7 +102,7 @@ export function useVistaCronograma(
         resumen: elegido,
       },
     }
-  }, [elegido, foto, borrador.acts, umbrales, indice, cortes.length])
+  }, [elegido, foto, borrador.acts, reglas, indice, cortes.length])
 
   const lineaBaseModificada =
     !historica &&

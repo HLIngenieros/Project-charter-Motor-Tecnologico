@@ -118,11 +118,16 @@ const fotoDelCorte: CorteDetalle = {
   ],
 }
 
-function abrir(ruta = '/charters/c1/corte', alGuardar?: (l: Llamada) => Respuesta) {
+function abrir(
+  ruta = '/charters/c1/corte',
+  alGuardar?: (l: Llamada) => Respuesta,
+  datos: { charter?: CharterDetalle; crono?: CronogramaRespuesta } = {},
+) {
   const llamadas = simularApi((l) => {
-    if (l.url === '/api/charters/c1') return { estado: 200, cuerpo: detalle }
+    if (l.url === '/api/charters/c1') return { estado: 200, cuerpo: datos.charter ?? detalle }
     if (l.url === '/api/categorias' || l.url === '/api/areas') return { estado: 200, cuerpo: [] }
-    if (l.url === '/api/charters/c1/cronograma') return { estado: 200, cuerpo: cronograma }
+    if (l.url === '/api/charters/c1/cronograma')
+      return { estado: 200, cuerpo: datos.crono ?? cronograma }
     if (l.url === '/api/charters/c1/cortes') return { estado: 200, cuerpo: [resumen] }
     if (l.url === '/api/charters/c1/cortes/2026-03-05' && l.metodo === 'GET')
       return { estado: 200, cuerpo: fotoDelCorte }
@@ -197,6 +202,41 @@ describe('registrar corte', () => {
     expect(await screen.findByText('actividad eliminada')).toBeInTheDocument()
     expect(screen.getByLabelText('Nota del corte')).toHaveValue('Arranque')
     expect(screen.queryByLabelText('Fecha de corte')).not.toBeInTheDocument()
+  })
+
+  it('con suma obligatoria y pesos en 90 % avisa y no deja guardar', async () => {
+    abrir('/charters/c1/corte', undefined, {
+      charter: { ...detalle, reglas: { ...REGLAS_POR_DEFECTO, sumaPesos: 'obligatoria' } },
+      crono: {
+        ...cronograma,
+        actividades: cronograma.actividades.map((a) => (a.id === 'c' ? { ...a, peso: 0.4 } : a)),
+      },
+    })
+    await screen.findByRole('heading', { name: 'Registrar corte' })
+    expect(
+      screen.getByText('Los pesos de las actividades deben sumar 100 % para registrar un corte.'),
+    ).toBeInTheDocument()
+    for (const b of screen.getAllByRole('button', { name: 'Guardar corte' }))
+      expect(b).toBeDisabled()
+  })
+
+  it('clasifica con los umbrales del charter', async () => {
+    abrir('/charters/c1/corte', undefined, {
+      charter: {
+        ...detalle,
+        reglas: { ...REGLAS_POR_DEFECTO, umbrales: { atencion: 5, riesgo: 25, atraso: 50 } },
+      },
+      // a terminada y b al 5 %: brecha de unos 6,6 puntos, sin vencidas.
+      crono: {
+        ...cronograma,
+        ultimoCorte: {
+          fecha: '2026-03-05',
+          avances: { a: { pct: 1, terminadaEn: '2026-03-01' }, b: { pct: 0.05 } },
+        },
+      },
+    })
+    const titulo = await screen.findByRole('heading', { name: /Así queda el charter/ })
+    expect(titulo).toHaveTextContent('En atención')
   })
 
   it('muestra el error de la API junto al botón', async () => {

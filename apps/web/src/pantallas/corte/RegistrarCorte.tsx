@@ -2,9 +2,11 @@ import {
   calcularCronograma,
   construirArbol,
   hojasProgramadas,
+  pesosCompletos,
   sumarDias,
   type AvancesPorHoja,
   type FechaISO,
+  type Reglas,
 } from '@charter/shared'
 import { useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
@@ -70,7 +72,17 @@ function Grupo({
   )
 }
 
-function Formulario({ charterId, nombre, p }: { charterId: string; nombre: string; p: Preparado }) {
+function Formulario({
+  charterId,
+  nombre,
+  p,
+  reglas,
+}: {
+  charterId: string
+  nombre: string
+  p: Preparado
+  reglas: Reglas
+}) {
   const navegar = useNavigate()
   const guardar = useGuardarCorte(charterId)
   const enviando = useRef(false)
@@ -96,26 +108,32 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
     [p.filas, pctsGrupos, fecha],
   )
 
+  const raices = useMemo(
+    () =>
+      construirArbol(
+        p.filas.map((f, i) => ({
+          id: f.id,
+          padreId: null,
+          orden: i,
+          nombre: f.nombre,
+          peso: f.peso,
+          inicio: f.inicio,
+          fin: f.fin,
+        })),
+      ),
+    [p.filas],
+  )
+  const bloqueado = reglas.sumaPesos === 'obligatoria' && !pesosCompletos(raices, reglas)
+
   const calculo = useMemo(() => {
-    const raices = construirArbol(
-      p.filas.map((f, i) => ({
-        id: f.id,
-        padreId: null,
-        orden: i,
-        nombre: f.nombre,
-        peso: f.peso,
-        inicio: f.inicio,
-        fin: f.fin,
-      })),
-    )
     const avances: AvancesPorHoja = Object.fromEntries(
       p.filas.map((f) => [
         f.id,
         { pct: pcts[f.id]!, terminadaEn: pcts[f.id]! >= 1 ? (p.terminadas[f.id] ?? fecha) : null },
       ]),
     )
-    return calcularCronograma(raices, avances, fecha)
-  }, [p.filas, p.terminadas, pcts, fecha])
+    return calcularCronograma(raices, avances, fecha, reglas)
+  }, [raices, p.filas, p.terminadas, pcts, fecha, reglas])
 
   const invalidos = p.filas.filter((f) => leerPorcentaje(textos[f.id] ?? '') === null).length
   const proyecto = calculo.proyecto
@@ -132,6 +150,7 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
   const enviar = async (e?: FormEvent) => {
     e?.preventDefault()
     if (enviando.current) return
+    if (bloqueado) return
     if (invalidos > 0) {
       setError('Revisa los avances: van de 0 a 100.')
       return
@@ -163,7 +182,7 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
 
   const editar = p.fechaFija !== null
   const botonGuardar = (
-    <Boton type="submit" cargando={guardar.isPending} className="flex-1">
+    <Boton type="submit" cargando={guardar.isPending} disabled={bloqueado} className="flex-1">
       Guardar corte
     </Boton>
   )
@@ -296,6 +315,11 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
               className="resize-y rounded-control border border-linea bg-superficie px-3 py-2 text-[0.9375rem] font-normal text-tinta placeholder:text-texto-3 hover:border-texto-3 focus:border-acento focus:shadow-foco focus:outline-none"
             />
           </label>
+          {bloqueado && (
+            <Aviso tono="alerta">
+              Los pesos de las actividades deben sumar 100 % para registrar un corte.
+            </Aviso>
+          )}
           {error && <Aviso tono="alerta">{error}</Aviso>}
           <div className="flex gap-2 max-md:hidden">
             <Link to={`/charters/${charterId}`} className={clasesBoton('secundario')}>
@@ -313,6 +337,7 @@ function Formulario({ charterId, nombre, p }: { charterId: string; nombre: strin
           <Boton
             type="submit"
             cargando={guardar.isPending}
+            disabled={bloqueado}
             className="ml-auto shrink-0 whitespace-nowrap"
           >
             Guardar corte
@@ -357,7 +382,7 @@ export function RegistrarCorte() {
     consultas.some((c) => c.isPending) || (!!anteriorAEditar && fotoAnterior.isPending)
 
   const preparado = useMemo((): Preparado | null => {
-    if (esperando || fallo || !cronograma.data || !cortes.data) return null
+    if (esperando || fallo || !cronograma.data || !cortes.data || !charter.data) return null
     const actuales = new Map(cronograma.data.actividades.map((a) => [a.id, a]))
     if (fechaEditar && foto.data) {
       const previos = new Map(fotoAnterior.data?.avances.map((a) => [a.actividadId, a.pct]))
@@ -391,7 +416,10 @@ export function RegistrarCorte() {
       if (a.terminadaEn) terminadas[idHoja] = a.terminadaEn
     const ultimaFecha = fechas.at(-1) ?? null
     return {
-      filas: hojasProgramadas(construirArbol(cronograma.data.actividades)).map((h) => ({
+      filas: hojasProgramadas(
+        construirArbol(cronograma.data.actividades),
+        charter.data?.reglas,
+      ).map((h) => ({
         id: h.id,
         item: h.item,
         nombre: h.nombre,
@@ -412,6 +440,7 @@ export function RegistrarCorte() {
   }, [
     esperando,
     fallo,
+    charter.data,
     cronograma.data,
     cortes.data,
     fechas,
@@ -466,6 +495,7 @@ export function RegistrarCorte() {
       key={preparado.fechaFija ?? 'nuevo'}
       charterId={id}
       nombre={charter.data.nombre}
+      reglas={charter.data.reglas}
       p={preparado}
     />
   )

@@ -184,10 +184,12 @@ export function DetalleActividad({
       </Etiqueta>
       {nodo.esHoja ? (
         <>
-          <Etiqueta texto="Peso (%)">
+          <Etiqueta texto={resultado?.pesoAuto ? 'Peso (%) · auto' : 'Peso (%)'}>
             <input
               className={`${ENTRADA} text-right font-mono`}
               inputMode="decimal"
+              title={resultado?.pesoAuto ? 'Peso repartido automáticamente' : undefined}
+              placeholder={resultado?.pesoAuto ? pesoATexto(resultado.peso) : undefined}
               value={peso}
               onChange={(e) => setPeso(e.target.value)}
               onBlur={confirmarPeso}
