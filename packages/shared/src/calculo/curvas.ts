@@ -1,12 +1,16 @@
 import { calcularCronograma, type Estado, type ResultadoCronograma } from './cronograma'
 import { aDia, aISO } from './fechas'
+import { REGLAS_POR_DEFECTO, type Reglas } from './reglas'
 import type { FechaISO, NodoArbol } from './tipos'
 
 const PASO_DIAS = 7
 
 /** Curva S planeada: un punto en el inicio del proyecto, luego cada 7 días y siempre el fin. */
-export function curvaSPlaneada(raices: NodoArbol[]): { fecha: FechaISO; pv: number }[] {
-  const { proyecto } = calcularCronograma(raices, {}, '1970-01-01')
+export function curvaSPlaneada(
+  raices: NodoArbol[],
+  reglas: Reglas = REGLAS_POR_DEFECTO,
+): { fecha: FechaISO; pv: number }[] {
+  const { proyecto } = calcularCronograma(raices, {}, '1970-01-01', reglas)
   if (proyecto.estado === 'sin_programar' || !proyecto.inicio || !proyecto.fin) return []
 
   const ini = aDia(proyecto.inicio)
@@ -17,7 +21,7 @@ export function curvaSPlaneada(raices: NodoArbol[]): { fecha: FechaISO; pv: numb
 
   return dias.map((d) => {
     const fecha = aISO(d)
-    return { fecha, pv: calcularCronograma(raices, {}, fecha).proyecto.pv }
+    return { fecha, pv: calcularCronograma(raices, {}, fecha, reglas).proyecto.pv }
   })
 }
 

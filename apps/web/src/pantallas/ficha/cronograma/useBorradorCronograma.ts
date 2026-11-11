@@ -1,4 +1,5 @@
 import {
+  REGLAS_POR_DEFECTO,
   calcularCronograma,
   construirArbol,
   validarCronograma,
@@ -128,7 +129,10 @@ export function useBorradorCronograma(
     const arbol = construirArbol(lista)
     return {
       arbol,
-      calculo: calcularCronograma(arbol, avances, fechaCalculo, umbrales),
+      calculo: calcularCronograma(arbol, avances, fechaCalculo, {
+        ...REGLAS_POR_DEFECTO,
+        umbrales,
+      }),
       avisos: lista.length ? validarCronograma(arbol) : [],
     }
   }, [lista, avances, fechaCalculo, umbrales])

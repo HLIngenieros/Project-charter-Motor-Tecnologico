@@ -1,4 +1,5 @@
 import { aDia, aISO } from './fechas'
+import { pesosEfectivos, REGLAS_POR_DEFECTO, type Reglas } from './reglas'
 import type { FechaISO, NodoArbol } from './tipos'
 
 export type Estado =
@@ -36,6 +37,8 @@ export interface ResultadoNodo {
   id: string
   item: string
   peso: number
+  /** El peso lo repartió la regla `sinPeso: 'repartir'` (la hoja no tenía peso). */
+  pesoAuto: boolean
   inicio: FechaISO | null
   fin: FechaISO | null
   dur: number | null
@@ -112,6 +115,7 @@ function sinProgramar(id: string, item: string, extra: Partial<ResultadoNodo> = 
     id,
     item,
     peso: 0,
+    pesoAuto: false,
     inicio: null,
     fin: null,
     dur: null,
@@ -133,7 +137,7 @@ function resultadoDe(
   item: string,
   acc: Acumulado,
   t: number,
-  u: Umbrales,
+  r: Reglas,
 ): ResultadoNodo {
   if (acc.peso <= 0) return sinProgramar(id, item)
   const dur = acc.fin - acc.ini + 1
@@ -144,6 +148,7 @@ function resultadoDe(
     id,
     item,
     peso: acc.peso,
+    pesoAuto: false,
     inicio: aISO(acc.ini),
     fin: aISO(acc.fin),
     dur,
@@ -152,7 +157,7 @@ function resultadoDe(
     desv,
     spi: pv > 0 ? ev / pv : null,
     forecast: aISO(acc.forecast),
-    estado: estadoDe(pv, ev, t, acc.fin, u),
+    estado: estadoDe(pv, ev, t, acc.fin + r.diasGracia, r.umbrales),
     adelantada: desv > 0,
     vencidas: acc.vencidas,
   }
@@ -167,13 +172,14 @@ export function calcularCronograma(
   raices: NodoArbol[],
   avances: AvancesPorHoja,
   fecha: FechaISO,
-  umbrales: Umbrales = UMBRALES_POR_DEFECTO,
+  reglas: Reglas = REGLAS_POR_DEFECTO,
 ): ResultadoCronograma {
   const t = aDia(fecha)
   const nodos: Record<string, ResultadoNodo> = {}
+  const pesos = pesosEfectivos(raices, reglas.sinPeso)
 
   const hoja = (n: NodoArbol): Acumulado => {
-    const peso = n.peso ?? 0
+    const { peso, auto: pesoAuto } = pesos[n.id] ?? { peso: 0, auto: false }
     const ini = n.inicio ? aDia(n.inicio) : null
     const fin = n.fin ? aDia(n.fin) : null
     if (!(peso > 0) || ini === null || fin === null || fin < ini) {
@@ -197,12 +203,13 @@ export function calcularCronograma(
           : t
         : Math.max(t, fin - Math.round(desv))
 
-    const estado = estadoDe(pv, ev, t, fin, umbrales)
+    const estado = estadoDe(pv, ev, t, fin + reglas.diasGracia, reglas.umbrales)
     const vencidas = estado === 'vencida' ? 1 : 0
     nodos[n.id] = {
       id: n.id,
       item: n.item,
       peso,
+      pesoAuto,
       inicio: n.inicio!,
       fin: n.fin!,
       dur,
@@ -221,10 +228,10 @@ export function calcularCronograma(
   const visitar = (n: NodoArbol): Acumulado => {
     if (n.esHoja) return hoja(n)
     const acc = n.hijos.map(visitar).reduce(combinar, VACIO)
-    nodos[n.id] = resultadoDe(n.id, n.item, acc, t, umbrales)
+    nodos[n.id] = resultadoDe(n.id, n.item, acc, t, reglas)
     return acc
   }
 
   const total = raices.map(visitar).reduce(combinar, VACIO)
-  return { proyecto: resultadoDe('proyecto', '', total, t, umbrales), nodos }
+  return { proyecto: resultadoDe('proyecto', '', total, t, reglas), nodos }
 }

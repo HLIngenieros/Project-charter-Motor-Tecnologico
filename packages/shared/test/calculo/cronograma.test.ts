@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { construirArbol } from '../../src/calculo/arbol'
 import { calcularCronograma, type ResultadoNodo } from '../../src/calculo/cronograma'
+import { REGLAS_POR_DEFECTO } from '../../src/calculo/reglas'
 import type { ActividadEntrada } from '../../src/calculo/tipos'
 
 const hoja = (id: string, extra: Partial<ActividadEntrada> = {}): ActividadEntrada => ({
@@ -78,9 +79,8 @@ describe('calcularCronograma · hoja', () => {
 
   it('respeta umbrales propios del charter', () => {
     const r = calcularCronograma(construirArbol([hoja('h')]), { h: { pct: 0.3 } }, '2025-03-05', {
-      atencion: 5,
-      riesgo: 10,
-      atraso: 20,
+      ...REGLAS_POR_DEFECTO,
+      umbrales: { atencion: 5, riesgo: 10, atraso: 20 },
     })
     expect(r.nodos.h!.estado).toBe('atrasada')
   })

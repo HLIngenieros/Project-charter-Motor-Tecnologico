@@ -1,4 +1,5 @@
 import {
+  REGLAS_POR_DEFECTO,
   construirArbol,
   hojasProgramadas,
   terminacionesPorHoja,
@@ -74,7 +75,10 @@ function resumir(c: CorteConFoto, todos: CorteConFoto[], u: Umbrales): CorteResu
   const hastaAqui = todos
     .filter((o) => o.fecha <= c.fecha)
     .map((o) => ({ fecha: o.fecha, avances: o.id === c.id ? c.foto : o.foto }))
-  const r = totalesDeFoto(c.foto, c.fecha, terminacionesPorHoja(hastaAqui), u)
+  const r = totalesDeFoto(c.foto, c.fecha, terminacionesPorHoja(hastaAqui), {
+    ...REGLAS_POR_DEFECTO,
+    umbrales: u,
+  })
   return {
     fecha: c.fecha,
     nota: c.nota,

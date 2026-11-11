@@ -1,4 +1,5 @@
 import { aDia } from './fechas'
+import { pesosEfectivos, REGLAS_POR_DEFECTO, type Reglas } from './reglas'
 import type { NodoArbol } from './tipos'
 
 export interface Aviso {
@@ -12,9 +13,13 @@ const TOLERANCIA = 1e-6
 const porcentaje = (x: number) => (x * 100).toLocaleString('es-CO', { maximumFractionDigits: 2 })
 
 /** Revisa el cronograma y devuelve avisos para el usuario (no bloquean el guardado). */
-export function validarCronograma(raices: NodoArbol[]): Aviso[] {
+export function validarCronograma(
+  raices: NodoArbol[],
+  reglas: Reglas = REGLAS_POR_DEFECTO,
+): Aviso[] {
   const avisos: Aviso[] = []
   let sumaPesos = 0
+  const pesos = pesosEfectivos(raices, reglas.sinPeso)
 
   const visitar = (n: NodoArbol) => {
     if (!n.nombre.trim()) {
@@ -35,7 +40,7 @@ export function validarCronograma(raices: NodoArbol[]): Aviso[] {
     }
 
     if (n.esHoja) {
-      const peso = n.peso ?? 0
+      const peso = pesos[n.id]?.peso ?? 0
       if (peso > 0 && n.inicio && n.fin && !fechasInvertidas) {
         sumaPesos += peso
       } else if (!fechasInvertidas) {
@@ -53,7 +58,9 @@ export function validarCronograma(raices: NodoArbol[]): Aviso[] {
   if (sumaPesos > 0 && Math.abs(sumaPesos - 1) > TOLERANCIA) {
     avisos.unshift({
       codigo: 'pesos_no_suman_100',
-      mensaje: `Los pesos de las actividades suman ${porcentaje(sumaPesos)} % y deberían sumar 100 %.`,
+      mensaje: `Los pesos de las actividades suman ${porcentaje(sumaPesos)} % y deberían sumar 100 %.${
+        reglas.sumaPesos === 'obligatoria' ? ' Debes completarlos para registrar un corte.' : ''
+      }`,
     })
   }
   return avisos

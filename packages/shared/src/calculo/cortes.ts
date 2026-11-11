@@ -1,11 +1,7 @@
 import { construirArbol, recorrerHojas } from './arbol'
-import {
-  calcularCronograma,
-  type AvancesPorHoja,
-  type ResultadoNodo,
-  type Umbrales,
-} from './cronograma'
+import { calcularCronograma, type AvancesPorHoja, type ResultadoNodo } from './cronograma'
 import { aDia } from './fechas'
+import { pesosEfectivos, REGLAS_POR_DEFECTO, type Reglas } from './reglas'
 import type { FechaISO, NodoArbol } from './tipos'
 
 const EPS = 1e-9
@@ -21,11 +17,18 @@ export interface FilaFoto {
   fin: FechaISO | null
 }
 
-/** Hojas con peso > 0 y fechas válidas: las únicas que entran en un corte. */
-export function hojasProgramadas(raices: NodoArbol[]): NodoArbol[] {
-  return recorrerHojas(raices).filter(
-    (h) => (h.peso ?? 0) > 0 && !!h.inicio && !!h.fin && aDia(h.fin) >= aDia(h.inicio),
-  )
+/**
+ * Hojas con peso efectivo > 0 y fechas válidas: las únicas que entran en un corte. Cada una
+ * lleva en `peso` su peso efectivo (el repartido, si la regla lo reparte).
+ */
+export function hojasProgramadas(
+  raices: NodoArbol[],
+  reglas: Reglas = REGLAS_POR_DEFECTO,
+): NodoArbol[] {
+  const pesos = pesosEfectivos(raices, reglas.sinPeso)
+  return recorrerHojas(raices)
+    .map((h) => ({ ...h, peso: pesos[h.id]?.peso ?? 0 }))
+    .filter((h) => h.peso > 0 && !!h.inicio && !!h.fin && aDia(h.fin) >= aDia(h.inicio))
 }
 
 /** Fecha del primer corte en que cada hoja llegó al 100 %. */
@@ -64,7 +67,7 @@ export function totalesDeFoto(
   foto: FilaFoto[],
   fecha: FechaISO,
   terminadas: Record<string, FechaISO> = {},
-  umbrales?: Umbrales,
+  reglas: Reglas = REGLAS_POR_DEFECTO,
 ): ResultadoNodo {
   const raices = raicesDeFoto(foto)
   const avances: AvancesPorHoja = Object.fromEntries(
@@ -73,5 +76,5 @@ export function totalesDeFoto(
       { pct: f.pct, terminadaEn: terminadas[f.actividadId] ?? null },
     ]),
   )
-  return calcularCronograma(raices, avances, fecha, umbrales).proyecto
+  return calcularCronograma(raices, avances, fecha, reglas).proyecto
 }

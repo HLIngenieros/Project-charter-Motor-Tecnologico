@@ -1,4 +1,6 @@
 import {
+  REGLAS_POR_DEFECTO,
+  arbolHistorico,
   calcularCronograma,
   construirArbol,
   type AvanceFoto,
@@ -10,7 +12,6 @@ import { useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
 import { useCorte, useCortes } from '../../api/cronograma'
 import type { BorradorCronograma } from './cronograma/useBorradorCronograma'
-import { arbolHistorico } from './vista'
 
 export interface Historica {
   fecha: FechaISO
@@ -85,7 +86,10 @@ export function useVistaCronograma(
     if (!elegido) return null
     const h = arbolHistorico(borrador.acts, foto ?? [])
     const arbol = construirArbol(h.acts)
-    const calculo = calcularCronograma(arbol, h.avances, elegido.fecha, umbrales)
+    const calculo = calcularCronograma(arbol, h.avances, elegido.fecha, {
+      ...REGLAS_POR_DEFECTO,
+      umbrales,
+    })
     const { pv, ev, desv, estado, vencidas } = elegido
     return {
       acts: h.acts,

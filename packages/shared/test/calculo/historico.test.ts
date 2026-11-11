@@ -1,6 +1,7 @@
-import type { ActividadEntrada, AvanceFoto } from '@charter/shared'
+import type { AvanceFoto } from '../../src/esquemas/cronograma'
+import type { ActividadEntrada } from '../../src/calculo/tipos'
 import { describe, expect, it } from 'vitest'
-import { arbolHistorico } from '../src/pantallas/ficha/vista'
+import { arbolHistorico } from '../../src/calculo/historico'
 
 const act = (id: string, extra: Partial<ActividadEntrada> = {}): ActividadEntrada => ({
   id,

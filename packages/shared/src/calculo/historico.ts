@@ -1,10 +1,10 @@
-import {
-  construirArbol,
-  recorrerHojas,
-  type ActividadEntrada,
-  type AvanceFoto,
-  type AvancesPorHoja,
-} from '@charter/shared'
+import { construirArbol, recorrerHojas } from './arbol'
+import type { FilaFoto } from './cortes'
+import type { AvancesPorHoja } from './cronograma'
+import type { ActividadEntrada } from './tipos'
+
+/** Fila de la foto tal como la devuelve el detalle de un corte. */
+type AvanceFoto = FilaFoto & { eliminada: boolean }
 
 export interface ArbolHistorico {
   /** Estructura actual; las hojas de la foto, con el peso y las fechas que tenían en el corte. */
