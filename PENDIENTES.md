@@ -85,9 +85,22 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 - [ ] T8.2 · Charters de prueba A1, D1 y C1
 - [ ] T8.3 · Pulido responsive y de movimiento
 - [ ] T8.4 · Pruebas E2E
-- [ ] T8.5 · Build de producción y guía de despliegue
+- [ ] T8.5 · Build de producción y guía de despliegue → adelantado como **despliegue en Vercel + Neon**
 
-**Próxima tarea sugerida:** Fase 6 (indicadores y riesgos primero: el charter real RF1 · Radicación de facturas ya tiene propuestos indicadores y riesgos que hoy no se pueden capturar). Los indicadores y riesgos de RF1 están anotados en T6.1 y T6.2 para cargarlos al construirlos. Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
+## Despliegue en Vercel + Neon
+
+Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md). Plan: [docs/planes/despliegue-vercel.md](docs/planes/despliegue-vercel.md). Sesiones: base y API asíncrona (Tasks 1–4) · fecha, acceso, Vercel y publicación (Tasks 5–7).
+
+- [ ] Antes de empezar: exportar el JSON de RF1 desde la app actual
+- [ ] Task 1 · Esquema Postgres y conexión (PGlite / Neon)
+- [ ] Task 2 · Autenticación, sesiones y CLI asíncronos
+- [ ] Task 3 · Charters, catálogos y parámetros asíncronos
+- [ ] Task 4 · Cronograma y cortes asíncronos (versión dentro de la transacción)
+- [ ] Task 5 · Fecha de Bogotá y `CORREOS_PERMITIDOS` (cierra la prueba de zona horaria)
+- [ ] Task 6 · Adaptador y `vercel.json`
+- [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación y documentación)
+
+**Próxima tarea sugerida:** despliegue en Vercel + Neon, sesión 1 (Tasks 1–4). Después, Fase 6 (indicadores y riesgos de RF1 anotados en T6.1 y T6.2). Sigue abierto de la Fase 2: límite de intentos en `POST /auth/registro`.
 
 ## Registro de sesiones
 
@@ -108,3 +121,4 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 | 2026-11-11 | T5.1–T5.3 · T7.4 y T8.1 (parcial) | Fase 5 sesión 2: selector de corte y ficha a una fecha en solo lectura, curva S protagonista (SVG, entrada por CSS porque `motion.path` no actualizaba el `d`), Gantt con fin proyectado, plegado y `memo` (170 actividades: arrastre p95 17 ms en producción). Pedido nuevo del usuario: parametrización del Admin y exportación PDF/JSON; diseño con maquetas (eligió el PDF completo en el orden de la ficha) y plan de 9 tareas. Sesión 1 del plan: reglas en el motor (pesos, umbrales, días hábiles, ritmo, gracia), parámetros globales con copia al crear y exportación JSON. 373 pruebas y lint en verde. Commits 03a98c3…09ada23 |
 | 2026-11-11 | T7.4 y T8.1 | Sesión 2 del plan de parametrización y exportación: reglas del charter en la ficha y en Registrar corte (peso «auto», suma obligatoria bloquea el corte), pestaña de Parametrización del Admin, menú Exportar (JSON y PDF) y vista de impresión A4 con curva estática, cronograma completo y pie con páginas. 389 pruebas, lint y build en verde; navegador revisado (Admin a 1440 y 390 px, JSON y PDF de un charter de 170 actividades en un corte pasado). Commits 43fc593…495927d |
 | 2026-11-11 | T5.4, T5.5, cierre Fase 5 | Propuesta de redacción para RF1 · Radicación de facturas (primer charter real, a partir de la transcripción del Comité IA): razón de ser, objetivos, supuestos, criterios, indicadores, riesgos y cronograma de 6 fases; cargado en el sistema a pedido del usuario (salvo indicadores y riesgos, sin sección aún). Fase 5 sesión 3: portafolio con avance «real de planeado», barra y chip del semáforo, vencidas, filtro «Con vencidas» y `MiniCurvaS` (desde 1024 px, escala hasta el mayor valor); mini curva con el punto nuevo en Registrar corte; el aviso «Corte guardado» se borra del historial. 396 pruebas, lint y build en verde; navegador a 1440 y 390 px. Commits 33fa829…b086bdd |
+| 2026-11-11 | Despliegue (diseño y plan) | Revisión de pendientes y de opciones de hosting gratuito. El PC no puede estar siempre prendido, así que el usuario eligió Vercel (Hobby, uso personal) + Neon. Diseño: Postgres en todas partes (PGlite en desarrollo y pruebas), API asíncrona, versión del cronograma dentro de la transacción, migraciones en el build, función que reenvía `/api` a Fastify, fecha de Bogotá y `CORREOS_PERMITIDOS`. Plan de 7 tareas en dos sesiones. Sin cambios de código |
