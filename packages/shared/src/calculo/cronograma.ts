@@ -1,4 +1,4 @@
-import { aDia, aISO } from './fechas'
+import { aDia, aISO, diasHabiles, sumarHabiles } from './fechas'
 import { pesosEfectivos, REGLAS_POR_DEFECTO, type Reglas } from './reglas'
 import type { FechaISO, NodoArbol } from './tipos'
 
@@ -143,7 +143,8 @@ function resultadoDe(
   const dur = acc.fin - acc.ini + 1
   const pv = acc.pesoPv / acc.peso
   const ev = acc.pesoEv / acc.peso
-  const desv = (ev - pv) * dur
+  const unidad = r.reparto === 'habiles' ? Math.max(1, diasHabiles(acc.ini, acc.fin)) : dur
+  const desv = (ev - pv) * unidad
   return {
     id,
     item,
@@ -192,16 +193,31 @@ export function calcularCronograma(
     }
 
     const dur = fin - ini + 1
-    const pv = recortar((t - ini + 1) / dur)
+    const habiles = reglas.reparto === 'habiles'
+    // Con días hábiles, planeado, desviación y forecast se cuentan en hábiles (dur sigue en calendario).
+    const durH = diasHabiles(ini, fin)
+    const unidad = habiles ? Math.max(1, durH) : dur
+    const pv = !habiles
+      ? recortar((t - ini + 1) / dur)
+      : durH === 0
+        ? t >= fin
+          ? 1
+          : 0
+        : recortar(diasHabiles(ini, Math.min(t, fin)) / durH)
     const avance = avances[n.id]
     const ev = pctValido(avance?.pct)
-    const desv = (ev - pv) * dur
+    const desv = (ev - pv) * unidad
+    const spi = pv > 0 ? ev / pv : null
+    const mover = (desde: number, dias: number) =>
+      habiles ? sumarHabiles(desde, dias) : desde + dias
     const forecast =
       ev >= 1 - EPS
         ? avance?.terminadaEn
           ? aDia(avance.terminadaEn)
           : t
-        : Math.max(t, fin - Math.round(desv))
+        : reglas.proyeccion === 'ritmo' && spi
+          ? Math.max(t, mover(ini, Math.ceil(unidad / spi - EPS) - 1))
+          : Math.max(t, mover(fin, -Math.round(desv)))
 
     const estado = estadoDe(pv, ev, t, fin + reglas.diasGracia, reglas.umbrales)
     const vencidas = estado === 'vencida' ? 1 : 0
@@ -216,7 +232,7 @@ export function calcularCronograma(
       pv,
       ev,
       desv,
-      spi: pv > 0 ? ev / pv : null,
+      spi,
       forecast: aISO(forecast),
       estado,
       adelantada: desv > 0,

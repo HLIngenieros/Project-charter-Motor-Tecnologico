@@ -21,3 +21,34 @@ export function aISO(dia: number): FechaISO {
 export function sumarDias(f: FechaISO, n: number): FechaISO {
   return aISO(aDia(f) + n)
 }
+
+/** Hábiles antes de cada resto de semana; el día 0 (1970-01-01) fue jueves. */
+const HABILES_PREFIJO = [0, 1, 2, 2, 2, 3, 4]
+
+/** Días hábiles (lunes a viernes) en [0, dia), contados desde el día 0. */
+function habilesAntes(dia: number): number {
+  const semanas = Math.floor(dia / 7)
+  return semanas * 5 + HABILES_PREFIJO[dia - semanas * 7]!
+}
+
+/** true si el número de día cae de lunes a viernes. */
+export function esHabil(dia: number): boolean {
+  const resto = (((dia + 4) % 7) + 7) % 7 // 0 = domingo
+  return resto !== 0 && resto !== 6
+}
+
+/** Días hábiles entre dos números de día, ambos incluidos; 0 si `hasta < desde`. */
+export function diasHabiles(desde: number, hasta: number): number {
+  return hasta < desde ? 0 : habilesAntes(hasta + 1) - habilesAntes(desde)
+}
+
+/** Avanza (o retrocede, con `n` negativo) `n` días hábiles desde `dia`. */
+export function sumarHabiles(dia: number, n: number): number {
+  const paso = n < 0 ? -1 : 1
+  let d = dia
+  for (let k = 0; k < Math.abs(n);) {
+    d += paso
+    if (esHabil(d)) k++
+  }
+  return d
+}
