@@ -81,11 +81,10 @@ describe('parámetros globales', () => {
 
   it('un charter de antes de la migración conserva sus umbrales', async () => {
     const id = await crearCharterPrueba(app, ana)
-    app.db
+    await app.db
       .update(charter)
       .set({ umbralAtencion: 8, umbralRiesgo: 20, umbralAtraso: 40 })
       .where(eq(charter.id, id))
-      .run()
     expect((await detalle(id)).reglas).toEqual({
       ...REGLAS_POR_DEFECTO,
       umbrales: { atencion: 8, riesgo: 20, atraso: 40 },

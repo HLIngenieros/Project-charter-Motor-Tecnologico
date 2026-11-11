@@ -24,7 +24,7 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
   app.get('/', async (request) => listarMisCharters(db, request.usuario!.id))
 
   app.post('/', async (request, reply) => {
-    const id = crearCharter(db, request.usuario!.id, charterCrear.parse(request.body))
+    const id = await crearCharter(db, request.usuario!.id, charterCrear.parse(request.body))
     return reply.status(201).send({ id })
   })
 
@@ -44,7 +44,7 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
       yo,
       soloReabre ? 'reapertura' : 'escritura',
     )
-    return detalleCharter(db, editarCharter(db, fila, datos), yo)
+    return detalleCharter(db, await editarCharter(db, fila, datos), yo)
   })
 
   app.put<{ Params: { id: string; tipo: string } }>('/:id/listas/:tipo', async (request) => {
@@ -61,7 +61,7 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
 
   app.delete<ConId>('/:id', async (request, reply) => {
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
-    eliminarCharter(db, fila.id)
+    await eliminarCharter(db, fila.id)
     return reply.status(204).send()
   })
 }

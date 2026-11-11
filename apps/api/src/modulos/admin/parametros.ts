@@ -14,14 +14,14 @@ const FILA = 1
 export type ReglasCharter = Omit<Reglas, 'umbrales'>
 
 /** Reglas vigentes para los charters nuevos (las de fábrica si nadie las cambió). */
-export function leerReglasVigentes(db: BaseDatos): Reglas {
-  const fila = db.select().from(parametros).where(eq(parametros.id, FILA)).get()
+export async function leerReglasVigentes(db: BaseDatos): Promise<Reglas> {
+  const [fila] = await db.select().from(parametros).where(eq(parametros.id, FILA)).limit(1)
   if (!fila) return REGLAS_POR_DEFECTO
   return { ...REGLAS_POR_DEFECTO, ...(JSON.parse(fila.reglas) as Partial<Reglas>) }
 }
 
-export function leerParametros(db: BaseDatos): ParametrosRespuesta {
-  const fila = db
+export async function leerParametros(db: BaseDatos): Promise<ParametrosRespuesta> {
+  const [fila] = await db
     .select({
       reglas: parametros.reglas,
       actualizadoEn: parametros.actualizadoEn,
@@ -31,7 +31,7 @@ export function leerParametros(db: BaseDatos): ParametrosRespuesta {
     .from(parametros)
     .leftJoin(usuario, eq(usuario.id, parametros.actualizadoPor))
     .where(eq(parametros.id, FILA))
-    .get()
+    .limit(1)
   if (!fila) return { reglas: REGLAS_POR_DEFECTO, actualizadoPor: null, actualizadoEn: null }
   return {
     reglas: { ...REGLAS_POR_DEFECTO, ...(JSON.parse(fila.reglas) as Partial<Reglas>) },
@@ -40,21 +40,21 @@ export function leerParametros(db: BaseDatos): ParametrosRespuesta {
   }
 }
 
-export function guardarReglas(
+export async function guardarReglas(
   db: BaseDatos,
   usuarioId: string,
   cuerpo: unknown,
-): ParametrosRespuesta {
+): Promise<ParametrosRespuesta> {
   const reglas = reglasEntrada.parse(cuerpo)
   const valores = {
     reglas: JSON.stringify(reglas),
     actualizadoPor: usuarioId,
     actualizadoEn: new Date().toISOString(),
   }
-  db.insert(parametros)
+  await db
+    .insert(parametros)
     .values({ id: FILA, ...valores })
     .onConflictDoUpdate({ target: parametros.id, set: valores })
-    .run()
   return leerParametros(db)
 }
 

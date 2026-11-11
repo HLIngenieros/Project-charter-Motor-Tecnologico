@@ -39,8 +39,9 @@ const pedir = (
 
 const detalle = async (id: string, h = ana) =>
   (await pedir('GET', `/api/charters/${id}`, h)).json<CharterDetalle>()
-const desactivarCategoria = (id: string) =>
-  ctx.db.update(categoria).set({ activa: false }).where(eq(categoria.id, id)).run()
+const desactivarCategoria = async (id: string) => {
+  await ctx.db.update(categoria).set({ activa: false }).where(eq(categoria.id, id))
+}
 
 describe('catálogos', () => {
   it('exigen sesión', async () => {
@@ -97,7 +98,7 @@ describe('crear charter', () => {
     expect(inexistente.statusCode).toBe(400)
     expect(inexistente.json().error.campos.categoriaId).toBe('Elige una categoría válida')
 
-    desactivarCategoria(DATA)
+    await desactivarCategoria(DATA)
     const inactiva = await pedir('POST', '/api/charters', ana, { nombre: 'X', categoriaId: DATA })
     expect(inactiva.statusCode).toBe(400)
   })
@@ -152,13 +153,10 @@ describe('listar charters', () => {
 
   it('trae el último corte por fecha', async () => {
     const id = await crearCharterPrueba(app, ana)
-    ctx.db
-      .insert(corte)
-      .values([
-        { id: v7(), charterId: id, fecha: '2026-11-01', pvProyecto: 0.4, evProyecto: 0.3 },
-        { id: v7(), charterId: id, fecha: '2026-10-01', pvProyecto: 0.2, evProyecto: 0.2 },
-      ])
-      .run()
+    await ctx.db.insert(corte).values([
+      { id: v7(), charterId: id, fecha: '2026-11-01', pvProyecto: 0.4, evProyecto: 0.3 },
+      { id: v7(), charterId: id, fecha: '2026-10-01', pvProyecto: 0.2, evProyecto: 0.2 },
+    ])
     const [c] = (await pedir('GET', '/api/charters', ana)).json<CharterResumen[]>()
     expect(c!.ultimoCorte).toMatchObject({ fecha: '2026-11-01', pv: 0.4, ev: 0.3, vencidas: 0 })
     expect(c!.cortes).toEqual([
@@ -217,8 +215,8 @@ describe('editar charter', () => {
 
   it('conserva una categoría que se desactivó pero no deja cambiar a otra inactiva', async () => {
     const id = await crearCharterPrueba(app, ana, { nombre: 'X', categoriaId: AUTOMATIZACION })
-    desactivarCategoria(AUTOMATIZACION)
-    desactivarCategoria(DATA)
+    await desactivarCategoria(AUTOMATIZACION)
+    await desactivarCategoria(DATA)
     expect(
       (await pedir('PATCH', `/api/charters/${id}`, ana, { patrocinador: 'Gerencia' })).statusCode,
     ).toBe(200)
@@ -262,13 +260,12 @@ describe('editar charter', () => {
 describe('eliminar charter', () => {
   it('el dueño lo elimina con sus listas', async () => {
     const id = await crearCharterPrueba(app, ana)
-    ctx.db
+    await ctx.db
       .insert(itemLista)
       .values({ id: v7(), charterId: id, tipo: 'objetivo', texto: 'Uno' })
-      .run()
     expect((await pedir('DELETE', `/api/charters/${id}`, ana)).statusCode).toBe(204)
     expect((await pedir('GET', `/api/charters/${id}`, ana)).statusCode).toBe(404)
-    expect(ctx.db.select().from(itemLista).all()).toHaveLength(0)
+    expect(await ctx.db.select().from(itemLista)).toHaveLength(0)
   })
 
   it('el dueño también elimina un charter cerrado', async () => {

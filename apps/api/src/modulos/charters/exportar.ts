@@ -18,20 +18,20 @@ import { detalleCharter } from './servicio'
  * El charter completo a una fecha: la vista actual (último corte, recalculado con el cronograma
  * de hoy, como la ficha) o un corte pasado (con su foto y lo guardado en ese corte).
  */
-export function exportarCharter(
+export async function exportarCharter(
   db: BaseDatos,
   fila: FilaCharter,
   yo: UsuarioSesion,
   pedido?: FechaISO,
-): ExportacionCharter {
-  const charter = detalleCharter(db, fila, yo)
+): Promise<ExportacionCharter> {
+  const charter = await detalleCharter(db, fila, yo)
   const { reglas } = charter
-  const crono = leerCronograma(db, fila)
-  const resumenes = listarCortes(db, fila)
+  const crono = await leerCronograma(db, fila)
+  const resumenes = await listarCortes(db, fila)
   if (pedido && !resumenes.some((c) => c.fecha === pedido)) {
     throw new ErrorApi(404, 'no_encontrado', 'No hay un corte en esa fecha.')
   }
-  const cortes = resumenes.map((c) => detalleCorte(db, fila, c.fecha))
+  const cortes = await Promise.all(resumenes.map((c) => detalleCorte(db, fila, c.fecha)))
   const ultimo = resumenes.at(-1)
   const pasado = pedido && pedido !== ultimo?.fecha ? cortes.find((c) => c.fecha === pedido)! : null
 

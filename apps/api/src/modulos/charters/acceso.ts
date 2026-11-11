@@ -22,7 +22,7 @@ export async function cargarCharter(
   usuario: UsuarioSesion,
   modo: ModoAcceso,
 ): Promise<FilaCharter> {
-  const fila = db.select().from(charter).where(eq(charter.id, id)).get()
+  const [fila] = await db.select().from(charter).where(eq(charter.id, id)).limit(1)
   const esDueno = fila?.propietarioId === usuario.id
   if (!fila || (!esDueno && !usuario.esAdmin)) {
     throw new ErrorApi(404, 'no_encontrado', 'No encontramos ese charter')
