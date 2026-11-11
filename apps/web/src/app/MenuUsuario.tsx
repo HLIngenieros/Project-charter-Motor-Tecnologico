@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useSalir, useSesion } from '../api/sesion'
 import { Boton } from '../componentes/Boton'
 
@@ -10,6 +10,14 @@ export function MenuUsuario() {
   if (!usuario) return null
   return (
     <>
+      {usuario.esAdmin && (
+        <Link
+          to="/admin/parametros"
+          className="rounded-control px-2 py-1.5 font-semibold text-white/90 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white"
+        >
+          Administración
+        </Link>
+      )}
       <span className="hidden truncate text-white/80 sm:inline">{usuario.nombre}</span>
       <Boton
         variante="fantasma"

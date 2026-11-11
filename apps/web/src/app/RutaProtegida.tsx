@@ -37,3 +37,10 @@ export function SoloInvitado({ children }: { children: ReactNode }) {
   if (sesion.data) return <Navigate to="/" replace />
   return children
 }
+
+/** Solo para Admin (va dentro de `RutaProtegida`); a los demás los lleva al inicio. */
+export function SoloAdmin({ children }: { children: ReactNode }) {
+  const { data: usuario } = useSesion()
+  if (!usuario?.esAdmin) return <Navigate to="/" replace />
+  return children
+}

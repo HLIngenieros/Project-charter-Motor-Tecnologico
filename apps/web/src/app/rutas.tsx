@@ -1,11 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router'
+import { AreaAdmin } from '../pantallas/admin/AreaAdmin'
+import { Parametrizacion } from '../pantallas/admin/Parametrizacion'
 import { RegistrarCorte } from '../pantallas/corte/RegistrarCorte'
 import { Entrar } from '../pantallas/Entrar'
 import { Ficha } from '../pantallas/ficha/Ficha'
 import { Muestra } from '../pantallas/Muestra'
 import { Portafolio } from '../pantallas/portafolio/Portafolio'
 import { Registro } from '../pantallas/Registro'
-import { RutaProtegida, SoloInvitado } from './RutaProtegida'
+import { RutaProtegida, SoloAdmin, SoloInvitado } from './RutaProtegida'
 
 export function Rutas() {
   return (
@@ -47,6 +49,28 @@ export function Rutas() {
         element={
           <RutaProtegida>
             <RegistrarCorte />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <RutaProtegida>
+            <SoloAdmin>
+              <Navigate to="/admin/parametros" replace />
+            </SoloAdmin>
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/admin/parametros"
+        element={
+          <RutaProtegida>
+            <SoloAdmin>
+              <AreaAdmin>
+                <Parametrizacion />
+              </AreaAdmin>
+            </SoloAdmin>
           </RutaProtegida>
         }
       />
