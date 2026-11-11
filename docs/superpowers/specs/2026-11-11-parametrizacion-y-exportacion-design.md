@@ -18,7 +18,7 @@ Dos pedidos que salen del mismo deseo: que el sistema reemplace de verdad al Exc
 ### Dónde vive
 
 - Nueva área **`/admin`** con pestañas *(call de Claude: el área aún no existe; esta es su primera pestaña)*. Por ahora solo **«Parametrización»** (`/admin/parametros`); Cuentas, Catálogos y Charters (T7.1–T7.3) se suman después como pestañas hermanas.
-- Acceso: enlace «Administración» en el menú de la cuenta, visible solo para Admin. La API responde 404 a quien no es Admin (como el resto del aislamiento).
+- Acceso: enlace «Administración» en el menú de la cuenta, visible solo para Admin. La API responde 403 `solo_admin` a quien no es Admin, con el guardia `exigirAdmin` que ya existe *(ajuste al escribir el plan: ocultar que existe una ruta de Admin no protege nada, a diferencia de un charter ajeno)*.
 
 ### Qué se parametriza
 
