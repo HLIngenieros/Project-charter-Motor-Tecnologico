@@ -13,8 +13,10 @@ import { BandaEstado } from './BandaEstado'
 import { ContextoGuardado, useColaGuardado, type AlFallar } from './colaGuardado'
 import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFicha'
 import { MenuCharter } from './MenuCharter'
-import { useCortes } from '../../api/cronograma'
+import { fechaCorta } from '../../formato'
 import { SeccionCronograma } from './cronograma/SeccionCronograma'
+import { SelectorCorte } from './SelectorCorte'
+import { useVistaCronograma } from './useVistaCronograma'
 import { useBorradorCronograma } from './cronograma/useBorradorCronograma'
 import { SeccionHistorial } from './SeccionHistorial'
 import { SeccionEncabezado } from './SeccionEncabezado'
@@ -100,11 +102,13 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
     },
     [encolar, mutateAsync],
   )
-  const soloLectura = !charter.permisos.editar
   /** Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). */
   const avisoAlVolver = (useLocation().state as { aviso?: string } | null)?.aviso
   const borrador = useBorradorCronograma(charter.id, cola.encolar, charter.umbrales)
-  const cortes = useCortes(charter.id)
+  const vista = useVistaCronograma(charter.id, borrador, charter.umbrales)
+  const { historica } = vista
+  /** Un corte pasado se ve siempre en solo lectura (también mientras se resuelve el pedido). */
+  const soloLectura = !charter.permisos.editar || historica !== null || vista.resolviendoCorte
   const esDueno = sesion.data?.id === charter.propietario.id
   const aviso = !esDueno ? (
     <Aviso>Charter de {charter.propietario.nombre} · solo lectura</Aviso>
@@ -136,13 +140,26 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
           <BandaEstado
             nombre={charter.nombre}
             situacion={
-              borrador.arbol.length > 0
-                ? { proyecto: borrador.calculo.proyecto, fechaCorte: borrador.fechaCorte }
+              vista.arbol.length > 0
+                ? {
+                    proyecto: vista.calculo.proyecto,
+                    fechaCorte: vista.fechaCorte,
+                    historica: historica !== null,
+                    lineaBaseModificada: vista.lineaBaseModificada,
+                  }
                 : undefined
             }
             registrarCorte={soloLectura ? undefined : `/charters/${charter.id}/corte`}
+            selectorCorte={
+              <SelectorCorte
+                cortes={vista.cortes}
+                valor={vista.corteElegido}
+                alCambiar={vista.elegirCorte}
+              />
+            }
             acciones={
-              esDueno && (
+              esDueno &&
+              !historica && (
                 <MenuCharter
                   charterId={charter.id}
                   nombre={charter.nombre}
@@ -159,11 +176,29 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
             secciones={secciones(
               charter,
               borrador.cargando ? undefined : borrador.acts.length,
-              cortes.data?.length,
+              vista.cortes.length || undefined,
             )}
           />
           <article className="flex min-w-0 flex-col gap-8 rounded-tarjeta border border-linea bg-superficie px-10 pt-7.5 pb-11 max-lg:-mx-4 max-lg:rounded-none max-lg:border-x-0 max-lg:px-4 max-lg:pt-6 max-lg:pb-8 max-sm:gap-9">
             {avisoAlVolver && <Aviso tono="ok">{avisoAlVolver}</Aviso>}
+            {vista.avisoCorte && <Aviso>{vista.avisoCorte}</Aviso>}
+            {historica && (
+              <Aviso tono="info">
+                <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span>
+                    Estás viendo el charter como estaba el {fechaCorta(historica.fecha)} (corte{' '}
+                    {historica.indice} de {historica.total}). Solo lectura.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => vista.elegirCorte(null)}
+                    className="rounded-sm font-semibold underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
+                  >
+                    Volver al último corte
+                  </button>
+                </span>
+              </Aviso>
+            )}
             {aviso}
             <EstadoGuardadoMovil />
             {/* Al pasar a solo lectura o volver, los campos se rehacen desde los datos de la API. */}
@@ -181,9 +216,19 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
                 soloLectura={soloLectura}
                 derecha={<SeccionObjetivos charter={charter} soloLectura={soloLectura} />}
               />
-              <SeccionCronograma borrador={borrador} soloLectura={soloLectura} />
+              <SeccionCronograma
+                borrador={vista}
+                soloLectura={soloLectura}
+                noExistia={historica?.noExistia}
+                eliminadas={historica?.eliminadas}
+              />
               <SeccionSupuestos charter={charter} soloLectura={soloLectura} />
-              <SeccionHistorial charterId={charter.id} soloLectura={soloLectura} />
+              <SeccionHistorial
+                charterId={charter.id}
+                soloLectura={soloLectura}
+                elegido={vista.corteElegido}
+                elegirCorte={vista.elegirCorte}
+              />
             </Fragment>
           </article>
         </div>

@@ -17,9 +17,14 @@ const ACCION =
 export function SeccionHistorial({
   charterId,
   soloLectura,
+  elegido = null,
+  elegirCorte,
 }: {
   charterId: string
   soloLectura: boolean
+  /** Corte que se ve en la ficha; null = el último. */
+  elegido?: FechaISO | null
+  elegirCorte?(fecha: FechaISO | null): void
 }) {
   const consulta = useCortes(charterId)
   const eliminar = useEliminarCorte(charterId)
@@ -30,6 +35,7 @@ export function SeccionHistorial({
     [consulta.data],
   )
   const ultimo = cortes[0]?.fecha
+  const viendo = elegido ?? ultimo
 
   const columnas: Columna<CorteResumen>[] = [
     {
@@ -39,6 +45,9 @@ export function SeccionHistorial({
         <span className="whitespace-nowrap">
           <b className="font-semibold text-tinta">{fechaCorta(c.fecha)}</b>
           {c.fecha === ultimo && <span className="text-texto-2"> · último</span>}
+          {elegido && c.fecha === elegido && (
+            <span className="font-semibold text-institucional"> · viendo</span>
+          )}
         </span>
       ),
     },
@@ -68,30 +77,48 @@ export function SeccionHistorial({
       ),
     },
   ]
-  if (!soloLectura)
+  if (elegirCorte || !soloLectura)
     columnas.push({
       id: 'acciones',
       titulo: <span className="sr-only">Acciones</span>,
       celda: (c) => (
         <span className="flex justify-end gap-3 whitespace-nowrap">
-          <Link
-            to={`/charters/${charterId}/corte?fecha=${c.fecha}`}
-            aria-label={`Editar el corte del ${fechaCorta(c.fecha)}`}
-            className={`${ACCION} text-institucional`}
-          >
-            Editar
-          </Link>
-          <button
-            type="button"
-            onClick={() => {
-              eliminar.reset()
-              setPorEliminar(c.fecha)
-            }}
-            aria-label={`Eliminar el corte del ${fechaCorta(c.fecha)}`}
-            className={`${ACCION} text-alerta-texto`}
-          >
-            Eliminar
-          </button>
+          {elegirCorte && c.fecha !== viendo && (
+            <button
+              type="button"
+              onClick={() => {
+                elegirCorte(c.fecha)
+                document.querySelector('main')?.scrollIntoView?.({ block: 'start' })
+              }}
+              aria-label={`Ver la ficha al ${fechaCorta(c.fecha)}`}
+              title="Ver la ficha a esta fecha"
+              className={`${ACCION} text-institucional`}
+            >
+              Ver
+            </button>
+          )}
+          {!soloLectura && (
+            <>
+              <Link
+                to={`/charters/${charterId}/corte?fecha=${c.fecha}`}
+                aria-label={`Editar el corte del ${fechaCorta(c.fecha)}`}
+                className={`${ACCION} text-institucional`}
+              >
+                Editar
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  eliminar.reset()
+                  setPorEliminar(c.fecha)
+                }}
+                aria-label={`Eliminar el corte del ${fechaCorta(c.fecha)}`}
+                className={`${ACCION} text-alerta-texto`}
+              >
+                Eliminar
+              </button>
+            </>
+          )}
         </span>
       ),
     })

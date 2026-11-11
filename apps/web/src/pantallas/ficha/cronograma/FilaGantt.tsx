@@ -37,6 +37,7 @@ export function FilaGantt({
   abierta,
   plegada,
   destello,
+  noExistia = false,
   pista,
   alAbrir,
   alPlegar,
@@ -48,6 +49,8 @@ export function FilaGantt({
   abierta: boolean
   plegada: boolean
   destello: boolean
+  /** Vista histórica: la hoja se creó después del corte. */
+  noExistia?: boolean
   pista: ReactNode
   alAbrir(): void
   alPlegar(): void
@@ -68,6 +71,7 @@ export function FilaGantt({
         (tonoFila && FONDO_FILA[tonoFila]) || '',
         abierta ? 'shadow-[inset_0_0_0_2px_var(--color-acento)]' : '',
         destello ? 'animate-destello' : '',
+        noExistia ? 'opacity-55' : '',
       ].join(' ')}
     >
       <div className="px-2.5 font-mono text-xs text-texto-2 max-md:hidden">
@@ -100,6 +104,11 @@ export function FilaGantt({
         >
           {nodo.nombre || <span className="font-normal text-texto-3 italic">Sin nombre</span>}
         </button>
+        {noExistia && (
+          <span className="flex-none text-xs font-normal text-texto-2 italic">
+            no existía en este corte
+          </span>
+        )}
         {aviso && (
           <span
             role="img"

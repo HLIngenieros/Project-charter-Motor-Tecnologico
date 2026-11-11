@@ -1,11 +1,11 @@
-import type { NodoArbol } from '@charter/shared'
+import type { AvanceFoto, NodoArbol } from '@charter/shared'
 import { Fragment, useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react'
 import { v7 } from 'uuid'
 import { Aviso } from '../../../componentes/Aviso'
 import { Boton } from '../../../componentes/Boton'
 import { Cargando } from '../../../componentes/Cargando'
 import { Dialogo } from '../../../componentes/Dialogo'
-import { fechaCorta } from '../../../formato'
+import { fechaCorta, porcentaje } from '../../../formato'
 import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
 import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
@@ -41,9 +41,15 @@ const Mas = () => (
 export function SeccionCronograma({
   borrador: b,
   soloLectura,
+  noExistia,
+  eliminadas = [],
 }: {
   borrador: BorradorCronograma
   soloLectura: boolean
+  /** Vista histórica: hojas actuales que no estaban en el corte. */
+  noExistia?: Set<string>
+  /** Vista histórica: filas de la foto cuya actividad ya no existe. */
+  eliminadas?: AvanceFoto[]
 }) {
   const [abierta, setAbierta] = useState<string | null>(null)
   const [enfocar, setEnfocar] = useState<string | null>(null)
@@ -248,6 +254,7 @@ export function SeccionCronograma({
                 abierta={abierta === n.id}
                 plegada={plegadas.has(n.id)}
                 destello={destello === n.id}
+                noExistia={noExistia?.has(n.id)}
                 pista={pista(n)}
                 alAbrir={() => setAbierta((x) => (x === n.id ? null : n.id))}
                 alPlegar={() =>
@@ -270,6 +277,24 @@ export function SeccionCronograma({
                 />
               )}
             </Fragment>
+          ))}
+
+          {eliminadas.map((f) => (
+            <div
+              key={f.actividadId}
+              className={`${COLUMNAS} min-h-9 items-center border-t border-linea-2 text-[0.8125rem] text-texto-2`}
+            >
+              <div className="px-2.5 font-mono text-xs max-md:hidden">{f.item}</div>
+              <div className="flex min-w-0 items-baseline gap-2 pr-2.5 pl-[42px]">
+                <span className="truncate line-through decoration-texto-3">{f.nombre}</span>
+                <span className="flex-none text-xs italic">actividad eliminada</span>
+              </div>
+              <div className="px-2.5 text-right font-mono text-xs max-md:hidden">
+                {f.peso ? porcentaje(f.peso) : '—'}
+              </div>
+              <div className="px-2.5 font-mono text-xs max-md:hidden">{porcentaje(f.pct)} real</div>
+              <div />
+            </div>
           ))}
 
           {!soloLectura && (

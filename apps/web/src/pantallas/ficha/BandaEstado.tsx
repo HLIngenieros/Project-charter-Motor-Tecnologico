@@ -10,8 +10,12 @@ import { chipDe, tonoDe } from './cronograma/estados'
 
 export interface Situacion {
   proyecto: ResultadoNodo
-  /** Fecha del último corte; null si aún no hay cortes. */
+  /** Fecha del corte que se ve; null si aún no hay cortes. */
   fechaCorte: FechaISO | null
+  /** Se ve un corte pasado, no el último. */
+  historica?: boolean
+  /** El cronograma cambió después del último corte. */
+  lineaBaseModificada?: boolean
 }
 
 const pct = (n: number) => porcentaje(n)
@@ -38,39 +42,44 @@ function Dato({
   )
 }
 
-function Datos({ proyecto: p, fechaCorte }: Situacion) {
+function Datos({ proyecto: p, fechaCorte, historica, lineaBaseModificada }: Situacion) {
   const tono = tonoDe(p.estado)
   return (
-    <div
-      role="group"
-      aria-label="Situación del charter"
-      className="flex items-center gap-[22px] border-l border-linea pl-6 max-lg:order-3 max-lg:grid max-lg:w-full max-lg:grid-cols-3 max-lg:justify-start max-lg:gap-x-6 max-lg:gap-y-2.5 max-lg:border-0 max-lg:pl-0"
-    >
-      <Dato titulo="Planeado">
-        <Cifra valor={p.pv} formato={pct} />
-      </Dato>
-      <Dato titulo="Real">
-        <Cifra valor={p.ev} formato={pct} />
-      </Dato>
-      <Dato titulo="Brecha" opcional>
-        <Cifra
-          valor={Math.max(0, p.pv - p.ev)}
-          formato={puntos}
-          className={fechaCorte ? textoTono(tono) : undefined}
-        />
-      </Dato>
-      <Dato titulo="Vencidas">
-        <a
-          href="#cronograma"
-          className={`rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-acento ${p.vencidas > 0 ? 'text-vencida' : 'text-tinta'}`}
-        >
-          <Cifra valor={p.vencidas} formato={entero} />
-        </a>
-      </Dato>
-      {fechaCorte && (
-        <Dato titulo="Último corte" opcional>
-          {fechaCorta(fechaCorte)}
+    <div className="flex flex-col gap-1 border-l border-linea pl-6 max-lg:order-3 max-lg:w-full max-lg:border-0 max-lg:pl-0">
+      <div
+        role="group"
+        aria-label="Situación del charter"
+        className="flex items-center gap-[22px] max-lg:grid max-lg:grid-cols-3 max-lg:justify-start max-lg:gap-x-6 max-lg:gap-y-2.5"
+      >
+        <Dato titulo="Planeado">
+          <Cifra valor={p.pv} formato={pct} />
         </Dato>
+        <Dato titulo="Real">
+          <Cifra valor={p.ev} formato={pct} />
+        </Dato>
+        <Dato titulo="Brecha" opcional>
+          <Cifra
+            valor={Math.max(0, p.pv - p.ev)}
+            formato={puntos}
+            className={fechaCorte ? textoTono(tono) : undefined}
+          />
+        </Dato>
+        <Dato titulo="Vencidas">
+          <a
+            href="#cronograma"
+            className={`rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-acento ${p.vencidas > 0 ? 'text-vencida' : 'text-tinta'}`}
+          >
+            <Cifra valor={p.vencidas} formato={entero} />
+          </a>
+        </Dato>
+        {fechaCorte && (
+          <Dato titulo={historica ? 'Corte' : 'Último corte'} opcional>
+            {fechaCorta(fechaCorte)}
+          </Dato>
+        )}
+      </div>
+      {lineaBaseModificada && (
+        <p className="text-xs text-texto-2">Línea base modificada desde el corte</p>
       )}
     </div>
   )
@@ -81,8 +90,11 @@ export function BandaEstado({
   nombre,
   situacion,
   registrarCorte,
+  selectorCorte,
   acciones,
 }: {
+  /** Elige en qué corte se ve la ficha. */
+  selectorCorte?: ReactNode
   nombre: string
   /** Situación actual; se omite mientras el cronograma no tiene actividades. */
   situacion?: Situacion
@@ -118,8 +130,9 @@ export function BandaEstado({
           </div>
         </div>
         {situacion && <Datos {...situacion} />}
-        {(registrarCorte || acciones) && (
+        {(registrarCorte || acciones || selectorCorte) && (
           <div className="ml-auto flex items-center gap-2">
+            {selectorCorte}
             {registrarCorte && (
               <Link to={registrarCorte} className={clasesBoton('primario', 'max-sm:px-3')}>
                 Registrar corte
