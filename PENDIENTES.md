@@ -75,17 +75,17 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 - [ ] T7.1 · Cuentas
 - [ ] T7.2 · Catálogos (categorías y áreas)
 - [ ] T7.3 · Lectura global de charters
-- [~] T7.4 · Parametrización (motor y API hechos; falta la pestaña web). Plan: [docs/planes/parametrizacion-exportacion.md](docs/planes/parametrizacion-exportacion.md)
+- [x] T7.4 · Parametrización (`/admin/parametros`). Plan: [docs/planes/parametrizacion-exportacion.md](docs/planes/parametrizacion-exportacion.md)
 
 ## Fase 8 · Cierre v1.0
 
-- [~] T8.1 · Exportar a PDF y JSON (endpoint JSON hecho; faltan el menú y la vista de impresión)
+- [x] T8.1 · Exportar a PDF y JSON (menú en la banda, vista de impresión A4 y descarga JSON)
 - [ ] T8.2 · Charters de prueba A1, D1 y C1
 - [ ] T8.3 · Pulido responsive y de movimiento
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** sesión 2 del plan de [parametrización y exportación](docs/planes/parametrizacion-exportacion.md) (Tasks 5–9: reglas en la ficha, pestaña de Admin, menú Exportar con JSON y PDF, cierre). Después, la sesión 3 de la Fase 5 (Tasks 7–9: portafolio con avance, mini curva en Registrar corte, cierre de fase). Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
+**Próxima tarea sugerida:** la sesión 3 de la Fase 5 (Tasks 7–9: portafolio con avance, mini curva en Registrar corte, cierre de fase). Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
 
 ## Registro de sesiones
 
@@ -104,3 +104,4 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 | 2026-11-10 | T4.2, T4.4, cierre Fase 4 | Tasks 7–9: banda con cifras animadas (`Cifra`, Motion) y estado del proyecto, historial de cortes con editar y eliminar, pantalla Registrar corte (vencidas / en curso / resto, reclasifica al cambiar la fecha, aviso si baja el %, editar sobre la foto con «actividad eliminada», barra fija en celular). El borrador del cronograma sube a la ficha para que banda y Gantt compartan cálculo. Ronda de navegador a 1440 y 390 px: arreglado el desborde horizontal por un `sr-only` absoluto dentro de la tabla y cifras partidas. Prueba intermitente de aislamiento: `instanceof ErrorApi` fallaba por módulo duplicado en Windows; ahora compara por nombre. 291 pruebas, lint y build en verde |
 | 2026-11-10 | Fase 5 · sesión 1 | Diseño de la Fase 5 con compañero visual (selector de corte en banda, curva e historial; ficha a una fecha en solo lectura; sin bloque de avance por grupo; cortes guardados inmutables) y plan de 9 tareas. Tasks 1–3: proyección y lectura de la curva en el motor, resumen del portafolio con estado, vencidas y serie de cortes, umbrales en el detalle y en la ficha, prueba de contraste del semáforo (naranja `#de781c`). 314 pruebas y lint en verde. Commits 681d883…a29a80d |
 | 2026-11-11 | T5.1–T5.3 · T7.4 y T8.1 (parcial) | Fase 5 sesión 2: selector de corte y ficha a una fecha en solo lectura, curva S protagonista (SVG, entrada por CSS porque `motion.path` no actualizaba el `d`), Gantt con fin proyectado, plegado y `memo` (170 actividades: arrastre p95 17 ms en producción). Pedido nuevo del usuario: parametrización del Admin y exportación PDF/JSON; diseño con maquetas (eligió el PDF completo en el orden de la ficha) y plan de 9 tareas. Sesión 1 del plan: reglas en el motor (pesos, umbrales, días hábiles, ritmo, gracia), parámetros globales con copia al crear y exportación JSON. 373 pruebas y lint en verde. Commits 03a98c3…09ada23 |
+| 2026-11-11 | T7.4 y T8.1 | Sesión 2 del plan de parametrización y exportación: reglas del charter en la ficha y en Registrar corte (peso «auto», suma obligatoria bloquea el corte), pestaña de Parametrización del Admin, menú Exportar (JSON y PDF) y vista de impresión A4 con curva estática, cronograma completo y pie con páginas. 389 pruebas, lint y build en verde; navegador revisado (Admin a 1440 y 390 px, JSON y PDF de un charter de 170 actividades en un corte pasado). Commits 43fc593…(cierre) |

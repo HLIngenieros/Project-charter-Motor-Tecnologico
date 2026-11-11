@@ -174,9 +174,13 @@ function Historial({ cortes, elegido }: { cortes: CorteResumen[]; elegido: strin
               <td className="py-1.5 pr-2">
                 <Chip tono={chip.tono}>{chip.texto}</Chip>
               </td>
-              <td className="py-1.5 pr-2 text-right font-cifra">{porcentaje(c.pv)}</td>
-              <td className="py-1.5 pr-2 text-right font-cifra">{porcentaje(c.ev)}</td>
-              <td className="py-1.5 pr-2 text-right font-cifra">
+              <td className="py-1.5 pr-2 text-right font-cifra whitespace-nowrap">
+                {porcentaje(c.pv)}
+              </td>
+              <td className="py-1.5 pr-2 text-right font-cifra whitespace-nowrap">
+                {porcentaje(c.ev)}
+              </td>
+              <td className="py-1.5 pr-2 text-right font-cifra whitespace-nowrap">
                 {puntos(Math.max(0, c.pv - c.ev))}
               </td>
               <td className="py-1.5 whitespace-pre-line text-texto">{c.nota || '—'}</td>

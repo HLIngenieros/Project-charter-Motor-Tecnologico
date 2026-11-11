@@ -31,11 +31,11 @@ export function CronogramaImpresion({ vista }: { vista: VistaCronograma }) {
         <tr className="border-b border-linea text-left text-texto-2">
           <th className="w-[7%] py-1.5 pr-1.5 font-semibold">Ítem</th>
           <th className="py-1.5 pr-1.5 font-semibold">Actividad</th>
-          <th className="w-[7%] py-1.5 pr-1.5 text-right font-semibold">Peso</th>
+          <th className="w-[8%] py-1.5 pr-3 text-right font-semibold">Peso</th>
           <th className="w-[9%] py-1.5 pr-1.5 font-semibold">Inicio</th>
           <th className="w-[9%] py-1.5 pr-1.5 font-semibold">Fin</th>
           <th className="w-[13%] py-1.5 pr-1.5 font-semibold">Estado</th>
-          <th className="w-[7%] py-1.5 pr-1.5 text-right font-semibold">Real</th>
+          <th className="w-[8%] py-1.5 pr-3 text-right font-semibold">Real</th>
           <th className="w-[24%] py-1.5 font-semibold">
             <span className="sr-only">Barra del cronograma</span>
           </th>
@@ -55,14 +55,16 @@ export function CronogramaImpresion({ vista }: { vista: VistaCronograma }) {
               <td className="py-1 pr-1.5" style={{ paddingLeft: (n.nivel - 1) * 10 }}>
                 {n.nombre || 'Sin nombre'}
               </td>
-              <td className="py-1 pr-1.5 text-right font-cifra">
+              <td className="py-1 pr-3 text-right font-cifra whitespace-nowrap">
                 {peso ? porcentaje(peso) : '—'}
                 {n.esHoja && r?.pesoAuto && <span className="text-texto-3"> auto</span>}
               </td>
               <td className="py-1 pr-1.5 whitespace-nowrap">{corta(r?.inicio ?? n.inicio)}</td>
               <td className="py-1 pr-1.5 whitespace-nowrap">{corta(r?.fin ?? n.fin)}</td>
               <td className="py-1 pr-1.5">{chip && <Chip tono={chip.tono}>{chip.texto}</Chip>}</td>
-              <td className="py-1 pr-1.5 text-right font-cifra">{r ? porcentaje(r.ev) : '—'}</td>
+              <td className="py-1 pr-3 text-right font-cifra whitespace-nowrap">
+                {r ? porcentaje(r.ev) : '—'}
+              </td>
               <td className="h-7 p-0">
                 <div className="relative h-7">
                   <PistaGantt

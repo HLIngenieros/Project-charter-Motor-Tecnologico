@@ -103,7 +103,8 @@ Convenciones: identificadores `TEXT` con UUID v7 *(criterio técnico: ordenables
 
 | Tabla | Campos |
 |---|---|
-| `charter` | id, propietario_id, nombre, codigo (opcional, ej. "A1"), categoria_id?, area_id?, responsable, patrocinador, revision, razon_de_ser, objetivo_general, estado (`activo` · `pausado` · `cerrado` · `cancelado`), umbral_atencion (10), umbral_riesgo (25), umbral_atraso (50) — puntos de brecha, §4.4 del análisis |
+| `charter` | id, propietario_id, nombre, codigo (opcional, ej. "A1"), categoria_id?, area_id?, responsable, patrocinador, revision, razon_de_ser, objetivo_general, estado (`activo` · `pausado` · `cerrado` · `cancelado`), umbral_atencion (10), umbral_riesgo (25), umbral_atraso (50) — puntos de brecha, §4.4 del análisis; reglas (JSON: suma de pesos, sin peso, reparto, proyección y días de gracia; se copian de `parametros` al crear) |
+| `parametros` | Una fila (`id = 1`): reglas (JSON) vigentes para los charters nuevos, actualizado_por, actualizado_en. Sin fila rigen `REGLAS_POR_DEFECTO` del motor |
 | `item_lista` | id, charter_id, tipo (`objetivo` · `supuesto` · `criterio_exito`), texto, orden |
 | `riesgo` | id, charter_id, riesgo, causa, mitigacion, orden |
 | `indicador` | id, charter_id, nombre, formula, meta_operador (`>=` · `<=` · `=`), meta_valor, meta_unidad, observaciones, orden |
@@ -179,19 +180,20 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 |---|---|
 | Auth | `POST /auth/registro` · `POST /auth/login` · `POST /auth/logout` · `GET /auth/yo` · `POST /auth/cambiar-clave` |
 | Catálogos (lectura) | `GET /categorias` · `GET /areas` |
-| Charters | `GET /charters` (los míos) · `POST /charters` · `GET/PATCH/DELETE /charters/:id` |
+| Charters | `GET /charters` (los míos) · `POST /charters` · `GET/PATCH/DELETE /charters/:id` · `GET /charters/:id/exportar[?corte=]` (JSON completo con cortes; 404 `no_encontrado` si el corte no existe) |
 | Listas | `PUT /charters/:id/listas/:tipo` (reemplaza la lista ordenada) |
 | Cronograma | `GET /charters/:id/cronograma` · `PUT /charters/:id/cronograma` (guarda el árbol completo en una transacción) |
 | Cortes | `GET /charters/:id/cortes` · `GET/PUT/DELETE /charters/:id/cortes/:fecha` |
 | Indicadores | `PUT /charters/:id/indicadores` · `PUT /indicadores/:id/mediciones` |
 | Riesgos | `PUT /charters/:id/riesgos` |
 | Presupuesto | `PUT /charters/:id/presupuesto` |
-| Admin | `GET /admin/charters` (todos, con filtros) · `GET /admin/charters/:id` · `GET/PATCH /admin/usuarios/:id` · `POST /admin/usuarios/:id/restablecer-clave` · CRUD `/admin/categorias` y `/admin/areas` |
+| Admin | `GET /admin/charters` (todos, con filtros) · `GET/PUT /admin/parametros` · `GET /admin/charters/:id` · `GET/PATCH /admin/usuarios/:id` · `POST /admin/usuarios/:id/restablecer-clave` · CRUD `/admin/categorias` y `/admin/areas` |
 
 - **Guardado por bloques** *(criterio técnico)*: listas, cronograma, riesgos, indicadores y presupuesto se envían completos con `PUT`. Simplifica la edición en línea y el reordenamiento. El volumen es pequeño (un cronograma grande tiene unas 200 filas).
 - **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`. Con `modo = 'escritura'` exige que el usuario sea el dueño. Con `modo = 'lectura'` acepta al dueño o a un Admin. Si el charter es de otro, responde **404** (no 403), para no revelar que existe. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
 - **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `version` (`charter.cronograma_version`); si no coincide, la API responde 409 `cronograma_desactualizado` y la web muestra «El cronograma cambió en otra pestaña» con «Recargar». No se usa `actualizado_en` porque los `PATCH` del encabezado lo cambian y darían falsos 409.
 - **Cortes:** `PUT /cortes/:fecha` crea el corte con la foto de la línea base vigente o, si ya existe en esa fecha, edita su % y su nota sin tocar la foto. Códigos propios: `fecha_futura`, `corte_anterior` (un corte nuevo no puede ir antes del último), `sin_hojas_programadas`, `actividad_invalida`; en el cronograma, `id_invalido` (id de otro charter).
+- **Admin:** las rutas `/admin/*` usan `exigirAdmin` y responden 403 `solo_admin`; ocultarlas no protege nada.
 - **Errores:** formato único `{ error: { codigo, mensaje, campos? } }`, con mensajes en español.
 
 ## 8. Autenticación y seguridad
@@ -214,7 +216,8 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 | `/charters/nuevo` | Creación rápida (nombre, categoría, área); después se completa en la ficha |
 | `/charters/:id` | **Ficha del charter**: documento vivo en el orden de la hoja ID & TI, con índice lateral (ver `docs/pantallas.md`) |
 | `/charters/:id/corte` | **Registrar corte**; con `?fecha=` edita ese corte sobre su foto |
-| `/charters/:id/imprimir` | Vista A4 para exportar a PDF |
+| `/charters/:id/imprimir` | Vista A4 para exportar a PDF (con `?corte=`, la ficha a esa fecha); sin `Layout`, imprime sola al cargar |
+| `/admin/parametros` | Parametrización: reglas de cálculo que copian los charters nuevos (`/admin` redirige aquí) |
 | `/cuenta` | Cambiar nombre y clave |
 | `/admin/charters` | Todos los charters, en solo lectura (reutiliza la ficha sin controles de edición) |
 | `/admin/usuarios`, `/admin/catalogos` | Gestión de cuentas, categorías y áreas |
@@ -235,7 +238,7 @@ La disposición y el detalle visual de cada pantalla se definen en la tarea T1.3
 
 ### 9.3 Exportar a PDF
 
-Se usa una ruta de impresión con CSS `@page { size: A4 }`, al estilo del Informe global, y el usuario imprime a PDF desde el navegador *(criterio técnico: no requiere Chromium en el servidor)*. Las gráficas de ECharts se renderizan en SVG para que salgan nítidas.
+El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viendo. **PDF:** `/charters/:id/imprimir` abre en otra pestaña el documento completo en el orden de la ficha (encabezado, razón de ser, objetivos, curva S, cronograma, supuestos y criterios, historial), con `@page { size: A4; margin: 14mm }`, cajas de margen para el pie (nombre, corte, fecha y «Página n de m») y `window.print()` al cargar *(criterio técnico: no requiere Chromium en el servidor)*. La curva S es la misma de la ficha en modo `estatica` (SVG, 688 px). **JSON:** `GET /charters/:id/exportar` y descarga como `charter-<código o nombre>-<fecha>.json`.
 
 ## 10. Despliegue
 

@@ -130,7 +130,7 @@ export function CurvaS({
   const [lienzo, ancho] = useAncho(anchoFijo)
   const movil = ancho < 640
   const alto = movil ? 260 : 380
-  const m = { l: movil ? 38 : 52, r: movil ? 10 : 20, t: 22, b: movil ? 62 : 66 }
+  const m = { l: movil ? 38 : estatica ? 68 : 52, r: movil ? 10 : 20, t: 22, b: movil ? 62 : 66 }
   const pw = Math.max(10, ancho - m.l - m.r)
   const ph = alto - m.t - m.b
   const yBase = m.t + ph
