@@ -1,5 +1,13 @@
-import type { AvanceFoto, NodoArbol } from '@charter/shared'
-import { Fragment, useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react'
+import type { AvanceFoto, Aviso as AvisoCronograma, NodoArbol } from '@charter/shared'
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react'
 import { v7 } from 'uuid'
 import { Aviso } from '../../../componentes/Aviso'
 import { Boton } from '../../../componentes/Boton'
@@ -10,7 +18,7 @@ import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
 import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
 import * as op from './operaciones'
-import { PistaGantt } from './PistaGantt'
+import type { Extremo } from './PistaGantt'
 import type { BorradorCronograma } from './useBorradorCronograma'
 
 /** Filas visibles en preorden: las hijas de una agrupadora plegada no se muestran. */
@@ -22,6 +30,25 @@ function visibles(arbol: NodoArbol[], plegadas: Set<string>): NodoArbol[] {
   }
   arbol.forEach(visitar)
   return salida
+}
+
+const SIN_AVISOS: AvisoCronograma[] = []
+
+/** Ancho real de la pista de fechas, para separar las etiquetas de mes de la del corte. */
+function useAnchoPista() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [ancho, setAncho] = useState<number | undefined>(undefined)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const obs = new ResizeObserver(([e]) => {
+      const w = Math.round(e!.contentRect.width)
+      if (w > 0) setAncho(w)
+    })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, ancho] as const
 }
 
 const Mas = () => (
@@ -59,14 +86,27 @@ export function SeccionCronograma({
 
   const filas = useMemo(() => visibles(b.arbol, plegadas), [b.arbol, plegadas])
   const avisoPesos = b.avisos.find((a) => a.codigo === 'pesos_no_suman_100')
+  const avisosPorId = useMemo(() => {
+    const m = new Map<string, AvisoCronograma[]>()
+    for (const a of b.avisos)
+      if (a.actividadId) m.set(a.actividadId, [...(m.get(a.actividadId) ?? []), a])
+    return m
+  }, [b.avisos])
+  const grupos = useMemo(() => b.arbol.filter((n) => !n.esHoja).map((n) => n.id), [b.arbol])
 
   const [escala, setEscala] = useState<Escala>('semestre')
   const [destello, setDestello] = useState<string | null>(null)
+  const [cabecera, anchoPista] = useAnchoPista()
+  // Por fechas, no por el objeto del cálculo: así las filas no cambian de props en cada recálculo.
+  const { inicio, fin } = b.calculo.proyecto
   const rango = useMemo(
-    () => rangoVisible(b.calculo.proyecto, escala, b.fechaCalculo),
-    [b.calculo.proyecto, escala, b.fechaCalculo],
+    () => rangoVisible({ inicio, fin }, escala, b.fechaCalculo),
+    [inicio, fin, escala, b.fechaCalculo],
   )
-  const marcas = useMemo(() => marcasDe(rango, escala), [rango, escala])
+  const marcas = useMemo(
+    () => marcasDe(rango, escala, b.fechaCalculo, anchoPista),
+    [rango, escala, b.fechaCalculo, anchoPista],
+  )
   const corte = aPorcentaje(b.fechaCalculo, rango)
   useEffect(() => {
     if (!destello) return
@@ -114,33 +154,39 @@ export function SeccionCronograma({
     cerrar: () => setAbierta(null),
   })
 
-  const teclaFila = (id: string) => (e: KeyboardEvent<HTMLButtonElement>) => {
-    if (soloLectura || !e.altKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return
-    e.preventDefault()
-    aplicar((a) => op.mover(a, id, e.key === 'ArrowUp' ? -1 : 1))
-    // Mover reordena los nodos y React les quita el foco: se devuelve a la fila.
-    requestAnimationFrame(() =>
-      document
-        .querySelector<HTMLButtonElement>(
-          `[data-fila="${id}"] button[aria-expanded]:not([aria-label])`,
-        )
-        ?.focus(),
-    )
-  }
-
-  const pista = (n: NodoArbol) => (
-    <PistaGantt
-      nodo={n}
-      resultado={b.calculo.nodos[n.id]}
-      rango={rango}
-      fechaCorte={b.fechaCalculo}
-      marcas={marcas}
-      soloLectura={soloLectura}
-      alMover={(dias, extremo) => {
-        aplicar((a) => op.moverFechas(a, n.id, dias, extremo))
-        setDestello(n.id)
-      }}
-    />
+  const alTecla = useCallback(
+    (id: string, e: KeyboardEvent<HTMLButtonElement>) => {
+      if (soloLectura || !e.altKey || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return
+      e.preventDefault()
+      aplicar((a) => op.mover(a, id, e.key === 'ArrowUp' ? -1 : 1))
+      // Mover reordena los nodos y React les quita el foco: se devuelve a la fila.
+      requestAnimationFrame(() =>
+        document
+          .querySelector<HTMLButtonElement>(
+            `[data-fila="${id}"] button[aria-expanded]:not([aria-label])`,
+          )
+          ?.focus(),
+      )
+    },
+    [soloLectura, aplicar],
+  )
+  const alAbrir = useCallback((id: string) => setAbierta((x) => (x === id ? null : id)), [])
+  const alPlegar = useCallback(
+    (id: string) =>
+      setPlegadas((p) => {
+        const s = new Set(p)
+        if (s.has(id)) s.delete(id)
+        else s.add(id)
+        return s
+      }),
+    [],
+  )
+  const alMover = useCallback(
+    (id: string, dias: number, extremo: Extremo) => {
+      aplicar((a) => op.moverFechas(a, id, dias, extremo))
+      setDestello(id)
+    },
+    [aplicar],
   )
 
   return (
@@ -150,14 +196,32 @@ export function SeccionCronograma({
           Cronograma
         </h2>
         {!soloLectura && (
-          <p className="text-[0.8125rem] text-texto-2 max-md:hidden">
+          <p className="text-[0.8125rem] text-texto-2 max-2xl:hidden">
             Arrastra una barra para mover sus fechas; sus extremos cambian el inicio o el fin.
           </p>
+        )}
+        {grupos.length > 0 && (
+          <div className="ml-auto flex items-center gap-1 max-md:hidden">
+            <button
+              type="button"
+              onClick={() => setPlegadas(new Set(grupos))}
+              className="rounded-[6px] px-2.5 py-1 text-[0.8125rem] font-semibold text-texto-2 hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
+            >
+              Plegar a grupos
+            </button>
+            <button
+              type="button"
+              onClick={() => setPlegadas(new Set())}
+              className="rounded-[6px] px-2.5 py-1 text-[0.8125rem] font-semibold text-texto-2 hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
+            >
+              Desplegar todo
+            </button>
+          </div>
         )}
         <div
           role="group"
           aria-label="Escala"
-          className="ml-auto inline-flex rounded-control bg-fondo p-[3px]"
+          className={`${grupos.length > 0 ? 'md:ml-0' : ''} ml-auto inline-flex rounded-control bg-fondo p-[3px]`}
         >
           {(
             [
@@ -208,7 +272,7 @@ export function SeccionCronograma({
             <div className="px-2.5">Actividad</div>
             <div className="px-2.5 text-right max-md:hidden">Peso</div>
             <div className="px-2.5 max-md:hidden">Estado</div>
-            <div className="relative h-8 overflow-hidden" aria-label="Fechas">
+            <div ref={cabecera} className="relative h-8 overflow-hidden" aria-label="Fechas">
               <span className="sr-only">Fechas</span>
               {marcas.map((m) => (
                 <Fragment key={m.fecha}>
@@ -250,22 +314,19 @@ export function SeccionCronograma({
               <FilaGantt
                 nodo={n}
                 resultado={b.calculo.nodos[n.id]}
-                avisos={b.avisos.filter((a) => a.actividadId === n.id)}
+                avisos={avisosPorId.get(n.id) ?? SIN_AVISOS}
                 abierta={abierta === n.id}
                 plegada={plegadas.has(n.id)}
                 destello={destello === n.id}
-                noExistia={noExistia?.has(n.id)}
-                pista={pista(n)}
-                alAbrir={() => setAbierta((x) => (x === n.id ? null : n.id))}
-                alPlegar={() =>
-                  setPlegadas((p) => {
-                    const s = new Set(p)
-                    if (s.has(n.id)) s.delete(n.id)
-                    else s.add(n.id)
-                    return s
-                  })
-                }
-                alTecla={teclaFila(n.id)}
+                noExistia={noExistia?.has(n.id) ?? false}
+                rango={rango}
+                fechaCorte={b.fechaCalculo}
+                marcas={marcas}
+                soloLectura={soloLectura}
+                alAbrir={alAbrir}
+                alPlegar={alPlegar}
+                alTecla={alTecla}
+                alMover={alMover}
               />
               {abierta === n.id && (
                 <DetalleActividad

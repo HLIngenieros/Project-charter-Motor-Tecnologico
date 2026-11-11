@@ -48,9 +48,12 @@ const IMAN = 9
 const salida = [0.22, 1, 0.36, 1] as const
 
 /** `d` como atributo (para quien no anima por CSS) y como estilo (para que la geometría se transforme). */
-const geo = (d: string): { d: string; style: CSSProperties } => ({
+const geo = (d: string, retrasoTrazo?: number): { d: string; style: CSSProperties } => ({
   d,
-  style: { d: `path("${d || 'M0 0'}")` } as CSSProperties,
+  style: {
+    d: `path("${d || 'M0 0'}")`,
+    ...(retrasoTrazo !== undefined ? { animationDelay: `${retrasoTrazo}s` } : {}),
+  } as CSSProperties,
 })
 
 function useAncho(inicial = 880) {
@@ -167,9 +170,13 @@ export function CurvaS({
     finProyectado ? aDia(finProyectado) : 0,
   )
   const lineasY = [0, 0.25, 0.5, 0.75, 1].map((v) => v * dom.techo)
-  const marcasMes = meses(dom.desde, dom.hasta).filter(
-    (_, i) => !(movil && zoom === 'proyecto' && i % 2),
-  )
+  // Etiquetas de mes con al menos 64 px entre sí (las de enero llevan el año).
+  const pxMes = (pw * 30.4) / Math.max(1, dom.hasta - dom.desde)
+  const paso = Math.max(1, Math.ceil(64 / pxMes))
+  const marcasMes = meses(dom.desde, dom.hasta).map((mm, i) => ({
+    ...mm,
+    etiqueta: i % paso === 0 ? mm.etiqueta : '',
+  }))
 
   const mover = (e: PointerEvent<SVGRectElement>) => {
     const r = e.currentTarget.getBoundingClientRect()
@@ -187,14 +194,6 @@ export function CurvaS({
           initial: { opacity: 0, ...extra },
           animate: { opacity: 1, ...Object.fromEntries(Object.keys(extra).map((k) => [k, 1])) },
           transition: { duration: 0.5, delay: retraso, ease: salida },
-        }
-  const trazar = (retraso: number) =>
-    reducido
-      ? { initial: false as const }
-      : {
-          initial: { pathLength: 0 },
-          animate: { pathLength: 1 },
-          transition: { duration: 1.1, delay: retraso, ease: salida },
         }
 
   return (
@@ -228,7 +227,7 @@ export function CurvaS({
               style={{ transform: `translateX(${x(mm.dia)}px)` }}
             >
               <line y1={m.t} y2={yBase} className="stroke-linea-2" />
-              {x(mm.dia) < m.l + pw - (movil ? 26 : 8) && (
+              {mm.etiqueta && x(mm.dia) < m.l + pw - (movil ? 26 : 8) && (
                 <text x={4} y={yBase + 20} className="fill-texto-2">
                   {mm.etiqueta}
                 </text>
@@ -256,24 +255,25 @@ export function CurvaS({
               />
             ))}
           </motion.g>
-          <motion.path
+          <path
             data-curva="planeada"
-            {...geo(dPlan)}
-            {...trazar(0)}
-            className="curva-geo fill-none stroke-institucional"
+            {...geo(dPlan, 0)}
+            pathLength={1}
+            className="curva-geo curva-trazo fill-none stroke-institucional"
             strokeWidth={2.5}
             strokeLinejoin="round"
           />
           {dProy && (
-            <motion.path
-              data-curva="proyeccion"
-              {...geo(dProy)}
-              {...entrar(1.2)}
-              className="curva-geo fill-none stroke-acento"
-              strokeWidth={2}
-              strokeDasharray="2 6"
-              strokeLinecap="round"
-            />
+            <motion.g {...entrar(1.2)}>
+              <path
+                data-curva="proyeccion"
+                {...geo(dProy)}
+                className="curva-geo fill-none stroke-acento"
+                strokeWidth={2}
+                strokeDasharray="2 6"
+                strokeLinecap="round"
+              />
+            </motion.g>
           )}
           {reales.length > 0 && (
             <>
@@ -285,11 +285,11 @@ export function CurvaS({
                   strokeLinejoin="round"
                 />
               )}
-              <motion.path
+              <path
                 data-curva="real"
-                {...geo(dReal)}
-                {...trazar(0.35)}
-                className="curva-geo fill-none stroke-acento"
+                {...geo(dReal, 0.35)}
+                pathLength={1}
+                className="curva-geo curva-trazo fill-none stroke-acento"
                 strokeWidth={3.5}
                 strokeLinejoin="round"
                 strokeLinecap="round"

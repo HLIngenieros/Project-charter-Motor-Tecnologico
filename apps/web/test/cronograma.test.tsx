@@ -297,3 +297,56 @@ describe('pista del Gantt', () => {
     expect(s.queryByRole('slider')).not.toBeInTheDocument()
   })
 })
+
+describe('Gantt completo', () => {
+  it('una hoja atrasada muestra su fin proyectado; una al día no', async () => {
+    abrir({
+      cronograma: {
+        version: 1,
+        actividades: [
+          hoja('a', { nombre: 'Atrasada', peso: 0.5, inicio: '2026-02-01', fin: '2026-02-28' }),
+          hoja('b', {
+            nombre: 'Al día',
+            orden: 1,
+            peso: 0.5,
+            inicio: '2026-02-01',
+            fin: '2026-02-28',
+          }),
+        ],
+        ultimoCorte: {
+          fecha: '2026-02-15',
+          avances: { a: { pct: 0.1, terminadaEn: null }, b: { pct: 0.6, terminadaEn: null } },
+        },
+      },
+    })
+    const s = await seccion()
+    const marcas = s.getAllByRole('img', { name: /^Fin proyectado/ })
+    expect(marcas).toHaveLength(1)
+    expect(marcas[0]!.closest('[data-fila]')).toHaveAttribute('data-fila', 'a')
+  })
+
+  it('«Plegar a grupos» deja solo el primer nivel y «Desplegar todo» lo devuelve', async () => {
+    const { usuario } = abrir({
+      cronograma: {
+        version: 1,
+        actividades: [
+          hoja('g1', { nombre: 'Grupo 1' }),
+          hoja('h1', { padreId: 'g1', nombre: 'Hoja 1', peso: 0.5 }),
+          hoja('g2', { nombre: 'Grupo 2', orden: 1 }),
+          hoja('g21', { padreId: 'g2', nombre: 'Subgrupo' }),
+          hoja('h2', { padreId: 'g21', nombre: 'Hoja 2', peso: 0.5 }),
+        ],
+        ultimoCorte: null,
+      },
+    })
+    const s = await seccion()
+    expect(s.getByText('Hoja 2')).toBeInTheDocument()
+    await usuario.click(s.getByRole('button', { name: 'Plegar a grupos' }))
+    expect(s.queryByText('Hoja 1')).not.toBeInTheDocument()
+    expect(s.queryByText('Subgrupo')).not.toBeInTheDocument()
+    expect(s.getByText('Grupo 1')).toBeInTheDocument()
+    expect(s.getByText('Grupo 2')).toBeInTheDocument()
+    await usuario.click(s.getByRole('button', { name: 'Desplegar todo' }))
+    expect(s.getByText('Hoja 2')).toBeInTheDocument()
+  })
+})

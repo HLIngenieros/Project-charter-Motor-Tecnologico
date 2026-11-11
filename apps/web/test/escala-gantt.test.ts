@@ -53,4 +53,19 @@ describe('marcas', () => {
     const m = marcas({ desde: '2026-01-01', hasta: '2027-01-01' }, 'anio')
     expect(m.map((x) => x.etiqueta)).toEqual(['ene', 'abr', 'jul', 'oct', 'ene'])
   })
+
+  it('la etiqueta de un mes pegada a la del corte se omite (la línea queda)', () => {
+    const r = { desde: '2026-10-01', hasta: '2027-01-01' }
+    const m = marcas(r, 'trimestre', '2026-11-10')
+    const nov = m.find((x) => x.fecha === '2026-11-01')!
+    expect(nov.etiqueta).toBe('')
+    expect(m.find((x) => x.fecha === '2026-12-01')!.etiqueta).toBe('dic')
+    expect(m.find((x) => x.fecha === '2026-10-01')!.etiqueta).toBe('oct')
+  })
+
+  it('con una pista ancha la etiqueta cercana sí cabe', () => {
+    const r = { desde: '2026-10-01', hasta: '2027-01-01' }
+    const m = marcas(r, 'trimestre', '2026-11-10', 1200)
+    expect(m.find((x) => x.fecha === '2026-11-01')!.etiqueta).toBe('nov')
+  })
 })

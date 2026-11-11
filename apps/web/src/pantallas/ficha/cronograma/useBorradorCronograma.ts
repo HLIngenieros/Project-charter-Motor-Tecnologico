@@ -54,6 +54,14 @@ export function useBorradorCronograma(
   const adoptado = useRef(false)
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null)
   const datos = consulta.data
+  // `aplicar` lee estos dos por ref: así su identidad no cambia con cada respuesta del PUT y
+  // las filas del Gantt (con `memo`) no se rehacen todas al guardar.
+  const datosRef = useRef(datos)
+  const conflictoRef = useRef(conflicto)
+  useEffect(() => {
+    datosRef.current = datos
+    conflictoRef.current = conflicto
+  }, [datos, conflicto])
 
   const enviar = useCallback(() => {
     temporizador.current = null
@@ -84,7 +92,8 @@ export function useBorradorCronograma(
 
   const aplicar = useCallback(
     (op: (a: ActividadEntrada[]) => ActividadEntrada[]) => {
-      if (conflicto || !datos) return
+      const datos = datosRef.current
+      if (conflictoRef.current || !datos) return
       // La primera edición parte de lo que trajo la API, con su versión.
       if (!adoptado.current) {
         adoptado.current = true
@@ -98,7 +107,7 @@ export function useBorradorCronograma(
       if (temporizador.current) clearTimeout(temporizador.current)
       temporizador.current = setTimeout(enviar, ESPERA_GUARDADO)
     },
-    [conflicto, datos, enviar],
+    [enviar],
   )
 
   const recargar = useCallback(() => {

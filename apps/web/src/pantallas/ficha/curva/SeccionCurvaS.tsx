@@ -9,7 +9,7 @@ import {
   type PuntoReal,
   type Umbrales,
 } from '@charter/shared'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useDeferredValue, useMemo, useState, type ReactNode } from 'react'
 import { Cargando } from '../../../componentes/Cargando'
 import { Chip } from '../../../componentes/Chip'
 import { fechaCorta, porcentaje, puntos } from '../../../formato'
@@ -52,7 +52,8 @@ export function SeccionCurvaS({
   const { historica, calculo, fechaCorte } = vista
   const p = calculo.proyecto
   const foto = historica?.foto
-  const arbol = vista.arbol
+  // Diferido: al soltar una barra, el Gantt se pinta primero y la curva en el render siguiente.
+  const arbol = useDeferredValue(vista.arbol)
 
   // Una pasada del motor por semana del proyecto: solo cuando cambia el cronograma.
   const planeada = useMemo(() => curvaSPlaneada(foto ? raicesDeFoto(foto) : arbol), [foto, arbol])
@@ -117,7 +118,7 @@ export function SeccionCurvaS({
   const ev = corteLeido ? corteLeido.ev : (l?.ev ?? null)
   const proyectada = !corteLeido && l?.tipo === 'proyeccion'
   const chip = corteLeido
-    ? chipDe(corteLeido, false)
+    ? chipDe(corteLeido, true)
     : ev !== null
       ? chipDe({ estado: estadoPorBrecha(pv, ev, umbrales), vencidas: 0 }, true)
       : null

@@ -44,15 +44,30 @@ export function diasPorPixel(r: Rango, anchoPx: number): number {
   return anchoPx > 0 ? (aDia(r.hasta) - aDia(r.desde)) / anchoPx : 0
 }
 
-/** Inicio de cada mes visible (o de cada trimestre en la escala año). */
-export function marcas(r: Rango, escala: Escala): { fecha: FechaISO; etiqueta: string }[] {
+/** Distancia mínima, en píxeles, entre la etiqueta de un mes y la del corte. */
+const SEPARACION_CORTE = 36
+
+/**
+ * Inicio de cada mes visible (o de cada trimestre en la escala año). Si hay corte, la etiqueta
+ * del mes que quedaría pegada a la suya se deja vacía (la línea del mes se conserva). `anchoPx`
+ * es el ancho de la pista; por defecto el mínimo de la columna.
+ */
+export function marcas(
+  r: Rango,
+  escala: Escala,
+  fechaCorte?: FechaISO,
+  anchoPx = 300,
+): { fecha: FechaISO; etiqueta: string }[] {
+  const pxPorDia = anchoPx / (aDia(r.hasta) - aDia(r.desde))
+  const cerca = (fecha: FechaISO) =>
+    !!fechaCorte && Math.abs(aDia(fecha) - aDia(fechaCorte)) * pxPorDia < SEPARACION_CORTE
   const salida: { fecha: FechaISO; etiqueta: string }[] = []
   let [a, m] = r.desde.split('-').map(Number) as [number, number]
   for (;;) {
     const fecha = `${a}-${String(m).padStart(2, '0')}-01`
     if (fecha > r.hasta) break
     if (fecha >= r.desde && (escala !== 'anio' || (m - 1) % 3 === 0)) {
-      salida.push({ fecha, etiqueta: MESES[m - 1]! })
+      salida.push({ fecha, etiqueta: cerca(fecha) ? '' : MESES[m - 1]! })
     }
     m++
     if (m > 12) {

@@ -15,6 +15,15 @@ export const COLOR_AVANCE: Record<string, string> = {
   vencida: 'bg-vencida',
 }
 
+/** Extensión punteada del fin proyectado (el amarillo no llega a 3:1: va su tono de texto). */
+const BORDE_PROYECTADO: Record<string, string> = {
+  al_dia: 'border-ok',
+  en_atencion: 'border-amarillo-texto',
+  en_riesgo: 'border-naranja',
+  atrasada: 'border-alerta',
+  vencida: 'border-vencida',
+}
+
 interface Arrastre {
   extremo: Extremo
   x0: number
@@ -95,6 +104,9 @@ export function PistaGantt({
   const izq = aPorcentaje(fechas.inicio, rango)
   const ancho = aPorcentaje(sumarDias(fechas.fin, 1), rango) - izq
   const avance = (resultado?.ev ?? 0) * 100
+  const forecast = resultado?.forecast
+  const proyectado = nodo.esHoja && !arrastre && forecast && forecast > fechas.fin ? forecast : null
+  const izqProyectado = proyectado ? izq + ancho : 0
 
   const empezar = (extremo: Extremo) => (e: PointerEvent<HTMLElement>) => {
     if (!editable || e.button !== 0) return
@@ -177,6 +189,18 @@ export function PistaGantt({
             style={{ width: `${avance}%` }}
           />
         </span>
+      )}
+      {proyectado && (
+        <span
+          role="img"
+          aria-label={`Fin proyectado ${fechaCorta(proyectado)}`}
+          title={`Fin proyectado ${fechaCorta(proyectado)}`}
+          className={`absolute top-[17px] h-0 border-t-2 border-dotted ${BORDE_PROYECTADO[resultado?.estado ?? ''] ?? 'border-texto-3'}`}
+          style={{
+            left: `${izqProyectado}%`,
+            width: `${aPorcentaje(sumarDias(proyectado, 1), rango) - izqProyectado}%`,
+          }}
+        />
       )}
       {tip && (
         <span
