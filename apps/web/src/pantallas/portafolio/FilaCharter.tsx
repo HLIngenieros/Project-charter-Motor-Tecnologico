@@ -76,7 +76,7 @@ export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; i
       <div className="text-[0.78125rem] text-texto-2">
         {corte ? (
           <>
-            <b className="font-cifra text-[0.9375rem] font-semibold text-tinta">
+            <b className="font-titulo text-[0.9375rem] font-semibold text-tinta tabular-nums">
               {porcentaje(corte.ev)}
             </b>{' '}
             de {porcentaje(corte.pv)}

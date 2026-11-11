@@ -22,7 +22,7 @@ const MARGEN = 4
 
 /**
  * Curva S en miniatura: planeado y real en los cortes, sin ejes ni interacción.
- * El eje vertical va de 0 a 100 % como la curva grande. `extra` es un punto nuevo
+ * El eje vertical llega un poco más allá del mayor valor, para que se lea la forma. `extra` es un punto nuevo
  * (el corte que se está registrando) que se suma al final y lleva el punto de estado.
  */
 export function MiniCurvaS({
@@ -45,7 +45,10 @@ export function MiniCurvaS({
   const total = diasEntre(inicio, serie[serie.length - 1]!.fecha)
   const x = (f: FechaISO) =>
     total > 0 ? MARGEN + (diasEntre(inicio, f) / total) * (ancho - 2 * MARGEN) : ancho - MARGEN
-  const y = (v: number) => MARGEN + (1 - Math.min(1, Math.max(0, v))) * (alto - 2 * MARGEN)
+  // Escala hasta un poco más del mayor valor: a 0–100 % la curva de un charter que empieza es plana.
+  const tope = Math.min(1, Math.max(0.1, ...serie.flatMap((p) => [p.pv, p.ev])) * 1.15)
+  const y = (v: number) =>
+    MARGEN + (1 - Math.min(tope, Math.max(0, v)) / tope) * (alto - 2 * MARGEN)
   const trazo = (v: (p: PuntoMini) => number) =>
     serie.map((p, i) => `${i ? 'L' : 'M'}${x(p.fecha).toFixed(1)} ${y(v(p)).toFixed(1)}`).join(' ')
 
