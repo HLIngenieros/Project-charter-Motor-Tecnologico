@@ -1,13 +1,17 @@
 import { existsSync, mkdirSync } from 'node:fs'
-import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import Database from 'better-sqlite3'
-import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
+import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core'
 import * as esquema from './esquema'
 import { sembrar } from './semilla'
 
-export type BaseDatos = BetterSQLite3Database<typeof esquema>
+export type BaseDatos = PgDatabase<PgQueryResultHKT, typeof esquema>
+
+type Motor = 'pg' | 'pglite'
+
+/** Con qué driver se abrió cada base, para migrarla con el migrador que le corresponde. */
+const motores = new WeakMap<BaseDatos, Motor>()
+
+export const esUrlPostgres = (destino: string) => /^postgres(ql)?:\/\//.test(destino)
 
 /** Carpeta de migraciones: `apps/api/drizzle`, tanto desde `src/db` como desde `dist`. */
 function carpetaMigraciones(): string {
@@ -19,14 +23,51 @@ function carpetaMigraciones(): string {
   return carpeta
 }
 
-/** Abre (o crea) la base, aplica las migraciones y siembra los catálogos. Admite ':memory:'. */
-export function crearDb(ruta: string): BaseDatos {
-  if (ruta !== ':memory:') mkdirSync(dirname(ruta), { recursive: true })
-  const sqlite = new Database(ruta)
-  sqlite.pragma('foreign_keys = ON')
-  sqlite.pragma('journal_mode = WAL')
-  const db = drizzle(sqlite, { schema: esquema })
-  migrate(db, { migrationsFolder: carpetaMigraciones() })
-  sembrar(db)
+/**
+ * Abre la base sin migrarla. Una URL `postgres://` va a Postgres (Neon) con un pool de `pg`;
+ * `':memory:'` es PGlite en memoria, y cualquier otra cosa, PGlite en esa carpeta.
+ */
+export async function abrirDb(destino: string): Promise<BaseDatos> {
+  if (esUrlPostgres(destino)) {
+    const { Pool } = await import('pg')
+    const { drizzle } = await import('drizzle-orm/node-postgres')
+    const db = drizzle(new Pool({ connectionString: destino, max: 3 }), { schema: esquema })
+    motores.set(db, 'pg')
+    return db
+  }
+  // PGlite solo con import dinámico: así no entra en la función de Vercel.
+  const { PGlite } = await import('@electric-sql/pglite')
+  if (destino !== ':memory:') mkdirSync(destino, { recursive: true })
+  const cliente = destino === ':memory:' ? new PGlite() : new PGlite(destino)
+  return envolverPglite(cliente)
+}
+
+/** Base de Drizzle sobre un cliente de PGlite ya abierto (las pruebas lo usan con `clone()`). */
+export async function envolverPglite(
+  cliente: import('@electric-sql/pglite').PGlite,
+): Promise<BaseDatos> {
+  const { drizzle } = await import('drizzle-orm/pglite')
+  const db = drizzle(cliente, { schema: esquema })
+  motores.set(db, 'pglite')
+  return db
+}
+
+/** Aplica las migraciones pendientes y siembra los catálogos. */
+export async function prepararDb(db: BaseDatos): Promise<void> {
+  const migrationsFolder = carpetaMigraciones()
+  if (motores.get(db) === 'pg') {
+    const { migrate } = await import('drizzle-orm/node-postgres/migrator')
+    await migrate(db as never, { migrationsFolder })
+  } else {
+    const { migrate } = await import('drizzle-orm/pglite/migrator')
+    await migrate(db as never, { migrationsFolder })
+  }
+  await sembrar(db)
+}
+
+/** Abre, migra y siembra (desarrollo, CLI y pruebas). Admite ':memory:'. */
+export async function crearDb(destino: string): Promise<BaseDatos> {
+  const db = await abrirDb(destino)
+  await prepararDb(db)
   return db
 }

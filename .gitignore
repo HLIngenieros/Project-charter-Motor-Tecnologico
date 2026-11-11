@@ -12,6 +12,7 @@ coverage/
 *.sqlite-wal
 *.sqlite-shm
 data/*.db
+data/pglite/
 
 # Variables de entorno / secretos
 .env

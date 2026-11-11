@@ -1,1 +1,0 @@
-ALTER TABLE `charter` ADD `cronograma_version` integer DEFAULT 0 NOT NULL;

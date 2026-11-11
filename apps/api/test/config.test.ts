@@ -6,6 +6,13 @@ import { construirApp } from '../src/app'
 import { cargarEntorno, leerConfig } from '../src/config'
 import { crearDb } from '../src/db/conexion'
 
+describe('base de datos', () => {
+  it('sin DATABASE_URL usa PGlite en data/pglite; con ella, esa URL', () => {
+    expect(leerConfig({}).urlDb).toBe('../../data/pglite')
+    expect(leerConfig({ DATABASE_URL: 'postgresql://x' }).urlDb).toBe('postgresql://x')
+  })
+})
+
 describe('confiar en el proxy', () => {
   it('por defecto no confía en X-Forwarded-For', () => {
     expect(leerConfig({}).confiarProxy).toBe(false)
@@ -14,7 +21,7 @@ describe('confiar en el proxy', () => {
 
   it('con CONFIAR_PROXY=true, el límite de login es por IP real del cliente', async () => {
     const app = await construirApp({
-      db: crearDb(':memory:'),
+      db: await crearDb(':memory:'),
       config: leerConfig({ CONFIAR_PROXY: 'true' }),
     })
     // Todas las peticiones llegan desde el proxy (127.0.0.1) con IPs de cliente distintas.

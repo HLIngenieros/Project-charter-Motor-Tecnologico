@@ -3,7 +3,8 @@ import { parseEnv } from 'node:util'
 
 export interface Config {
   puerto: number
-  rutaDb: string
+  /** URL de Postgres (Neon) o carpeta de PGlite. */
+  urlDb: string
   dominioPermitido: string
   cookieSegura: boolean
   /** Confiar en X-Forwarded-For (solo detrás de un proxy como IIS). */
@@ -16,7 +17,7 @@ type Entorno = Record<string, string | undefined>
 export function leerConfig(entorno: Entorno = process.env): Config {
   return {
     puerto: Number(entorno.PUERTO ?? 3100),
-    rutaDb: entorno.RUTA_DB ?? '../../data/charters.db',
+    urlDb: entorno.DATABASE_URL || '../../data/pglite',
     dominioPermitido: (entorno.DOMINIO_PERMITIDO ?? 'hlingenieros.com').trim().toLowerCase(),
     cookieSegura: entorno.COOKIE_SEGURA === 'true',
     confiarProxy: entorno.CONFIAR_PROXY === 'true',

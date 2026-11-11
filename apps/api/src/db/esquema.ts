@@ -1,14 +1,16 @@
 import { ESTADOS_CHARTER, REGLAS_POR_DEFECTO, TIPOS_LISTA } from '@charter/shared'
 import {
-  type AnySQLiteColumn,
+  type AnyPgColumn,
+  bigint,
+  boolean,
+  doublePrecision,
+  index,
   integer,
+  pgTable,
   primaryKey,
-  real,
-  sqliteTable,
   text,
   uniqueIndex,
-  index,
-} from 'drizzle-orm/sqlite-core'
+} from 'drizzle-orm/pg-core'
 
 /** Marca de tiempo ISO UTC. */
 const ahora = () => new Date().toISOString()
@@ -18,14 +20,14 @@ const tiempos = {
   actualizadoEn: text('actualizado_en').notNull().$defaultFn(ahora).$onUpdateFn(ahora),
 }
 
-const booleano = (nombre: string) => integer(nombre, { mode: 'boolean' })
+const booleano = (nombre: string) => boolean(nombre)
 
 /** Reglas de fábrica sin los umbrales, como texto JSON (default de `charter.reglas`). */
 export const REGLAS_CHARTER_DEFECTO = JSON.stringify({ ...REGLAS_POR_DEFECTO, umbrales: undefined })
 
 // ── 5.1 Cuentas y catálogos ─────────────────────────────────────────────
 
-export const usuario = sqliteTable('usuario', {
+export const usuario = pgTable('usuario', {
   id: text('id').primaryKey(),
   correo: text('correo').notNull().unique(),
   nombre: text('nombre').notNull(),
@@ -36,7 +38,7 @@ export const usuario = sqliteTable('usuario', {
   ...tiempos,
 })
 
-export const sesion = sqliteTable(
+export const sesion = pgTable(
   'sesion',
   {
     /** SHA-256 (hex) del token; el token en claro solo viaja en la cookie. */
@@ -51,7 +53,7 @@ export const sesion = sqliteTable(
   (t) => [index('sesion_usuario_idx').on(t.usuarioId)],
 )
 
-export const categoria = sqliteTable('categoria', {
+export const categoria = pgTable('categoria', {
   id: text('id').primaryKey(),
   nombre: text('nombre').notNull(),
   color: text('color').notNull(),
@@ -61,7 +63,7 @@ export const categoria = sqliteTable('categoria', {
   ...tiempos,
 })
 
-export const area = sqliteTable('area', {
+export const area = pgTable('area', {
   id: text('id').primaryKey(),
   nombre: text('nombre').notNull(),
   activa: booleano('activa').notNull().default(true),
@@ -71,7 +73,7 @@ export const area = sqliteTable('area', {
 
 // ── 5.2 Charter ─────────────────────────────────────────────────────────
 
-export const charter = sqliteTable(
+export const charter = pgTable(
   'charter',
   {
     id: text('id').primaryKey(),
@@ -89,9 +91,9 @@ export const charter = sqliteTable(
     objetivoGeneral: text('objetivo_general').notNull().default(''),
     estado: text('estado', { enum: ESTADOS_CHARTER }).notNull().default('activo'),
     // Brecha (planeado − real) en puntos porcentuales; spec §4.4.
-    umbralAtencion: real('umbral_atencion').notNull().default(10),
-    umbralRiesgo: real('umbral_riesgo').notNull().default(25),
-    umbralAtraso: real('umbral_atraso').notNull().default(50),
+    umbralAtencion: doublePrecision('umbral_atencion').notNull().default(10),
+    umbralRiesgo: doublePrecision('umbral_riesgo').notNull().default(25),
+    umbralAtraso: doublePrecision('umbral_atraso').notNull().default(50),
     // Reglas de cálculo copiadas al crear el charter, sin los umbrales (van en sus columnas).
     // JSON de `ReglasCharter`; el default son las reglas de fábrica (los charters de antes).
     reglas: text('reglas').notNull().default(REGLAS_CHARTER_DEFECTO),
@@ -107,7 +109,7 @@ const charterId = () =>
     .notNull()
     .references(() => charter.id, { onDelete: 'cascade' })
 
-export const itemLista = sqliteTable('item_lista', {
+export const itemLista = pgTable('item_lista', {
   id: text('id').primaryKey(),
   charterId: charterId(),
   tipo: text('tipo', { enum: TIPOS_LISTA }).notNull(),
@@ -116,7 +118,7 @@ export const itemLista = sqliteTable('item_lista', {
   ...tiempos,
 })
 
-export const riesgo = sqliteTable('riesgo', {
+export const riesgo = pgTable('riesgo', {
   id: text('id').primaryKey(),
   charterId: charterId(),
   riesgo: text('riesgo').notNull(),
@@ -126,7 +128,7 @@ export const riesgo = sqliteTable('riesgo', {
   ...tiempos,
 })
 
-export const indicador = sqliteTable('indicador', {
+export const indicador = pgTable('indicador', {
   id: text('id').primaryKey(),
   charterId: charterId(),
   nombre: text('nombre').notNull(),
@@ -134,14 +136,14 @@ export const indicador = sqliteTable('indicador', {
   metaOperador: text('meta_operador', { enum: ['>=', '<=', '='] })
     .notNull()
     .default('>='),
-  metaValor: real('meta_valor').notNull().default(0),
+  metaValor: doublePrecision('meta_valor').notNull().default(0),
   metaUnidad: text('meta_unidad').notNull().default(''),
   observaciones: text('observaciones').notNull().default(''),
   orden: integer('orden').notNull().default(0),
   ...tiempos,
 })
 
-export const medicion = sqliteTable(
+export const medicion = pgTable(
   'medicion',
   {
     id: text('id').primaryKey(),
@@ -149,48 +151,48 @@ export const medicion = sqliteTable(
       .notNull()
       .references(() => indicador.id, { onDelete: 'cascade' }),
     periodo: text('periodo').notNull(),
-    valor: real('valor').notNull(),
+    valor: doublePrecision('valor').notNull(),
     nota: text('nota').notNull().default(''),
     ...tiempos,
   },
   (t) => [index('medicion_indicador_idx').on(t.indicadorId)],
 )
 
-export const rubro = sqliteTable('rubro', {
+export const rubro = pgTable('rubro', {
   id: text('id').primaryKey(),
   charterId: charterId(),
   descripcion: text('descripcion').notNull(),
-  valor: integer('valor').notNull().default(0),
+  valor: bigint('valor', { mode: 'number' }).notNull().default(0),
   orden: integer('orden').notNull().default(0),
   ...tiempos,
 })
 
-export const rubroDetalle = sqliteTable('rubro_detalle', {
+export const rubroDetalle = pgTable('rubro_detalle', {
   id: text('id').primaryKey(),
   rubroId: text('rubro_id')
     .notNull()
     .references(() => rubro.id, { onDelete: 'cascade' }),
   concepto: text('concepto').notNull(),
-  cantidad: real('cantidad').notNull().default(1),
-  valorUnitario: integer('valor_unitario').notNull().default(0),
+  cantidad: doublePrecision('cantidad').notNull().default(1),
+  valorUnitario: bigint('valor_unitario', { mode: 'number' }).notNull().default(0),
   orden: integer('orden').notNull().default(0),
   ...tiempos,
 })
 
 // ── 5.3 Cronograma y cortes ─────────────────────────────────────────────
 
-export const actividad = sqliteTable(
+export const actividad = pgTable(
   'actividad',
   {
     id: text('id').primaryKey(),
     charterId: charterId(),
-    padreId: text('padre_id').references((): AnySQLiteColumn => actividad.id, {
+    padreId: text('padre_id').references((): AnyPgColumn => actividad.id, {
       onDelete: 'cascade',
     }),
     orden: integer('orden').notNull(),
     nombre: text('nombre').notNull(),
     entregable: text('entregable'),
-    peso: real('peso'),
+    peso: doublePrecision('peso'),
     inicio: text('inicio'),
     fin: text('fin'),
     ...tiempos,
@@ -201,7 +203,7 @@ export const actividad = sqliteTable(
   ],
 )
 
-export const actividadResponsable = sqliteTable(
+export const actividadResponsable = pgTable(
   'actividad_responsable',
   {
     actividadId: text('actividad_id')
@@ -214,23 +216,23 @@ export const actividadResponsable = sqliteTable(
   (t) => [primaryKey({ columns: [t.actividadId, t.orden] })],
 )
 
-export const corte = sqliteTable(
+export const corte = pgTable(
   'corte',
   {
     id: text('id').primaryKey(),
     charterId: charterId(),
     fecha: text('fecha').notNull(),
     nota: text('nota').notNull().default(''),
-    pvProyecto: real('pv_proyecto').notNull().default(0),
-    evProyecto: real('ev_proyecto').notNull().default(0),
-    desvProyecto: real('desv_proyecto').notNull().default(0),
+    pvProyecto: doublePrecision('pv_proyecto').notNull().default(0),
+    evProyecto: doublePrecision('ev_proyecto').notNull().default(0),
+    desvProyecto: doublePrecision('desv_proyecto').notNull().default(0),
     ...tiempos,
   },
   (t) => [uniqueIndex('corte_charter_fecha_unq').on(t.charterId, t.fecha)],
 )
 
 /** Foto de cada hoja en un corte. `actividad_id` no tiene clave foránea: sobrevive al borrado. */
-export const avance = sqliteTable(
+export const avance = pgTable(
   'avance',
   {
     corteId: text('corte_id')
@@ -239,8 +241,8 @@ export const avance = sqliteTable(
     actividadId: text('actividad_id').notNull(),
     item: text('item').notNull(),
     nombre: text('nombre').notNull(),
-    pctReal: real('pct_real').notNull().default(0),
-    peso: real('peso'),
+    pctReal: doublePrecision('pct_real').notNull().default(0),
+    peso: doublePrecision('peso'),
     inicio: text('inicio'),
     fin: text('fin'),
     ...tiempos,
@@ -253,7 +255,7 @@ export type FilaCharter = typeof charter.$inferSelect
 
 // ── Parámetros globales (una sola fila, id = 1) ─────────────────────────
 
-export const parametros = sqliteTable('parametros', {
+export const parametros = pgTable('parametros', {
   id: integer('id').primaryKey(),
   /** JSON de `Reglas` vigentes para los charters nuevos. */
   reglas: text('reglas').notNull(),

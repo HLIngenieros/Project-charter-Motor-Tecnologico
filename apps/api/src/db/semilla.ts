@@ -26,6 +26,6 @@ const CATEGORIAS = [
   },
 ]
 
-export function sembrar(db: BaseDatos): void {
-  db.insert(categoria).values(CATEGORIAS).onConflictDoNothing().run()
+export async function sembrar(db: BaseDatos): Promise<void> {
+  await db.insert(categoria).values(CATEGORIAS).onConflictDoNothing()
 }

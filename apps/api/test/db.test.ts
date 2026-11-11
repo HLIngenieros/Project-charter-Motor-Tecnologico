@@ -2,6 +2,7 @@ import { eq, sql } from 'drizzle-orm'
 import { v7 } from 'uuid'
 import { describe, expect, it } from 'vitest'
 import { crearDb } from '../src/db/conexion'
+import { esViolacionUnica } from '../src/db/errores'
 import { actividad, avance, categoria, charter, corte, usuario } from '../src/db/esquema'
 import { sembrar } from '../src/db/semilla'
 
@@ -24,29 +25,36 @@ const TABLAS = [
   'parametros',
 ]
 
-function conCharter() {
-  const db = crearDb(':memory:')
+async function conCharter() {
+  const db = await crearDb(':memory:')
   const usuarioId = v7()
   const charterId = v7()
-  db.insert(usuario)
+  await db
+    .insert(usuario)
     .values({ id: usuarioId, correo: 'a@hlingenieros.com', nombre: 'A', hashClave: 'x' })
-    .run()
-  db.insert(charter).values({ id: charterId, propietarioId: usuarioId, nombre: 'Charter A' }).run()
+  await db.insert(charter).values({ id: charterId, propietarioId: usuarioId, nombre: 'Charter A' })
   return { db, usuarioId, charterId }
 }
 
+/** Devuelve el error con que se rechaza la promesa (falla si no se rechaza). */
+async function errorDe(promesa: PromiseLike<unknown>): Promise<unknown> {
+  try {
+    await promesa
+  } catch (error) {
+    return error
+  }
+  throw new Error('Se esperaba un error')
+}
+
 describe('crearDb', () => {
-  it('crea las 16 tablas y las 3 categorías del Comité', () => {
-    const db = crearDb(':memory:')
-    const tablas = db
-      .all<{
-        name: string
-      }>(
-        sql`select name from sqlite_master where type = 'table' and name not like 'sqlite_%' and name not like '__drizzle%'`,
-      )
-      .map((t) => t.name)
+  it('crea las 16 tablas y las 3 categorías del Comité', async () => {
+    const db = await crearDb(':memory:')
+    const filas = await db.execute<{ table_name: string }>(
+      sql`select table_name from information_schema.tables where table_schema = 'public' and table_name not like '__drizzle%'`,
+    )
+    const tablas = filas.rows.map((t) => t.table_name)
     expect(tablas.sort()).toEqual([...TABLAS].sort())
-    const cats = db.select().from(categoria).all()
+    const cats = await db.select().from(categoria).orderBy(categoria.orden)
     expect(cats.map((c) => c.nombre)).toEqual([
       'Automatización',
       'Análisis de Data',
@@ -55,78 +63,85 @@ describe('crearDb', () => {
     expect(cats[0]).toMatchObject({ color: '#D98A00', colorFondo: '#FBF1DF', activa: true })
   })
 
-  it('sembrar es idempotente', () => {
-    const db = crearDb(':memory:')
-    sembrar(db)
-    sembrar(db)
-    expect(db.select().from(categoria).all()).toHaveLength(3)
+  it('sembrar es idempotente', async () => {
+    const db = await crearDb(':memory:')
+    await sembrar(db)
+    await sembrar(db)
+    expect(await db.select().from(categoria)).toHaveLength(3)
   })
 
-  it('activa las claves foráneas', () => {
-    const db = crearDb(':memory:')
-    expect(db.get<{ foreign_keys: number }>(sql`pragma foreign_keys`)).toEqual({ foreign_keys: 1 })
+  it('cumple las claves foráneas', async () => {
+    const db = await crearDb(':memory:')
+    const error = await errorDe(
+      db.insert(charter).values({ id: v7(), propietarioId: v7(), nombre: 'Huérfano' }),
+    )
+    expect(error).toBeTruthy()
+  })
+})
+
+describe('esViolacionUnica', () => {
+  it('reconoce el error real de un correo repetido y no otros', async () => {
+    const { db } = await conCharter()
+    const error = await errorDe(
+      db
+        .insert(usuario)
+        .values({ id: v7(), correo: 'a@hlingenieros.com', nombre: 'B', hashClave: 'y' }),
+    )
+    expect(esViolacionUnica(error)).toBe(true)
+    expect(esViolacionUnica(new Error('x'))).toBe(false)
   })
 })
 
 describe('restricciones', () => {
-  it('no permite dos cortes con la misma fecha en un charter', () => {
-    const { db, charterId } = conCharter()
-    const nuevo = () => db.insert(corte).values({ id: v7(), charterId, fecha: '2025-03-13' }).run()
-    nuevo()
-    expect(nuevo).toThrow(/UNIQUE/)
+  it('no permite dos cortes con la misma fecha en un charter', async () => {
+    const { db, charterId } = await conCharter()
+    const nuevo = () => db.insert(corte).values({ id: v7(), charterId, fecha: '2025-03-13' })
+    await nuevo()
+    expect(esViolacionUnica(await errorDe(nuevo()))).toBe(true)
   })
 
-  it('no permite dos usuarios con el mismo correo', () => {
-    const { db } = conCharter()
-    expect(() =>
-      db
-        .insert(usuario)
-        .values({ id: v7(), correo: 'a@hlingenieros.com', nombre: 'B', hashClave: 'y' })
-        .run(),
-    ).toThrow(/UNIQUE/)
-  })
-
-  it('borrar una actividad con avances conserva el avance', () => {
-    const { db, charterId } = conCharter()
+  it('borrar una actividad con avances conserva el avance', async () => {
+    const { db, charterId } = await conCharter()
     const actividadId = v7()
     const corteId = v7()
-    db.insert(actividad).values({ id: actividadId, charterId, orden: 1, nombre: 'Hoja' }).run()
-    db.insert(corte).values({ id: corteId, charterId, fecha: '2025-03-13' }).run()
-    db.insert(avance)
+    await db.insert(actividad).values({ id: actividadId, charterId, orden: 1, nombre: 'Hoja' })
+    await db.insert(corte).values({ id: corteId, charterId, fecha: '2025-03-13' })
+    await db
+      .insert(avance)
       .values({ corteId, actividadId, item: '1', nombre: 'Hoja', pctReal: 0.5 })
-      .run()
 
-    db.delete(actividad).where(eq(actividad.id, actividadId)).run()
+    await db.delete(actividad).where(eq(actividad.id, actividadId))
 
-    expect(db.select().from(avance).all()).toEqual([
+    expect(await db.select().from(avance)).toEqual([
       expect.objectContaining({ actividadId, item: '1', nombre: 'Hoja', pctReal: 0.5 }),
     ])
   })
 
-  it('borrar una agrupadora borra sus hijas', () => {
-    const { db, charterId } = conCharter()
+  it('borrar una agrupadora borra sus hijas', async () => {
+    const { db, charterId } = await conCharter()
     const padre = v7()
-    db.insert(actividad).values({ id: padre, charterId, orden: 1, nombre: 'G' }).run()
-    db.insert(actividad)
+    await db.insert(actividad).values({ id: padre, charterId, orden: 1, nombre: 'G' })
+    await db
+      .insert(actividad)
       .values({ id: v7(), charterId, padreId: padre, orden: 1, nombre: 'H' })
-      .run()
-    db.delete(actividad).where(eq(actividad.id, padre)).run()
-    expect(db.select().from(actividad).all()).toHaveLength(0)
+    await db.delete(actividad).where(eq(actividad.id, padre))
+    expect(await db.select().from(actividad)).toHaveLength(0)
   })
 
-  it('borrar un charter borra sus actividades y cortes', () => {
-    const { db, charterId } = conCharter()
-    db.insert(actividad).values({ id: v7(), charterId, orden: 1, nombre: 'Hoja' }).run()
-    db.insert(corte).values({ id: v7(), charterId, fecha: '2025-03-13' }).run()
-    db.delete(charter).where(eq(charter.id, charterId)).run()
-    expect(db.select().from(actividad).all()).toHaveLength(0)
-    expect(db.select().from(corte).all()).toHaveLength(0)
+  it('borrar un charter borra sus actividades y cortes', async () => {
+    const { db, charterId } = await conCharter()
+    await db.insert(actividad).values({ id: v7(), charterId, orden: 1, nombre: 'Hoja' })
+    await db.insert(corte).values({ id: v7(), charterId, fecha: '2025-03-13' })
+    await db.delete(charter).where(eq(charter.id, charterId))
+    expect(await db.select().from(actividad)).toHaveLength(0)
+    expect(await db.select().from(corte)).toHaveLength(0)
   })
 
-  it('no permite borrar una categoría en uso', () => {
-    const { db, charterId } = conCharter()
-    const cat = db.select().from(categoria).all()[0]!
-    db.update(charter).set({ categoriaId: cat.id }).where(eq(charter.id, charterId)).run()
-    expect(() => db.delete(categoria).where(eq(categoria.id, cat.id)).run()).toThrow(/FOREIGN KEY/)
+  it('no permite borrar una categoría en uso', async () => {
+    const { db, charterId } = await conCharter()
+    const [cat] = await db.select().from(categoria).limit(1)
+    await db.update(charter).set({ categoriaId: cat!.id }).where(eq(charter.id, charterId))
+    expect(await errorDe(db.delete(categoria).where(eq(categoria.id, cat!.id)))).toBeTruthy()
+    expect(await db.select().from(categoria)).toHaveLength(3)
   })
 })
