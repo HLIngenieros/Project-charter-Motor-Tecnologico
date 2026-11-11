@@ -46,7 +46,7 @@ Definición técnica de la plataforma. Complementa el [README](../README.md) (qu
 | Gráficas | SVG propio + Motion (sin ECharts) | Curva S, mini curva, Gantt e indicadores |
 | Backend | Fastify 5 | Liviano, con validación por esquema |
 | ORM | Drizzle ORM + migraciones de drizzle-kit | SQL explícito y migrable a PostgreSQL |
-| Base de datos | SQLite (better-sqlite3) en un archivo | Cero instalación; basta para el uso esperado |
+| Base de datos | Postgres: Neon en producción (`pg`), PGlite en desarrollo y pruebas | PGlite no requiere instalar nada; Neon da la base gestionada para Vercel |
 | Claves | argon2id | Hash recomendado |
 | Pruebas | Vitest (cálculo, API) y Playwright (flujos clave) | — |
 | Fuentes | Sora, Plus Jakarta Sans y JetBrains Mono, servidas desde el propio proyecto | Funciona sin internet en un servidor interno |
@@ -252,15 +252,15 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 ### Después: servidor interno
 
 - `npm run build` genera la web estática, y Fastify la sirve junto con la API en **un solo proceso y un solo puerto**.
-- Se configura con un `.env` en la raíz (plantilla en `.env.ejemplo`; la API y el CLI lo cargan al arrancar): `PUERTO`, `RUTA_DB`, `DOMINIO_PERMITIDO=hlingenieros.com`, `COOKIE_SEGURA` y `CONFIAR_PROXY`. Detrás de IIS, `CONFIAR_PROXY=true` para que el límite de intentos use la IP real del cliente y no la del proxy.
+- Se configura con un `.env` en la raíz (plantilla en `.env.ejemplo`; la API y el CLI lo cargan al arrancar): `PUERTO`, `DATABASE_URL` (vacío = PGlite en `data/pglite`), `DOMINIO_PERMITIDO=hlingenieros.com`, `COOKIE_SEGURA` y `CONFIAR_PROXY`. Detrás de IIS, `CONFIAR_PROXY=true` para que el límite de intentos use la IP real del cliente y no la del proxy.
 - En Windows Server se corre como servicio (NSSM o PM2) detrás de IIS o de otro proxy con HTTPS.
-- **Respaldo:** `npm run respaldo` usa la API de backup de SQLite para copiar la base en caliente. En el servidor se programa a diario.
+- **Respaldo:** en producción, el historial de Neon.
 - **Migración a PostgreSQL:** solo si el uso lo exige. Drizzle lo permite cambiando el dialecto y regenerando las migraciones.
 
 ## 11. Calidad
 
 - **Motor de cálculo:** pruebas unitarias exhaustivas más la prueba de aceptación contra el Excel.
-- **API:** pruebas de integración con SQLite en memoria para auth, aislamiento por dueño, permisos de Admin y guardado del cronograma.
+- **API:** pruebas de integración con PGlite en memoria (un clon por caso) para auth, aislamiento por dueño, permisos de Admin y guardado del cronograma.
 - **E2E (Playwright), pocos y valiosos:** registro → crear charter → cronograma → corte → ver curva S; y Admin en solo lectura.
 - TypeScript estricto, ESLint y Prettier.
 

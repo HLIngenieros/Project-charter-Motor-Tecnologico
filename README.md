@@ -75,7 +75,7 @@ Definición completa en [docs/arquitectura.md](docs/arquitectura.md). Resumen:
 | Animación | Motion (Framer Motion) |
 | Gráficas | Apache ECharts (curva S, Gantt, indicadores) |
 | Backend | Node + Fastify + Drizzle ORM |
-| Base de datos | SQLite (archivo local); se puede migrar a PostgreSQL con Drizzle |
+| Base de datos | PostgreSQL con Drizzle: Neon en producción, PGlite en desarrollo |
 | Autenticación | Usuario + contraseña con hash (argon2), sesión en cookie httpOnly |
 | Tipos y validación | Zod, compartido |
 | Cálculos | Paquete compartido en TypeScript, con pruebas contra el Excel |
@@ -83,7 +83,7 @@ Definición completa en [docs/arquitectura.md](docs/arquitectura.md). Resumen:
 ```
 ProjectCharter/
 ├── apps/
-│   ├── api/          # Fastify + Drizzle + SQLite
+│   ├── api/          # Fastify + Drizzle + Postgres
 │   └── web/          # React + Vite + Tailwind
 ├── packages/
 │   └── shared/       # Esquemas Zod, tipos y motor de cálculo

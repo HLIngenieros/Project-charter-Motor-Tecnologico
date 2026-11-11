@@ -85,6 +85,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-11 · PDF: pie en cajas de margen de `@page` inyectadas con `<style>` (llevan el nombre del charter); curva a 688 px (182 mm útiles); `window.print()` una vez, tras cargar y `document.fonts.ready` · Claude.
 - 2026-11-11 · Mini curva S del portafolio: escala vertical hasta un poco más del mayor valor (a 0–100 % se ve plana) y solo desde 1024 px. El aviso que deja otra pantalla en `state` se guarda al montar y se borra con `navigate(…, { replace: true, state: null })` · Claude.
 - 2026-11-11 · **Despliegue en Vercel + Neon** (link fijo, uso personal por ahora; el PC no puede estar siempre prendido). Postgres en todas partes: Neon en producción, PGlite en desarrollo y pruebas; se quita SQLite y la base se regenera (no se migran datos). Fecha de hoy en `America/Bogota` y `CORREOS_PERMITIDOS` para limitar el registro. Reemplaza «local primero, servidor interno después» · Usuario / Claude.
+- 2026-11-11 · Presupuesto (`rubro.valor`, `valor_unitario`) en `bigint` modo número: `integer` de Postgres es de 32 bits. El guardado del cronograma hace primero el `UPDATE … WHERE cronograma_version = v` dentro de la transacción (bloquea la fila; el simultáneo da 409) · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
@@ -95,7 +96,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - **Fase 5 cerrada (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. `componentes/MiniCurvaS.tsx` la usan el portafolio y Registrar corte.
 - **Primer charter real:** RF1 · Radicación de facturas (Comité IA, eje Automatización; responsable Jorge Espinosa, patrocinador Área ID & TI). Redacción, listas y cronograma (25 actividades, 23 nov 2026 – 10 abr 2027) cargados el 2026-11-11 a partir de la reunión. Indicadores y riesgos propuestos esperan la Fase 6.
 - **Parametrización y exportación cerradas (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Web: `pantallas/admin/` (`AreaAdmin` con pestañas como enlaces, `Parametrizacion`; `SoloAdmin` en las rutas), `MenuExportar` en la banda, `api/exportar.ts` y `pantallas/imprimir/` (`Imprimir` sin `Layout`, `CronogramaImpresion`, `imprimir.css`). La impresión reutiliza `SeccionCurvaS` con `estatica` y `ancho`.
-- **Despliegue (siguiente):** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md` (7 tareas, 2 sesiones). Antes de la Task 1, exportar el JSON de RF1. Hasta terminarlo, la arquitectura y los comandos de abajo siguen siendo los de SQLite.
+- **Despliegue en curso:** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md`. Sesión 1 (Tasks 1–4) hecha el 2026-11-11: Postgres en todas partes y API asíncrona. Falta la sesión 2 (Tasks 5–7: fecha de Bogotá, `CORREOS_PERMITIDOS`, adaptador de Vercel y publicación). Respaldo de la base SQLite y JSON de los 8 charters (RF1 incluido) en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`; la base local de PGlite arrancó vacía.
+- Base: `db/conexion.ts` con `abrirDb` (URL `postgres://` → `pg`; `':memory:'` o carpeta → PGlite, solo con `import()` dinámico), `prepararDb` (migra y siembra), `crearDb` = ambas, y `cerrarDb`. `esViolacionUnica` (código `23505`) en `db/errores.ts`. Pruebas: `crearDbPrueba()` de `test/ayudas.ts` clona una plantilla migrada por archivo y cierra los clones en `afterEach`.
 - Ficha a una fecha: `useVistaCronograma` (`?corte=`) arma la `VistaCronograma` que comparten banda, curva y Gantt; en un corte pasado todo es solo lectura. Curva S en `pantallas/ficha/curva/` (`geometria.ts` puro, `CurvaS` en SVG). Reglas de los charters: `apps/api/src/modulos/admin/parametros.ts` (`reglasDeCharter`, `columnasDeReglas`).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
 - Cortes web: historial en `pantallas/ficha/SeccionHistorial.tsx`; pantalla en `pantallas/corte/` (`RegistrarCorte` prepara las filas y monta `Formulario` con `key`; `clasificar.ts` puro; `FilaAvance`). Al guardar navega a la ficha con `state.aviso`. `Cifra` anima números con un `MotionValue`.
@@ -105,13 +107,13 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 ## Comandos
 
-- `npm run dev` (API 3100 + web 5173) · `npm test` · `npm run lint` · `npm run build`.
+- `npm run dev` (API 3100 + web 5173; base PGlite en `data/pglite`, o Postgres si hay `DATABASE_URL`) · `npm test` · `npm run lint` · `npm run build`.
 - Admin: registrar la cuenta y luego `npm run admin -- --promover <correo>` (`--quitar` lo retira).
 - Si Claude levanta `npm run dev` para verificar, al terminar debe matar **todo el árbol** (`concurrently` y `tsx watch`), no solo el proceso del puerto: un `tsx watch` huérfano relanza la API al cambiar el código y ocupa el 3100 (EADDRINUSE).
 
 ## Aprendido
 
-- npm 11 bloquea scripts de instalación: no hace falta aprobarlos (better-sqlite3 trae binario; esbuild usa su paquete de plataforma).
+- npm 11 bloquea scripts de instalación: no hace falta aprobarlos (esbuild usa su paquete de plataforma).
 - En Git Bash los heredocs largos con JSX/plantillas fallan a veces; usar Write para archivos de código.
 - Prettier no debe tocar el fixture ni las migraciones (`.prettierignore`).
 - Vite puede quedar con un módulo a medio editar en caché: reiniciar `npm run dev`.
@@ -119,7 +121,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Las maquetas cargan los scripts con `?v=n`: subir el número al cambiarlos, o el navegador muestra la versión en caché.
 - Las pruebas de API usan `sesionDe(app, correo, { admin })` y `crearCharterPrueba` de `test/ayudas.ts`; para ordenar por `actualizado_en`, `pausa()` evita marcas ISO iguales.
 - Prettier puede romper una edición hecha con `sed` sobre líneas que reacomodó: correr Prettier después de editar, no antes.
-- `drizzle-kit generate` en SQLite recrea la tabla y copia **todas** las columnas, incluso las nuevas que no existen en la vieja: revisar el `INSERT … SELECT` de cada migración antes de commitear.
+- Revisar el SQL de cada migración de `drizzle-kit generate` antes de commitear (claves foráneas, `ON DELETE`, índices).
 
 - Un campo editable no adopta el valor de la API mientras su propio envío va en camino; si no, una respuesta vieja pisa lo último escrito.
 - El estado `isPending` de una mutación llega un render tarde: para evitar el doble envío, usar un `ref`.
@@ -145,8 +147,12 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Un archivo con un NUL literal (p. ej. un `join` con el carácter nulo escrito tal cual) bloquea Edit: reemplazarlo por el escape `'\u0000'` (mismo valor).
 - Las mutaciones a la API exigen la cabecera `X-Requested-With: charter` (CSRF): al sembrar datos desde el navegador con `fetch`, ponerla o da 403 `csrf`.
 - En un texto como `<b>26,9 %</b> de 38,2 %`, el espacio tras `</b>` se pierde si hay salto de línea en JSX: usar `{' '}` (un margen no basta para lectores de pantalla ni pruebas).
-- Para cargar datos en un charter ajeno sin su clave: script temporal con `tsx` en `apps/api` que llame a `editarCharter`, `reemplazarLista` y `guardarCronograma` (mismas validaciones Zod), con respaldo previo de la base (`sqlite3 … .backup`) y borrarlo al terminar.
+- Para cargar datos en un charter ajeno sin su clave: script temporal con `tsx` en `apps/api` que llame a `editarCharter`, `reemplazarLista` y `guardarCronograma` (mismas validaciones Zod), con respaldo previo de la base y borrarlo al terminar. Desde Postgres todo es `async` (`await`).
 - Para revisar el PDF sin visor: `page.emulateMedia({ media: 'print' })` con el viewport a 688 px (ancho útil del A4) y medir `scrollWidth`; el número de páginas sale de contar `/Type /Page` en el archivo.
+
+- Cada clon de PGlite es una instancia WASM: sin cerrarlo, la suite de la API se queda sin memoria (Fatal OOM). La plantilla tarda ~2 s y cada clon ~0,3 s; `apps/api/vitest.config.ts` sube el límite a 30 s.
+- Con `PgDatabase` genérica, `db.execute` devuelve `unknown`: castear a `{ rows: … }`. Drizzle en Postgres no tiene `.get()/.all()/.run()`: `const [fila] = await …limit(1)` y `.returning()` en vez de `changes`.
+- `tsx watch` del usuario relanza la API al cambiar el código: tras cambios de base, su `npm run dev` ya corre con lo nuevo (sirve para verificar sin levantar otro).
 
 ## Glosario
 
