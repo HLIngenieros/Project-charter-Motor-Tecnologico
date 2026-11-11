@@ -83,6 +83,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-11 · El motor recibe `Reglas` (no `Umbrales`); `CharterDetalle.reglas` reemplaza a `umbrales`. `arbolHistorico` vive en el motor (lo usan la ficha y la exportación) · Claude.
 - 2026-11-11 · Registrar corte y la ficha usan las reglas del charter; con suma obligatoria e incompleta, «Guardar corte» queda deshabilitado con aviso. Una hoja con peso repartido muestra su peso efectivo y «auto» · Claude (plan).
 - 2026-11-11 · PDF: pie en cajas de margen de `@page` inyectadas con `<style>` (llevan el nombre del charter); curva a 688 px (182 mm útiles); `window.print()` una vez, tras cargar y `document.fonts.ready` · Claude.
+- 2026-11-11 · Mini curva S del portafolio: escala vertical hasta un poco más del mayor valor (a 0–100 % se ve plana) y solo desde 1024 px. El aviso que deja otra pantalla en `state` se guarda al montar y se borra con `navigate(…, { replace: true, state: null })` · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
@@ -90,7 +91,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
 - **Fase 3 cerrada (2026-11-09).**
 - **Fase 4 cerrada (2026-11-10).** T4.5 (primer charter real) se omitió por ahora.
-- **Fase 5 en curso:** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. Sesiones 1 y 2 (Tasks 1–6) hechas; falta la 3 (Tasks 7–9: portafolio, mini curva en Registrar corte, cierre).
+- **Fase 5 cerrada (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. `componentes/MiniCurvaS.tsx` la usan el portafolio y Registrar corte.
+- **Primer charter real:** RF1 · Radicación de facturas (Comité IA, eje Automatización; responsable Jorge Espinosa, patrocinador Área ID & TI). Propuesta de redacción y cronograma hecha el 2026-11-11 a partir de la reunión; falta que el usuario decida cargarla. Indicadores y riesgos esperan la Fase 6.
 - **Parametrización y exportación cerradas (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Web: `pantallas/admin/` (`AreaAdmin` con pestañas como enlaces, `Parametrizacion`; `SoloAdmin` en las rutas), `MenuExportar` en la banda, `api/exportar.ts` y `pantallas/imprimir/` (`Imprimir` sin `Layout`, `CronogramaImpresion`, `imprimir.css`). La impresión reutiliza `SeccionCurvaS` con `estatica` y `ancho`.
 - Ficha a una fecha: `useVistaCronograma` (`?corte=`) arma la `VistaCronograma` que comparten banda, curva y Gantt; en un corte pasado todo es solo lectura. Curva S en `pantallas/ficha/curva/` (`geometria.ts` puro, `CurvaS` en SVG). Reglas de los charters: `apps/api/src/modulos/admin/parametros.ts` (`reglasDeCharter`, `columnasDeReglas`).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
@@ -139,6 +141,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - En Bash, nunca dejar un `cat` sin entrada al final de un comando: se queda esperando hasta el tiempo límite.
 - jsdom no parsea las cajas de margen de `@page` («Could not parse CSS stylesheet»): ese `<style>` se omite con `import.meta.env.MODE === 'test'`. El `Blob` de jsdom no trae `text()`: leer con `FileReader`.
 - Un archivo con un NUL literal (p. ej. un `join` con el carácter nulo escrito tal cual) bloquea Edit: reemplazarlo por el escape `'\u0000'` (mismo valor).
+- Las mutaciones a la API exigen la cabecera `X-Requested-With: charter` (CSRF): al sembrar datos desde el navegador con `fetch`, ponerla o da 403 `csrf`.
+- En un texto como `<b>26,9 %</b> de 38,2 %`, el espacio tras `</b>` se pierde si hay salto de línea en JSX: usar `{' '}` (un margen no basta para lectores de pantalla ni pruebas).
 - Para revisar el PDF sin visor: `page.emulateMedia({ media: 'print' })` con el viewport a 688 px (ancho útil del A4) y medir `scrollWidth`; el número de páginas sale de contar `/Type /Page` en el archivo.
 
 ## Glosario

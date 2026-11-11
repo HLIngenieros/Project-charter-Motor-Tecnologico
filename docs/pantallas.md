@@ -34,6 +34,7 @@ Entrar / Registro  (ya construidas, Fase 2)
 - **Estados:** sin charters (explica el primer paso y ofrece crear), sin resultados por filtro, charter sin cortes («Registra el primer corte»).
 - **Admin:** misma lista con todos los charters y una columna de propietario; solo lectura (sin «Nuevo charter»).
 - **Celular:** cada charter apilado (nombre, avance + estado, último corte); sin curva S.
+- **Como quedó al construirlo (Fase 5):** la mini curva se ve desde 1024 px (entre 768 y 1024 no cabe) y su escala vertical llega un poco más allá del mayor valor, para que se lea la forma aunque el charter vaya empezando.
 
 ## 2. Ficha del charter (`ficha.html`)
 
@@ -76,6 +77,7 @@ Pedido del usuario al aprobar (2026-11-09): más grande, dinámica, antes del cr
 - **Detalle en línea** (clic en la fila, sin modal): actividad, entregable, peso, inicio, fin y responsable (columnas A–J).
 - «+ Agregar actividad»; Tab sangra la fila (la vuelve hija de la anterior) y Mayús + Tab la saca. Pegar desde el Excel queda para la Fase 3.
 - **Celular:** solo actividad y pista, de consulta (sin arrastre).
+- **Como quedó al construirlo (Fase 5):** el corte se elige en la banda (selector), en un punto de la curva o con «Ver» del historial (`?corte=`); en un corte pasado la ficha queda en solo lectura con su foto. «Plegar a grupos» deja solo las agrupadoras. No hay bloque de avance por grupo (decisión del usuario: basta el Gantt plegado).
 
 ## 3. Registrar corte (`corte.html`)
 
@@ -85,7 +87,7 @@ Pedido del usuario al aprobar (2026-11-09): más grande, dinámica, antes del cr
 - **Resumen a la derecha (fijo):** cómo queda el charter (chip, planeado, real, brecha), mini curva S con el nuevo punto, nota del corte, «Cancelar» y «Guardar corte».
 - Al cambiar la fecha se reclasifican las listas.
 - **Celular:** una columna; el resumen pasa a una barra fija abajo con real/planeado, estado y «Guardar corte».
-- **Como quedó al construirlo (Fase 4):** la fecha no puede ir antes del día siguiente al último corte ni después de hoy; si ya hay corte hoy, la pantalla ofrece editarlo. Las listas se reclasifican al cambiar la fecha, no al escribir (una fila no salta al llegar a 100). **Editar** (`?fecha=`, desde el historial) usa la foto del corte: fecha fija, actividades borradas rotuladas «actividad eliminada» y «Antes» = el corte inmediatamente anterior. Si el % baja frente al anterior, la fila avisa. La mini curva S del resumen queda para la Fase 5.
+- **Como quedó al construirlo (Fase 4):** la fecha no puede ir antes del día siguiente al último corte ni después de hoy; si ya hay corte hoy, la pantalla ofrece editarlo. Las listas se reclasifican al cambiar la fecha, no al escribir (una fila no salta al llegar a 100). **Editar** (`?fecha=`, desde el historial) usa la foto del corte: fecha fija, actividades borradas rotuladas «actividad eliminada» y «Antes» = el corte inmediatamente anterior. Si el % baja frente al anterior, la fila avisa. La mini curva S del resumen (Fase 5) dibuja los cortes anteriores y el punto nuevo en vivo; se oculta bajo 768 px. El aviso «Corte guardado» se ve una vez en la ficha y se borra del historial.
 
 ## 4. Vista celular (`celular.html`)
 

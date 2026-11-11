@@ -43,7 +43,7 @@ Definición técnica de la plataforma. Complementa el [README](../README.md) (qu
 | Datos en el cliente | TanStack Query | Caché, recarga y estados de carga |
 | Formularios | React Hook Form + Zod | Validación compartida con la API |
 | Animación | Motion | Transiciones, entradas escalonadas, contadores |
-| Gráficas | Apache ECharts | Curva S, Gantt, avance por grupo e indicadores |
+| Gráficas | SVG propio + Motion (sin ECharts) | Curva S, mini curva, Gantt e indicadores |
 | Backend | Fastify 5 | Liviano, con validación por esquema |
 | ORM | Drizzle ORM + migraciones de drizzle-kit | SQL explícito y migrable a PostgreSQL |
 | Base de datos | SQLite (better-sqlite3) en un archivo | Cero instalación; basta para el uso esperado |
@@ -226,7 +226,8 @@ La disposición y el detalle visual de cada pantalla se definen en la tarea T1.3
 
 ### 9.2 Comportamiento
 
-- **Portafolio:** cada tarjeta muestra la situación **al último corte** (planeado y real a esa misma fecha, para no inventar atrasos). Si el último corte tiene más de 14 días o no hay cortes, se muestra una etiqueta "corte desactualizado". La API calcula y devuelve estos datos en `GET /charters` a partir de los totales guardados *(criterio técnico)*.
+- **Portafolio:** cada fila muestra la situación **al último corte** (planeado y real a esa misma fecha, para no inventar atrasos), el chip de su estado, las vencidas y una mini curva S con los cortes; la fecha va en ámbar si pasan más de 21 días. `GET /charters` trae `ultimoCorte { fecha, pv, ev, estado, vencidas }` y `cortes [{ fecha, pv, ev }]` de los totales guardados, sin cargar cronogramas *(criterio técnico)*. El detalle trae las `reglas` del charter.
+- **Ficha a una fecha:** `?corte=<fecha>` muestra la ficha con la foto de ese corte en solo lectura; se elige en la banda, en la curva S o en el historial.
 - **Resumen:** KPIs animados (planeado, real, desviación, fecha proyectada), curva S, avance por grupo, Gantt compacto y selector de fecha de corte que recalcula todo en el cliente.
 - **Cronograma:** tabla-árbol editable en línea (crear, indentar, sacar de nivel, mover, eliminar), con columnas A–J editables y K–N calculadas al instante. El Gantt queda al lado y se sincroniza (arrastre de barras y extremos). Los avisos de validación se muestran en línea. Se **guarda solo**: el árbol completo se envía 800 ms después del último cambio por la cola de guardado de la ficha, y cada `PUT` lleva la versión que devolvió el anterior *(cambio en la Fase 4: la ficha es documento vivo y el Gantt se edita arrastrando)*.
 - **Cortes:** historial al final de la ficha (fecha, estado, planeado, real, brecha, nota; editar y eliminar). Registrar un corte muestra «solo lo que toca»: vencidas y en curso a la fecha elegida, el resto plegado, cada hoja precargada con el % del corte anterior y su planeado a esa fecha, y un resumen en vivo. La banda de la ficha muestra la situación actual (línea base vigente + avances del último corte, a la fecha de ese corte).

@@ -56,13 +56,13 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 
 ## Fase 5 · Visualización
 
-Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md). Plan: [docs/planes/fase-5.md](docs/planes/fase-5.md). Sesiones: datos (Tasks 1–3, hecha) · ficha (Tasks 4–6, hecha) · portafolio y cierre (Tasks 7–9).
+Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md). Plan: [docs/planes/fase-5.md](docs/planes/fase-5.md). Sesiones: datos (Tasks 1–3, hecha) · ficha (Tasks 4–6, hecha) · portafolio y cierre (Tasks 7–9, hecha). **Fase cerrada 2026-11-11.**
 
 - [x] T5.1 · Resumen con KPIs y selector de corte (ficha a una fecha en solo lectura) — 2026-11-11
 - [x] T5.2 · Curva S — 2026-11-11
 - [x] T5.3 · Gantt (fin proyectado, plegar a grupos, `memo`; 170 actividades sin trabarse) — 2026-11-11
-- [~] T5.4 · Semáforos (tonos y umbrales del charter hechos; sin bloque de avance por grupo, decisión del usuario)
-- [ ] T5.5 · Portafolio con avance
+- [x] T5.4 · Semáforos (tonos y umbrales del charter; sin bloque de avance por grupo, decisión del usuario) — 2026-11-11
+- [x] T5.5 · Portafolio con avance, semáforo, vencidas y mini curva; mini curva en Registrar corte — 2026-11-11
 
 ## Fase 6 · Complementos
 
@@ -85,7 +85,7 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** la sesión 3 de la Fase 5 (Tasks 7–9: portafolio con avance, mini curva en Registrar corte, cierre de fase). Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
+**Próxima tarea sugerida:** Fase 6 (indicadores y riesgos primero: el charter real RF1 · Radicación de facturas ya tiene propuestos indicadores y riesgos que hoy no se pueden capturar). Pendiente del usuario: decidir si se carga en RF1 la redacción y el cronograma propuestos tras la reunión del Comité IA del 11 nov. Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
 
 ## Registro de sesiones
 
@@ -105,3 +105,4 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 | 2026-11-10 | Fase 5 · sesión 1 | Diseño de la Fase 5 con compañero visual (selector de corte en banda, curva e historial; ficha a una fecha en solo lectura; sin bloque de avance por grupo; cortes guardados inmutables) y plan de 9 tareas. Tasks 1–3: proyección y lectura de la curva en el motor, resumen del portafolio con estado, vencidas y serie de cortes, umbrales en el detalle y en la ficha, prueba de contraste del semáforo (naranja `#de781c`). 314 pruebas y lint en verde. Commits 681d883…a29a80d |
 | 2026-11-11 | T5.1–T5.3 · T7.4 y T8.1 (parcial) | Fase 5 sesión 2: selector de corte y ficha a una fecha en solo lectura, curva S protagonista (SVG, entrada por CSS porque `motion.path` no actualizaba el `d`), Gantt con fin proyectado, plegado y `memo` (170 actividades: arrastre p95 17 ms en producción). Pedido nuevo del usuario: parametrización del Admin y exportación PDF/JSON; diseño con maquetas (eligió el PDF completo en el orden de la ficha) y plan de 9 tareas. Sesión 1 del plan: reglas en el motor (pesos, umbrales, días hábiles, ritmo, gracia), parámetros globales con copia al crear y exportación JSON. 373 pruebas y lint en verde. Commits 03a98c3…09ada23 |
 | 2026-11-11 | T7.4 y T8.1 | Sesión 2 del plan de parametrización y exportación: reglas del charter en la ficha y en Registrar corte (peso «auto», suma obligatoria bloquea el corte), pestaña de Parametrización del Admin, menú Exportar (JSON y PDF) y vista de impresión A4 con curva estática, cronograma completo y pie con páginas. 389 pruebas, lint y build en verde; navegador revisado (Admin a 1440 y 390 px, JSON y PDF de un charter de 170 actividades en un corte pasado). Commits 43fc593…495927d |
+| 2026-11-11 | T5.4, T5.5, cierre Fase 5 | Propuesta de redacción para RF1 · Radicación de facturas (primer charter real, a partir de la transcripción del Comité IA): razón de ser, objetivos, supuestos, criterios, indicadores, riesgos y cronograma de 6 fases; queda en espera de la decisión del usuario. Fase 5 sesión 3: portafolio con avance «real de planeado», barra y chip del semáforo, vencidas, filtro «Con vencidas» y `MiniCurvaS` (desde 1024 px, escala hasta el mayor valor); mini curva con el punto nuevo en Registrar corte; el aviso «Corte guardado» se borra del historial. 396 pruebas, lint y build en verde; navegador a 1440 y 390 px. Commits 33fa829…b086bdd |
