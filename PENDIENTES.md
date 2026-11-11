@@ -67,7 +67,9 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 ## Fase 6 · Complementos
 
 - [ ] T6.1 · Indicadores y mediciones
+  - Cargar en RF1: días hábiles entre el cierre del mes y la radicación completa (meta ≤ 5) · % de facturas radicadas sin intervención manual (meta ≥ 90 %) · facturas pendientes al cierre (meta: tendencia a 0).
 - [ ] T6.2 · Riesgos
+  - Cargar en RF1 (riesgo · causa · mitigación): facturas sin orden de compra · órdenes globales agotadas o con precios desactualizados · alerta temprana a Compras y al proyecto. Facturas que no llegan al buzón · el proveedor las retiene o el almacenista las pide a su correo · cruce obligatorio con la DIAN y circular a obras. No se pueden hacer los eventos en la DIAN · falta el XML · exigir PDF + XML en la regla mínima. Reglas de soportes difíciles de estandarizar · muchas excepciones por tipo de proveedor · arrancar con orden de compra + cumplido y sumar reglas por tipo. Contactos de proveedores desactualizados · Compras registra al vendedor, no al área financiera · coordinar con Compras (puede ser otra iniciativa). Alcance que crece · integración con Libra o portal de proveedores · ciclo acotado en el criterio de éxito 4.
 - [ ] T6.3 · Presupuesto con desglose
 
 ## Fase 7 · Admin
@@ -85,7 +87,7 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 - [ ] T8.4 · Pruebas E2E
 - [ ] T8.5 · Build de producción y guía de despliegue
 
-**Próxima tarea sugerida:** Fase 6 (indicadores y riesgos primero: el charter real RF1 · Radicación de facturas ya tiene propuestos indicadores y riesgos que hoy no se pueden capturar). Los indicadores y riesgos de RF1 están en el registro de la sesión del 11 nov (propuesta en el chat) para cargarlos al construirlos. Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
+**Próxima tarea sugerida:** Fase 6 (indicadores y riesgos primero: el charter real RF1 · Radicación de facturas ya tiene propuestos indicadores y riesgos que hoy no se pueden capturar). Los indicadores y riesgos de RF1 están anotados en T6.1 y T6.2 para cargarlos al construirlos. Siguen abiertos de la Fase 2: límite de intentos en `POST /auth/registro` y la prueba de zona horaria.
 
 ## Registro de sesiones
 
