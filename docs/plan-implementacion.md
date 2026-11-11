@@ -86,12 +86,13 @@ Plan general por fases y tareas. La arquitectura está en [arquitectura.md](arqu
 | T7.1 · Cuentas | Listado, desactivar o reactivar, restablecer clave (temporal con cambio obligatorio), otorgar o quitar Admin | Pruebas de API y flujo en la web. Desactivar y restablecer clave llaman a `cerrarSesionesDe` (prueba: reactivar no revive una cookie vieja) |
 | T7.2 · Catálogos | CRUD de categorías (con color) y áreas; desactivar si están en uso | Los cambios se reflejan en los formularios |
 | T7.3 · Lectura global | `/admin/charters` con filtros por dueño, área, categoría y estado; ficha en modo solo lectura | El Admin ve todo y no ve ningún control de edición; la API rechaza sus escrituras |
+| T7.4 · Parametrización | `/admin/parametros`: reglas de pesos, umbrales, reparto del planeado, proyección y días de gracia; cada charter copia las vigentes al crearse. Diseño y plan: [spec](superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md), [plan](planes/parametrizacion-exportacion.md) | Un cambio solo afecta a los charters nuevos; los cortes registrados no cambian |
 
 ## Fase 8 · Cierre de la versión 1.0
 
 | Tarea | Entregable | Terminada cuando |
 |---|---|---|
-| T8.1 · Exportar a PDF | Vista `/imprimir` en A4 al estilo del Informe global, con gráficas en SVG | El PDF impreso desde Chrome y Edge se ve correcto |
+| T8.1 · Exportar a PDF y JSON | Vista `/charters/:id/imprimir` en A4 al estilo del Informe global (documento completo en el orden de la ficha), con gráficas en SVG; JSON con todo el charter y sus cortes. Plan: [parametrizacion-exportacion.md](planes/parametrizacion-exportacion.md) | El PDF impreso desde Chrome y Edge se ve correcto |
 | T8.2 · Charters de prueba | Semilla con A1, D1 y C1 (datos del Informe global) | Se cargan con un comando |
 | T8.3 · Pulido responsive y de movimiento | Revisión en 360, 768 y 1440 px, `prefers-reduced-motion` y accesibilidad básica (foco y contraste) | Sin desbordes ni elementos ilegibles |
 | T8.4 · E2E | Playwright: registro → charter → cronograma → corte → curva S; y Admin en solo lectura | Pasan en local |

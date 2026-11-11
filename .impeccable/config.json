@@ -41,6 +41,33 @@
         ],
         "createdAt": "2026-11-09T19:50:16.721Z",
         "reason": "DESIGN.md 'Single Ornament': the plan grid on the institutional band is the incumbent brand device from apps/web global.css (.reticula)"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1400-1794407592/content/ficha-pdf.html"
+        ],
+        "createdAt": "2026-11-11T14:34:13.538Z",
+        "reason": "Claude: miniaturas de hojas A4 a escala en una maqueta desechable del compañero visual; no es UI real"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1400-1794407592/content/ficha-pdf.html"
+        ],
+        "createdAt": "2026-11-11T14:34:13.924Z",
+        "reason": "Claude: miniaturas de hojas A4 a escala en una maqueta desechable del compañero visual; no es UI real"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "ui\",sans-serif",
+        "files": [
+          ".superpowers/brainstorm/1400-1794407592/content/ficha-pdf.html"
+        ],
+        "createdAt": "2026-11-11T14:34:14.447Z",
+        "reason": "Claude: miniaturas de hojas A4 a escala en una maqueta desechable del compañero visual; no es UI real"
       }
     ]
   }

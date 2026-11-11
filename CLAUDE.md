@@ -77,6 +77,10 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-10 · Fase 5: el corte se elige en la banda, en la curva S o en el historial (`?corte=`); la ficha en un corte pasado queda en solo lectura con la foto. Sin bloque de avance por grupo (basta el Gantt con «Plegar a grupos») · Usuario.
 - 2026-11-10 · Un corte registrado no cambia aunque se mueva el cronograma; la vista actual recalcula en vivo y avisa «Línea base modificada desde el corte». Fin proyectado = el del motor en todas partes · Usuario / Claude.
 - 2026-11-10 · Gráficas en SVG propio con Motion, sin ECharts. Naranja `#de781c` (3:1 sobre blanco); el amarillo no llega a 3:1 y en la curva lleva borde `amarillo-texto` · Claude.
+- 2026-11-11 · **Parametrización del Admin** (`/admin/parametros`): reglas de pesos (suma obligatoria, repartir el peso vacío; un 0 escrito excluye), umbrales, reparto por días calendario o hábiles, proyección por desviación o ritmo (SPI por hoja) y días de gracia. **Cada charter copia las vigentes al crearse**; cambiarlas no toca a los existentes ni a sus cortes · Usuario / Claude.
+- 2026-11-11 · **Exportar la ficha**: PDF como documento completo en el orden de la ficha (vista de impresión del navegador, A4) y JSON con todo el charter y sus cortes, solo exportación. Se exporta lo que se ve (`?corte=`) · Usuario / Claude.
+- 2026-11-11 · Rutas de Admin con `exigirAdmin` (403 `solo_admin`), no 404: ocultar una ruta de Admin no protege nada · Claude.
+- 2026-11-11 · El motor recibe `Reglas` (no `Umbrales`); `CharterDetalle.reglas` reemplaza a `umbrales`. `arbolHistorico` vive en el motor (lo usan la ficha y la exportación) · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
@@ -84,7 +88,9 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
 - **Fase 3 cerrada (2026-11-09).**
 - **Fase 4 cerrada (2026-11-10).** T4.5 (primer charter real) se omitió por ahora.
-- **Fase 5 en curso:** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. Sesión 1 (Tasks 1–3) hecha; sigue la sesión 2 (Tasks 4–6: corte elegido y modo histórico, curva S, Gantt).
+- **Fase 5 en curso:** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. Sesiones 1 y 2 (Tasks 1–6) hechas; falta la 3 (Tasks 7–9: portafolio, mini curva en Registrar corte, cierre).
+- **Parametrización y exportación en curso** (antes de cerrar la Fase 5, pedido del usuario): diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Sesión 1 (Tasks 1–4: motor, API, JSON) hecha; sigue la 2 (Tasks 5–9: web).
+- Ficha a una fecha: `useVistaCronograma` (`?corte=`) arma la `VistaCronograma` que comparten banda, curva y Gantt; en un corte pasado todo es solo lectura. Curva S en `pantallas/ficha/curva/` (`geometria.ts` puro, `CurvaS` en SVG). Reglas de los charters: `apps/api/src/modulos/admin/parametros.ts` (`reglasDeCharter`, `columnasDeReglas`).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
 - Cortes web: historial en `pantallas/ficha/SeccionHistorial.tsx`; pantalla en `pantallas/corte/` (`RegistrarCorte` prepara las filas y monta `Formulario` con `key`; `clasificar.ts` puro; `FilaAvance`). Al guardar navega a la ficha con `state.aviso`. `Cifra` anima números con un `MotionValue`.
 - La ficha guarda con `useColaGuardado(alFallar)` (`pantallas/ficha/colaGuardado.ts`, compartida por `ContextoGuardado`): todo guardado nuevo debe encolarse ahí. `alFallar` atiende 401 y 409 `charter_cerrado`. `secciones()` en `Ficha.tsx` lista solo las secciones construidas; al pasar a solo lectura, las secciones se rehacen (`Fragment` con `key`).
@@ -123,6 +129,12 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - Vitest no entrega el CSS crudo con `?raw`: para leer `tokens.css` en una prueba, `readFileSync(resolve(__dirname, …))` (ver `contraste.test.ts`).
 - Los escapes (`\s`) se pierden al pasar código por heredoc, `sed` o Python en Bash: para expresiones regulares usar Edit.
 - Las capturas de Playwright solo se pueden guardar dentro del repo (`.playwright-mcp/`, ignorado), no en el scratchpad.
+
+- `motion.path` no actualiza el `d` puesto en `style` después de montarse: geometría que cambia va en `<path>` normal (transición CSS de `d`) y la entrada con `pathLength` + `stroke-dashoffset` en CSS.
+- Medir rendimiento con el build de producción (`vite build` + `vite preview`, que hereda el proxy): React en modo dev es 3–5 veces más lento. Con `memo` en filas, los callbacks deben ser estables (leer por ref lo que cambia con cada respuesta) y lo caro, diferido (`useDeferredValue`).
+- Los ids de actividad son únicos en toda la base: dos charters de prueba no pueden reutilizar `A`/`B` (el PUT del cronograma da 400).
+- El usuario puede tener su propio `npm run dev` corriendo: antes de levantar otro, revisar los puertos 3100/5173 y no matar procesos que no lancé.
+- En Bash, nunca dejar un `cat` sin entrada al final de un comando: se queda esperando hasta el tiempo límite.
 
 ## Glosario
 
