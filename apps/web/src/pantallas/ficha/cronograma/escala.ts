@@ -77,3 +77,17 @@ export function marcas(
   }
   return salida
 }
+
+/** Todo el proyecto, para imprimir: del inicio − 7 días al mayor de fin y forecast + 8 días. */
+export function rangoProyecto(p: {
+  inicio: FechaISO | null
+  fin: FechaISO | null
+  forecast?: FechaISO | null
+}): Rango {
+  if (!p.inicio || !p.fin) {
+    const hoy = aDia(new Date().toISOString().slice(0, 10))
+    return { desde: aISO(hoy - MARGEN), hasta: aISO(hoy + 90) }
+  }
+  const fin = Math.max(aDia(p.fin), p.forecast ? aDia(p.forecast) : 0)
+  return { desde: aISO(aDia(p.inicio) - MARGEN), hasta: aISO(fin + MARGEN + 1) }
+}

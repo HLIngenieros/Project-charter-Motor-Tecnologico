@@ -4,6 +4,7 @@ import { Parametrizacion } from '../pantallas/admin/Parametrizacion'
 import { RegistrarCorte } from '../pantallas/corte/RegistrarCorte'
 import { Entrar } from '../pantallas/Entrar'
 import { Ficha } from '../pantallas/ficha/Ficha'
+import { Imprimir } from '../pantallas/imprimir/Imprimir'
 import { Muestra } from '../pantallas/Muestra'
 import { Portafolio } from '../pantallas/portafolio/Portafolio'
 import { Registro } from '../pantallas/Registro'
@@ -49,6 +50,14 @@ export function Rutas() {
         element={
           <RutaProtegida>
             <RegistrarCorte />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/charters/:id/imprimir"
+        element={
+          <RutaProtegida>
+            <Imprimir />
           </RutaProtegida>
         }
       />

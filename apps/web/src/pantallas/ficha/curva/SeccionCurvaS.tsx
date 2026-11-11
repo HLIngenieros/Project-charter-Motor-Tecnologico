@@ -40,12 +40,17 @@ export function SeccionCurvaS({
   cortes,
   elegirCorte,
   reglas,
+  estatica = false,
+  ancho,
 }: {
   vista: VistaCronograma
   /** Del más viejo al más reciente. */
   cortes: CorteResumen[]
-  elegirCorte(fecha: FechaISO | null): void
+  elegirCorte?(fecha: FechaISO | null): void
   reglas: Reglas
+  /** Versión para imprimir: sin zoom, sin puntero y a un ancho fijo. */
+  estatica?: boolean
+  ancho?: number
 }) {
   const [zoom, setZoom] = useState<Zoom>('proyecto')
   const [puntero, setPuntero] = useState<FechaISO | null>(null)
@@ -85,31 +90,40 @@ export function SeccionCurvaS({
       Curva S
     </h2>
   )
-  const marco = (cuerpo: ReactNode, cabecera?: ReactNode) => (
-    <section
-      id="curva"
-      aria-labelledby="titulo-curva"
-      className="-mx-10 scroll-mt-28 border-y border-linea-2 bg-[#f7f9fc] px-10 pt-7.5 pb-6.5 max-lg:-mx-4 max-lg:px-4"
-    >
-      <div className="mb-4 flex flex-wrap items-end gap-4">
-        {titulo}
-        {cabecera}
-      </div>
-      {cuerpo}
-    </section>
-  )
+  const marco = (cuerpo: ReactNode, cabecera?: ReactNode) =>
+    estatica ? (
+      <section aria-labelledby="titulo-curva" className="seccion-impresion">
+        <div className="mb-3">{titulo}</div>
+        {cuerpo}
+      </section>
+    ) : (
+      <section
+        id="curva"
+        aria-labelledby="titulo-curva"
+        className="-mx-10 scroll-mt-28 border-y border-linea-2 bg-[#f7f9fc] px-10 pt-7.5 pb-6.5 max-lg:-mx-4 max-lg:px-4"
+      >
+        <div className="mb-4 flex flex-wrap items-end gap-4">
+          {titulo}
+          {cabecera}
+        </div>
+        {cuerpo}
+      </section>
+    )
 
   if (vista.cargando) return marco(<Cargando />)
   if (planeada.length === 0)
     return marco(
       <p className="text-sm text-texto-2">
-        Programa el cronograma para ver la curva S.{' '}
-        <a
-          href="#cronograma"
-          className="rounded-sm font-semibold text-institucional underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
-        >
-          Ir al cronograma
-        </a>
+        Programa el cronograma para ver la curva S.
+        {!estatica && ' '}
+        {!estatica && (
+          <a
+            href="#cronograma"
+            className="rounded-sm font-semibold text-institucional underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
+          >
+            Ir al cronograma
+          </a>
+        )}
       </p>,
     )
 
@@ -204,12 +218,14 @@ export function SeccionCurvaS({
         finProyectado={p.forecast}
         zoom={reales.length ? zoom : 'proyecto'}
         marca={marca}
-        alPuntero={setPuntero}
+        alPuntero={estatica ? undefined : setPuntero}
         elegirCorte={elegirCorte}
         etiqueta={etiqueta}
+        estatica={estatica}
+        ancho={ancho}
       />
     </>,
-    reales.length > 0 && (
+    !estatica && reales.length > 0 && (
       <div
         role="group"
         aria-label="Zoom de la curva"

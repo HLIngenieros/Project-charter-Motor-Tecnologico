@@ -46,6 +46,7 @@ const PUNTO: Record<Estado, string> = {
 const N_TRAMO = 14
 const IMAN = 9
 const salida = [0.22, 1, 0.36, 1] as const
+const NADA = () => {}
 
 /** `d` como atributo (para quien no anima por CSS) y como estilo (para que la geometría se transforme). */
 const geo = (d: string, retrasoTrazo?: number): { d: string; style: CSSProperties } => ({
@@ -56,19 +57,19 @@ const geo = (d: string, retrasoTrazo?: number): { d: string; style: CSSPropertie
   } as CSSProperties,
 })
 
-function useAncho(inicial = 880) {
+function useAncho(fijo?: number, inicial = 880) {
   const ref = useRef<HTMLDivElement>(null)
-  const [ancho, setAncho] = useState(inicial)
+  const [ancho, setAncho] = useState(fijo ?? inicial)
   useEffect(() => {
     const el = ref.current
-    if (!el || typeof ResizeObserver === 'undefined') return
+    if (fijo !== undefined || !el || typeof ResizeObserver === 'undefined') return
     const obs = new ResizeObserver(([e]) => {
       const w = Math.round(e!.contentRect.width)
       if (w > 0) setAncho((a) => (Math.abs(a - w) > 2 ? w : a))
     })
     obs.observe(el)
     return () => obs.disconnect()
-  }, [])
+  }, [fijo])
   return [ref, ancho] as const
 }
 
@@ -99,9 +100,11 @@ export function CurvaS({
   finProyectado,
   zoom,
   marca,
-  alPuntero,
-  elegirCorte,
+  alPuntero = NADA,
+  elegirCorte = NADA,
   etiqueta,
+  estatica = false,
+  ancho: anchoFijo,
 }: {
   planeada: PuntoPlan[]
   /** Todos los cortes, del más viejo al más reciente (el último, en vivo en la vista actual). */
@@ -114,13 +117,17 @@ export function CurvaS({
   finProyectado: FechaISO | null
   zoom: Zoom
   marca: Marca | null
-  alPuntero(fecha: FechaISO | null): void
-  elegirCorte(fecha: FechaISO): void
+  alPuntero?(fecha: FechaISO | null): void
+  elegirCorte?(fecha: FechaISO): void
   /** Resumen accesible de la gráfica. */
   etiqueta: string
+  /** Para imprimir: sin animaciones, sin puntero y con los cortes como puntos del SVG. */
+  estatica?: boolean
+  /** Ancho fijo en px; sin él, la gráfica mide su contenedor. */
+  ancho?: number
 }) {
-  const reducido = useMovimientoReducido()
-  const [lienzo, ancho] = useAncho()
+  const reducido = useMovimientoReducido() || estatica
+  const [lienzo, ancho] = useAncho(anchoFijo)
   const movil = ancho < 640
   const alto = movil ? 260 : 380
   const m = { l: movil ? 38 : 52, r: movil ? 10 : 20, t: 22, b: movil ? 62 : 66 }
@@ -259,7 +266,7 @@ export function CurvaS({
             data-curva="planeada"
             {...geo(dPlan, 0)}
             pathLength={1}
-            className="curva-geo curva-trazo fill-none stroke-institucional"
+            className={`curva-geo ${estatica ? '' : 'curva-trazo'} fill-none stroke-institucional`}
             strokeWidth={2.5}
             strokeLinejoin="round"
           />
@@ -289,7 +296,7 @@ export function CurvaS({
                 data-curva="real"
                 {...geo(dReal, 0.35)}
                 pathLength={1}
-                className="curva-geo curva-trazo fill-none stroke-acento"
+                className={`curva-geo ${estatica ? '' : 'curva-trazo'} fill-none stroke-acento`}
                 strokeWidth={3.5}
                 strokeLinejoin="round"
                 strokeLinecap="round"
@@ -396,15 +403,29 @@ export function CurvaS({
           </g>
         )}
 
-        <rect
-          x={m.l}
-          y={0}
-          width={pw}
-          height={yBase}
-          className="cursor-crosshair fill-transparent"
-          onPointerMove={mover}
-          onPointerLeave={() => alPuntero(null)}
-        />
+        {estatica ? (
+          reales.map((c, i) => (
+            <circle
+              key={c.fecha}
+              data-corte={c.fecha}
+              cx={x(c.fecha)}
+              cy={y(c.ev)}
+              r={5}
+              strokeWidth={2}
+              className={`${RELLENO[c.estado]} ${c.vencidas > 0 ? 'stroke-vencida' : c.estado === 'en_atencion' ? 'stroke-amarillo-texto' : 'stroke-superficie'} ${i > vigente ? 'opacity-30' : ''}`}
+            />
+          ))
+        ) : (
+          <rect
+            x={m.l}
+            y={0}
+            width={pw}
+            height={yBase}
+            className="cursor-crosshair fill-transparent"
+            onPointerMove={mover}
+            onPointerLeave={() => alPuntero(null)}
+          />
+        )}
       </svg>
 
       {/* Puntos de corte: botones reales sobre la gráfica (foco, teclado y lector de pantalla). */}
@@ -416,36 +437,37 @@ export function CurvaS({
           style={{ left: x(guardado.fecha) + 10, top: y(guardado.ev) }}
         />
       )}
-      {reales.map((c, i) => {
-        const venc = c.vencidas > 0
-        const nombre = `Corte del ${fechaCorta(c.fecha)}, ${ETIQUETA_ESTADO[c.estado]}${
-          venc ? `, ${c.vencidas} ${c.vencidas === 1 ? 'vencida' : 'vencidas'}` : ''
-        }`
-        return (
-          <motion.button
-            key={c.fecha}
-            type="button"
-            aria-label={nombre}
-            aria-current={i === vigente ? 'true' : undefined}
-            onClick={() => elegirCorte(c.fecha)}
-            onFocus={() => alPuntero(c.fecha)}
-            onBlur={() => alPuntero(null)}
-            {...(reducido
-              ? {}
-              : {
-                  initial: { scale: 0 },
-                  animate: { scale: 1 },
-                  transition: { duration: 0.45, delay: 0.55 + i * 0.09, ease: salida },
-                })}
-            className={`curva-punto absolute grid size-6 -translate-1/2 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-acento ${i > vigente ? 'opacity-30' : ''}`}
-            style={{ left: x(c.fecha), top: y(c.ev) }}
-          >
-            <span
-              className={`block size-3 rounded-full border-2 ${venc ? 'border-vencida' : c.estado === 'en_atencion' ? 'border-amarillo-texto' : 'border-superficie'} ${PUNTO[c.estado]} ${i === vigente ? 'ring-2 ring-acento/40' : ''}`}
-            />
-          </motion.button>
-        )
-      })}
+      {!estatica &&
+        reales.map((c, i) => {
+          const venc = c.vencidas > 0
+          const nombre = `Corte del ${fechaCorta(c.fecha)}, ${ETIQUETA_ESTADO[c.estado]}${
+            venc ? `, ${c.vencidas} ${c.vencidas === 1 ? 'vencida' : 'vencidas'}` : ''
+          }`
+          return (
+            <motion.button
+              key={c.fecha}
+              type="button"
+              aria-label={nombre}
+              aria-current={i === vigente ? 'true' : undefined}
+              onClick={() => elegirCorte(c.fecha)}
+              onFocus={() => alPuntero(c.fecha)}
+              onBlur={() => alPuntero(null)}
+              {...(reducido
+                ? {}
+                : {
+                    initial: { scale: 0 },
+                    animate: { scale: 1 },
+                    transition: { duration: 0.45, delay: 0.55 + i * 0.09, ease: salida },
+                  })}
+              className={`curva-punto absolute grid size-6 -translate-1/2 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-acento ${i > vigente ? 'opacity-30' : ''}`}
+              style={{ left: x(c.fecha), top: y(c.ev) }}
+            >
+              <span
+                className={`block size-3 rounded-full border-2 ${venc ? 'border-vencida' : c.estado === 'en_atencion' ? 'border-amarillo-texto' : 'border-superficie'} ${PUNTO[c.estado]} ${i === vigente ? 'ring-2 ring-acento/40' : ''}`}
+              />
+            </motion.button>
+          )
+        })}
     </div>
   )
 }

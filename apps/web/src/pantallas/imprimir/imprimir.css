@@ -1,0 +1,54 @@
+/* Vista de impresión de la ficha (A4 vertical, Chrome y Edge). El pie con el número de página
+   lo pone Imprimir.tsx en las cajas de margen de @page, porque lleva el nombre del charter. */
+
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+.seccion-impresion {
+  break-inside: avoid-page;
+}
+
+/* Las secciones largas se parten entre hojas; sus filas no. */
+.seccion-impresion-larga {
+  break-inside: auto;
+}
+
+.seccion-impresion h2 {
+  break-after: avoid-page;
+}
+
+.curva-impresion {
+  break-inside: avoid;
+}
+
+.tabla-impresion thead {
+  display: table-header-group;
+}
+
+.fila-impresion {
+  break-inside: avoid;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .hoja-impresion {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    font-size: 9.5pt;
+  }
+}
