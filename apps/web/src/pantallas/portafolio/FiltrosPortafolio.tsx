@@ -9,6 +9,7 @@ const ESTADOS: { valor: Filtros['estado']; texto: string }[] = [
   { valor: 'cerrado', texto: 'Cerrados' },
   { valor: 'cancelado', texto: 'Cancelados' },
   { valor: 'sin_cortes', texto: 'Sin cortes' },
+  { valor: 'con_vencidas', texto: 'Con vencidas' },
 ]
 
 export function FiltrosPortafolio({

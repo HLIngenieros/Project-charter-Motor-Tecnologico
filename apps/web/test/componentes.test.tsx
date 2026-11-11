@@ -6,6 +6,7 @@ import { Aviso } from '../src/componentes/Aviso'
 import { Boton } from '../src/componentes/Boton'
 import { Campo } from '../src/componentes/Campo'
 import { Dialogo } from '../src/componentes/Dialogo'
+import { MiniCurvaS } from '../src/componentes/MiniCurvaS'
 import { Pestanas } from '../src/componentes/Pestanas'
 
 describe('Boton', () => {
@@ -115,5 +116,24 @@ describe('Aviso y Pestanas', () => {
     await usuario.keyboard('{ArrowRight}')
     expect(screen.getByRole('tab', { name: 'Cronograma' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tab', { name: 'Cronograma' })).toHaveFocus()
+  })
+})
+
+describe('MiniCurvaS', () => {
+  const puntos = [
+    { fecha: '2026-10-01', pv: 0.1, ev: 0.05 },
+    { fecha: '2026-10-15', pv: 0.3, ev: 0.2 },
+    { fecha: '2026-11-01', pv: 0.5, ev: 0.4 },
+  ]
+
+  it('con 3 puntos dibuja planeado y real', () => {
+    const { container } = render(<MiniCurvaS puntos={puntos} estado="al_dia" />)
+    expect(container.querySelectorAll('path')).toHaveLength(2)
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('sin puntos no dibuja nada', () => {
+    const { container } = render(<MiniCurvaS puntos={[]} />)
+    expect(container.querySelector('svg')).toBeNull()
   })
 })

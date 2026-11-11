@@ -5,7 +5,7 @@ export interface FiltrosPortafolio {
   /** `'todas'`, `'ninguna'` (sin categoría) o el id de una categoría. */
   categoria: 'todas' | 'ninguna' | (string & {})
   area: 'todas' | (string & {})
-  estado: 'todos' | EstadoCharter | 'sin_cortes'
+  estado: 'todos' | EstadoCharter | 'sin_cortes' | 'con_vencidas'
 }
 
 export const FILTROS_VACIOS: FiltrosPortafolio = {
@@ -42,6 +42,7 @@ export function filtrarCharters(lista: CharterResumen[], f: FiltrosPortafolio): 
       return false
     if (f.area !== 'todas' && c.area?.id !== f.area) return false
     if (f.estado === 'sin_cortes') return c.ultimoCorte === null
+    if (f.estado === 'con_vencidas') return (c.ultimoCorte?.vencidas ?? 0) > 0
     if (f.estado !== 'todos' && c.estado !== f.estado) return false
     return true
   })

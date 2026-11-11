@@ -1,15 +1,29 @@
-import type { CharterResumen, EstadoCharter } from '@charter/shared'
+import type { CharterResumen, Estado, EstadoCharter } from '@charter/shared'
 import { motion } from 'motion/react'
 import { Link } from 'react-router'
 import { Chip, ChipCategoria } from '../../componentes/Chip'
+import { MiniCurvaS } from '../../componentes/MiniCurvaS'
 import { diasEntre, fechaCorta, hoyISO, porcentaje } from '../../formato'
 import { escalonado, useVariantes } from '../../movimiento'
+import { ETIQUETA_ESTADO, tonoDe } from '../ficha/cronograma/estados'
 
 const EnlaceAnimado = motion.create(Link)
 
 /** Columnas fijas de la lista; la cabecera usa las mismas. */
 export const COLUMNAS =
-  'md:grid-cols-[minmax(0,1fr)_180px_130px_150px] lg:grid-cols-[minmax(0,1fr)_210px_140px_150px]'
+  'md:grid-cols-[minmax(0,1fr)_180px_130px_150px] lg:grid-cols-[minmax(0,1fr)_200px_120px_140px_150px]'
+
+/** Barra de avance en el tono del semáforo del último corte. */
+const BARRA: Record<Estado, string> = {
+  al_dia: 'bg-ok',
+  terminada: 'bg-ok',
+  en_atencion: 'bg-amarillo',
+  en_riesgo: 'bg-naranja',
+  atrasada: 'bg-alerta',
+  vencida: 'bg-vencida',
+  por_iniciar: 'bg-texto-3',
+  sin_programar: 'bg-texto-3',
+}
 
 /** Un corte con más de estos días se marca como viejo. */
 const DIAS_CORTE_VIEJO = 21
@@ -62,14 +76,13 @@ export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; i
       <div className="text-[0.78125rem] text-texto-2">
         {corte ? (
           <>
-            <b className="mr-1 font-cifra text-[0.9375rem] font-semibold text-tinta">
+            <b className="font-cifra text-[0.9375rem] font-semibold text-tinta">
               {porcentaje(corte.ev)}
-            </b>
-            real de {porcentaje(corte.pv)}
+            </b>{' '}
+            de {porcentaje(corte.pv)}
             <div className="relative mt-1.5 h-1.5 rounded-full bg-fondo" aria-hidden>
-              {/* El color del semáforo llega con T5.5; mientras tanto, neutro. */}
               <span
-                className="absolute inset-y-0 left-0 rounded-full bg-texto-3"
+                className={`absolute inset-y-0 left-0 rounded-full ${BARRA[corte.estado]}`}
                 style={{ width: `${Math.min(1, corte.ev) * 100}%` }}
               />
               <span
@@ -83,8 +96,25 @@ export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; i
         )}
       </div>
 
+      <div className="hidden lg:block">
+        {c.cortes.length > 0 && (
+          <MiniCurvaS puntos={c.cortes} estado={corte?.estado} ancho={120} alto={36} />
+        )}
+      </div>
+
       <div className="row-start-2 justify-self-end md:row-auto md:justify-self-start max-md:col-start-2">
-        {!corte && <Chip>Sin cortes</Chip>}
+        {corte ? (
+          <>
+            <Chip tono={tonoDe(corte.estado)}>{ETIQUETA_ESTADO[corte.estado]}</Chip>
+            {corte.vencidas > 0 && (
+              <span className="mt-1 block text-[0.78125rem] font-semibold text-vencida max-md:text-right">
+                {corte.vencidas === 1 ? '1 vencida' : `${corte.vencidas} vencidas`}
+              </span>
+            )}
+          </>
+        ) : (
+          <Chip>Sin cortes</Chip>
+        )}
       </div>
 
       <div className="text-[0.84375rem] leading-snug text-tinta max-md:row-start-3">

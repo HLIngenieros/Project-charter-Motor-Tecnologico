@@ -141,6 +141,7 @@ export function Portafolio() {
           >
             <div>Charter</div>
             <div>Avance</div>
+            <div className="hidden lg:block">Curva S</div>
             <div>Estado</div>
             <div>Último corte</div>
           </div>
