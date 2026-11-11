@@ -8,7 +8,7 @@ import {
   type CronogramaRespuesta,
 } from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { crearCharterPrueba, nuevaApp, sesionDe } from './ayudas'
 
 let app: FastifyInstance
@@ -162,6 +162,20 @@ describe('PUT /charters/:id/cortes/:fecha', () => {
     expect(anterior.json().error.codigo).toBe('corte_anterior')
 
     expect((await guardarCorte(id, '2026-02-30', { avances: [] })).statusCode).toBe(400)
+  })
+
+  it('«hoy» es la fecha de Bogotá: a las 8 p. m. el corte de hoy vale y el de mañana no', async () => {
+    const id = await conCronograma()
+    vi.useFakeTimers({ toFake: ['Date'] })
+    try {
+      vi.setSystemTime(new Date('2026-11-12T01:00:00Z'))
+      const manana = await guardarCorte(id, '2026-11-12', { avances: [] })
+      expect(manana.statusCode).toBe(400)
+      expect(manana.json().error.codigo).toBe('fecha_futura')
+      expect((await guardarCorte(id, '2026-11-11', { avances: [] })).statusCode).toBe(201)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('rechaza actividades que no son hojas programadas', async () => {

@@ -6,6 +6,8 @@ export interface Config {
   /** URL de Postgres (Neon) o carpeta de PGlite. */
   urlDb: string
   dominioPermitido: string
+  /** Si no está vacía, solo estos correos pueden registrarse. */
+  correosPermitidos: string[]
   cookieSegura: boolean
   /** Confiar en X-Forwarded-For (solo detrás de un proxy como IIS). */
   confiarProxy: boolean
@@ -19,6 +21,10 @@ export function leerConfig(entorno: Entorno = process.env): Config {
     puerto: Number(entorno.PUERTO ?? 3100),
     urlDb: entorno.DATABASE_URL || '../../data/pglite',
     dominioPermitido: (entorno.DOMINIO_PERMITIDO ?? 'hlingenieros.com').trim().toLowerCase(),
+    correosPermitidos: (entorno.CORREOS_PERMITIDOS ?? '')
+      .split(',')
+      .map((c) => c.trim().toLowerCase())
+      .filter(Boolean),
     cookieSegura: entorno.COOKIE_SEGURA === 'true',
     confiarProxy: entorno.CONFIAR_PROXY === 'true',
   }

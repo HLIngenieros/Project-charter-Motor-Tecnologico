@@ -45,6 +45,11 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
         { correo: `Usa tu correo @${app.config.dominioPermitido}` },
       )
     }
+    const { correosPermitidos } = app.config
+    if (correosPermitidos.length > 0 && !correosPermitidos.includes(datos.correo.toLowerCase())) {
+      const mensaje = 'Este correo no tiene acceso. Pide que lo agreguen.'
+      throw new ErrorApi(403, 'correo_no_permitido', mensaje, { correo: mensaje })
+    }
     const rechazado = () =>
       new ErrorApi(409, 'registro_rechazado', 'No fue posible crear la cuenta con ese correo')
     const [existente] = await db

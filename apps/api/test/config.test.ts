@@ -13,6 +13,17 @@ describe('base de datos', () => {
   })
 })
 
+describe('correos permitidos', () => {
+  it('separa por coma, recorta y pasa a minúscula; vacío si no está', () => {
+    expect(
+      leerConfig({ CORREOS_PERMITIDOS: ' Ana@hlingenieros.com, b@hlingenieros.com ' })
+        .correosPermitidos,
+    ).toEqual(['ana@hlingenieros.com', 'b@hlingenieros.com'])
+    expect(leerConfig({}).correosPermitidos).toEqual([])
+    expect(leerConfig({ CORREOS_PERMITIDOS: '' }).correosPermitidos).toEqual([])
+  })
+})
+
 describe('confiar en el proxy', () => {
   it('por defecto no confía en X-Forwarded-For', () => {
     expect(leerConfig({}).confiarProxy).toBe(false)

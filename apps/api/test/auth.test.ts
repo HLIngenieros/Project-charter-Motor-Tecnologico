@@ -2,7 +2,18 @@ import { eq } from 'drizzle-orm'
 import { describe, expect, it } from 'vitest'
 import { exigirSesion } from '../src/auth/guardas'
 import { sesion, usuario } from '../src/db/esquema'
-import { CSRF, conSesion, cookieDe, datosRegistro, entrar, nuevaApp, registrar } from './ayudas'
+import { construirApp } from '../src/app'
+import { leerConfig } from '../src/config'
+import {
+  CSRF,
+  conSesion,
+  cookieDe,
+  crearDbPrueba,
+  datosRegistro,
+  entrar,
+  nuevaApp,
+  registrar,
+} from './ayudas'
 
 describe('registro', () => {
   it('crea la cuenta y la sesión con una cookie HttpOnly y SameSite=Lax', async () => {
@@ -41,6 +52,26 @@ describe('registro', () => {
       expect(r.json().error.codigo).toBe('dominio_no_permitido')
     },
   )
+
+  it('con CORREOS_PERMITIDOS, solo esos correos se registran', async () => {
+    const app = await construirApp({
+      db: await crearDbPrueba(),
+      config: leerConfig({ CORREOS_PERMITIDOS: 'ana@hlingenieros.com' }),
+    })
+    const fuera = await registrar(app, { ...datosRegistro, correo: 'otro@hlingenieros.com' })
+    expect(fuera.statusCode).toBe(403)
+    expect(fuera.json().error.codigo).toBe('correo_no_permitido')
+    expect(
+      (await registrar(app, { ...datosRegistro, correo: 'ANA@hlingenieros.com' })).statusCode,
+    ).toBe(201)
+    await app.close()
+  })
+
+  it('sin CORREOS_PERMITIDOS, cualquiera del dominio se registra', async () => {
+    const { app } = await nuevaApp()
+    const r = await registrar(app, { ...datosRegistro, correo: 'otro@hlingenieros.com' })
+    expect(r.statusCode).toBe(201)
+  })
 
   it('rechaza un correo repetido aunque cambien las mayúsculas', async () => {
     const { app } = await nuevaApp()
