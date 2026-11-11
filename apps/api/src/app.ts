@@ -8,6 +8,7 @@ import { crearDb, type BaseDatos } from './db/conexion'
 import { ErrorApi, registrarErrores } from './errores'
 import { rutasCatalogos } from './modulos/catalogos/rutas'
 import { rutasCharters } from './modulos/charters/rutas'
+import { rutasAdmin } from './modulos/admin/rutas'
 import { rutasCortes } from './modulos/cortes/rutas'
 import { rutasCronograma } from './modulos/cronograma/rutas'
 
@@ -40,6 +41,7 @@ export async function construirApp({ db, config }: OpcionesApp): Promise<Fastify
       await api.register(rutasCharters, { prefix: '/charters' })
       await api.register(rutasCronograma, { prefix: '/charters' })
       await api.register(rutasCortes, { prefix: '/charters' })
+      await api.register(rutasAdmin, { prefix: '/admin' })
     },
     { prefix: '/api' },
   )

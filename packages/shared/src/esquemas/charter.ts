@@ -1,4 +1,5 @@
-import type { Estado, Umbrales } from '../calculo/cronograma'
+import type { Estado } from '../calculo/cronograma'
+import type { Reglas } from '../calculo/reglas'
 import type { FechaISO } from '../calculo/tipos'
 import { z } from './zod'
 
@@ -136,5 +137,6 @@ export interface CharterDetalle {
   listas: Record<TipoLista, ItemLista[]>
   permisos: { editar: boolean; reabrir: boolean }
   /** Umbrales del semáforo, en puntos de brecha. */
-  umbrales: Umbrales
+  /** Reglas de cálculo del charter (copiadas de las vigentes al crearlo). */
+  reglas: Reglas
 }

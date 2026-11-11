@@ -1,4 +1,4 @@
-import { ESTADOS_CHARTER, TIPOS_LISTA } from '@charter/shared'
+import { ESTADOS_CHARTER, REGLAS_POR_DEFECTO, TIPOS_LISTA } from '@charter/shared'
 import {
   type AnySQLiteColumn,
   integer,
@@ -19,6 +19,9 @@ const tiempos = {
 }
 
 const booleano = (nombre: string) => integer(nombre, { mode: 'boolean' })
+
+/** Reglas de fábrica sin los umbrales, como texto JSON (default de `charter.reglas`). */
+export const REGLAS_CHARTER_DEFECTO = JSON.stringify({ ...REGLAS_POR_DEFECTO, umbrales: undefined })
 
 // ── 5.1 Cuentas y catálogos ─────────────────────────────────────────────
 
@@ -89,6 +92,9 @@ export const charter = sqliteTable(
     umbralAtencion: real('umbral_atencion').notNull().default(10),
     umbralRiesgo: real('umbral_riesgo').notNull().default(25),
     umbralAtraso: real('umbral_atraso').notNull().default(50),
+    // Reglas de cálculo copiadas al crear el charter, sin los umbrales (van en sus columnas).
+    // JSON de `ReglasCharter`; el default son las reglas de fábrica (los charters de antes).
+    reglas: text('reglas').notNull().default(REGLAS_CHARTER_DEFECTO),
     // Sube con cada PUT del cronograma; detecta ediciones desde otra pestaña (409).
     cronogramaVersion: integer('cronograma_version').notNull().default(0),
     ...tiempos,
@@ -244,3 +250,13 @@ export const avance = sqliteTable(
 
 export type FilaUsuario = typeof usuario.$inferSelect
 export type FilaCharter = typeof charter.$inferSelect
+
+// ── Parámetros globales (una sola fila, id = 1) ─────────────────────────
+
+export const parametros = sqliteTable('parametros', {
+  id: integer('id').primaryKey(),
+  /** JSON de `Reglas` vigentes para los charters nuevos. */
+  reglas: text('reglas').notNull(),
+  actualizadoPor: text('actualizado_por').references(() => usuario.id, { onDelete: 'set null' }),
+  actualizadoEn: text('actualizado_en').notNull(),
+})

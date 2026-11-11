@@ -1,7 +1,8 @@
+import { reglasDeCharter } from '../admin/parametros'
 import {
-  REGLAS_POR_DEFECTO,
   construirArbol,
   hojasProgramadas,
+  pesosCompletos,
   terminacionesPorHoja,
   totalesDeFoto,
   type CorteDetalle,
@@ -9,7 +10,7 @@ import {
   type CorteResumen,
   type FechaISO,
   type FilaFoto,
-  type Umbrales,
+  type Reglas,
 } from '@charter/shared'
 import { and, asc, eq, inArray } from 'drizzle-orm'
 import { v7 } from 'uuid'
@@ -25,12 +26,6 @@ interface CorteConFoto {
   nota: string
   foto: FilaFoto[]
 }
-
-const umbralesDe = (f: FilaCharter): Umbrales => ({
-  atencion: f.umbralAtencion,
-  riesgo: f.umbralRiesgo,
-  atraso: f.umbralAtraso,
-})
 
 /** Todos los cortes del charter con su foto, por fecha ascendente. */
 function cortesConFoto(db: BaseDatos, charterId: string): CorteConFoto[] {
@@ -71,14 +66,11 @@ function cortesConFoto(db: BaseDatos, charterId: string): CorteConFoto[] {
 }
 
 /** Totales y estado de un corte con su foto y las terminaciones hasta su fecha. */
-function resumir(c: CorteConFoto, todos: CorteConFoto[], u: Umbrales): CorteResumen {
+function resumir(c: CorteConFoto, todos: CorteConFoto[], reglas: Reglas): CorteResumen {
   const hastaAqui = todos
     .filter((o) => o.fecha <= c.fecha)
     .map((o) => ({ fecha: o.fecha, avances: o.id === c.id ? c.foto : o.foto }))
-  const r = totalesDeFoto(c.foto, c.fecha, terminacionesPorHoja(hastaAqui), {
-    ...REGLAS_POR_DEFECTO,
-    umbrales: u,
-  })
+  const r = totalesDeFoto(c.foto, c.fecha, terminacionesPorHoja(hastaAqui), reglas)
   return {
     fecha: c.fecha,
     nota: c.nota,
@@ -90,9 +82,16 @@ function resumir(c: CorteConFoto, todos: CorteConFoto[], u: Umbrales): CorteResu
   }
 }
 
+const pesosIncompletos = () =>
+  new ErrorApi(
+    409,
+    'pesos_incompletos',
+    'Los pesos de las actividades deben sumar 100 % para registrar un corte.',
+  )
+
 export function listarCortes(db: BaseDatos, fila: FilaCharter): CorteResumen[] {
   const todos = cortesConFoto(db, fila.id)
-  return todos.map((c) => resumir(c, todos, umbralesDe(fila)))
+  return todos.map((c) => resumir(c, todos, reglasDeCharter(fila)))
 }
 
 export function detalleCorte(db: BaseDatos, fila: FilaCharter, fecha: FechaISO): CorteDetalle {
@@ -108,7 +107,7 @@ export function detalleCorte(db: BaseDatos, fila: FilaCharter, fecha: FechaISO):
       .map((a) => a.id),
   )
   return {
-    ...resumir(c, todos, umbralesDe(fila)),
+    ...resumir(c, todos, reglasDeCharter(fila)),
     avances: c.foto.map((f) => ({ ...f, eliminada: !vigentes.has(f.actividadId) })),
   }
 }
@@ -129,11 +128,16 @@ export function guardarCorte(
   const todos = cortesConFoto(db, fila.id)
   const existente = todos.find((c) => c.fecha === fecha)
   const pcts = new Map(entrada.avances.map((a) => [a.actividadId, a.pct]))
+  const reglas = reglasDeCharter(fila)
 
   let nuevo: CorteConFoto
   if (existente) {
     const enFoto = new Set(existente.foto.map((f) => f.actividadId))
     if ([...pcts.keys()].some((id) => !enFoto.has(id))) throw actividadInvalida()
+    // Al editar manda la foto: el cronograma pudo cambiar después del corte.
+    const sumaFoto = existente.foto.reduce((s, f) => s + (f.peso ?? 0), 0)
+    if (reglas.sumaPesos === 'obligatoria' && Math.abs(sumaFoto - 1) > 1e-4)
+      throw pesosIncompletos()
     nuevo = {
       ...existente,
       nota: entrada.nota,
@@ -151,13 +155,17 @@ export function guardarCorte(
         'Ya hay un corte más reciente. Edítalo o usa una fecha posterior.',
       )
     }
-    const hojas = hojasProgramadas(construirArbol(leerCronograma(db, fila).actividades))
+    const raices = construirArbol(leerCronograma(db, fila).actividades)
+    const hojas = hojasProgramadas(raices, reglas)
     if (hojas.length === 0) {
       throw new ErrorApi(
         400,
         'sin_hojas_programadas',
         'Programa al menos una actividad con peso y fechas antes de registrar un corte.',
       )
+    }
+    if (reglas.sumaPesos === 'obligatoria' && !pesosCompletos(raices, reglas)) {
+      throw pesosIncompletos()
     }
     const programadas = new Set(hojas.map((h) => h.id))
     if ([...pcts.keys()].some((id) => !programadas.has(id))) throw actividadInvalida()
@@ -179,7 +187,7 @@ export function guardarCorte(
   }
 
   const otros = todos.filter((c) => c.id !== nuevo.id)
-  const totales = resumir(nuevo, [...otros, nuevo], umbralesDe(fila))
+  const totales = resumir(nuevo, [...otros, nuevo], reglas)
   db.transaction((tx) => {
     const valores = {
       nota: nuevo.nota,

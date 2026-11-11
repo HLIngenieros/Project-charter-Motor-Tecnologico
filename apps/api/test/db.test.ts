@@ -21,6 +21,7 @@ const TABLAS = [
   'actividad_responsable',
   'corte',
   'avance',
+  'parametros',
 ]
 
 function conCharter() {
@@ -35,7 +36,7 @@ function conCharter() {
 }
 
 describe('crearDb', () => {
-  it('crea las 15 tablas y las 3 categorías del Comité', () => {
+  it('crea las 16 tablas y las 3 categorías del Comité', () => {
     const db = crearDb(':memory:')
     const tablas = db
       .all<{

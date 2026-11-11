@@ -1,3 +1,4 @@
+import { REGLAS_POR_DEFECTO } from '@charter/shared'
 import type { CharterDetalle, ItemLista, TipoLista } from '@charter/shared'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -29,7 +30,7 @@ const base: CharterDetalle = {
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
-  umbrales: { atencion: 10, riesgo: 25, atraso: 50 },
+  reglas: REGLAS_POR_DEFECTO,
 }
 
 function abrir(listas: Partial<Record<TipoLista, ItemLista[]>> = {}, editar = true) {

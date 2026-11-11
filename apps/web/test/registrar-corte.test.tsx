@@ -1,3 +1,4 @@
+import { REGLAS_POR_DEFECTO } from '@charter/shared'
 import type {
   ActividadEntrada,
   CharterDetalle,
@@ -39,7 +40,7 @@ const detalle: CharterDetalle = {
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
-  umbrales: { atencion: 10, riesgo: 25, atraso: 50 },
+  reglas: REGLAS_POR_DEFECTO,
 }
 
 const hoja = (

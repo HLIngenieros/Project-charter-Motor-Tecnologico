@@ -106,8 +106,8 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
   )
   /** Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). */
   const avisoAlVolver = (useLocation().state as { aviso?: string } | null)?.aviso
-  const borrador = useBorradorCronograma(charter.id, cola.encolar, charter.umbrales)
-  const vista = useVistaCronograma(charter.id, borrador, charter.umbrales)
+  const borrador = useBorradorCronograma(charter.id, cola.encolar, charter.reglas.umbrales)
+  const vista = useVistaCronograma(charter.id, borrador, charter.reglas.umbrales)
   const { historica } = vista
   /** Un corte pasado se ve siempre en solo lectura (también mientras se resuelve el pedido). */
   const soloLectura = !charter.permisos.editar || historica !== null || vista.resolviendoCorte
@@ -222,7 +222,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
                 vista={vista}
                 cortes={vista.cortes}
                 elegirCorte={vista.elegirCorte}
-                umbrales={charter.umbrales}
+                umbrales={charter.reglas.umbrales}
               />
               <SeccionCronograma
                 borrador={vista}

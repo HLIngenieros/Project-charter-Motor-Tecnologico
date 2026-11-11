@@ -1,3 +1,4 @@
+import { columnasDeReglas, leerReglasVigentes, reglasDeCharter } from '../admin/parametros'
 import {
   TIPOS_LISTA,
   type AreaPublica,
@@ -143,6 +144,8 @@ export function crearCharter(db: BaseDatos, usuarioId: string, datos: CharterCre
       categoriaId: datos.categoriaId ?? null,
       areaId: datos.areaId ?? null,
       razonDeSer: datos.razonDeSer ?? '',
+      // El charter nace con las reglas vigentes y las conserva aunque el Admin las cambie.
+      ...columnasDeReglas(leerReglasVigentes(db)),
     })
     .run()
   return id
@@ -190,11 +193,7 @@ export function detalleCharter(
     propietario,
     listas,
     permisos: { editar: esDueno && !cerrado, reabrir: esDueno && cerrado },
-    umbrales: {
-      atencion: fila.umbralAtencion,
-      riesgo: fila.umbralRiesgo,
-      atraso: fila.umbralAtraso,
-    },
+    reglas: reglasDeCharter(fila),
   }
 }
 

@@ -1,3 +1,4 @@
+import { REGLAS_POR_DEFECTO } from '@charter/shared'
 import type { ActividadEntrada, CharterDetalle, CronogramaRespuesta } from '@charter/shared'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -33,7 +34,7 @@ const detalle: CharterDetalle = {
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
-  umbrales: { atencion: 10, riesgo: 25, atraso: 50 },
+  reglas: REGLAS_POR_DEFECTO,
 }
 
 const hoja = (id: string, extra: Partial<ActividadEntrada> = {}): ActividadEntrada => ({
@@ -115,7 +116,10 @@ describe('cronograma de la ficha', () => {
     }
     abrir({
       cronograma,
-      detalleCharter: { ...detalle, umbrales: { atencion: 5, riesgo: 25, atraso: 50 } },
+      detalleCharter: {
+        ...detalle,
+        reglas: { ...REGLAS_POR_DEFECTO, umbrales: { atencion: 5, riesgo: 25, atraso: 50 } },
+      },
     })
     const s = await seccion()
     expect(s.getByText('En atención')).toBeInTheDocument()

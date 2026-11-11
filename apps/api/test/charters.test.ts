@@ -174,10 +174,10 @@ describe('listar charters', () => {
     expect(c!.cortes).toEqual([])
   })
 
-  it('el detalle trae los umbrales del charter', async () => {
+  it('el detalle trae las reglas del charter, con sus umbrales', async () => {
     const id = await crearCharterPrueba(app, ana)
     const d = (await pedir('GET', `/api/charters/${id}`, ana)).json<CharterDetalle>()
-    expect(d.umbrales).toEqual({ atencion: 10, riesgo: 25, atraso: 50 })
+    expect(d.reglas.umbrales).toEqual({ atencion: 10, riesgo: 25, atraso: 50 })
   })
 })
 
