@@ -28,14 +28,14 @@ export async function rutasCortes(app: FastifyInstance): Promise<void> {
     const fecha = fechaISO.parse(request.params.fecha)
     const entrada = corteEntrada.parse(request.body)
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
-    const { corte, creado } = guardarCorte(db, fila, fecha, entrada)
+    const { corte, creado } = await guardarCorte(db, fila, fecha, entrada)
     return reply.status(creado ? 201 : 200).send(corte)
   })
 
   app.delete<ConFecha>('/:id/cortes/:fecha', async (request, reply) => {
     const fecha = fechaISO.parse(request.params.fecha)
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
-    eliminarCorte(db, fila, fecha)
+    await eliminarCorte(db, fila, fecha)
     return reply.status(204).send()
   })
 }

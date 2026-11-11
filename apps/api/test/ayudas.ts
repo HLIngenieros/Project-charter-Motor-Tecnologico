@@ -1,5 +1,6 @@
 import type { FastifyInstance, LightMyRequestResponse } from 'fastify'
 import { eq } from 'drizzle-orm'
+import { afterEach } from 'vitest'
 import { construirApp } from '../src/app'
 import { leerConfig } from '../src/config'
 import type { PGlite } from '@electric-sql/pglite'
@@ -23,8 +24,16 @@ export async function crearDbPrueba(): Promise<BaseDatos> {
     await prepararDb(await envolverPglite(cliente))
     return cliente
   })()
-  return envolverPglite((await (await plantilla).clone()) as PGlite)
+  const clon = (await (await plantilla).clone()) as PGlite
+  abiertas.push(clon)
+  return envolverPglite(clon)
 }
+
+/** Cada clon es una instancia WASM aparte: sin cerrarla, la suite se queda sin memoria. */
+const abiertas: PGlite[] = []
+afterEach(async () => {
+  await Promise.all(abiertas.splice(0).map((c) => c.close()))
+})
 
 export async function nuevaApp(
   preparar?: (app: FastifyInstance) => void | Promise<void>,

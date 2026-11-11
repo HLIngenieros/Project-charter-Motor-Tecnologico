@@ -79,6 +79,22 @@ describe('PUT /charters/:id/cronograma', () => {
     expect(g.actividades).toEqual(tresNiveles().map(quitarVacios))
   })
 
+  it('dos guardados simultáneos con la misma versión: uno 200 y otro 409', async () => {
+    const id = await crearCharterPrueba(app, ana)
+    const otro: ActividadEntrada[] = [
+      { id: 'x', padreId: null, orden: 0, nombre: 'Otra', peso: 1, responsables: [] },
+    ]
+    const respuestas = await Promise.all([guardar(id, 0, tresNiveles()), guardar(id, 0, otro)])
+    expect(respuestas.map((r) => r.statusCode).sort()).toEqual([200, 409])
+    const rechazo = respuestas.find((r) => r.statusCode === 409)!
+    expect(rechazo.json().error.codigo).toBe('cronograma_desactualizado')
+
+    const gano = respuestas[0]!.statusCode === 200 ? tresNiveles() : otro
+    const g = (await leer(id)).json<CronogramaRespuesta>()
+    expect(g.version).toBe(1)
+    expect(g.actividades).toEqual(gano.map(quitarVacios))
+  })
+
   it('reordena con la versión vigente', async () => {
     const id = await crearCharterPrueba(app, ana)
     await guardar(id, 0, tresNiveles())
@@ -140,32 +156,28 @@ describe('PUT /charters/:id/cronograma', () => {
   it('eliminar una hoja con avances conserva sus avances', async () => {
     const id = await crearCharterPrueba(app, ana)
     await guardar(id, 0, tresNiveles())
-    db.insert(corte).values({ id: 'c1', charterId: id, fecha: '2026-01-31' }).run()
-    db.insert(avance)
+    await db.insert(corte).values({ id: 'c1', charterId: id, fecha: '2026-01-31' })
+    await db
+      .insert(avance)
       .values({ corteId: 'c1', actividadId: 'h1', item: '1.1.1', nombre: 'Hoja 1', pctReal: 0.5 })
-      .run()
 
     const sinH1 = tresNiveles().filter((a) => a.id !== 'h1')
     expect((await guardar(id, 1, sinH1)).statusCode).toBe(200)
-    expect(db.select().from(avance).all()).toHaveLength(1)
+    expect(await db.select().from(avance)).toHaveLength(1)
   })
 
   it('devuelve los avances del último corte con su terminación', async () => {
     const id = await crearCharterPrueba(app, ana)
     await guardar(id, 0, tresNiveles())
-    db.insert(corte)
-      .values([
-        { id: 'c1', charterId: id, fecha: '2026-01-31' },
-        { id: 'c2', charterId: id, fecha: '2026-02-28' },
-      ])
-      .run()
-    db.insert(avance)
-      .values([
-        { corteId: 'c1', actividadId: 'h1', item: '1.1.1', nombre: 'Hoja 1', pctReal: 1 },
-        { corteId: 'c2', actividadId: 'h1', item: '1.1.1', nombre: 'Hoja 1', pctReal: 1 },
-        { corteId: 'c2', actividadId: 'h2', item: '1.1.2', nombre: 'Hoja 2', pctReal: 0.3 },
-      ])
-      .run()
+    await db.insert(corte).values([
+      { id: 'c1', charterId: id, fecha: '2026-01-31' },
+      { id: 'c2', charterId: id, fecha: '2026-02-28' },
+    ])
+    await db.insert(avance).values([
+      { corteId: 'c1', actividadId: 'h1', item: '1.1.1', nombre: 'Hoja 1', pctReal: 1 },
+      { corteId: 'c2', actividadId: 'h1', item: '1.1.1', nombre: 'Hoja 1', pctReal: 1 },
+      { corteId: 'c2', actividadId: 'h2', item: '1.1.2', nombre: 'Hoja 2', pctReal: 0.3 },
+    ])
     const r = (await leer(id)).json<CronogramaRespuesta>()
     expect(r.ultimoCorte).toEqual({
       fecha: '2026-02-28',

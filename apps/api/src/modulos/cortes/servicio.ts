@@ -28,15 +28,14 @@ interface CorteConFoto {
 }
 
 /** Todos los cortes del charter con su foto, por fecha ascendente. */
-function cortesConFoto(db: BaseDatos, charterId: string): CorteConFoto[] {
-  const cortes = db
+async function cortesConFoto(db: BaseDatos, charterId: string): Promise<CorteConFoto[]> {
+  const cortes = await db
     .select()
     .from(corte)
     .where(eq(corte.charterId, charterId))
     .orderBy(asc(corte.fecha))
-    .all()
   if (cortes.length === 0) return []
-  const filas = db
+  const filas = await db
     .select()
     .from(avance)
     .where(
@@ -45,7 +44,6 @@ function cortesConFoto(db: BaseDatos, charterId: string): CorteConFoto[] {
         cortes.map((c) => c.id),
       ),
     )
-    .all()
   return cortes.map((c) => ({
     id: c.id,
     fecha: c.fecha,
@@ -89,23 +87,24 @@ const pesosIncompletos = () =>
     'Los pesos de las actividades deben sumar 100 % para registrar un corte.',
   )
 
-export function listarCortes(db: BaseDatos, fila: FilaCharter): CorteResumen[] {
-  const todos = cortesConFoto(db, fila.id)
+export async function listarCortes(db: BaseDatos, fila: FilaCharter): Promise<CorteResumen[]> {
+  const todos = await cortesConFoto(db, fila.id)
   return todos.map((c) => resumir(c, todos, reglasDeCharter(fila)))
 }
 
-export function detalleCorte(db: BaseDatos, fila: FilaCharter, fecha: FechaISO): CorteDetalle {
-  const todos = cortesConFoto(db, fila.id)
+export async function detalleCorte(
+  db: BaseDatos,
+  fila: FilaCharter,
+  fecha: FechaISO,
+): Promise<CorteDetalle> {
+  const todos = await cortesConFoto(db, fila.id)
   const c = todos.find((o) => o.fecha === fecha)
   if (!c) throw new ErrorApi(404, 'no_encontrado', 'No hay un corte en esa fecha.')
-  const vigentes = new Set(
-    db
-      .select({ id: actividad.id })
-      .from(actividad)
-      .where(eq(actividad.charterId, fila.id))
-      .all()
-      .map((a) => a.id),
-  )
+  const actuales = await db
+    .select({ id: actividad.id })
+    .from(actividad)
+    .where(eq(actividad.charterId, fila.id))
+  const vigentes = new Set(actuales.map((a) => a.id))
   return {
     ...resumir(c, todos, reglasDeCharter(fila)),
     avances: c.foto.map((f) => ({ ...f, eliminada: !vigentes.has(f.actividadId) })),
@@ -119,13 +118,13 @@ const actividadInvalida = () =>
  * Crea el corte (foto de la línea base vigente) o, si ya hay uno en esa fecha, cambia sus
  * % y su nota sin tocar la foto. En ambos casos recalcula los totales guardados.
  */
-export function guardarCorte(
+export async function guardarCorte(
   db: BaseDatos,
   fila: FilaCharter,
   fecha: FechaISO,
   entrada: CorteEntrada,
-): { corte: CorteDetalle; creado: boolean } {
-  const todos = cortesConFoto(db, fila.id)
+): Promise<{ corte: CorteDetalle; creado: boolean }> {
+  const todos = await cortesConFoto(db, fila.id)
   const existente = todos.find((c) => c.fecha === fecha)
   const pcts = new Map(entrada.avances.map((a) => [a.actividadId, a.pct]))
   const reglas = reglasDeCharter(fila)
@@ -155,7 +154,7 @@ export function guardarCorte(
         'Ya hay un corte más reciente. Edítalo o usa una fecha posterior.',
       )
     }
-    const raices = construirArbol(leerCronograma(db, fila).actividades)
+    const raices = construirArbol((await leerCronograma(db, fila)).actividades)
     const hojas = hojasProgramadas(raices, reglas)
     if (hojas.length === 0) {
       throw new ErrorApi(
@@ -188,7 +187,7 @@ export function guardarCorte(
 
   const otros = todos.filter((c) => c.id !== nuevo.id)
   const totales = resumir(nuevo, [...otros, nuevo], reglas)
-  db.transaction((tx) => {
+  await db.transaction(async (tx) => {
     const valores = {
       nota: nuevo.nota,
       pvProyecto: totales.pv,
@@ -196,40 +195,41 @@ export function guardarCorte(
       desvProyecto: totales.desv,
     }
     if (existente) {
-      tx.update(corte).set(valores).where(eq(corte.id, nuevo.id)).run()
-      tx.delete(avance).where(eq(avance.corteId, nuevo.id)).run()
+      await tx.update(corte).set(valores).where(eq(corte.id, nuevo.id))
+      await tx.delete(avance).where(eq(avance.corteId, nuevo.id))
     } else {
-      tx.insert(corte)
-        .values({ id: nuevo.id, charterId: fila.id, fecha, ...valores })
-        .run()
+      await tx.insert(corte).values({ id: nuevo.id, charterId: fila.id, fecha, ...valores })
     }
-    tx.insert(avance)
-      .values(
-        nuevo.foto.map((f) => ({
-          corteId: nuevo.id,
-          actividadId: f.actividadId,
-          item: f.item,
-          nombre: f.nombre,
-          pctReal: f.pct,
-          peso: f.peso,
-          inicio: f.inicio,
-          fin: f.fin,
-        })),
-      )
-      .run()
-    tx.update(charter)
+    await tx.insert(avance).values(
+      nuevo.foto.map((f) => ({
+        corteId: nuevo.id,
+        actividadId: f.actividadId,
+        item: f.item,
+        nombre: f.nombre,
+        pctReal: f.pct,
+        peso: f.peso,
+        inicio: f.inicio,
+        fin: f.fin,
+      })),
+    )
+    await tx
+      .update(charter)
       .set({ actualizadoEn: new Date().toISOString() })
       .where(eq(charter.id, fila.id))
-      .run()
   })
 
-  return { corte: detalleCorte(db, fila, fecha), creado: !existente }
+  return { corte: await detalleCorte(db, fila, fecha), creado: !existente }
 }
 
-export function eliminarCorte(db: BaseDatos, fila: FilaCharter, fecha: FechaISO): void {
-  const r = db
+export async function eliminarCorte(
+  db: BaseDatos,
+  fila: FilaCharter,
+  fecha: FechaISO,
+): Promise<void> {
+  const borrados = await db
     .delete(corte)
     .where(and(eq(corte.charterId, fila.id), eq(corte.fecha, fecha)))
-    .run()
-  if (r.changes === 0) throw new ErrorApi(404, 'no_encontrado', 'No hay un corte en esa fecha.')
+    .returning({ id: corte.id })
+  if (borrados.length === 0)
+    throw new ErrorApi(404, 'no_encontrado', 'No hay un corte en esa fecha.')
 }

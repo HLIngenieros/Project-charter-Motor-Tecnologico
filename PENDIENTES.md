@@ -91,11 +91,11 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 
 Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md). Plan: [docs/planes/despliegue-vercel.md](docs/planes/despliegue-vercel.md). Sesiones: base y API asíncrona (Tasks 1–4) · fecha, acceso, Vercel y publicación (Tasks 5–7).
 
-- [ ] Antes de empezar: exportar el JSON de RF1 desde la app actual
-- [ ] Task 1 · Esquema Postgres y conexión (PGlite / Neon)
-- [ ] Task 2 · Autenticación, sesiones y CLI asíncronos
-- [ ] Task 3 · Charters, catálogos y parámetros asíncronos
-- [ ] Task 4 · Cronograma y cortes asíncronos (versión dentro de la transacción)
+- [x] Antes de empezar: exportar el JSON de RF1 desde la app actual (los 8 charters y una copia de `charters.db` en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`)
+- [x] Task 1 · Esquema Postgres y conexión (PGlite / Neon)
+- [x] Task 2 · Autenticación, sesiones y CLI asíncronos
+- [x] Task 3 · Charters, catálogos y parámetros asíncronos
+- [x] Task 4 · Cronograma y cortes asíncronos (versión dentro de la transacción)
 - [ ] Task 5 · Fecha de Bogotá y `CORREOS_PERMITIDOS` (cierra la prueba de zona horaria)
 - [ ] Task 6 · Adaptador y `vercel.json`
 - [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación y documentación)

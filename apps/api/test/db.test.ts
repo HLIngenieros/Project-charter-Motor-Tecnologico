@@ -49,9 +49,10 @@ async function errorDe(promesa: PromiseLike<unknown>): Promise<unknown> {
 describe('crearDb', () => {
   it('crea las 16 tablas y las 3 categorías del Comité', async () => {
     const db = await crearDb(':memory:')
-    const filas = await db.execute<{ table_name: string }>(
+    // Con el tipo genérico de la base, `execute` no sabe la forma del resultado.
+    const filas = (await db.execute(
       sql`select table_name from information_schema.tables where table_schema = 'public' and table_name not like '__drizzle%'`,
-    )
+    )) as unknown as { rows: { table_name: string }[] }
     const tablas = filas.rows.map((t) => t.table_name)
     expect(tablas.sort()).toEqual([...TABLAS].sort())
     const cats = await db.select().from(categoria).orderBy(categoria.orden)
