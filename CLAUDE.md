@@ -86,17 +86,20 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-11 · Mini curva S del portafolio: escala vertical hasta un poco más del mayor valor (a 0–100 % se ve plana) y solo desde 1024 px. El aviso que deja otra pantalla en `state` se guarda al montar y se borra con `navigate(…, { replace: true, state: null })` · Claude.
 - 2026-11-11 · **Despliegue en Vercel + Neon** (link fijo, uso personal por ahora; el PC no puede estar siempre prendido). Postgres en todas partes: Neon en producción, PGlite en desarrollo y pruebas; se quita SQLite y la base se regenera (no se migran datos). Fecha de hoy en `America/Bogota` y `CORREOS_PERMITIDOS` para limitar el registro. Reemplaza «local primero, servidor interno después» · Usuario / Claude.
 - 2026-11-11 · Presupuesto (`rubro.valor`, `valor_unitario`) en `bigint` modo número: `integer` de Postgres es de 32 bits. El guardado del cronograma hace primero el `UPDATE … WHERE cronograma_version = v` dentro de la transacción (bloquea la fila; el simultáneo da 409) · Claude.
+- 2026-11-11 · **Publicar al final**: se termina todo (Fases 6, 7 y 8) y se despliega en la Fase 8 (T8.5 = Task 7 del plan de Vercel). T4.5 se da por cumplida con RF1 · Usuario.
+- 2026-11-11 · La función de Vercel (`apps/api/src/vercel.ts`) no migra: lo hace `npm run migrar` en el build. Arranca la app una vez por instancia y olvida un arranque fallido para reintentar · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
 
 - **T1.3 aprobada (2026-11-09):** maquetas en `docs/maquetas/` (abrir con `python -m http.server` dentro de la carpeta) y flujos en `docs/pantallas.md`. PRODUCT.md y DESIGN.md creados.
 - **Fase 3 cerrada (2026-11-09).**
-- **Fase 4 cerrada (2026-11-10).** T4.5 (primer charter real) se omitió por ahora.
+- **Fase 4 cerrada (2026-11-10).** T4.5 cumplida con RF1 (2026-11-11).
 - **Fase 5 cerrada (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. `componentes/MiniCurvaS.tsx` la usan el portafolio y Registrar corte.
 - **Primer charter real:** RF1 · Radicación de facturas (Comité IA, eje Automatización; responsable Jorge Espinosa, patrocinador Área ID & TI). Redacción, listas y cronograma (25 actividades, 23 nov 2026 – 10 abr 2027) cargados el 2026-11-11 a partir de la reunión. Indicadores y riesgos propuestos esperan la Fase 6.
 - **Parametrización y exportación cerradas (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Web: `pantallas/admin/` (`AreaAdmin` con pestañas como enlaces, `Parametrizacion`; `SoloAdmin` en las rutas), `MenuExportar` en la banda, `api/exportar.ts` y `pantallas/imprimir/` (`Imprimir` sin `Layout`, `CronogramaImpresion`, `imprimir.css`). La impresión reutiliza `SeccionCurvaS` con `estatica` y `ancho`.
-- **Despliegue en curso:** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md`. Sesión 1 (Tasks 1–4) hecha el 2026-11-11: Postgres en todas partes y API asíncrona. Falta la sesión 2 (Tasks 5–7: fecha de Bogotá, `CORREOS_PERMITIDOS`, adaptador de Vercel y publicación). Respaldo de la base SQLite y JSON de los 8 charters (RF1 incluido) en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`; la base local de PGlite arrancó vacía.
+- **Despliegue en curso:** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md`. Tasks 1–6 hechas el 2026-11-11 (Postgres, API asíncrona, fecha de Bogotá, `CORREOS_PERMITIDOS`, adaptador y `vercel.json`). La Task 7 (Neon, Vercel, verificación, RF1 a Neon y documentación) queda para la Fase 8. Respaldo de la base SQLite y JSON de los 8 charters (RF1 incluido) en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`; la base local de PGlite arrancó vacía: recargar RF1 antes de la Fase 6.
+- **Siguiente:** Fase 6 (indicadores, riesgos, presupuesto) con brainstorming → spec → plan; luego Fase 7 (Admin) y Fase 8.
 - Base: `db/conexion.ts` con `abrirDb` (URL `postgres://` → `pg`; `':memory:'` o carpeta → PGlite, solo con `import()` dinámico), `prepararDb` (migra y siembra), `crearDb` = ambas, y `cerrarDb`. `esViolacionUnica` (código `23505`) en `db/errores.ts`. Pruebas: `crearDbPrueba()` de `test/ayudas.ts` clona una plantilla migrada por archivo y cierra los clones en `afterEach`.
 - Ficha a una fecha: `useVistaCronograma` (`?corte=`) arma la `VistaCronograma` que comparten banda, curva y Gantt; en un corte pasado todo es solo lectura. Curva S en `pantallas/ficha/curva/` (`geometria.ts` puro, `CurvaS` en SVG). Reglas de los charters: `apps/api/src/modulos/admin/parametros.ts` (`reglasDeCharter`, `columnasDeReglas`).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
@@ -108,6 +111,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 ## Comandos
 
 - `npm run dev` (API 3100 + web 5173; base PGlite en `data/pglite`, o Postgres si hay `DATABASE_URL`) · `npm test` · `npm run lint` · `npm run build`.
+- `npm run migrar` aplica migraciones y semilla a la base de `DATABASE_URL`; `npm run build:vercel` = migrar + build (lo usa Vercel).
 - Admin: registrar la cuenta y luego `npm run admin -- --promover <correo>` (`--quitar` lo retira).
 - Si Claude levanta `npm run dev` para verificar, al terminar debe matar **todo el árbol** (`concurrently` y `tsx watch`), no solo el proceso del puerto: un `tsx watch` huérfano relanza la API al cambiar el código y ocupa el 3100 (EADDRINUSE).
 
@@ -152,6 +156,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 - Cada clon de PGlite es una instancia WASM: sin cerrarlo, la suite de la API se queda sin memoria (Fatal OOM). La plantilla tarda ~2 s y cada clon ~0,3 s; `apps/api/vitest.config.ts` sube el límite a 30 s.
 - Con `PgDatabase` genérica, `db.execute` devuelve `unknown`: castear a `{ rows: … }`. Drizzle en Postgres no tiene `.get()/.all()/.run()`: `const [fila] = await …limit(1)` y `.returning()` en vez de `changes`.
+- Este PC está en hora de Bogotá: una prueba de fechas «de Bogotá» pasa aunque el código use la zona local. Por eso `apps/api/vitest.config.ts` fija `TZ=UTC`. Probar `npm run migrar` con `DATABASE_URL=<carpeta del scratchpad>` (PGlite aparte), nunca sobre `data/pglite` con el `npm run dev` del usuario corriendo.
 - `tsx watch` del usuario relanza la API al cambiar el código: tras cambios de base, su `npm run dev` ya corre con lo nuevo (sirve para verificar sin levantar otro).
 
 ## Glosario

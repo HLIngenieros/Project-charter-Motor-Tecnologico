@@ -30,7 +30,7 @@
 
 - [ ] Límite de intentos por IP también en `POST /auth/registro`.
 - [x] Motor: `pct` no numérico (o no finito) cuenta como 0 y `construirArbol` rechaza ids repetidos (`id_duplicado`) — 2026-11-09
-- [ ] La prueba de zona horaria debe verificar que `TZ` sí se aplicó (hoy no podría fallar).
+- [x] La prueba de zona horaria ya puede fallar: `hoyISO` usa `America/Bogota` y las pruebas de la API corren con `TZ=UTC` — 2026-11-11
 - [x] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts` — 2026-11-09
 - [x] Contraste: el color de la categoría solo va en el punto y el fondo del chip; el texto es `tinta` (T3.2) — 2026-11-09
 - [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
@@ -52,7 +52,7 @@ Plan: [docs/planes/fase-3.md](docs/planes/fase-3.md). Sesiones: API (Tasks 1–3
 - [x] T4.2 · Editor de cronograma A–J con cálculo vivo — 2026-11-10
 - [x] T4.3 · API de cortes con foto de línea base
 - [x] T4.4 · Pantalla de cortes (banda con cifras, historial y Registrar corte) — 2026-11-10
-- [ ] T4.5 · Hito: primer charter real del líder de TI
+- [x] T4.5 · Hito: primer charter real · RF1 · Radicación de facturas (redacción, listas y cronograma de 25 actividades desde la reunión del Comité IA) — 2026-11-11
 
 ## Fase 5 · Visualización
 
@@ -85,7 +85,7 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 - [ ] T8.2 · Charters de prueba A1, D1 y C1
 - [ ] T8.3 · Pulido responsive y de movimiento
 - [ ] T8.4 · Pruebas E2E
-- [ ] T8.5 · Build de producción y guía de despliegue → adelantado como **despliegue en Vercel + Neon**
+- [ ] T8.5 · Build de producción y despliegue → **Task 7 del plan de Vercel + Neon** (decisión del usuario: se publica con todo terminado)
 
 ## Despliegue en Vercel + Neon
 
@@ -96,13 +96,13 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 - [x] Task 2 · Autenticación, sesiones y CLI asíncronos
 - [x] Task 3 · Charters, catálogos y parámetros asíncronos
 - [x] Task 4 · Cronograma y cortes asíncronos (versión dentro de la transacción)
-- [ ] Task 5 · Fecha de Bogotá y `CORREOS_PERMITIDOS` (cierra la prueba de zona horaria)
-- [ ] Task 6 · Adaptador y `vercel.json`
-- [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación y documentación)
+- [x] Task 5 · Fecha de Bogotá y `CORREOS_PERMITIDOS` (cierra la prueba de zona horaria) — 2026-11-11
+- [x] Task 6 · Adaptador (`apps/api/src/vercel.ts`, `api/index.js`), `vercel.json`, `npm run migrar` y Node 24 — 2026-11-11
+- [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación, RF1 y documentación) → **en la Fase 8 (T8.5)**
 
 Menor anotado: dos PUT simultáneos que crean un corte en la misma fecha darían 500 por el índice único (no 409).
 
-**Próxima tarea sugerida:** despliegue en Vercel + Neon, sesión 2 (Tasks 5–7, la 7 con el usuario: cuentas de Neon y Vercel). Después, Fase 6 (indicadores y riesgos de RF1 anotados en T6.1 y T6.2). Sigue abierto de la Fase 2: límite de intentos en `POST /auth/registro`.
+**Próxima tarea sugerida:** Fase 6 (diseño y plan; indicadores y riesgos de RF1 anotados en T6.1 y T6.2), luego Fase 7 y Fase 8, que termina publicando (Task 7 del plan de Vercel). Antes de la Fase 6, recargar RF1 en la base local de PGlite desde el respaldo (arrancó vacía). Siguen abiertos: límite de intentos en `POST /auth/registro` y el 500 de cortes simultáneos. `transcripcionreu.docx` (raíz, sin commitear) espera decisión: a `docs/referencias/` o fuera del repo.
 
 ## Registro de sesiones
 
@@ -125,3 +125,4 @@ Menor anotado: dos PUT simultáneos que crean un corte en la misma fecha darían
 | 2026-11-11 | T5.4, T5.5, cierre Fase 5 | Propuesta de redacción para RF1 · Radicación de facturas (primer charter real, a partir de la transcripción del Comité IA): razón de ser, objetivos, supuestos, criterios, indicadores, riesgos y cronograma de 6 fases; cargado en el sistema a pedido del usuario (salvo indicadores y riesgos, sin sección aún). Fase 5 sesión 3: portafolio con avance «real de planeado», barra y chip del semáforo, vencidas, filtro «Con vencidas» y `MiniCurvaS` (desde 1024 px, escala hasta el mayor valor); mini curva con el punto nuevo en Registrar corte; el aviso «Corte guardado» se borra del historial. 396 pruebas, lint y build en verde; navegador a 1440 y 390 px. Commits 33fa829…b086bdd |
 | 2026-11-11 | Despliegue (diseño y plan) | Revisión de pendientes y de opciones de hosting gratuito. El PC no puede estar siempre prendido, así que el usuario eligió Vercel (Hobby, uso personal) + Neon. Diseño: Postgres en todas partes (PGlite en desarrollo y pruebas), API asíncrona, versión del cronograma dentro de la transacción, migraciones en el build, función que reenvía `/api` a Fastify, fecha de Bogotá y `CORREOS_PERMITIDOS`. Plan de 7 tareas en dos sesiones. Sin cambios de código |
 | 2026-11-11 | Despliegue · sesión 1 | Respaldo previo (JSON de los 8 charters y copia de `charters.db`). Tasks 1–4: SQLite reemplazado por Postgres (PGlite en desarrollo y pruebas, Neon en producción), migración inicial nueva, toda la API asíncrona, registro simultáneo con 409 y versión del cronograma validada dentro de la transacción. Presupuesto en `bigint`. Las pruebas clonan una plantilla de PGlite y cierran los clones (sin eso, sin memoria). 399 pruebas, lint y build en verde; navegador sobre PGlite. Commits ae9bbf7…0165419 |
+| 2026-11-11 | Despliegue · sesión 2 (Tasks 5–6) | `hoyISO` en `America/Bogota` (pruebas de la API con `TZ=UTC` para que puedan fallar), `CORREOS_PERMITIDOS` (403 `correo_no_permitido`), adaptador de Vercel que arranca una vez y reintenta si falla, `api/index.js`, `vercel.json`, `npm run migrar` en el build y Node 24. Build sin PGlite. 408 pruebas, lint y build en verde. El usuario decidió publicar al final (Fase 8), con todo terminado; T4.5 se da por hecha con RF1. Commits d98fd29…HEAD |
