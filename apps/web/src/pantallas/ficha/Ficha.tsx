@@ -1,7 +1,7 @@
 import type { CharterDetalle, CharterEditar, EstadoCharter } from '@charter/shared'
 import { useQueryClient } from '@tanstack/react-query'
-import { Fragment, useCallback, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router'
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { CLAVES, useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
 import { ErrorCliente } from '../../api/cliente'
 import { CLAVE_SESION, useSesion } from '../../api/sesion'
@@ -105,8 +105,17 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
     },
     [encolar, mutateAsync],
   )
-  /** Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). */
-  const avisoAlVolver = (useLocation().state as { aviso?: string } | null)?.aviso
+  /**
+   * Mensaje que deja otra pantalla al volver (p. ej. «Corte guardado»). Se guarda al montar y se
+   * borra del historial, para que no reaparezca al recargar o al volver atrás.
+   */
+  const ubicacion = useLocation()
+  const navegar = useNavigate()
+  const [avisoAlVolver] = useState(() => (ubicacion.state as { aviso?: string } | null)?.aviso)
+  useEffect(() => {
+    if ((ubicacion.state as { aviso?: string } | null)?.aviso)
+      void navegar(ubicacion.pathname + ubicacion.search, { replace: true, state: null })
+  }, [ubicacion, navegar])
   const borrador = useBorradorCronograma(charter.id, cola.encolar, charter.reglas)
   const vista = useVistaCronograma(charter.id, borrador, charter.reglas)
   const { historica } = vista

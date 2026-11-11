@@ -7,9 +7,9 @@ import {
   type CronogramaRespuesta,
   REGLAS_POR_DEFECTO,
 } from '@charter/shared'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, useLocation, type InitialEntry, type Location } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Proveedores } from '../src/app/Proveedores'
 import { Rutas } from '../src/app/rutas'
@@ -70,7 +70,11 @@ const corte = (fecha: string, pv: number, ev: number, nota = ''): CorteResumen =
 
 const CORTES = [corte('2026-11-02', 0.2, 0.1, 'Arranque'), corte('2026-11-09', 0.3, 0.125)]
 
-function abrir(detalleCharter = detalle) {
+function abrir(
+  detalleCharter = detalle,
+  entrada: InitialEntry = '/charters/c1',
+  ver?: (l: Location) => void,
+) {
   let cortes = [...CORTES]
   const llamadas = simularApi((l) => {
     if (l.url === '/api/charters/c1') return { estado: 200, cuerpo: detalleCharter }
@@ -87,17 +91,36 @@ function abrir(detalleCharter = detalle) {
   const usuario = userEvent.setup()
   render(
     <Proveedores>
-      <MemoryRouter initialEntries={['/charters/c1']}>
+      <MemoryRouter initialEntries={[entrada]}>
         <Rutas />
+        {ver && <Espia ver={ver} />}
       </MemoryRouter>
     </Proveedores>,
   )
   return { llamadas, usuario }
 }
 
+function Espia({ ver }: { ver: (l: Location) => void }) {
+  ver(useLocation())
+  return null
+}
+
 const historial = async () => within(await screen.findByRole('region', { name: 'Cortes' }))
 
 describe('banda e historial de cortes', () => {
+  it('el aviso de corte guardado se ve una vez y no reaparece al volver', async () => {
+    let ubicacion: Location | undefined
+    const entrada = { pathname: '/charters/c1', state: { aviso: 'Corte guardado' } }
+    abrir(detalle, entrada, (l) => (ubicacion = l))
+    expect(await screen.findByText('Corte guardado')).toBeInTheDocument()
+    await waitFor(() => expect(ubicacion?.state).toBeNull())
+    expect(screen.getByText('Corte guardado')).toBeInTheDocument()
+    cleanup()
+    abrir(detalle, { pathname: ubicacion!.pathname, state: ubicacion!.state })
+    await historial()
+    expect(screen.queryByText('Corte guardado')).not.toBeInTheDocument()
+  })
+
   it('lista los cortes del más reciente al más viejo', async () => {
     abrir()
     const h = await historial()

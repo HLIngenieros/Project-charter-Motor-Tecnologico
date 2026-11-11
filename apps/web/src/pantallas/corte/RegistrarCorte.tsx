@@ -18,6 +18,7 @@ import { Aviso } from '../../componentes/Aviso'
 import { Boton, clasesBoton } from '../../componentes/Boton'
 import { Cargando } from '../../componentes/Cargando'
 import { Chip, textoTono } from '../../componentes/Chip'
+import { MiniCurvaS, type PuntoMini } from '../../componentes/MiniCurvaS'
 import { Cifra } from '../../componentes/Cifra'
 import { fechaCorta, hoyISO, porcentaje, puntos } from '../../formato'
 import { chipDe, tonoDe } from '../ficha/cronograma/estados'
@@ -77,11 +78,14 @@ function Formulario({
   nombre,
   p,
   reglas,
+  historia,
 }: {
   charterId: string
   nombre: string
   p: Preparado
   reglas: Reglas
+  /** Cortes guardados: la mini curva usa los anteriores a la fecha. */
+  historia: PuntoMini[]
 }) {
   const navegar = useNavigate()
   const guardar = useGuardarCorte(charterId)
@@ -304,6 +308,15 @@ function Formulario({
               </div>
             ))}
           </div>
+          <div className="max-md:hidden">
+            <MiniCurvaS
+              puntos={historia}
+              extra={{ fecha, pv: proyecto.pv, ev: proyecto.ev }}
+              estado={proyecto.estado}
+              ancho={298}
+              alto={64}
+            />
+          </div>
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-tinta">
             Nota del corte
             <textarea
@@ -496,6 +509,7 @@ export function RegistrarCorte() {
       charterId={id}
       nombre={charter.data.nombre}
       reglas={charter.data.reglas}
+      historia={cortes.data ?? []}
       p={preparado}
     />
   )

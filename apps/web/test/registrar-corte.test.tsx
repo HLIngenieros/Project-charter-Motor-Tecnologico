@@ -178,6 +178,16 @@ describe('registrar corte', () => {
     expect(screen.getByText('Baja frente al corte anterior (60 %)')).toBeInTheDocument()
   })
 
+  it('la mini curva mueve el punto nuevo al escribir', async () => {
+    const { usuario } = abrir()
+    await screen.findByRole('heading', { name: 'Registrar corte' })
+    const punto = () => document.querySelector('[data-punto-final]')!.getAttribute('cy')
+    const antes = punto()
+    await usuario.clear(campo('Diseño'))
+    await usuario.type(campo('Diseño'), '100')
+    await waitFor(() => expect(punto()).not.toBe(antes))
+  })
+
   it('guarda todas las hojas con la fecha de hoy y vuelve a la ficha', async () => {
     const { llamadas, usuario } = abrir()
     await screen.findByRole('heading', { name: 'Registrar corte' })
