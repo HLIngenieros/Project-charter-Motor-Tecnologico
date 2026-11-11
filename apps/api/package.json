@@ -9,7 +9,8 @@
     "start": "node dist/servidor.js",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json",
-    "admin": "tsx src/cli/admin.ts"
+    "admin": "tsx src/cli/admin.ts",
+    "migrar": "tsx src/cli/migrar.ts"
   },
   "dependencies": {
     "@charter/shared": "^0.1.0",

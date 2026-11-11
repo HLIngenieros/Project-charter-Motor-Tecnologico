@@ -11,7 +11,9 @@
     "test": "npm test --workspaces --if-present",
     "build": "npm run build -w apps/api && npm run build -w apps/web",
     "lint": "eslint . && npm run typecheck --workspaces --if-present",
-    "admin": "npm run admin -w apps/api --"
+    "admin": "npm run admin -w apps/api --",
+    "migrar": "npm run migrar -w apps/api",
+    "build:vercel": "npm run migrar && npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
