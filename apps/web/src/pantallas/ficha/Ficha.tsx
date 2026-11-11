@@ -13,6 +13,7 @@ import { BandaEstado } from './BandaEstado'
 import { ContextoGuardado, useColaGuardado, type AlFallar } from './colaGuardado'
 import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFicha'
 import { MenuCharter } from './MenuCharter'
+import { MenuExportar } from './MenuExportar'
 import { fechaCorta } from '../../formato'
 import { SeccionCronograma } from './cronograma/SeccionCronograma'
 import { SeccionCurvaS } from './curva/SeccionCurvaS'
@@ -151,6 +152,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
                   }
                 : undefined
             }
+            exportar={<MenuExportar charter={charter} corte={historica?.fecha ?? null} />}
             registrarCorte={soloLectura ? undefined : `/charters/${charter.id}/corte`}
             selectorCorte={
               <SelectorCorte

@@ -91,10 +91,13 @@ export function BandaEstado({
   situacion,
   registrarCorte,
   selectorCorte,
+  exportar,
   acciones,
 }: {
   /** Elige en qué corte se ve la ficha. */
   selectorCorte?: ReactNode
+  /** Menú «Exportar»; va antes de «Registrar corte». */
+  exportar?: ReactNode
   nombre: string
   /** Situación actual; se omite mientras el cronograma no tiene actividades. */
   situacion?: Situacion
@@ -130,9 +133,10 @@ export function BandaEstado({
           </div>
         </div>
         {situacion && <Datos {...situacion} />}
-        {(registrarCorte || acciones || selectorCorte) && (
+        {(registrarCorte || acciones || selectorCorte || exportar) && (
           <div className="ml-auto flex items-center gap-2">
             {selectorCorte}
+            {exportar}
             {registrarCorte && (
               <Link to={registrarCorte} className={clasesBoton('primario', 'max-sm:px-3')}>
                 Registrar corte
