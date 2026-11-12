@@ -5,7 +5,7 @@ export type Segmento = 'verde' | 'amarillo' | 'naranja' | 'rojo' | 'vencida' | '
 
 export const SEGMENTOS: Segmento[] = ['verde', 'amarillo', 'naranja', 'rojo', 'vencida', 'neutro']
 
-/** Cómo se lee cada segmento tras el conteo: «Financiera: 2 en rojo». */
+/** Cómo se lee cada segmento tras el conteo: «Financiera: 2 en rojo» (vencida va con `lecturaSegmento`). */
 export const LECTURA_SEGMENTO: Record<Segmento, string> = {
   verde: 'al día',
   amarillo: 'en atención',
@@ -13,6 +13,10 @@ export const LECTURA_SEGMENTO: Record<Segmento, string> = {
   rojo: 'en rojo',
   vencida: 'vencidos',
   neutro: 'sin corte o sin iniciar',
+}
+
+export function lecturaSegmento(s: Segmento, n: number): string {
+  return s === 'vencida' && n === 1 ? 'vencido' : LECTURA_SEGMENTO[s]
 }
 
 /** Nombre corto del segmento para el chip del filtro: «Financiera · rojo». */

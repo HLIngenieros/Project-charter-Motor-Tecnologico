@@ -5,7 +5,7 @@ import { porcentaje } from '../../formato'
 import { useMovimientoReducido } from '../../movimiento'
 import type { FiltroSemaforo } from './filtrar'
 import {
-  LECTURA_SEGMENTO,
+  lecturaSegmento,
   SEGMENTOS,
   type EjeTablero,
   type GrupoTablero,
@@ -81,7 +81,7 @@ function Barra({
         {SEGMENTOS.filter((s) => grupo.conteo[s] > 0).map((s) => {
           const n = grupo.conteo[s]
           const elegido = delGrupo && activo.segmento === s
-          const etiqueta = `${grupo.nombre}: ${n} ${LECTURA_SEGMENTO[s]}`
+          const etiqueta = `${grupo.nombre}: ${n} ${lecturaSegmento(s, n)}`
           return (
             <button
               key={s}

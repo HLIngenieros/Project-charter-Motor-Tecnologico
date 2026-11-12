@@ -14,13 +14,15 @@ export function MenuUsuario() {
   return (
     <>
       {usuario.esAdmin && (
-        <Link to="/admin" className={ENLACE}>
-          Administración
+        <Link to="/admin" className={ENLACE} aria-label="Administración">
+          <span className="max-sm:hidden">Administración</span>
+          <span className="sm:hidden">Admin</span>
         </Link>
       )}
       <span className="hidden truncate text-white/80 sm:inline">{usuario.nombre}</span>
-      <Link to="/cuenta/clave" className={ENLACE}>
-        Cambiar clave
+      <Link to="/cuenta/clave" className={ENLACE} aria-label="Cambiar clave">
+        <span className="max-sm:hidden">Cambiar clave</span>
+        <span className="sm:hidden">Clave</span>
       </Link>
       <Boton
         variante="fantasma"

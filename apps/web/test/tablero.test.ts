@@ -1,7 +1,11 @@
 import type { CharterResumen, Estado } from '@charter/shared'
 import { sumarDias } from '@charter/shared'
 import { describe, expect, it } from 'vitest'
-import { calcularTablero, segmentoDe } from '../src/pantallas/portafolio/datosTablero'
+import {
+  calcularTablero,
+  lecturaSegmento,
+  segmentoDe,
+} from '../src/pantallas/portafolio/datosTablero'
 
 const HOY = '2026-11-12'
 
@@ -49,6 +53,14 @@ describe('segmentoDe', () => {
     for (const [estado, segmento] of Object.entries(esperado))
       expect(segmentoDe(conCorte('x', estado as Estado))).toBe(segmento)
     expect(segmentoDe(charter({ id: 'y' }))).toBe('neutro')
+  })
+})
+
+describe('lecturaSegmento', () => {
+  it('vencido en singular y vencidos en plural', () => {
+    expect(lecturaSegmento('vencida', 1)).toBe('vencido')
+    expect(lecturaSegmento('vencida', 2)).toBe('vencidos')
+    expect(lecturaSegmento('rojo', 1)).toBe('en rojo')
   })
 })
 

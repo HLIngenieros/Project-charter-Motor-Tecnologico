@@ -85,7 +85,7 @@ Plan general por fases y tareas. La arquitectura está en [arquitectura.md](arqu
 |---|---|---|
 | T7.1 · Cuentas | Listado, desactivar o reactivar, restablecer clave (temporal con cambio obligatorio), otorgar o quitar Admin | Pruebas de API y flujo en la web. Desactivar y restablecer clave llaman a `cerrarSesionesDe` (prueba: reactivar no revive una cookie vieja) |
 | T7.2 · Catálogos | CRUD de categorías (con color) y áreas; desactivar si están en uso | Los cambios se reflejan en los formularios |
-| T7.3 · Lectura global | `/admin/charters` con filtros por dueño, área, categoría y estado; ficha en modo solo lectura | El Admin ve todo y no ve ningún control de edición; la API rechaza sus escrituras |
+| T7.3 · Lectura global *(hecha 2026-11-12)* | Tablero en el portafolio para todo usuario (cifras y semáforo por área y categoría) y vista «Todos» del Admin (`?ver=todos`) con filtro Dueño; un charter ajeno abre la ficha en solo lectura | El Admin ve todo y no ve ningún control de edición; la API rechaza sus escrituras |
 | T7.4 · Parametrización *(hecha 2026-11-11)* | `/admin/parametros`: reglas de pesos, umbrales, reparto del planeado, proyección y días de gracia; cada charter copia las vigentes al crearse. Diseño y plan: [spec](superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md), [plan](planes/parametrizacion-exportacion.md) | Un cambio solo afecta a los charters nuevos; los cortes registrados no cambian |
 
 ## Fase 8 · Cierre de la versión 1.0

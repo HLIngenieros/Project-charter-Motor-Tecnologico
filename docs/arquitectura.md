@@ -187,7 +187,7 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 | Indicadores | `PUT /charters/:id/indicadores` · `PUT /indicadores/:id/mediciones` |
 | Riesgos | `PUT /charters/:id/riesgos` |
 | Presupuesto | `PUT /charters/:id/presupuesto` |
-| Admin | `GET /admin/charters` (todos, con filtros) · `GET/PUT /admin/parametros` · `GET /admin/charters/:id` · `GET/PATCH /admin/usuarios/:id` · `POST /admin/usuarios/:id/restablecer-clave` · CRUD `/admin/categorias` y `/admin/areas` |
+| Admin | `GET /charters?ver=todos` (todos, con `propietario`; un no-Admin recibe 403) · `GET/PUT /admin/parametros` · `GET /admin/cuentas` · `PATCH /admin/cuentas/:id` (activa, Admin; 400 `sobre_si_mismo`, 409 `ultimo_admin`) · `POST /admin/cuentas/:id/restablecer-clave` · `GET/POST /admin/catalogos/{categorias,areas}` y `PATCH/DELETE …/:id` (409 `nombre_repetido`, `en_uso`, `protegida`) |
 
 - **Guardado por bloques** *(criterio técnico)*: listas, cronograma, riesgos, indicadores y presupuesto se envían completos con `PUT`. Simplifica la edición en línea y el reordenamiento. El volumen es pequeño (un cronograma grande tiene unas 200 filas).
 - **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`. Con `modo = 'escritura'` exige que el usuario sea el dueño. Con `modo = 'lectura'` acepta al dueño o a un Admin. Si el charter es de otro, responde **404** (no 403), para no revelar que existe. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
@@ -212,15 +212,14 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 | Ruta | Pantalla |
 |---|---|
 | `/entrar`, `/registro` | Login y registro: una tarjeta centrada con la marca e ingreso animado |
-| `/` | **Portafolio:** tarjetas de mis charters con categoría, área, % real frente al planeado, semáforo y último corte. Filtros por estado, categoría y área |
+| `/` | **Portafolio:** tablero (cifras y semáforo por área y categoría; un clic filtra la tabla) y lista de mis charters con % real frente al planeado, semáforo y último corte. Filtros por texto, estado, categoría y área. El Admin alterna «Mis charters / Todos» (`?ver=todos`, con columna y filtro Dueño) |
 | `/charters/nuevo` | Creación rápida (nombre, categoría, área); después se completa en la ficha |
 | `/charters/:id` | **Ficha del charter**: documento vivo en el orden de la hoja ID & TI, con índice lateral (ver `docs/pantallas.md`) |
 | `/charters/:id/corte` | **Registrar corte**; con `?fecha=` edita ese corte sobre su foto |
 | `/charters/:id/imprimir` | Vista A4 para exportar a PDF (con `?corte=`, la ficha a esa fecha); sin `Layout`, imprime sola al cargar |
-| `/admin/parametros` | Parametrización: reglas de cálculo que copian los charters nuevos (`/admin` redirige aquí) |
-| `/cuenta` | Cambiar nombre y clave |
-| `/admin/charters` | Todos los charters, en solo lectura (reutiliza la ficha sin controles de edición) |
-| `/admin/usuarios`, `/admin/catalogos` | Gestión de cuentas, categorías y áreas |
+| `/admin/parametros` | Parametrización: reglas de cálculo que copian los charters nuevos |
+| `/cuenta/clave` | Cambiar la clave; con la clave restablecida, toda ruta lleva aquí |
+| `/admin/cuentas`, `/admin/catalogos` | Gestión de cuentas, categorías y áreas (`/admin` redirige a Cuentas) |
 
 La disposición y el detalle visual de cada pantalla se definen en la tarea T1.3 del plan, con maquetas.
 
