@@ -28,22 +28,22 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 
 ## Estructura
 
-| Ruta | Contenido |
-|---|---|
-| `README.md` | Requerimientos, identidad visual y arquitectura propuesta |
-| `docs/arquitectura.md` | Arquitectura: perfiles, stack, modelo de datos, API, motor, despliegue |
-| `docs/plan-implementacion.md` | Plan general por fases y tareas con criterios de terminado |
-| `docs/planes/fase-N.md` | Plan detallado de cada fase (pasos, interfaces y pruebas) |
-| `docs/superpowers/specs/` | Diseños aprobados antes de cada plan (Fase 5 en adelante) |
-| `docs/analisis-plantilla-excel.md` | Análisis del Excel, errores encontrados y **especificación de cálculos** (§4) |
-| `docs/referencias/` | Excel y PDF fuente |
-| `PENDIENTES.md` | Fases, tareas y registro de sesiones |
-| `PRODUCT.md` / `DESIGN.md` | Contexto de producto y sistema visual (Impeccable); `.impeccable/` guarda su configuración y el contrato de dirección |
-| `docs/pantallas.md` y `docs/maquetas/` | Flujos aprobados (T1.3) y maquetas HTML navegables con port mínimo del motor |
-| `packages/shared/` | Motor de cálculo (`src/calculo`) y esquemas Zod (`src/esquemas`); fixture del Excel en `test/fixtures/id-ti.json` |
-| `apps/api/` | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/` (`acceso.ts` = único control de acceso, `servicio.ts`, `rutas.ts`), `modulos/catalogos/`, `cli/admin.ts` |
-| `apps/web/` | React: `componentes/`, `pantallas/`, `app/` (rutas, layout), `api/` (cliente y sesión), `estilos/tokens.css` |
-| `scripts/extraer_fixture.py` | Regenera el fixture desde el Excel |
+| Ruta                                   | Contenido                                                                                                                                                                                  |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `README.md`                            | Requerimientos, identidad visual y arquitectura propuesta                                                                                                                                  |
+| `docs/arquitectura.md`                 | Arquitectura: perfiles, stack, modelo de datos, API, motor, despliegue                                                                                                                     |
+| `docs/plan-implementacion.md`          | Plan general por fases y tareas con criterios de terminado                                                                                                                                 |
+| `docs/planes/fase-N.md`                | Plan detallado de cada fase (pasos, interfaces y pruebas)                                                                                                                                  |
+| `docs/superpowers/specs/`              | Diseños aprobados antes de cada plan (Fase 5 en adelante)                                                                                                                                  |
+| `docs/analisis-plantilla-excel.md`     | Análisis del Excel, errores encontrados y **especificación de cálculos** (§4)                                                                                                              |
+| `docs/referencias/`                    | Excel y PDF fuente                                                                                                                                                                         |
+| `PENDIENTES.md`                        | Fases, tareas y registro de sesiones                                                                                                                                                       |
+| `PRODUCT.md` / `DESIGN.md`             | Contexto de producto y sistema visual (Impeccable); `.impeccable/` guarda su configuración y el contrato de dirección                                                                      |
+| `docs/pantallas.md` y `docs/maquetas/` | Flujos aprobados (T1.3) y maquetas HTML navegables con port mínimo del motor                                                                                                               |
+| `packages/shared/`                     | Motor de cálculo (`src/calculo`) y esquemas Zod (`src/esquemas`); fixture del Excel en `test/fixtures/id-ti.json`                                                                          |
+| `apps/api/`                            | Fastify: `db/` (esquema, migraciones en `drizzle/`), `auth/`, `modulos/charters/` (`acceso.ts` = único control de acceso, `servicio.ts`, `rutas.ts`), `modulos/catalogos/`, `cli/admin.ts` |
+| `apps/web/`                            | React: `componentes/`, `pantallas/`, `app/` (rutas, layout), `api/` (cliente y sesión), `estilos/tokens.css`                                                                               |
+| `scripts/extraer_fixture.py`           | Regenera el fixture desde el Excel                                                                                                                                                         |
 
 ## Decisiones
 
@@ -88,6 +88,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - 2026-11-11 · Presupuesto (`rubro.valor`, `valor_unitario`) en `bigint` modo número: `integer` de Postgres es de 32 bits. El guardado del cronograma hace primero el `UPDATE … WHERE cronograma_version = v` dentro de la transacción (bloquea la fila; el simultáneo da 409) · Claude.
 - 2026-11-11 · **Publicar al final**: se termina todo (Fases 6, 7 y 8) y se despliega en la Fase 8 (T8.5 = Task 7 del plan de Vercel). T4.5 se da por cumplida con RF1 · Usuario.
 - 2026-11-11 · La función de Vercel (`apps/api/src/vercel.ts`) no migra: lo hace `npm run migrar` en el build. Arranca la app una vez por instancia y olvida un arranque fallido para reintentar · Claude.
+- 2026-11-12 · **Fase 6:** riesgos en tabla + matriz probabilidad × impacto (1–5, solo la calificación vigente); presupuesto solo planeado, total y barras por rubro con desglose; indicadores solo definición (sin mediciones por ahora) · Usuario. Nivel de riesgo fijo (1–4 bajo, 5–9 medio, 10–15 alto, 16–25 crítico); ids generados por la web y upsert (no borrar y reinsertar: `medicion` cuelga de `indicador`); valor de rubro con desglose lo calcula el servidor; meta opcional; en un corte pasado se ven los valores actuales · Claude.
 - 2026-11-09 · Semáforo por brecha (PV − EV) en puntos: verde < 10, amarillo < 25, naranja < 50, rojo ≥ 50, y **vencida** (vinotinto) si pasó el fin sin el 100 %. Agrupadoras cuentan sus hojas vencidas · Usuario.
 
 ## Estado actual
@@ -99,7 +100,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - **Primer charter real:** RF1 · Radicación de facturas (Comité IA, eje Automatización; responsable Jorge Espinosa, patrocinador Área ID & TI). Redacción, listas y cronograma (25 actividades, 23 nov 2026 – 10 abr 2027) cargados el 2026-11-11 a partir de la reunión. Indicadores y riesgos propuestos esperan la Fase 6.
 - **Parametrización y exportación cerradas (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Web: `pantallas/admin/` (`AreaAdmin` con pestañas como enlaces, `Parametrizacion`; `SoloAdmin` en las rutas), `MenuExportar` en la banda, `api/exportar.ts` y `pantallas/imprimir/` (`Imprimir` sin `Layout`, `CronogramaImpresion`, `imprimir.css`). La impresión reutiliza `SeccionCurvaS` con `estatica` y `ancho`.
 - **Despliegue en curso:** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md`. Tasks 1–6 hechas el 2026-11-11 (Postgres, API asíncrona, fecha de Bogotá, `CORREOS_PERMITIDOS`, adaptador y `vercel.json`). La Task 7 (Neon, Vercel, verificación, RF1 a Neon y documentación) queda para la Fase 8. Respaldo de la base SQLite y JSON de los 8 charters (RF1 incluido) en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`; la base local de PGlite arrancó vacía: recargar RF1 antes de la Fase 6.
-- **Siguiente:** Fase 6 (indicadores, riesgos, presupuesto) con brainstorming → spec → plan; luego Fase 7 (Admin) y Fase 8.
+- **Fase 6 aprobada (2026-11-12):** diseño en `docs/superpowers/specs/2026-11-12-fase-6-complementos-design.md`, plan en `docs/planes/fase-6.md` (3 sesiones). **Siguiente:** arrancar directo con la sesión 1 (Tasks 1–2); luego Fase 7 (Admin) y Fase 8.
+- Registro con «Confirmar clave» y `componentes/CampoClave.tsx` (mostrar u ocultar la clave), en Entrar y Registro.
 - Base: `db/conexion.ts` con `abrirDb` (URL `postgres://` → `pg`; `':memory:'` o carpeta → PGlite, solo con `import()` dinámico), `prepararDb` (migra y siembra), `crearDb` = ambas, y `cerrarDb`. `esViolacionUnica` (código `23505`) en `db/errores.ts`. Pruebas: `crearDbPrueba()` de `test/ayudas.ts` clona una plantilla migrada por archivo y cierra los clones en `afterEach`.
 - Ficha a una fecha: `useVistaCronograma` (`?corte=`) arma la `VistaCronograma` que comparten banda, curva y Gantt; en un corte pasado todo es solo lectura. Curva S en `pantallas/ficha/curva/` (`geometria.ts` puro, `CurvaS` en SVG). Reglas de los charters: `apps/api/src/modulos/admin/parametros.ts` (`reglasDeCharter`, `columnasDeReglas`).
 - Cronograma web en `pantallas/ficha/cronograma/`: `operaciones.ts` (puras), `useBorradorCronograma(id, encolar)` (copia local; adopta lo de la API en la primera edición; versión en un ref), `escala.ts`, `PistaGantt`. El borrador vive en `Ficha.tsx` y lo comparten la banda (`BandaEstado` con `situacion`) y `SeccionCronograma`. Los cortes usan los umbrales del charter; la ficha, los de por defecto (el detalle no los trae).
