@@ -135,6 +135,30 @@ describe('listar charters', () => {
     expect(await nombres(admin)).toEqual(['Del admin'])
   })
 
+  it('el Admin con ?ver=todos ve los de todos con su dueño', async () => {
+    await crearCharterPrueba(app, ana, { nombre: 'A1' })
+    await crearCharterPrueba(app, beto, { nombre: 'B1' })
+    const r = await pedir('GET', '/api/charters?ver=todos', admin)
+    expect(r.statusCode).toBe(200)
+    const lista = r.json<CharterResumen[]>()
+    expect(lista.map((c) => [c.nombre, c.propietario.nombre]).sort()).toEqual([
+      ['A1', 'ana Prueba'],
+      ['B1', 'beto Prueba'],
+    ])
+    // Sin el parámetro, también trae el dueño (el propio).
+    const propios = (await pedir('GET', '/api/charters', ana)).json<CharterResumen[]>()
+    expect(propios[0]!.propietario).toMatchObject({ nombre: 'ana Prueba' })
+    expect(propios[0]!.propietario.id).toBeTruthy()
+    expect((await pedir('GET', '/api/charters?ver=mios', admin)).json()).toEqual([])
+  })
+
+  it('un usuario con ?ver=todos recibe 403 y un valor desconocido da 400', async () => {
+    const r = await pedir('GET', '/api/charters?ver=todos', ana)
+    expect(r.statusCode).toBe(403)
+    expect(r.json().error.codigo).toBe('solo_admin')
+    expect((await pedir('GET', '/api/charters?ver=otra', admin)).statusCode).toBe(400)
+  })
+
   it('pone primero el editado más reciente y trae la categoría', async () => {
     const a = await crearCharterPrueba(app, ana, { nombre: 'A', categoriaId: CONOCIMIENTO })
     await pausa()

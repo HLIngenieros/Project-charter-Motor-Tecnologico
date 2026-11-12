@@ -41,6 +41,7 @@ const resumen = (d: CharterDetalle): CharterResumen => ({
   estado: d.estado,
   categoria: null,
   area: null,
+  propietario: d.propietario,
   actualizadoEn: d.actualizadoEn,
   ultimoCorte: null,
   cortes: [],

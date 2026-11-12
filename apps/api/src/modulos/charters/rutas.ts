@@ -8,7 +8,8 @@ import {
   tipoLista,
 } from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
-import { exigirSesion } from '../../auth/guardas'
+import { z } from 'zod'
+import { exigirAdmin, exigirSesion } from '../../auth/guardas'
 import { cargarCharter } from './acceso'
 import { reemplazarIndicadores, reemplazarPresupuesto, reemplazarRiesgos } from './complementos'
 import { exportarCharter } from './exportar'
@@ -17,9 +18,11 @@ import {
   detalleCharter,
   editarCharter,
   eliminarCharter,
-  listarMisCharters,
+  listarCharters,
   reemplazarLista,
 } from './servicio'
+
+const consultaListado = z.object({ ver: z.enum(['mios', 'todos']).optional() })
 
 interface ConId {
   Params: { id: string }
@@ -30,7 +33,15 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
   const { db } = app
   app.addHook('preHandler', exigirSesion)
 
-  app.get('/', async (request) => listarMisCharters(db, request.usuario!.id))
+  // `?ver=todos` es solo del Admin; sin el parámetro, cada quien ve los suyos (también el Admin).
+  app.get('/', async (request) => {
+    const { ver } = consultaListado.parse(request.query)
+    if (ver === 'todos') {
+      await exigirAdmin(request)
+      return listarCharters(db)
+    }
+    return listarCharters(db, { propietarioId: request.usuario!.id })
+  })
 
   app.post('/', async (request, reply) => {
     const id = await crearCharter(db, request.usuario!.id, charterCrear.parse(request.body))

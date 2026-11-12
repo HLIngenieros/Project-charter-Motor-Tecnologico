@@ -83,16 +83,23 @@ export async function validarCatalogos(
   }
 }
 
-export async function listarMisCharters(
+/** Resumen de los charters de `propietarioId`, o de todos si no viene (vista del Admin). */
+export async function listarCharters(
   db: BaseDatos,
-  usuarioId: string,
+  { propietarioId }: { propietarioId?: string } = {},
 ): Promise<CharterResumen[]> {
   const filas = await db
-    .select({ charter, categoria, area })
+    .select({
+      charter,
+      categoria,
+      area,
+      propietario: { id: usuario.id, nombre: usuario.nombre },
+    })
     .from(charter)
+    .innerJoin(usuario, eq(charter.propietarioId, usuario.id))
     .leftJoin(categoria, eq(charter.categoriaId, categoria.id))
     .leftJoin(area, eq(charter.areaId, area.id))
-    .where(eq(charter.propietarioId, usuarioId))
+    .where(propietarioId ? eq(charter.propietarioId, propietarioId) : undefined)
     .orderBy(desc(charter.actualizadoEn), desc(charter.id))
   if (filas.length === 0) return []
 
@@ -126,7 +133,7 @@ export async function listarMisCharters(
   }
 
   return Promise.all(
-    filas.map(async ({ charter: c, categoria: cat, area: ar }) => ({
+    filas.map(async ({ charter: c, categoria: cat, area: ar, propietario }) => ({
       id: c.id,
       nombre: c.nombre,
       codigo: c.codigo,
@@ -134,6 +141,7 @@ export async function listarMisCharters(
       estado: c.estado,
       categoria: cat ? aCategoria(cat) : null,
       area: ar ? aArea(ar) : null,
+      propietario,
       actualizadoEn: c.actualizadoEn,
       ultimoCorte: await ultimoDe(c),
       cortes: series.get(c.id) ?? [],
