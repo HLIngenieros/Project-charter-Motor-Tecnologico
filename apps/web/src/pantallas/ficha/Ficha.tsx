@@ -26,10 +26,11 @@ import { SeccionObjetivos } from './SeccionObjetivos'
 import { SeccionRazon } from './SeccionRazon'
 import { SeccionSupuestos } from './SeccionSupuestos'
 import { SeccionIndicadores } from './complementos/SeccionIndicadores'
+import { SeccionRiesgos } from './complementos/SeccionRiesgos'
 
 /** Solo las secciones ya construidas; las de fases siguientes se suman aquí. */
 function secciones(
-  { listas, indicadores }: CharterDetalle,
+  { listas, indicadores, riesgos }: CharterDetalle,
   actividades?: number,
   cortes?: number,
 ): SeccionIndice[] {
@@ -45,6 +46,7 @@ function secciones(
       cuenta: listas.supuesto.length + listas.criterio_exito.length,
     },
     { id: 'indicadores', titulo: 'Indicadores', cuenta: indicadores.length },
+    { id: 'riesgos', titulo: 'Riesgos', cuenta: riesgos.length },
     { id: 'cortes', titulo: 'Cortes', cuenta: cortes },
   ]
 }
@@ -245,6 +247,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
               />
               <SeccionSupuestos charter={charter} soloLectura={soloLectura} />
               <SeccionIndicadores charter={charter} soloLectura={soloLectura} />
+              <SeccionRiesgos charter={charter} soloLectura={soloLectura} />
               <SeccionHistorial
                 charterId={charter.id}
                 soloLectura={soloLectura}
