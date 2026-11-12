@@ -107,6 +107,7 @@ export interface CharterResumen {
   estado: EstadoCharter
   categoria: CategoriaPublica | null
   area: AreaPublica | null
+  propietario: { id: string; nombre: string }
   actualizadoEn: string
   /** Totales guardados del último corte (no se recalculan con el cronograma actual). */
   ultimoCorte: {
