@@ -44,6 +44,9 @@ const detalle: CharterDetalle = {
   },
   permisos: { editar: true, reabrir: false },
   reglas: REGLAS_POR_DEFECTO,
+  indicadores: [],
+  riesgos: [],
+  rubros: [],
 }
 
 const act = (

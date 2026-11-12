@@ -34,7 +34,7 @@ const claveLocal = () => `local-${++siguiente}`
 
 const limpios = (filas: Fila[]) => filas.map((f) => f.texto.trim()).filter(Boolean)
 
-function Icono({ children }: { children: ReactNode }) {
+export function Icono({ children }: { children: ReactNode }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ function Icono({ children }: { children: ReactNode }) {
   )
 }
 
-function BotonIcono({
+export function BotonIcono({
   etiqueta,
   alPulsar,
   disabled,

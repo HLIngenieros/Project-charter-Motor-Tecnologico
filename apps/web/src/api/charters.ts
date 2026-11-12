@@ -88,6 +88,32 @@ export function useGuardarLista(id: string, tipo: TipoLista) {
   })
 }
 
+/** PUT de una colección completa de la ficha; la respuesta reemplaza ese campo del detalle. */
+function useGuardarColeccion<C extends 'indicadores' | 'riesgos' | 'rubros'>(
+  id: string,
+  campo: C,
+  ruta: string,
+  envolver: (items: CharterDetalle[C]) => unknown,
+) {
+  const cliente = useQueryClient()
+  return useMutation({
+    mutationFn: (items: CharterDetalle[C]) =>
+      api<CharterDetalle[C]>(`/charters/${id}/${ruta}`, { metodo: 'PUT', cuerpo: envolver(items) }),
+    onSuccess: (guardados) => {
+      cliente.setQueryData<CharterDetalle>(CLAVES.charter(id), (previo) =>
+        previo ? { ...previo, [campo]: guardados } : previo,
+      )
+    },
+  })
+}
+
+export const useGuardarIndicadores = (id: string) =>
+  useGuardarColeccion(id, 'indicadores', 'indicadores', (items) => ({ items }))
+export const useGuardarRiesgos = (id: string) =>
+  useGuardarColeccion(id, 'riesgos', 'riesgos', (items) => ({ items }))
+export const useGuardarPresupuesto = (id: string) =>
+  useGuardarColeccion(id, 'rubros', 'presupuesto', (rubros) => ({ rubros }))
+
 export function useEliminarCharter() {
   const cliente = useQueryClient()
   return useMutation({

@@ -43,6 +43,9 @@ const base: CharterDetalle = {
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
   reglas: REGLAS_POR_DEFECTO,
+  indicadores: [],
+  riesgos: [],
+  rubros: [],
 }
 
 /** Simula la API de un charter: GET devuelve el detalle y PATCH lo actualiza. */

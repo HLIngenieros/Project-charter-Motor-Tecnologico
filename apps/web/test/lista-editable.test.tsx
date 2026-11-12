@@ -31,6 +31,9 @@ const base: CharterDetalle = {
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
   reglas: REGLAS_POR_DEFECTO,
+  indicadores: [],
+  riesgos: [],
+  rubros: [],
 }
 
 function abrir(listas: Partial<Record<TipoLista, ItemLista[]>> = {}, editar = true) {

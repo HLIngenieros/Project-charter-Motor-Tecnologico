@@ -41,6 +41,9 @@ const detalle: CharterDetalle = {
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
   permisos: { editar: true, reabrir: false },
   reglas: REGLAS_POR_DEFECTO,
+  indicadores: [],
+  riesgos: [],
+  rubros: [],
 }
 
 const ACTS: ActividadEntrada[] = [
