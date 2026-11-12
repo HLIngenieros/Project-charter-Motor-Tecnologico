@@ -1,6 +1,7 @@
 import type { Estado } from '../calculo/cronograma'
 import type { Reglas } from '../calculo/reglas'
 import type { FechaISO } from '../calculo/tipos'
+import type { Indicador, Riesgo, Rubro } from './complementos'
 import { z } from './zod'
 
 export const ESTADOS_CHARTER = ['activo', 'pausado', 'cerrado', 'cancelado'] as const
@@ -136,7 +137,10 @@ export interface CharterDetalle {
   propietario: { id: string; nombre: string }
   listas: Record<TipoLista, ItemLista[]>
   permisos: { editar: boolean; reabrir: boolean }
-  /** Umbrales del semáforo, en puntos de brecha. */
   /** Reglas de cálculo del charter (copiadas de las vigentes al crearlo). */
   reglas: Reglas
+  indicadores: Indicador[]
+  riesgos: Riesgo[]
+  /** Cada rubro con su desglose; `valor` ya es el calculado si tiene líneas. */
+  rubros: Rubro[]
 }

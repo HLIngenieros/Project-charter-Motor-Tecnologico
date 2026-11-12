@@ -1,3 +1,4 @@
+import type { CalificacionRiesgo } from '../calculo/complementos'
 import type { ResultadoNodo } from '../calculo/cronograma'
 import type { ActividadEntrada, FechaISO } from '../calculo/tipos'
 import type { CharterDetalle } from './charter'
@@ -22,4 +23,10 @@ export interface ExportacionCharter {
   }
   /** Todos los cortes con su foto, del más viejo al más reciente. */
   cortes: CorteDetalle[]
+  /** Lo calculado de indicadores, riesgos y presupuesto (los datos van en `charter`). */
+  complementos: {
+    /** Calificación de cada riesgo por id; null si no tiene probabilidad o impacto. */
+    niveles: Record<string, CalificacionRiesgo | null>
+    totalPresupuesto: number
+  }
 }
