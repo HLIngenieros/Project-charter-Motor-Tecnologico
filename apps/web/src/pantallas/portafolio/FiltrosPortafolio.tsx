@@ -1,4 +1,5 @@
 import type { AreaPublica, CategoriaPublica } from '@charter/shared'
+import type { ReactNode } from 'react'
 import { Selector } from '../../componentes/Selector'
 import type { FiltrosPortafolio as Filtros } from './filtrar'
 
@@ -17,14 +18,20 @@ export function FiltrosPortafolio({
   cambiar,
   categorias,
   areas,
+  duenos,
   cuenta,
+  children,
 }: {
   filtros: Filtros
   cambiar: (cambios: Partial<Filtros>) => void
   categorias: CategoriaPublica[]
   /** Solo se muestra el filtro si algún charter tiene área. */
   areas: AreaPublica[]
+  /** Solo en la vista «Todos» del Admin. */
+  duenos?: { id: string; nombre: string }[]
   cuenta: string
+  /** Chips de filtros extra (el segmento del tablero). */
+  children?: ReactNode
 }) {
   return (
     <div className="mt-6 mb-3.5 flex flex-wrap items-center gap-2.5 max-md:mt-5">
@@ -99,6 +106,23 @@ export function FiltrosPortafolio({
           </option>
         ))}
       </Selector>
+      {duenos && (
+        <Selector
+          etiqueta="Dueño"
+          etiquetaOculta
+          value={filtros.dueno}
+          onChange={(e) => cambiar({ dueno: e.target.value })}
+          className="max-md:flex-[1_1_40%]"
+        >
+          <option value="todos">Todos los dueños</option>
+          {duenos.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.nombre}
+            </option>
+          ))}
+        </Selector>
+      )}
+      {children}
       <span aria-live="polite" className="ml-auto text-[0.8125rem] text-texto-2 max-md:hidden">
         {cuenta}
       </span>

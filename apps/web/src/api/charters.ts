@@ -23,10 +23,11 @@ export const CLAVES = {
 
 const CINCO_MIN = 5 * 60_000
 
-export function useCharters() {
+/** `'todos'` solo lo puede pedir el Admin; las invalidaciones de `CLAVES.charters` cubren ambas. */
+export function useCharters(ver: 'mios' | 'todos' = 'mios') {
   return useQuery({
-    queryKey: CLAVES.charters,
-    queryFn: () => api<CharterResumen[]>('/charters'),
+    queryKey: [...CLAVES.charters, ver],
+    queryFn: () => api<CharterResumen[]>(ver === 'todos' ? '/charters?ver=todos' : '/charters'),
   })
 }
 

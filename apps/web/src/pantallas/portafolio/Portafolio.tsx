@@ -2,21 +2,36 @@ import type { AreaPublica, CharterResumen } from '@charter/shared'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router'
 import { useCategorias, useCharters } from '../../api/charters'
+import { useSesion } from '../../api/sesion'
 import { Layout } from '../../app/Layout'
 import { Aviso } from '../../componentes/Aviso'
 import { Boton } from '../../componentes/Boton'
 import { Cargando } from '../../componentes/Cargando'
+import { hoyISO } from '../../formato'
 import { DialogoNuevoCharter } from './DialogoNuevoCharter'
-import { COLUMNAS, FilaCharter } from './FilaCharter'
+import { columnas, FilaCharter } from './FilaCharter'
 import {
   filtrarCharters,
+  filtrarParaTablero,
   FILTROS_VACIOS,
   hayFiltros,
+  semaforoAUrl,
+  semaforoDeUrl,
+  type FiltroSemaforo,
   type FiltrosPortafolio as Filtros,
 } from './filtrar'
 import { FiltrosPortafolio } from './FiltrosPortafolio'
+import { Tablero } from './Tablero'
+import { calcularTablero, grupoDe, NOMBRE_SEGMENTO, SIN_GRUPO } from './datosTablero'
 
-const PARAMETROS = { texto: 'q', categoria: 'categoria', area: 'area', estado: 'estado' } as const
+const PARAMETROS = {
+  texto: 'q',
+  categoria: 'categoria',
+  area: 'area',
+  estado: 'estado',
+  dueno: 'dueno',
+  semaforo: 'sem',
+} as const
 
 /** Los filtros viven en la URL: sobreviven a recargar y a volver atrás. */
 function useFiltrosEnUrl(): [Filtros, (cambios: Partial<Filtros>) => void, () => void] {
@@ -27,21 +42,55 @@ function useFiltrosEnUrl(): [Filtros, (cambios: Partial<Filtros>) => void, () =>
     area: parametros.get(PARAMETROS.area) ?? FILTROS_VACIOS.area,
     estado:
       (parametros.get(PARAMETROS.estado) as Filtros['estado'] | null) ?? FILTROS_VACIOS.estado,
+    dueno: parametros.get(PARAMETROS.dueno) ?? FILTROS_VACIOS.dueno,
+    semaforo: semaforoDeUrl(parametros.get(PARAMETROS.semaforo)),
   }
   const cambiar = (cambios: Partial<Filtros>) =>
     setParametros(
       (previos) => {
         const nuevos = new URLSearchParams(previos)
-        for (const [clave, valor] of Object.entries(cambios) as [keyof Filtros, string][]) {
-          if (valor === FILTROS_VACIOS[clave] || valor === '') nuevos.delete(PARAMETROS[clave])
-          else nuevos.set(PARAMETROS[clave], valor)
+        for (const [clave, valor] of Object.entries(cambios) as [
+          keyof Filtros,
+          Filtros[keyof Filtros],
+        ][]) {
+          const texto = typeof valor === 'object' && valor ? semaforoAUrl(valor) : valor
+          if (!texto || texto === FILTROS_VACIOS[clave]) nuevos.delete(PARAMETROS[clave])
+          else nuevos.set(PARAMETROS[clave], texto)
         }
         return nuevos
       },
       { replace: true },
     )
-  const limpiar = () => setParametros(new URLSearchParams(), { replace: true })
+  // Limpiar quita los filtros, no la vista elegida.
+  const limpiar = () =>
+    setParametros(
+      (previos) => {
+        const nuevos = new URLSearchParams()
+        const ver = previos.get('ver')
+        if (ver) nuevos.set('ver', ver)
+        return nuevos
+      },
+      { replace: true },
+    )
   return [filtros, cambiar, limpiar]
+}
+
+/** `?ver=todos` solo lo atiende el Admin; a los demás se les muestra lo suyo. */
+function useVista(esAdmin: boolean): ['mios' | 'todos', (ver: 'mios' | 'todos') => void] {
+  const [parametros, setParametros] = useSearchParams()
+  const ver = esAdmin && parametros.get('ver') === 'todos' ? 'todos' : 'mios'
+  const cambiar = (nueva: 'mios' | 'todos') =>
+    setParametros(
+      (previos) => {
+        const nuevos = new URLSearchParams(previos)
+        if (nueva === 'todos') nuevos.set('ver', 'todos')
+        else nuevos.delete('ver')
+        nuevos.delete(PARAMETROS.dueno)
+        return nuevos
+      },
+      { replace: true },
+    )
+  return [ver, cambiar]
 }
 
 /**
@@ -63,6 +112,65 @@ function areasUsadas(lista: CharterResumen[]): AreaPublica[] {
   const porId = new Map<string, AreaPublica>()
   for (const c of lista) if (c.area) porId.set(c.area.id, c.area)
   return [...porId.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+}
+
+function duenosDe(lista: CharterResumen[]): { id: string; nombre: string }[] {
+  const porId = new Map<string, { id: string; nombre: string }>()
+  for (const c of lista) porId.set(c.propietario.id, c.propietario)
+  return [...porId.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+}
+
+/** «Financiera · rojo»: el nombre del grupo sale de la lista (o «Sin área»). */
+function textoSemaforo(s: FiltroSemaforo, lista: CharterResumen[]): string {
+  const nombre =
+    s.grupo === 'ninguna'
+      ? SIN_GRUPO[s.eje]
+      : (lista.map((c) => grupoDe(c, s.eje)).find((g) => g.id === s.grupo)?.nombre ?? '…')
+  return `${nombre} · ${NOMBRE_SEGMENTO[s.segmento]}`
+}
+
+/** Selector «Mis charters / Todos» del Admin. */
+function SelectorVista({
+  ver,
+  cambiar,
+}: {
+  ver: 'mios' | 'todos'
+  cambiar: (ver: 'mios' | 'todos') => void
+}) {
+  const opciones = [
+    { valor: 'mios', texto: 'Mis charters' },
+    { valor: 'todos', texto: 'Todos' },
+  ] as const
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Ver"
+      className="inline-flex rounded-control border border-linea bg-fondo p-0.5"
+    >
+      {opciones.map((o) => (
+        <label
+          key={o.valor}
+          className={[
+            'relative cursor-pointer rounded-[6px] px-3 py-1.5 text-[0.84375rem] font-semibold transition-colors duration-150',
+            'has-focus-visible:outline-2 has-focus-visible:outline-acento',
+            ver === o.valor
+              ? 'bg-superficie text-tinta shadow-[0_1px_2px_rgb(0_0_0/0.08)]'
+              : 'text-texto-2 hover:text-tinta',
+          ].join(' ')}
+        >
+          <input
+            type="radio"
+            name="ver"
+            value={o.valor}
+            checked={ver === o.valor}
+            onChange={() => cambiar(o.valor)}
+            className="sr-only"
+          />
+          {o.texto}
+        </label>
+      ))}
+    </div>
+  )
 }
 
 function IconoMas() {
@@ -99,14 +207,20 @@ function CurvaVacia() {
 }
 
 export function Portafolio() {
-  const charters = useCharters()
+  const esAdmin = useSesion().data?.esAdmin ?? false
+  const [ver, cambiarVista] = useVista(esAdmin)
+  const todos = ver === 'todos'
+  const charters = useCharters(ver)
   const avisoAlVolver = useAvisoAlVolver()
   const categorias = useCategorias()
-  const [filtros, cambiar, limpiar] = useFiltrosEnUrl()
+  const [enUrl, cambiar, limpiar] = useFiltrosEnUrl()
+  // Fuera de «Todos» no hay filtro Dueño: uno que quede en la URL no debe esconder filas.
+  const filtros: Filtros = todos ? enUrl : { ...enUrl, dueno: 'todos' }
   const [creando, setCreando] = useState(false)
 
   const lista = useMemo(() => charters.data ?? [], [charters.data])
-  const visibles = useMemo(() => filtrarCharters(lista, filtros), [lista, filtros])
+  const visibles = filtrarCharters(lista, filtros)
+  const tablero = calcularTablero(filtrarParaTablero(lista, filtros), hoyISO())
   const activas = (categorias.data ?? []).filter((c) => c.activa)
   const nuevo = (
     <Boton onClick={() => setCreando(true)} className="max-md:w-full">
@@ -141,26 +255,53 @@ export function Portafolio() {
   else
     contenido = (
       <>
+        <Tablero
+          datos={tablero}
+          semaforo={filtros.semaforo}
+          alPulsar={(semaforo) => cambiar({ semaforo })}
+        />
         <FiltrosPortafolio
           filtros={filtros}
           cambiar={cambiar}
           categorias={categorias.data ?? []}
           areas={areasUsadas(lista)}
+          duenos={todos ? duenosDe(lista) : undefined}
           cuenta={`${visibles.length} de ${lista.length} charters`}
-        />
+        >
+          {filtros.semaforo && (
+            <button
+              type="button"
+              onClick={() => cambiar({ semaforo: null })}
+              aria-label={`Quitar filtro ${textoSemaforo(filtros.semaforo, lista)}`}
+              className={[
+                'inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-full border border-acento/40 bg-acento/10 px-3',
+                'text-[0.8125rem] font-semibold text-tinta transition-colors duration-150 hover:bg-acento/20',
+                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento',
+              ].join(' ')}
+            >
+              {textoSemaforo(filtros.semaforo, lista)}
+              <span aria-hidden className="text-base leading-none text-texto-2">
+                ×
+              </span>
+            </button>
+          )}
+        </FiltrosPortafolio>
         <div className="overflow-hidden rounded-tarjeta border border-linea bg-superficie">
           <div
             aria-hidden
-            className={`hidden bg-fondo px-5 py-2.5 text-xs font-semibold text-texto-2 md:grid md:gap-5 ${COLUMNAS}`}
+            className={`hidden bg-fondo px-5 py-2.5 text-xs font-semibold text-texto-2 md:grid md:gap-5 ${columnas(todos)}`}
           >
             <div>Charter</div>
+            {todos && <div className="hidden lg:block">Dueño</div>}
             <div>Avance</div>
             <div className="hidden lg:block">Curva S</div>
             <div>Estado</div>
             <div>Último corte</div>
           </div>
           {visibles.length > 0 ? (
-            visibles.map((c, i) => <FilaCharter key={c.id} charter={c} indice={i} />)
+            visibles.map((c, i) => (
+              <FilaCharter key={c.id} charter={c} indice={i} conDueno={todos} />
+            ))
           ) : (
             <div className="px-6 py-10 text-center">
               <h2 className="text-xl font-semibold">Ningún charter coincide</h2>
@@ -185,7 +326,12 @@ export function Portafolio() {
       )}
       <div className="flex flex-wrap items-end gap-4">
         <div>
-          <h1 className="text-[1.75rem] font-semibold max-md:text-2xl">Mis charters</h1>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <h1 className="text-[1.75rem] font-semibold max-md:text-2xl">
+              {todos ? 'Todos los charters' : 'Mis charters'}
+            </h1>
+            {esAdmin && <SelectorVista ver={ver} cambiar={cambiarVista} />}
+          </div>
           <p className="mt-1 text-texto-2">Avance al último corte de cada uno.</p>
         </div>
         {lista.length > 0 && <div className="ml-auto max-md:ml-0 max-md:w-full">{nuevo}</div>}

@@ -9,9 +9,12 @@ import { ETIQUETA_ESTADO, tonoDe } from '../ficha/cronograma/estados'
 
 const EnlaceAnimado = motion.create(Link)
 
-/** Columnas fijas de la lista; la cabecera usa las mismas. */
-export const COLUMNAS =
-  'md:grid-cols-[minmax(0,1fr)_180px_130px_150px] lg:grid-cols-[minmax(0,1fr)_200px_120px_140px_150px]'
+/** Columnas fijas de la lista; la cabecera usa las mismas. Dueño solo desde `lg`. */
+export function columnas(conDueno = false): string {
+  return conDueno
+    ? 'md:grid-cols-[minmax(0,1fr)_180px_130px_150px] lg:grid-cols-[minmax(0,1fr)_140px_180px_120px_130px_140px]'
+    : 'md:grid-cols-[minmax(0,1fr)_180px_130px_150px] lg:grid-cols-[minmax(0,1fr)_200px_120px_140px_150px]'
+}
 
 /** Barra de avance en el tono del semáforo del último corte. */
 const BARRA: Record<Estado, string> = {
@@ -40,7 +43,16 @@ function hace(dias: number): string {
   return `hace ${dias} días`
 }
 
-export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; indice: number }) {
+export function FilaCharter({
+  charter: c,
+  indice,
+  conDueno = false,
+}: {
+  charter: CharterResumen
+  indice: number
+  /** Vista «Todos»: columna Dueño desde `lg`; debajo, en la línea de datos. */
+  conDueno?: boolean
+}) {
   const variantes = useVariantes(escalonado(indice))
   const corte = c.ultimoCorte
   const dias = corte ? diasEntre(corte.fecha, hoyISO()) : 0
@@ -56,7 +68,7 @@ export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; i
         'group grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2.5 border-t border-linea-2 px-4 py-3.5',
         'transition-colors duration-150 hover:bg-[#f7f9fc] focus-visible:bg-[#f7f9fc]',
         'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-acento',
-        `md:gap-5 md:px-5 md:py-4 ${COLUMNAS}`,
+        `md:gap-5 md:px-5 md:py-4 ${columnas(conDueno)}`,
       ].join(' ')}
     >
       <div className="col-span-full min-w-0 md:col-span-1">
@@ -70,8 +82,15 @@ export function FilaCharter({ charter: c, indice }: { charter: CharterResumen; i
           <ChipCategoria categoria={c.categoria} />
           <span>{c.responsable}</span>
           {c.codigo && <span className="font-cifra text-xs">{c.codigo}</span>}
+          {conDueno && <span className="lg:hidden">· de {c.propietario.nombre}</span>}
         </div>
       </div>
+
+      {conDueno && (
+        <div className="hidden truncate text-[0.84375rem] text-tinta lg:block">
+          {c.propietario.nombre}
+        </div>
+      )}
 
       <div className="text-[0.78125rem] text-texto-2">
         {corte ? (
