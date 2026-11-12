@@ -5,6 +5,7 @@ import { useRegistrar } from '../api/sesion'
 import { Aviso } from '../componentes/Aviso'
 import { Boton } from '../componentes/Boton'
 import { Campo } from '../componentes/Campo'
+import { CampoClave } from '../componentes/CampoClave'
 import { camposDeZod, separarError, type ErroresCampos } from './errores'
 import { MarcoAcceso } from './MarcoAcceso'
 
@@ -16,6 +17,7 @@ export function Registro() {
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [clave, setClave] = useState('')
+  const [confirmacion, setConfirmacion] = useState('')
   const [campos, setCampos] = useState<ErroresCampos>({})
   const [general, setGeneral] = useState<string>()
 
@@ -26,6 +28,9 @@ export function Registro() {
     const errores = datos.success ? {} : camposDeZod(datos.error)
     if (!errores.correo && !esCorreoPermitido(correo, DOMINIO_POR_DEFECTO)) {
       errores.correo = AVISO_DOMINIO
+    }
+    if (!errores.clave && confirmacion !== clave) {
+      errores.confirmacion = 'Las claves no coinciden'
     }
     setCampos(errores)
     if (!datos.success || Object.keys(errores).length > 0) return
@@ -70,14 +75,20 @@ export function Registro() {
           onChange={(e) => setCorreo(e.target.value)}
           error={campos.correo}
         />
-        <Campo
+        <CampoClave
           etiqueta="Clave"
-          type="password"
           autoComplete="new-password"
           ayuda="Mínimo 8 caracteres."
           value={clave}
           onChange={(e) => setClave(e.target.value)}
           error={campos.clave}
+        />
+        <CampoClave
+          etiqueta="Confirmar clave"
+          autoComplete="new-password"
+          value={confirmacion}
+          onChange={(e) => setConfirmacion(e.target.value)}
+          error={campos.confirmacion}
         />
         <Boton type="submit" ancho cargando={registrar.isPending} className="mt-2">
           Crear cuenta

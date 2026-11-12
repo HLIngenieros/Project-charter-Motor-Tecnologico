@@ -5,6 +5,7 @@ import { useEntrar } from '../api/sesion'
 import { Aviso } from '../componentes/Aviso'
 import { Boton } from '../componentes/Boton'
 import { Campo } from '../componentes/Campo'
+import { CampoClave } from '../componentes/CampoClave'
 import { camposDeZod, separarError, type ErroresCampos } from './errores'
 import { MarcoAcceso } from './MarcoAcceso'
 
@@ -62,9 +63,8 @@ export function Entrar() {
           onChange={(e) => setCorreo(e.target.value)}
           error={campos.correo}
         />
-        <Campo
+        <CampoClave
           etiqueta="Clave"
-          type="password"
           autoComplete="current-password"
           value={clave}
           onChange={(e) => setClave(e.target.value)}

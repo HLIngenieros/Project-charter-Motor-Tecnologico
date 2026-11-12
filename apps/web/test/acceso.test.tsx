@@ -102,6 +102,7 @@ describe('registro', () => {
     await usuario.type(await screen.findByLabelText('Nombre'), 'Ana Pérez')
     await usuario.type(screen.getByLabelText('Correo'), 'ana@hlingenieros.com')
     await usuario.type(screen.getByLabelText('Clave'), 'clave-segura-1')
+    await usuario.type(screen.getByLabelText('Confirmar clave'), 'clave-segura-1')
     await usuario.click(screen.getByRole('button', { name: 'Crear cuenta' }))
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
@@ -135,8 +136,39 @@ describe('registro', () => {
     await usuario.type(await screen.findByLabelText('Nombre'), 'Ana Pérez')
     await usuario.type(screen.getByLabelText('Correo'), 'ana@hlingenieros.com')
     await usuario.type(screen.getByLabelText('Clave'), 'clave-segura-1')
+    await usuario.type(screen.getByLabelText('Confirmar clave'), 'clave-segura-1')
     await usuario.click(screen.getByRole('button', { name: 'Crear cuenta' }))
     expect(await screen.findByText('El nombre no es válido')).toBeInTheDocument()
+  })
+
+  it('si la confirmación no coincide avisa sin llamar a la API', async () => {
+    const usuario = userEvent.setup()
+    abrir('/registro')
+    await usuario.type(await screen.findByLabelText('Nombre'), 'Ana Pérez')
+    await usuario.type(screen.getByLabelText('Correo'), 'ana@hlingenieros.com')
+    await usuario.type(screen.getByLabelText('Clave'), 'clave-segura-1')
+    await usuario.type(screen.getByLabelText('Confirmar clave'), 'clave-segura-2')
+    await usuario.click(screen.getByRole('button', { name: 'Crear cuenta' }))
+
+    expect(await screen.findByText('Las claves no coinciden')).toBeInTheDocument()
+    expect(screen.getByLabelText('Confirmar clave')).toHaveAttribute('aria-invalid', 'true')
+    expect(mutaciones()).toHaveLength(0)
+  })
+
+  it('el botón del ojo muestra y oculta la clave', async () => {
+    const usuario = userEvent.setup()
+    abrir('/registro')
+    const clave = await screen.findByLabelText('Clave')
+    const ojo = screen.getByRole('button', { name: 'Mostrar clave' })
+    expect(clave).toHaveAttribute('type', 'password')
+
+    await usuario.click(ojo)
+    expect(clave).toHaveAttribute('type', 'text')
+    expect(ojo).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByLabelText('Confirmar clave')).toHaveAttribute('type', 'password')
+
+    await usuario.click(ojo)
+    expect(clave).toHaveAttribute('type', 'password')
   })
 })
 
