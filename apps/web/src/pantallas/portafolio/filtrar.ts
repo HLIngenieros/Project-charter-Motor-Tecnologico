@@ -1,4 +1,4 @@
-import type { CharterResumen, EstadoCharter } from '@charter/shared'
+import { normalizar, type CharterResumen, type EstadoCharter } from '@charter/shared'
 
 export interface FiltrosPortafolio {
   texto: string
@@ -16,14 +16,6 @@ export const FILTROS_VACIOS: FiltrosPortafolio = {
 }
 
 /** Minúsculas y sin tildes, para comparar textos. */
-export function normalizar(texto: string): string {
-  return texto
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase()
-    .trim()
-}
-
 export function hayFiltros(f: FiltrosPortafolio): boolean {
   return (
     f.texto.trim() !== '' || f.categoria !== 'todas' || f.area !== 'todas' || f.estado !== 'todos'

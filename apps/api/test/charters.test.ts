@@ -54,6 +54,7 @@ describe('catálogos', () => {
     expect(r.statusCode).toBe(200)
     const lista = r.json<{ nombre: string; activa: boolean }[]>()
     expect(lista.map((c) => c.nombre)).toEqual([
+      'Default',
       'Automatización',
       'Análisis de Data',
       'Gestión del Conocimiento',

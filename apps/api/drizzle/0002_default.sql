@@ -1,0 +1,1 @@
+ALTER TABLE "categoria" ADD COLUMN "protegida" boolean DEFAULT false NOT NULL;

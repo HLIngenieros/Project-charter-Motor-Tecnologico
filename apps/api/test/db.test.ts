@@ -47,7 +47,7 @@ async function errorDe(promesa: PromiseLike<unknown>): Promise<unknown> {
 }
 
 describe('crearDb', () => {
-  it('crea las 16 tablas y las 3 categorías del Comité', async () => {
+  it('crea las 16 tablas, «Default» y las 3 categorías del Comité', async () => {
     const db = await crearDb(':memory:')
     // Con el tipo genérico de la base, `execute` no sabe la forma del resultado.
     const filas = (await db.execute(
@@ -57,18 +57,20 @@ describe('crearDb', () => {
     expect(tablas.sort()).toEqual([...TABLAS].sort())
     const cats = await db.select().from(categoria).orderBy(categoria.orden)
     expect(cats.map((c) => c.nombre)).toEqual([
+      'Default',
       'Automatización',
       'Análisis de Data',
       'Gestión del Conocimiento',
     ])
-    expect(cats[0]).toMatchObject({ color: '#D98A00', colorFondo: '#FBF1DF', activa: true })
+    expect(cats[0]).toMatchObject({ protegida: true, activa: true })
+    expect(cats[1]).toMatchObject({ color: '#D98A00', colorFondo: '#FBF1DF', activa: true })
   })
 
   it('sembrar es idempotente', async () => {
     const db = await crearDb(':memory:')
     await sembrar(db)
     await sembrar(db)
-    expect(await db.select().from(categoria)).toHaveLength(3)
+    expect(await db.select().from(categoria)).toHaveLength(4)
   })
 
   it('cumple las claves foráneas', async () => {
@@ -143,6 +145,6 @@ describe('restricciones', () => {
     const [cat] = await db.select().from(categoria).limit(1)
     await db.update(charter).set({ categoriaId: cat!.id }).where(eq(charter.id, charterId))
     expect(await errorDe(db.delete(categoria).where(eq(categoria.id, cat!.id)))).toBeTruthy()
-    expect(await db.select().from(categoria)).toHaveLength(3)
+    expect(await db.select().from(categoria)).toHaveLength(4)
   })
 })

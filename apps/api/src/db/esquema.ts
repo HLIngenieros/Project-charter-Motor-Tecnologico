@@ -60,6 +60,8 @@ export const categoria = pgTable('categoria', {
   colorFondo: text('color_fondo').notNull(),
   activa: booleano('activa').notNull().default(true),
   orden: integer('orden').notNull().default(0),
+  /** «Default»: no se puede desactivar ni eliminar. */
+  protegida: booleano('protegida').notNull().default(false),
   ...tiempos,
 })
 
