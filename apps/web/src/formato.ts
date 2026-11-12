@@ -37,6 +37,18 @@ export function puntos(fraccion: number): string {
   return porcentaje(Math.abs(fraccion)).replace(' %', ' pts')
 }
 
+/** Pesos colombianos sin decimales: `182000000` → `'182.000.000'`. */
+export function pesos(n: number): string {
+  return Math.round(n).toLocaleString('es-CO', { maximumFractionDigits: 0 })
+}
+
+/** `'182.000.000'` o `'182000000'` → `182000000`; vacío → `0`; inválido → `null`. */
+export function leerPesos(texto: string): number | null {
+  const limpio = texto.replace(/[\s.$]/g, '').replace(/^COP/i, '')
+  if (limpio === '') return 0
+  return /^\d+$/.test(limpio) ? Number(limpio) : null
+}
+
 /** Fecha de hoy en el navegador, `YYYY-MM-DD`. */
 export function hoyISO(): string {
   return fechaLocal(new Date())
