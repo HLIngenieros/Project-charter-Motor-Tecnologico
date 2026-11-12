@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { AreaAdmin } from '../pantallas/admin/AreaAdmin'
+import { Catalogos } from '../pantallas/admin/Catalogos'
 import { Cuentas } from '../pantallas/admin/Cuentas'
 import { Parametrizacion } from '../pantallas/admin/Parametrizacion'
 import { CambiarClave } from '../pantallas/CambiarClave'
@@ -88,6 +89,18 @@ export function Rutas() {
             <SoloAdmin>
               <AreaAdmin>
                 <Cuentas />
+              </AreaAdmin>
+            </SoloAdmin>
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path="/admin/catalogos"
+        element={
+          <RutaProtegida>
+            <SoloAdmin>
+              <AreaAdmin>
+                <Catalogos />
               </AreaAdmin>
             </SoloAdmin>
           </RutaProtegida>

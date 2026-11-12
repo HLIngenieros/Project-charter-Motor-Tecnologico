@@ -16,6 +16,7 @@ const vieja: CategoriaPublica = {
   color: '#0A9C9B',
   colorFondo: '#E1F4F3',
   activa: false,
+  protegida: false,
 }
 const activa: CategoriaPublica = {
   id: 'cat-a',
@@ -23,6 +24,7 @@ const activa: CategoriaPublica = {
   color: '#D98A00',
   colorFondo: '#FBF1DF',
   activa: true,
+  protegida: false,
 }
 
 const base: CharterDetalle = {

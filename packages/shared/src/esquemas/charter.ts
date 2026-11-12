@@ -86,6 +86,8 @@ export interface CategoriaPublica {
   color: string
   colorFondo: string
   activa: boolean
+  /** «Default»: viene preseleccionada al crear un charter. */
+  protegida: boolean
 }
 
 export interface AreaPublica {

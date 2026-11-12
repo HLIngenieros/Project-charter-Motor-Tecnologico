@@ -19,6 +19,7 @@ const automatizacion: CategoriaPublica = {
   color: '#D98A00',
   colorFondo: '#FBF1DF',
   activa: true,
+  protegida: false,
 }
 
 function charter(p: Partial<CharterResumen> & { id: string; nombre: string }): CharterResumen {

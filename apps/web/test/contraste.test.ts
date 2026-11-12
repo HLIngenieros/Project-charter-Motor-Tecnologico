@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { PALETA_CATEGORIAS } from '@charter/shared'
 import { describe, expect, it } from 'vitest'
 import { razonContraste } from '../src/estilos/contraste'
 
@@ -42,4 +43,14 @@ describe('contraste', () => {
   it('el borde del amarillo llega a 3:1 sobre la superficie', () => {
     expect(razonContraste(token('amarillo-texto'), token('superficie'))).toBeGreaterThanOrEqual(3)
   })
+
+  // Chip de categoría: texto tinta sobre el fondo. El punto va siempre junto al nombre; aun así
+  // los colores llegan a 3:1, salvo el ámbar del Comité (identidad institucional, 2,8:1).
+  it.each(PALETA_CATEGORIAS.map((p) => [p.color, p]))(
+    'categoría %s: el chip llega a 4,5:1 y el color a 3:1',
+    (_, { color, colorFondo }) => {
+      expect(razonContraste(token('tinta'), colorFondo)).toBeGreaterThanOrEqual(4.5)
+      if (color !== '#D98A00') expect(razonContraste(color, '#FFFFFF')).toBeGreaterThanOrEqual(3)
+    },
+  )
 })

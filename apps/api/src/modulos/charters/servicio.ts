@@ -35,6 +35,7 @@ const aCategoria = (c: typeof categoria.$inferSelect): CategoriaPublica => ({
   color: c.color,
   colorFondo: c.colorFondo,
   activa: c.activa,
+  protegida: c.protegida,
 })
 
 const aArea = (a: typeof area.$inferSelect): AreaPublica => ({

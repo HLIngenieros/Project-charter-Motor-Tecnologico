@@ -22,7 +22,9 @@ export function DialogoNuevoCharter({
   const navegar = useNavigate()
   const idRazon = useId()
   const [nombre, setNombre] = useState('')
-  const [categoriaId, setCategoriaId] = useState('')
+  // null = sin tocar: se usa «Default» (la categoría protegida) apenas lleguen las categorías.
+  const [elegida, setElegida] = useState<string | null>(null)
+  const categoriaId = elegida ?? categorias.find((c) => c.protegida)?.id ?? ''
   const [razonDeSer, setRazonDeSer] = useState('')
   const [errores, setErrores] = useState<ErroresCampos>({})
   const [general, setGeneral] = useState<string>()
@@ -32,7 +34,7 @@ export function DialogoNuevoCharter({
   const cerrar = () => {
     if (enviando.current) return
     setNombre('')
-    setCategoriaId('')
+    setElegida(null)
     setRazonDeSer('')
     setErrores({})
     setGeneral(undefined)
@@ -82,7 +84,7 @@ export function DialogoNuevoCharter({
           <Selector
             etiqueta="Categoría"
             value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)}
+            onChange={(e) => setElegida(e.target.value)}
             error={errores.categoriaId}
           >
             <option value="">Sin categoría</option>
