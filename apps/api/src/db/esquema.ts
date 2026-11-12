@@ -124,6 +124,9 @@ export const riesgo = pgTable('riesgo', {
   riesgo: text('riesgo').notNull(),
   causa: text('causa').notNull().default(''),
   mitigacion: text('mitigacion').notNull().default(''),
+  /** 1–5; nulo = sin calificar. */
+  probabilidad: integer('probabilidad'),
+  impacto: integer('impacto'),
   orden: integer('orden').notNull().default(0),
   ...tiempos,
 })
@@ -136,7 +139,8 @@ export const indicador = pgTable('indicador', {
   metaOperador: text('meta_operador', { enum: ['>=', '<=', '='] })
     .notNull()
     .default('>='),
-  metaValor: doublePrecision('meta_valor').notNull().default(0),
+  /** Nulo = sin meta. */
+  metaValor: doublePrecision('meta_valor'),
   metaUnidad: text('meta_unidad').notNull().default(''),
   observaciones: text('observaciones').notNull().default(''),
   orden: integer('orden').notNull().default(0),

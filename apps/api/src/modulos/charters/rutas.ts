@@ -1,7 +1,16 @@
-import { charterCrear, charterEditar, listaEntrada, tipoLista } from '@charter/shared'
+import {
+  charterCrear,
+  charterEditar,
+  indicadoresEntrada,
+  listaEntrada,
+  presupuestoEntrada,
+  riesgosEntrada,
+  tipoLista,
+} from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
 import { exigirSesion } from '../../auth/guardas'
 import { cargarCharter } from './acceso'
+import { reemplazarIndicadores, reemplazarPresupuesto, reemplazarRiesgos } from './complementos'
 import { exportarCharter } from './exportar'
 import {
   crearCharter,
@@ -52,6 +61,24 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
     const { items } = listaEntrada.parse(request.body)
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
     return reemplazarLista(db, fila.id, tipo, items)
+  })
+
+  app.put<ConId>('/:id/indicadores', async (request) => {
+    const { items } = indicadoresEntrada.parse(request.body)
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
+    return reemplazarIndicadores(db, fila.id, items)
+  })
+
+  app.put<ConId>('/:id/riesgos', async (request) => {
+    const { items } = riesgosEntrada.parse(request.body)
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
+    return reemplazarRiesgos(db, fila.id, items)
+  })
+
+  app.put<ConId>('/:id/presupuesto', async (request) => {
+    const { rubros } = presupuestoEntrada.parse(request.body)
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'escritura')
+    return reemplazarPresupuesto(db, fila.id, rubros)
   })
 
   app.get<ConId & { Querystring: { corte?: string } }>('/:id/exportar', async (request) => {

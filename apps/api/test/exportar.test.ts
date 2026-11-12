@@ -5,6 +5,7 @@ import type {
   ExportacionCharter,
 } from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
+import { v7 } from 'uuid'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { crearCharterPrueba, nuevaApp, sesionDe } from './ayudas'
 
@@ -103,5 +104,38 @@ describe('GET /charters/:id/exportar', () => {
     expect((await exportar('', beto)).statusCode).toBe(404)
     const admin = await sesionDe(app, 'admin@hlingenieros.com', { admin: true })
     expect((await exportar('', admin)).statusCode).toBe(200)
+  })
+
+  it('trae indicadores, riesgos y presupuesto con lo calculado', async () => {
+    const riesgo = {
+      id: v7(),
+      riesgo: 'Sin orden de compra',
+      causa: '',
+      mitigacion: '',
+      probabilidad: 3,
+      impacto: 4,
+    }
+    const sinCalificar = { ...riesgo, id: v7(), probabilidad: null }
+    const put = (ruta: string, payload: object) =>
+      app.inject({ method: 'PUT', url: `/api/charters/${id}/${ruta}`, headers: ana, payload })
+    await put('riesgos', { items: [riesgo, sinCalificar] })
+    await put('presupuesto', {
+      rubros: [
+        { id: v7(), descripcion: 'A', valor: 5000, lineas: [] },
+        {
+          id: v7(),
+          descripcion: 'B',
+          valor: 1,
+          lineas: [{ id: v7(), concepto: 'x', cantidad: 2, valorUnitario: 10 }],
+        },
+      ],
+    })
+    const e = (await exportar()).json<ExportacionCharter>()
+    expect(e.charter.riesgos).toHaveLength(2)
+    expect(e.charter.rubros).toHaveLength(2)
+    expect(e.charter.indicadores).toEqual([])
+    expect(e.complementos.niveles[riesgo.id]).toEqual({ puntaje: 12, nivel: 'alto' })
+    expect(e.complementos.niveles[sinCalificar.id]).toBeNull()
+    expect(e.complementos.totalPresupuesto).toBe(5020)
   })
 })

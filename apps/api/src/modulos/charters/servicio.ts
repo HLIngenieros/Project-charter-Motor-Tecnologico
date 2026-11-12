@@ -25,6 +25,7 @@ import {
 } from '../../db/esquema'
 import { ErrorApi } from '../../errores'
 import { listarCortes } from '../cortes/servicio'
+import { leerComplementos } from './complementos'
 
 const ESTADOS_CERRADOS = new Set<FilaCharter['estado']>(['cerrado', 'cancelado'])
 
@@ -202,6 +203,7 @@ export async function detalleCharter(
     listas,
     permisos: { editar: esDueno && !cerrado, reabrir: esDueno && cerrado },
     reglas: reglasDeCharter(fila),
+    ...(await leerComplementos(db, fila.id)),
   }
 }
 

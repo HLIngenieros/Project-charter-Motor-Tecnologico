@@ -2,6 +2,8 @@ import {
   arbolHistorico,
   calcularCronograma,
   construirArbol,
+  nivelRiesgo,
+  totalPresupuesto,
   type ExportacionCharter,
   type FechaISO,
 } from '@charter/shared'
@@ -61,5 +63,11 @@ export async function exportarCharter(
     charter,
     cronograma: { actividades, calculo: calculo.nodos, proyecto: calculo.proyecto },
     cortes,
+    complementos: {
+      niveles: Object.fromEntries(
+        charter.riesgos.map((r) => [r.id, nivelRiesgo(r.probabilidad, r.impacto)]),
+      ),
+      totalPresupuesto: totalPresupuesto(charter.rubros),
+    },
   }
 }
