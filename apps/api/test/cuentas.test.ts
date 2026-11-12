@@ -1,5 +1,5 @@
 import type { CuentaAdmin } from '@charter/shared'
-import type { FastifyInstance } from 'fastify'
+import type { FastifyInstance, LightMyRequestResponse } from 'fastify'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { conSesion, crearCharterPrueba, CSRF, entrar, nuevaApp, sesionDe } from './ayudas'
 
@@ -13,12 +13,13 @@ beforeEach(async () => {
   admin = await sesionDe(app, 'admin@hlingenieros.com', { admin: true })
 })
 
-const listar = (h = admin) => app.inject({ method: 'GET', url: '/api/admin/cuentas', headers: h })
+const listar = async (h = admin): Promise<LightMyRequestResponse> =>
+  app.inject({ method: 'GET', url: '/api/admin/cuentas', headers: h })
 const idDe = async (correo: string) =>
   (await listar()).json<CuentaAdmin[]>().find((c) => c.correo === correo)!.id
-const restablecer = (id: string, h = admin) =>
+const restablecer = async (id: string, h = admin): Promise<LightMyRequestResponse> =>
   app.inject({ method: 'POST', url: `/api/admin/cuentas/${id}/restablecer-clave`, headers: h })
-const editar = (id: string, cuerpo: unknown, h = admin) =>
+const editar = async (id: string, cuerpo: object, h = admin): Promise<LightMyRequestResponse> =>
   app.inject({ method: 'PATCH', url: `/api/admin/cuentas/${id}`, headers: h, payload: cuerpo })
 const misCharters = (h: Record<string, string>) =>
   app.inject({ method: 'GET', url: '/api/charters', headers: h })
