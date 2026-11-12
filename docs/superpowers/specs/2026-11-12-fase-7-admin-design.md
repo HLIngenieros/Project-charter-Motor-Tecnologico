@@ -33,7 +33,7 @@ La app se va a publicar (Fase 8) y el usuario será su Admin. Necesita tres cosa
 
 - **Entrar:** bajo el botón, texto «¿Olvidaste tu clave? Contacta al administrador del sistema.» (sin enlace).
 - **Admin › Cuentas** (`/admin/cuentas`, nueva pestaña en `AreaAdmin` antes de Parametrización; el enlace «Administración» de `MenuUsuario` pasa a apuntar a `/admin/cuentas`):
-  - Tabla: nombre, correo, rol (chip «Admin»), estado (Activa / Desactivada), n.º de charters, último acceso (`max(sesion.ultimo_uso)`, «nunca» si no hay sesiones; *aproximación, ver Calls*), y menú de acciones por fila.
+  - Tabla: nombre, correo, rol (chip «Admin»), estado (Activa / Desactivada), n.º de charters, último acceso (`max(sesion.ultimo_uso)`, «nunca» si no hay sesiones; _aproximación, ver Calls_), y menú de acciones por fila.
   - Búsqueda por nombre o correo; filtro Activas / Desactivadas / Todas. En celular, cada cuenta como bloque.
   - Acciones, con diálogo de confirmación:
     - **Restablecer clave:** el servidor genera una clave temporal; el diálogo la muestra **una sola vez** con botón «Copiar» y el texto «Pásasela a la persona; al entrar deberá cambiarla».
@@ -67,7 +67,7 @@ La app se va a publicar (Fase 8) y el usuario será su Admin. Necesita tres cosa
 ### Datos
 
 - Semilla: nueva categoría **«Default»** con id fijo, color neutro de la paleta, `orden` 0 (primera). Migración con `INSERT … ON CONFLICT DO NOTHING` o vía `sembrar` (idempotente).
-- Columna nueva `categoria.protegida boolean default false` (true solo para Default). *Call: alternativa sería comparar con el id fijo; la columna es más clara.*
+- Columna nueva `categoria.protegida boolean default false` (true solo para Default). _Call: alternativa sería comparar con el id fijo; la columna es más clara._
 
 ### Web · Admin › Catálogos (`/admin/catalogos`)
 
@@ -105,14 +105,14 @@ Se calcula en la web sobre la lista **ya filtrada** por los filtros del portafol
 - **Cifras** (4):
   1. **Activos:** charters en estado activo.
   2. **En rojo o vencidos:** activos cuyo `estado` global del último corte es `atrasada` o `vencida`.
-  3. **Avance:** «X % real de Y % planeado», promedio simple de `ev` y `pv` de los activos con corte. *Call: promedio simple; los charters no tienen peso entre sí.*
-  4. **Sin corte reciente:** activos sin corte o con último corte de hace más de **30 días** (fecha de hoy de Bogotá). *Call: 30 días fijo, no parametrizable por ahora.*
-- **Segmentos del semáforo** (por el `estado` global del último corte, el mismo que pinta el chip del portafolio; así las barras suman exactamente los activos). *Call:*
+  3. **Avance:** «X % real de Y % planeado», promedio simple de `ev` y `pv` de los activos con corte. _Call: promedio simple; los charters no tienen peso entre sí._
+  4. **Sin corte reciente:** activos sin corte o con último corte de hace más de **30 días** (fecha de hoy de Bogotá). _Call: 30 días fijo, no parametrizable por ahora._
+- **Segmentos del semáforo** (por el `estado` global del último corte, el mismo que pinta el chip del portafolio; así las barras suman exactamente los activos). _Call:_
   - verde = `al_dia` y `terminada`; amarillo = `en_atencion`; naranja = `en_riesgo`; rojo = `atrasada`; vencida = `vencida`;
   - **neutro** «Sin corte o sin iniciar» = sin corte, `por_iniciar` y `sin_programar`.
   - Las hojas vencidas dentro de un charter en otro color **no** lo mueven de segmento; eso lo sigue cubriendo el filtro «Con vencidas» y el chip de la fila.
 - **Semáforo por área** y **por categoría:** una barra apilada por grupo con los segmentos de arriba y su conteo; «Sin área» / «Sin categoría» como grupo propio si hay. Solo charters activos. Tonos del semáforo existentes (amarillo con borde `amarillo-texto`).
-- **Interacción:** clic en un segmento filtra la tabla por ese grupo y ese estado (filtro nuevo `semaforo` en la URL); un chip «Financiera · rojo ×» lo quita. *Call.* Barras accesibles: cada segmento es un botón con etiqueta «Financiera: 2 en rojo».
+- **Interacción:** clic en un segmento filtra la tabla por ese grupo y ese estado (filtro nuevo `semaforo` en la URL); un chip «Financiera · rojo ×» lo quita. _Call._ Barras accesibles: cada segmento es un botón con etiqueta «Financiera: 2 en rojo».
 - Con 0 charters, el tablero no se muestra (queda el estado vacío actual). En celular: cifras en 2 × 2 y barras a todo el ancho.
 - Animación: entrada de barras y cifras con `Cifra`/Motion, respetando `prefers-reduced-motion`.
 
