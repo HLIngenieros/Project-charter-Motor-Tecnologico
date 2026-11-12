@@ -59,9 +59,9 @@ describe('parametrización del Admin', () => {
     expect(screen.queryByRole('link', { name: 'Administración' })).not.toBeInTheDocument()
   })
 
-  it('/admin lleva a la pestaña de parametrización', async () => {
+  it('/admin lleva a la pestaña de cuentas', async () => {
     abrir('/admin')
-    await waitFor(() => expect(screen.getByTestId('ruta')).toHaveTextContent('/admin/parametros'))
+    await waitFor(() => expect(screen.getByTestId('ruta')).toHaveTextContent('/admin/cuentas'))
     expect(await screen.findByRole('heading', { name: 'Administración' })).toBeInTheDocument()
   })
 

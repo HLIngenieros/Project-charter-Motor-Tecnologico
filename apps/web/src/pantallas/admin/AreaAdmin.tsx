@@ -2,9 +2,13 @@ import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router'
 import { Layout } from '../../app/Layout'
 
-const PESTANAS = [{ ruta: '/admin/parametros', etiqueta: 'Parametrización' }]
+const PESTANAS = [
+  { ruta: '/admin/cuentas', etiqueta: 'Cuentas' },
+  { ruta: '/admin/catalogos', etiqueta: 'Catálogos' },
+  { ruta: '/admin/parametros', etiqueta: 'Parametrización' },
+]
 
-/** Marco del área de Admin: título y pestañas (por ahora solo Parametrización). */
+/** Marco del área de Admin: título y pestañas (Cuentas, Catálogos y Parametrización). */
 export function AreaAdmin({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   return (
