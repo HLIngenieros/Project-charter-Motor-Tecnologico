@@ -87,7 +87,7 @@
   ```
 - Produces: `CharterDetalle` + `indicadores: Indicador[]`, `riesgos: Riesgo[]`, `rubros: Rubro[]`; `ExportacionCharter` + `complementos: { niveles: Record<string, { puntaje: number; nivel: NivelRiesgo } | null>; totalPresupuesto: number }`.
 
-- [ ] **Step 1: Pruebas que fallan**
+- [x] **Step 1: Pruebas que fallan**
 
 ```ts
 // calculo/complementos.test.ts
@@ -159,10 +159,10 @@ it('acepta textos vacíos y nulos, rechaza fuera de rango', () => {
 })
 ```
 
-- [ ] **Step 2:** `npm test -w packages/shared -- complementos` → FALLA (módulos inexistentes).
-- [ ] **Step 3:** Implementar esquemas, cálculos, exportarlos en los `index.ts` y ampliar `CharterDetalle` y `ExportacionCharter`.
-- [ ] **Step 4:** `npm test -w packages/shared` → PASA. `npm run typecheck -w packages/shared` (la API y la web dejan de compilar hasta la Task 2/3: esperado).
-- [ ] **Step 5:** Commit «Agrega esquemas y cálculos de indicadores, riesgos y presupuesto».
+- [x] **Step 2:** `npm test -w packages/shared -- complementos` → FALLA (módulos inexistentes).
+- [x] **Step 3:** Implementar esquemas, cálculos, exportarlos en los `index.ts` y ampliar `CharterDetalle` y `ExportacionCharter`.
+- [x] **Step 4:** `npm test -w packages/shared` → PASA. `npm run typecheck -w packages/shared` (la API y la web dejan de compilar hasta la Task 2/3: esperado).
+- [x] **Step 5:** Commit «Agrega esquemas y cálculos de indicadores, riesgos y presupuesto».
 
 ### Task 2: API · migración, servicio, rutas y JSON
 
@@ -201,8 +201,8 @@ it('acepta textos vacíos y nulos, rechaza fuera de rango', () => {
 
   Todas en una transacción, con `orden` = posición, y tocan `charter.actualizado_en` (como `reemplazarLista`). `reemplazarPresupuesto` guarda `valor = valorRubro(rubro)`.
 
-- [ ] **Step 1: Migración.** Cambiar `esquema.ts`, correr `npx drizzle-kit generate --name complementos` en `apps/api` y revisar el SQL: solo `ADD COLUMN probabilidad integer`, `ADD COLUMN impacto integer`, `ALTER COLUMN meta_valor DROP NOT NULL` y `DROP DEFAULT`; nada de recrear tablas.
-- [ ] **Step 2: Pruebas que fallan** (`complementos.test.ts`, con `crearCharterPrueba` y `sesionDe`; ids con `v7()`):
+- [x] **Step 1: Migración.** Cambiar `esquema.ts`, correr `npx drizzle-kit generate --name complementos` en `apps/api` y revisar el SQL: solo `ADD COLUMN probabilidad integer`, `ADD COLUMN impacto integer`, `ALTER COLUMN meta_valor DROP NOT NULL` y `DROP DEFAULT`; nada de recrear tablas.
+- [x] **Step 2: Pruebas que fallan** (`complementos.test.ts`, con `crearCharterPrueba` y `sesionDe`; ids con `v7()`):
   - `guarda y devuelve en orden` para las tres rutas; `GET /charters/:id` las trae en ese orden.
   - `conserva ids y borra los que faltan`: PUT [A, B], PUT [B'] (B editado) → detalle = [B'] con el mismo id.
   - `editar un indicador conserva sus mediciones`: insertar una fila en `medicion` con `app.db`, PUT el indicador con otro nombre → la medición sigue (Review Focus 1).
@@ -211,10 +211,10 @@ it('acepta textos vacíos y nulos, rechaza fuera de rango', () => {
   - `charter cerrado → 409 charter_cerrado`; `Admin sobre charter ajeno → no escribe` (mismo código que dan hoy las listas); `charter ajeno de otro usuario → 404`.
   - `más de 50 → 400`.
   - En `exportar.test.ts`: el JSON trae `charter.riesgos` y `complementos.niveles[id]` = `{ puntaje: 12, nivel: 'alto' }` y `complementos.totalPresupuesto`.
-- [ ] **Step 3:** `npm test -w apps/api -- complementos exportar` → FALLA.
-- [ ] **Step 4:** Implementar `complementos.ts`, sumar `leerComplementos` a `detalleCharter`, las tres rutas en `rutas.ts` (parse Zod → `cargarCharter(…, 'escritura')` → servicio) y `complementos` en `exportarCharter`.
-- [ ] **Step 5:** `npm test -w apps/api` y `npm run typecheck -w apps/api` → PASA.
-- [ ] **Step 6:** Commit «Agrega la API de indicadores, riesgos y presupuesto».
+- [x] **Step 3:** `npm test -w apps/api -- complementos exportar` → FALLA.
+- [x] **Step 4:** Implementar `complementos.ts`, sumar `leerComplementos` a `detalleCharter`, las tres rutas en `rutas.ts` (parse Zod → `cargarCharter(…, 'escritura')` → servicio) y `complementos` en `exportarCharter`.
+- [x] **Step 5:** `npm test -w apps/api` y `npm run typecheck -w apps/api` → PASA.
+- [x] **Step 6:** Commit «Agrega la API de indicadores, riesgos y presupuesto».
 
 ## Sesión 2 · Ficha
 
