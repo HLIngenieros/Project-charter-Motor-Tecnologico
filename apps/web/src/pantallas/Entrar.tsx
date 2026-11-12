@@ -73,6 +73,9 @@ export function Entrar() {
         <Boton type="submit" ancho cargando={entrar.isPending} className="mt-2">
           Entrar
         </Boton>
+        <p className="text-center text-sm text-texto-2">
+          ¿Olvidaste tu clave? Contacta al administrador del sistema.
+        </p>
       </form>
     </MarcoAcceso>
   )

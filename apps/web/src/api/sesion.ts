@@ -1,4 +1,9 @@
-import type { LoginEntrada, RegistroEntrada, UsuarioPublico } from '@charter/shared'
+import type {
+  CambiarClaveEntrada,
+  LoginEntrada,
+  RegistroEntrada,
+  UsuarioPublico,
+} from '@charter/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, ErrorCliente } from './cliente'
 
@@ -36,6 +41,21 @@ export function useRegistrar() {
     mutationFn: (datos: RegistroEntrada) =>
       api<UsuarioPublico>('/auth/registro', { metodo: 'POST', cuerpo: datos }),
     onSuccess: (usuario) => cliente.setQueryData(CLAVE_SESION, usuario),
+  })
+}
+
+/** Cambia la clave propia; quita la marca de la sesión antes de navegar y luego la vuelve a pedir. */
+export function useCambiarClave() {
+  const cliente = useQueryClient()
+  return useMutation({
+    mutationFn: (datos: CambiarClaveEntrada) =>
+      api<void>('/auth/cambiar-clave', { metodo: 'POST', cuerpo: datos }),
+    onSuccess: () => {
+      cliente.setQueryData<UsuarioPublico | null>(CLAVE_SESION, (u) =>
+        u ? { ...u, debeCambiarClave: false } : u,
+      )
+      void cliente.invalidateQueries({ queryKey: CLAVE_SESION })
+    },
   })
 }
 

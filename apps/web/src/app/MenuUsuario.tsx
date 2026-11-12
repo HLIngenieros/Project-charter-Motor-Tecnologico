@@ -2,7 +2,10 @@ import { Link, useNavigate } from 'react-router'
 import { useSalir, useSesion } from '../api/sesion'
 import { Boton } from '../componentes/Boton'
 
-/** Nombre del usuario y «Salir», a la derecha de la banda institucional. */
+const ENLACE =
+  'rounded-control px-2 py-1.5 font-semibold text-white/90 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white'
+
+/** Administración, nombre, «Cambiar clave» y «Salir», a la derecha de la banda institucional. */
 export function MenuUsuario() {
   const { data: usuario } = useSesion()
   const salir = useSalir()
@@ -11,14 +14,14 @@ export function MenuUsuario() {
   return (
     <>
       {usuario.esAdmin && (
-        <Link
-          to="/admin/parametros"
-          className="rounded-control px-2 py-1.5 font-semibold text-white/90 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-white"
-        >
+        <Link to="/admin" className={ENLACE}>
           Administración
         </Link>
       )}
       <span className="hidden truncate text-white/80 sm:inline">{usuario.nombre}</span>
+      <Link to="/cuenta/clave" className={ENLACE}>
+        Cambiar clave
+      </Link>
       <Boton
         variante="fantasma"
         cargando={salir.isPending}

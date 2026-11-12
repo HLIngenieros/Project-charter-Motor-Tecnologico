@@ -1,8 +1,7 @@
 import type { AreaPublica, CharterResumen } from '@charter/shared'
-import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router'
 import { useCategorias, useCharters } from '../../api/charters'
-import { useSesion } from '../../api/sesion'
 import { Layout } from '../../app/Layout'
 import { Aviso } from '../../componentes/Aviso'
 import { Boton } from '../../componentes/Boton'
@@ -45,6 +44,21 @@ function useFiltrosEnUrl(): [Filtros, (cambios: Partial<Filtros>) => void, () =>
   return [filtros, cambiar, limpiar]
 }
 
+/**
+ * Mensaje que deja otra pantalla al llegar (p. ej. «Clave cambiada»). Se guarda al montar y
+ * se borra del historial, para que no reaparezca al recargar o al volver atrás.
+ */
+function useAvisoAlVolver(): string | undefined {
+  const ubicacion = useLocation()
+  const navegar = useNavigate()
+  const [aviso] = useState(() => (ubicacion.state as { aviso?: string } | null)?.aviso)
+  useEffect(() => {
+    if ((ubicacion.state as { aviso?: string } | null)?.aviso)
+      void navegar(ubicacion.pathname + ubicacion.search, { replace: true, state: null })
+  }, [ubicacion, navegar])
+  return aviso
+}
+
 function areasUsadas(lista: CharterResumen[]): AreaPublica[] {
   const porId = new Map<string, AreaPublica>()
   for (const c of lista) if (c.area) porId.set(c.area.id, c.area)
@@ -85,8 +99,8 @@ function CurvaVacia() {
 }
 
 export function Portafolio() {
-  const { data: usuario } = useSesion()
   const charters = useCharters()
+  const avisoAlVolver = useAvisoAlVolver()
   const categorias = useCategorias()
   const [filtros, cambiar, limpiar] = useFiltrosEnUrl()
   const [creando, setCreando] = useState(false)
@@ -164,9 +178,9 @@ export function Portafolio() {
 
   return (
     <Layout ancho="portafolio">
-      {usuario?.debeCambiarClave && (
-        <Aviso tono="alerta" className="mb-6">
-          Debes cambiar tu clave antes de seguir. La opción llega con la pantalla de cuenta.
+      {avisoAlVolver && (
+        <Aviso tono="ok" className="mb-6">
+          {avisoAlVolver}
         </Aviso>
       )}
       <div className="flex flex-wrap items-end gap-4">

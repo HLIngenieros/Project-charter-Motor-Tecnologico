@@ -19,7 +19,12 @@ function SinConexion({ reintentar, cargando }: { reintentar: () => void; cargand
   )
 }
 
-/** Solo con sesión; si no, lleva a /entrar y recuerda a dónde se quería ir. */
+export const RUTA_CLAVE = '/cuenta/clave'
+
+/**
+ * Solo con sesión; si no, lleva a /entrar y recuerda a dónde se quería ir. Con la clave
+ * restablecida por el Admin, toda ruta lleva a cambiarla.
+ */
 export function RutaProtegida({ children }: { children: ReactNode }) {
   const sesion = useSesion()
   const ubicacion = useLocation()
@@ -27,6 +32,8 @@ export function RutaProtegida({ children }: { children: ReactNode }) {
   if (sesion.isError)
     return <SinConexion reintentar={() => void sesion.refetch()} cargando={sesion.isFetching} />
   if (!sesion.data) return <Navigate to="/entrar" replace state={{ desde: ubicacion.pathname }} />
+  if (sesion.data.debeCambiarClave && ubicacion.pathname !== RUTA_CLAVE)
+    return <Navigate to={RUTA_CLAVE} replace />
   return children
 }
 

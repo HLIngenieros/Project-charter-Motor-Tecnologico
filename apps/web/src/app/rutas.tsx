@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router'
 import { AreaAdmin } from '../pantallas/admin/AreaAdmin'
 import { Parametrizacion } from '../pantallas/admin/Parametrizacion'
+import { CambiarClave } from '../pantallas/CambiarClave'
 import { RegistrarCorte } from '../pantallas/corte/RegistrarCorte'
 import { Entrar } from '../pantallas/Entrar'
 import { Ficha } from '../pantallas/ficha/Ficha'
@@ -8,7 +9,7 @@ import { Imprimir } from '../pantallas/imprimir/Imprimir'
 import { Muestra } from '../pantallas/Muestra'
 import { Portafolio } from '../pantallas/portafolio/Portafolio'
 import { Registro } from '../pantallas/Registro'
-import { RutaProtegida, SoloAdmin, SoloInvitado } from './RutaProtegida'
+import { RUTA_CLAVE, RutaProtegida, SoloAdmin, SoloInvitado } from './RutaProtegida'
 
 export function Rutas() {
   return (
@@ -34,6 +35,14 @@ export function Rutas() {
         element={
           <RutaProtegida>
             <Portafolio />
+          </RutaProtegida>
+        }
+      />
+      <Route
+        path={RUTA_CLAVE}
+        element={
+          <RutaProtegida>
+            <CambiarClave />
           </RutaProtegida>
         }
       />

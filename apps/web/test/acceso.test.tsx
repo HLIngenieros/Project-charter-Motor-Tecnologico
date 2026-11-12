@@ -210,9 +210,9 @@ describe('rutas', () => {
     expect(await screen.findByRole('heading', { name: 'Entra a tus charters' })).toBeInTheDocument()
   })
 
-  it('con debeCambiarClave muestra el aviso en el inicio', async () => {
+  it('con debeCambiarClave el inicio lleva a cambiar la clave', async () => {
     responder = () => ({ estado: 200, cuerpo: { ...usuarioAna, debeCambiarClave: true } })
     abrir('/')
-    expect(await screen.findByText(/Debes cambiar tu clave/)).toBeInTheDocument()
+    expect(await screen.findByText(/Tu clave fue restablecida/)).toBeInTheDocument()
   })
 })
