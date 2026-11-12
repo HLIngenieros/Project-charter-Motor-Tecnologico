@@ -68,11 +68,10 @@ Diseño: [docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md](docs
 
 Diseño: [docs/superpowers/specs/2026-11-12-fase-6-complementos-design.md](docs/superpowers/specs/2026-11-12-fase-6-complementos-design.md). Plan: [docs/planes/fase-6.md](docs/planes/fase-6.md). Sesiones: datos (Tasks 1–2, hecha) · ficha (Tasks 3–4, hecha) · presupuesto, PDF y cierre (Tasks 5–6).
 
-- [~] T6.1 · Indicadores (solo definición; las mediciones quedan para después) · sección en la ficha hecha; faltan PDF y carga en RF1
-  - Cargar en RF1: días hábiles entre el cierre del mes y la radicación completa (meta ≤ 5) · % de facturas radicadas sin intervención manual (meta ≥ 90 %) · facturas pendientes al cierre (meta: tendencia a 0).
-- [~] T6.2 · Riesgos con matriz probabilidad × impacto · sección y matriz en la ficha hechas; faltan PDF y carga en RF1
-  - Cargar en RF1 (riesgo · causa · mitigación): facturas sin orden de compra · órdenes globales agotadas o con precios desactualizados · alerta temprana a Compras y al proyecto. Facturas que no llegan al buzón · el proveedor las retiene o el almacenista las pide a su correo · cruce obligatorio con la DIAN y circular a obras. No se pueden hacer los eventos en la DIAN · falta el XML · exigir PDF + XML en la regla mínima. Reglas de soportes difíciles de estandarizar · muchas excepciones por tipo de proveedor · arrancar con orden de compra + cumplido y sumar reglas por tipo. Contactos de proveedores desactualizados · Compras registra al vendedor, no al área financiera · coordinar con Compras (puede ser otra iniciativa). Alcance que crece · integración con Libra o portal de proveedores · ciclo acotado en el criterio de éxito 4.
-- [~] T6.3 · Presupuesto con barras por rubro y desglose (solo planeado)
+- [x] T6.1 · Indicadores (solo definición; las mediciones quedan para después) · ficha, PDF y JSON
+- [x] T6.2 · Riesgos con matriz probabilidad × impacto · ficha (tabla y matriz enlazadas), PDF y JSON
+- [x] T6.3 · Presupuesto con total, barras por rubro y desglose (solo planeado) · ficha, PDF y JSON
+- [ ] RF1: **evaluar con Jorge y el Comité** la propuesta cargada el 2026-11-12 (6 indicadores, 8 riesgos, presupuesto austero de COP 22.220.000 con tarifas supuestas de 60.000 y 45.000 COP/h y licencia de ~60.000 COP/mes). Quedó fuera de la propuesta: órdenes de compra globales agotadas o con precios desactualizados.
 
 ## Fase 7 · Admin
 
@@ -104,7 +103,7 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 
 Menor anotado: dos PUT simultáneos que crean un corte en la misma fecha darían 500 por el índice único (no 409).
 
-**Próxima tarea sugerida:** Fase 6 sesión 3 (Tasks 5–6 de [docs/planes/fase-6.md](docs/planes/fase-6.md)): presupuesto, PDF, ronda de navegador (1440 y 390 px) y carga de indicadores y riesgos en RF1 (ya está en la base local). **Ejecución directa**; el ledger está en `.superpowers/sdd/fase-6/progress.md`. Luego Fase 7 y Fase 8, que termina publicando (Task 7 del plan de Vercel). Siguen abiertos: límite de intentos en `POST /auth/registro` y el 500 de cortes simultáneos.
+**Próxima tarea sugerida:** Fase 7 (Admin): brainstorming → spec → plan. Luego Fase 8, que termina publicando (Task 7 del plan de Vercel). Siguen abiertos: límite de intentos en `POST /auth/registro` y el 500 de cortes simultáneos.
 
 ## Registro de sesiones
 

@@ -12,6 +12,11 @@ import { chipDe } from '../ficha/cronograma/estados'
 import { useBorradorCronograma } from '../ficha/cronograma/useBorradorCronograma'
 import { SeccionCurvaS } from '../ficha/curva/SeccionCurvaS'
 import { useVistaCronograma, type VistaCronograma } from '../ficha/useVistaCronograma'
+import {
+  IndicadoresImpresion,
+  PresupuestoImpresion,
+  RiesgosImpresion,
+} from './ComplementosImpresion'
 import { CronogramaImpresion } from './CronogramaImpresion'
 import './imprimir.css'
 
@@ -272,6 +277,15 @@ function Documento({ charter }: { charter: CharterDetalle }) {
         </Seccion>
         <Seccion titulo="Criterios de éxito">
           <Lista items={charter.listas.criterio_exito} />
+        </Seccion>
+        <Seccion titulo="Indicadores" larga>
+          <IndicadoresImpresion indicadores={charter.indicadores} />
+        </Seccion>
+        <Seccion titulo="Riesgos" larga>
+          <RiesgosImpresion riesgos={charter.riesgos} />
+        </Seccion>
+        <Seccion titulo="Presupuesto" larga>
+          <PresupuestoImpresion rubros={charter.rubros} />
         </Seccion>
         <Seccion titulo="Historial de cortes" larga>
           <Historial cortes={vista.cortes} elegido={vista.corteElegido} />

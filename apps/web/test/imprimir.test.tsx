@@ -95,9 +95,9 @@ const cronograma: CronogramaRespuesta = {
   ultimoCorte: { fecha: '2026-11-09', avances: { h1: { pct: 0.2 } } },
 }
 
-function abrir(url: string) {
+function abrir(url: string, charter: CharterDetalle = detalle) {
   simularApi((l: Llamada) => {
-    if (l.url === '/api/charters/c1') return { estado: 200, cuerpo: detalle }
+    if (l.url === '/api/charters/c1') return { estado: 200, cuerpo: charter }
     if (l.url === '/api/categorias' || l.url === '/api/areas') return { estado: 200, cuerpo: [] }
     if (l.url === '/api/charters/c1/cronograma') return { estado: 200, cuerpo: cronograma }
     if (l.url === '/api/charters/c1/cortes') return { estado: 200, cuerpo: cortes }
@@ -150,10 +150,57 @@ const TITULOS = [
   'Cronograma',
   'Supuestos',
   'Criterios de éxito',
+  'Indicadores',
+  'Riesgos',
+  'Presupuesto',
   'Historial de cortes',
 ]
 
 describe('vista de impresión', () => {
+  it('incluye indicadores, riesgos con matriz estática y presupuesto', async () => {
+    abrir('/charters/c1/imprimir', {
+      ...detalle,
+      indicadores: [
+        {
+          id: 'i1',
+          nombre: 'Facturas sin intervención',
+          formula: 'Automáticas ÷ recibidas',
+          metaOperador: '>=',
+          metaValor: 90,
+          metaUnidad: '%',
+          observaciones: '',
+        },
+      ],
+      riesgos: [
+        {
+          id: 'r1',
+          riesgo: 'Proveedores sin soportes',
+          causa: 'Facturan al despachar',
+          mitigacion: 'Circular',
+          probabilidad: 4,
+          impacto: 3,
+        },
+      ],
+      rubros: [
+        {
+          id: 'b1',
+          descripcion: 'Horas internas',
+          valor: 8333,
+          lineas: [{ id: 'l1', concepto: 'Desarrollo', cantidad: 2.5, valorUnitario: 3333 }],
+        },
+      ],
+    })
+    await waitFor(() => expect(imprimir).toHaveBeenCalledTimes(1))
+    expect(screen.getByText('Facturas sin intervención')).toBeInTheDocument()
+    expect(screen.getByText('≥ 90 %')).toBeInTheDocument()
+    expect(screen.getByText('Proveedores sin soportes')).toBeInTheDocument()
+    expect(screen.getByText('Alto · 12')).toBeInTheDocument()
+    const matriz = screen.getByRole('group', { name: 'Matriz de probabilidad e impacto' })
+    expect(matriz.querySelectorAll('[tabindex]')).toHaveLength(0)
+    expect(screen.getByText('COP 8.333')).toBeInTheDocument()
+    expect(screen.getByText('Desarrollo')).toBeInTheDocument()
+  })
+
   it('muestra las secciones en el orden de la ficha y llama a imprimir una vez', async () => {
     abrir('/charters/c1/imprimir')
     expect(await screen.findByRole('heading', { level: 1, name: 'Plan TI' })).toBeInTheDocument()
@@ -166,6 +213,9 @@ describe('vista de impresión', () => {
     expect(screen.getByText('Sin registrar')).toBeInTheDocument()
     expect(screen.getByText('Nota del 2026-11-05')).toBeInTheDocument()
     expect(screen.getByText(/Generado el/)).toBeInTheDocument()
+    expect(screen.getByText('Aún no hay indicadores.')).toBeInTheDocument()
+    expect(screen.getByText('Aún no hay riesgos.')).toBeInTheDocument()
+    expect(screen.getByText('Aún no hay presupuesto.')).toBeInTheDocument()
     // Un render más no vuelve a imprimir.
     await new Promise((r) => setTimeout(r, 50))
     expect(imprimir).toHaveBeenCalledTimes(1)

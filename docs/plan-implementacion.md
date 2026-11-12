@@ -75,9 +75,9 @@ Plan general por fases y tareas. La arquitectura está en [arquitectura.md](arqu
 
 | Tarea | Entregable | Terminada cuando |
 |---|---|---|
-| T6.1 · Indicadores | Tabla con meta estructurada, mediciones por periodo, cumplimiento, semáforo y una gráfica por indicador | Cumplimiento según la §4.6 |
-| T6.2 · Riesgos | Tabla editable y ordenable | Se edita y se guarda |
-| T6.3 · Presupuesto | Rubros con desglose opcional (cantidad × valor unitario) y total en COP | Los totales cuadran |
+| T6.1 · Indicadores | Tabla con nombre, fórmula, meta estructurada (opcional) y observaciones. Las mediciones, el cumplimiento y su gráfica quedan para después (decisión del 2026-11-12) | Se edita, se guarda y sale en el PDF y el JSON |
+| T6.2 · Riesgos | Tabla editable y ordenable con probabilidad e impacto (1–5), nivel y matriz 5 × 5 | Se edita, se guarda y sale en el PDF y el JSON |
+| T6.3 · Presupuesto | Rubros con desglose opcional (cantidad × valor unitario), barras y total en COP (solo planeado) | Los totales cuadran |
 
 ## Fase 7 · Admin
 
