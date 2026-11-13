@@ -11,7 +11,16 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { fechaCorta } from '../../../formato'
 import { useMovimientoReducido } from '../../../movimiento'
 import { ETIQUETA_ESTADO } from '../cronograma/estados'
-import { dominio, escalaX, escalaY, tramosBrecha, trazo, valorEn, type Zoom } from './geometria'
+import {
+  dominio,
+  escalaX,
+  escalaY,
+  textoFin,
+  tramosBrecha,
+  trazo,
+  valorEn,
+  type Zoom,
+} from './geometria'
 
 /** Lo que marca el puntero (o nada): fecha y valores leídos. */
 export interface Marca {
@@ -172,6 +181,18 @@ export function CurvaS({
 
   const fechaVigente = reales[vigente]?.fecha
   const xv = fechaVigente ? x(fechaVigente) : null
+  const textoCorte = fechaVigente ? `Corte ${fechaCorta(fechaVigente).replace(/ \d{4}$/, '')}` : ''
+  // En pantallas angostas la etiqueta del fin se acorta o se omite si choca con la del corte.
+  const etiquetaFin = finProyectado
+    ? textoFin(
+        xv !== null && fechaVigente
+          ? { x: Math.min(xv + 6, m.l + pw - 70), texto: textoCorte }
+          : null,
+        x(finProyectado),
+        `${dProy ? 'Fin proyectado' : 'Fin'} ${fechaCorta(finProyectado).replace(/ \d{4}$/, '')}`,
+        `Fin ${fechaCorta(finProyectado).replace(/ \d{4}$/, '')}`,
+      )
+    : null
   const finDia = Math.max(
     planeada.length ? aDia(planeada.at(-1)!.fecha) : 0,
     finProyectado ? aDia(finProyectado) : 0,
@@ -321,17 +342,17 @@ export function CurvaS({
             className="curva-geo fill-[#00759c] text-xs font-semibold"
             style={{ transform: `translateX(${Math.min(xv + 6, m.l + pw - 70)}px)` }}
           >
-            Corte {fechaCorta(fechaVigente).replace(/ \d{4}$/, '')}
+            {textoCorte}
           </text>
         )}
-        {finProyectado && zoom === 'proyecto' && x(finProyectado) <= m.l + pw && (
+        {finProyectado && etiquetaFin && zoom === 'proyecto' && x(finProyectado) <= m.l + pw && (
           <text
             x={x(finProyectado)}
             y={y(1) - 8}
             textAnchor="end"
             className="fill-texto-2 text-xs font-semibold"
           >
-            {dProy ? 'Fin proyectado' : 'Fin'} {fechaCorta(finProyectado).replace(/ \d{4}$/, '')}
+            {etiquetaFin}
           </text>
         )}
 

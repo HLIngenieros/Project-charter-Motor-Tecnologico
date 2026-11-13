@@ -104,7 +104,7 @@ export function SelectorCorte({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.14, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-full right-0 z-30 mt-1.5 max-h-80 w-72 overflow-y-auto rounded-tarjeta border border-linea bg-superficie p-1.5 shadow-dialogo"
+            className="absolute top-full right-0 z-30 mt-1.5 max-h-80 w-72 overflow-y-auto max-lg:right-auto max-lg:left-0 rounded-tarjeta border border-linea bg-superficie p-1.5 shadow-dialogo"
           >
             {[...cortes].reverse().map((c, i) => {
               const chip = chipDe(c, false)

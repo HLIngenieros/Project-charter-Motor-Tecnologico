@@ -191,7 +191,7 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 
 - **Guardado por bloques** *(criterio técnico)*: listas, cronograma, riesgos, indicadores y presupuesto se envían completos con `PUT`. Simplifica la edición en línea y el reordenamiento. El volumen es pequeño (un cronograma grande tiene unas 200 filas).
 - **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`. Con `modo = 'escritura'` exige que el usuario sea el dueño. Con `modo = 'lectura'` acepta al dueño o a un Admin. Si el charter es de otro, responde **404** (no 403), para no revelar que existe. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
-- **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `version` (`charter.cronograma_version`); si no coincide, la API responde 409 `cronograma_desactualizado` y la web muestra «El cronograma cambió en otra pestaña» con «Recargar». No se usa `actualizado_en` porque los `PATCH` del encabezado lo cambian y darían falsos 409.
+- **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `version` (`charter.cronograma_version`); si no coincide, la API responde 409 `cronograma_desactualizado` y la web muestra «El cronograma cambió en otra pestaña» con «Recargar». Dos cortes nuevos en la misma fecha a la vez chocan en el índice único y el segundo recibe 409 `corte_simultaneo`. No se usa `actualizado_en` porque los `PATCH` del encabezado lo cambian y darían falsos 409.
 - **Cortes:** `PUT /cortes/:fecha` crea el corte con la foto de la línea base vigente o, si ya existe en esa fecha, edita su % y su nota sin tocar la foto. Códigos propios: `fecha_futura`, `corte_anterior` (un corte nuevo no puede ir antes del último), `sin_hojas_programadas`, `actividad_invalida`; en el cronograma, `id_invalido` (id de otro charter).
 - **Admin:** las rutas `/admin/*` usan `exigirAdmin` y responden 403 `solo_admin`; ocultarlas no protege nada.
 - **Errores:** formato único `{ error: { codigo, mensaje, campos? } }`, con mensajes en español.
@@ -201,7 +201,7 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 - **Clave:** mínimo 8 caracteres, sin otras reglas de composición *(decisión del usuario, 2026-11-09)*. Se guarda con argon2id.
 - **Sesión:** token aleatorio en una cookie `charter_sesion` con `HttpOnly`, `SameSite=Lax`, `Path=/` y `Secure` cuando corre en HTTPS. En la base se guarda solo el hash del token. La sesión dura 7 días y se renueva con el uso *(criterio técnico)*. Logout, desactivación y cambio de clave borran las sesiones.
 - **CSRF:** la web y la API se sirven en el mismo origen. Con `SameSite=Lax`, y como las mutaciones exigen `Content-Type: application/json` y una cabecera `X-Requested-With`, no hace falta un token adicional.
-- **Fuerza bruta:** se limita el login a 10 intentos por 15 minutos por correo y por IP (`@fastify/rate-limit`).
+- **Fuerza bruta:** se limita el login a 10 intentos por 15 minutos por correo y por IP, y el registro a 20 por hora por IP (`@fastify/rate-limit`; 429 `demasiados_intentos`).
 - **Cabeceras:** se usa `@fastify/helmet` con una política CSP propia (las fuentes son locales y no se usan CDN).
 - **Registro:** el dominio se valida en la API, no solo en la web. Un correo ya registrado da un error genérico.
 

@@ -35,7 +35,7 @@ export function FiltrosPortafolio({
 }) {
   return (
     <div className="mt-6 mb-3.5 flex flex-wrap items-center gap-2.5 max-md:mt-5">
-      <label className="relative max-w-[360px] flex-[1_1_260px] max-md:max-w-none max-md:basis-full">
+      <label className="relative max-w-[400px] flex-[1_1_260px] max-md:max-w-none max-md:basis-full">
         <span className="sr-only">Buscar</span>
         <svg
           aria-hidden

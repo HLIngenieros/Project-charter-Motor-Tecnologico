@@ -157,6 +157,22 @@ describe('login', () => {
     expect(r.json().error.codigo).toBe('demasiados_intentos')
   })
 
+  it('el registro 21 desde la misma IP en una hora da 429', async () => {
+    const { app } = await nuevaApp()
+    const registrarDesde = (i: number) =>
+      app.inject({
+        method: 'POST',
+        url: '/api/auth/registro',
+        headers: CSRF,
+        remoteAddress: '10.7.7.7',
+        payload: { ...datosRegistro, correo: `r${i}@hlingenieros.com` },
+      })
+    for (let i = 0; i < 20; i++) expect((await registrarDesde(i)).statusCode).toBe(201)
+    const r = await registrarDesde(20)
+    expect(r.statusCode).toBe(429)
+    expect(r.json().error.codigo).toBe('demasiados_intentos')
+  })
+
   it('el intento 11 por IP da 429 aunque cambie el correo', async () => {
     const { app } = await nuevaApp()
     for (let i = 0; i < 10; i++) {

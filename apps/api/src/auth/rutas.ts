@@ -13,7 +13,13 @@ import { usuario } from '../db/esquema'
 import { ErrorApi } from '../errores'
 import { cifrarClave, hashDeRelleno, verificarClave } from './claves'
 import { exigirSesion } from './guardas'
-import { LimitePorCorreo, MAX_INTENTOS, VENTANA_MS } from './limite'
+import {
+  LimitePorCorreo,
+  MAX_INTENTOS,
+  MAX_REGISTROS,
+  VENTANA_MS,
+  VENTANA_REGISTRO_MS,
+} from './limite'
 import {
   aUsuarioSesion,
   borrarCookie,
@@ -35,7 +41,11 @@ export async function rutasAuth(app: FastifyInstance): Promise<void> {
   const limiteCorreo = new LimitePorCorreo()
   const { db } = app
 
-  app.post('/registro', async (request, reply) => {
+  const limiteRegistro = {
+    config: { rateLimit: { max: MAX_REGISTROS, timeWindow: VENTANA_REGISTRO_MS } },
+  }
+
+  app.post('/registro', limiteRegistro, async (request, reply) => {
     const datos = registroEntrada.parse(request.body)
     if (!esCorreoPermitido(datos.correo, app.config.dominioPermitido)) {
       throw new ErrorApi(

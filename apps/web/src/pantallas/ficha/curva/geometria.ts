@@ -100,3 +100,23 @@ export function estadoPorBrecha(pv: number, ev: number, u: Umbrales): Estado {
   if (brecha < u.atraso) return 'en_riesgo'
   return 'atrasada'
 }
+
+/** Ancho aproximado de una etiqueta de la curva (text-xs seminegrita). */
+const anchoTexto = (texto: string) => texto.length * 6.2
+
+/**
+ * Texto de la etiqueta de fin (anclada a la derecha en `xFin`) que no choca con la del corte
+ * (anclada a la izquierda en `corte.x`): el largo, el corto o ninguno.
+ */
+export function textoFin(
+  corte: { x: number; texto: string } | null,
+  xFin: number,
+  largo: string,
+  corto: string,
+): string | null {
+  if (!corte) return largo
+  const libreDesde = corte.x + anchoTexto(corte.texto) + 6
+  if (xFin - anchoTexto(largo) >= libreDesde) return largo
+  if (xFin - anchoTexto(corto) >= libreDesde) return corto
+  return null
+}

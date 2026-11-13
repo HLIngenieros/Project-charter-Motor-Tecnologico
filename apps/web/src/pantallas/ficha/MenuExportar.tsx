@@ -133,7 +133,7 @@ export function MenuExportar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.14, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-full right-0 z-30 mt-1.5 w-64 rounded-tarjeta border border-linea bg-superficie p-1.5 shadow-dialogo"
+            className="absolute top-full right-0 z-30 mt-1.5 w-64 max-sm:w-60 rounded-tarjeta border border-linea bg-superficie p-1.5 shadow-dialogo"
           >
             <button type="button" role="menuitem" tabIndex={-1} onClick={pdf} className={OPCION}>
               <Icono d={DOCUMENTO} />

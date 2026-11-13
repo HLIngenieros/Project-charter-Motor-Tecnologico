@@ -5,6 +5,7 @@ import {
   escalaX,
   escalaY,
   estadoPorBrecha,
+  textoFin,
   tramosBrecha,
   trazo,
 } from '../src/pantallas/ficha/curva/geometria'
@@ -87,5 +88,28 @@ describe('geometría de la curva S', () => {
     expect(estadoPorBrecha(0.6, 0.3, u)).toBe('en_riesgo')
     expect(estadoPorBrecha(0.9, 0.3, u)).toBe('atrasada')
     expect(estadoPorBrecha(1, 1, u)).toBe('terminada')
+  })
+})
+
+describe('textoFin', () => {
+  // «Corte 12 nov» desde x = 180: ~74 px a 6,2 px por carácter.
+  const corte = { x: 180, texto: 'Corte 12 nov' }
+
+  it('deja el texto largo si no choca con la etiqueta del corte', () => {
+    expect(textoFin(corte, 500, 'Fin proyectado 31 mar', 'Fin 31 mar')).toBe(
+      'Fin proyectado 31 mar',
+    )
+  })
+
+  it('usa el corto si el largo choca y el corto cabe', () => {
+    expect(textoFin(corte, 340, 'Fin proyectado 31 mar', 'Fin 31 mar')).toBe('Fin 31 mar')
+  })
+
+  it('no muestra nada si también choca el corto', () => {
+    expect(textoFin(corte, 290, 'Fin proyectado 31 mar', 'Fin 31 mar')).toBeNull()
+  })
+
+  it('sin etiqueta de corte siempre va el largo', () => {
+    expect(textoFin(null, 100, 'Fin proyectado 31 mar', 'Fin 31 mar')).toBe('Fin proyectado 31 mar')
   })
 })

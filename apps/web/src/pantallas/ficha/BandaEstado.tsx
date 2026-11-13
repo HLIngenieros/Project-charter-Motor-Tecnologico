@@ -134,15 +134,20 @@ export function BandaEstado({
         </div>
         {situacion && <Datos {...situacion} />}
         {(registrarCorte || acciones || selectorCorte || exportar) && (
-          <div className="ml-auto flex items-center gap-2">
+          // En celular, dos filas: «Corte» y «Exportar»; debajo, «Registrar corte» y el estado.
+          <div className="ml-auto flex items-center gap-2 max-sm:ml-0 max-sm:w-full max-sm:flex-wrap">
             {selectorCorte}
-            {exportar}
+            {exportar && <div className="max-sm:ml-auto">{exportar}</div>}
+            <div aria-hidden className="hidden max-sm:order-last max-sm:block max-sm:basis-full" />
             {registrarCorte && (
-              <Link to={registrarCorte} className={clasesBoton('primario', 'max-sm:px-3')}>
+              <Link
+                to={registrarCorte}
+                className={clasesBoton('primario', 'max-sm:order-last max-sm:flex-1')}
+              >
                 Registrar corte
               </Link>
             )}
-            {acciones}
+            {acciones && <div className="max-sm:order-last max-sm:ml-auto">{acciones}</div>}
           </div>
         )}
       </div>

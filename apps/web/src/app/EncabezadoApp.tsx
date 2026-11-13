@@ -13,7 +13,7 @@ export function EncabezadoApp({
   return (
     <header className="reticula text-white">
       <div className={`mx-auto flex h-16 ${ancho} items-center justify-between gap-4 px-4 sm:px-6`}>
-        <Link to="/" className="rounded-sello focus-visible:outline-white">
+        <Link to="/" className="shrink-0 rounded-sello focus-visible:outline-white">
           <Marca />
         </Link>
         {derecha && <div className="flex min-w-0 items-center gap-3 text-sm">{derecha}</div>}

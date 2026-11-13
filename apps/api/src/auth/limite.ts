@@ -2,6 +2,9 @@ import { ErrorApi } from '../errores'
 
 export const MAX_INTENTOS = 10
 export const VENTANA_MS = 15 * 60_000
+/** Registros por IP: holgado para una oficina que sale por una sola IP. */
+export const MAX_REGISTROS = 20
+export const VENTANA_REGISTRO_MS = 60 * 60_000
 
 /** Límite de intentos de login por correo normalizado, en memoria. */
 export class LimitePorCorreo {

@@ -128,7 +128,7 @@ export function SeccionEncabezado({
           placeholder="Agregar código"
           maximo={20}
           soloLectura={soloLectura}
-          className="font-cifra text-[0.8125rem] [&_input]:w-[14ch] [&_input]:text-[0.8125rem] [&_input]:text-texto-2"
+          className="font-cifra text-[0.8125rem] [&_input]:w-[16ch] [&_input]:text-[0.8125rem] [&_input]:text-texto-2"
         />
         {verArea && (
           <>

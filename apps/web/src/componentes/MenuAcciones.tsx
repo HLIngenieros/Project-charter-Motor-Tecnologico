@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 
 export interface Accion {
   etiqueta: string
@@ -20,8 +20,24 @@ function Puntos() {
   )
 }
 
-/** Botón «⋯» con un menú de acciones (teclado: flechas, Inicio, Fin, Escape). */
-export function MenuAcciones({ etiqueta, acciones }: { etiqueta: string; acciones: Accion[] }) {
+const BOTON_PUNTOS =
+  'flex size-9 items-center justify-center rounded-control text-texto-2 transition-colors hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento'
+
+/**
+ * Botón «⋯» con un menú de acciones (teclado: flechas, Inicio, Fin, Escape).
+ * `boton` y `claseBoton` cambian el disparador (p. ej. «Cuenta» en el encabezado).
+ */
+export function MenuAcciones({
+  etiqueta,
+  acciones,
+  boton: contenidoBoton,
+  claseBoton = BOTON_PUNTOS,
+}: {
+  etiqueta: string
+  acciones: Accion[]
+  boton?: ReactNode
+  claseBoton?: string
+}) {
   const idMenu = useId()
   const [abierto, setAbierto] = useState(false)
   const boton = useRef<HTMLButtonElement>(null)
@@ -78,9 +94,9 @@ export function MenuAcciones({ etiqueta, acciones }: { etiqueta: string; accione
             setAbierto(true)
           }
         }}
-        className="flex size-9 items-center justify-center rounded-control text-texto-2 transition-colors hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
+        className={claseBoton}
       >
-        <Puntos />
+        {contenidoBoton ?? <Puntos />}
       </button>
       <AnimatePresence>
         {abierto && (

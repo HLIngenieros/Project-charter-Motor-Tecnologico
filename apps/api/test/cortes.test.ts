@@ -9,6 +9,7 @@ import {
 } from '@charter/shared'
 import type { FastifyInstance } from 'fastify'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { corte as tablaCorte } from '../src/db/esquema'
 import { crearCharterPrueba, nuevaApp, sesionDe } from './ayudas'
 
 let app: FastifyInstance
@@ -94,6 +95,22 @@ describe('PUT /charters/:id/cortes/:fecha', () => {
     expect(c.pv).toBeCloseTo(esperado.pv, 10)
     expect(c.ev).toBeCloseTo(esperado.ev, 10)
     expect(c.desv).toBeCloseTo(esperado.desv, 10)
+  })
+
+  it('si otro crea el corte de esa fecha mientras se guarda, da 409 y no 500', async () => {
+    const id = await conCronograma()
+    // PGlite serializa las peticiones: la carrera de Postgres se simula metiendo el corte
+    // rival justo antes de la transacción.
+    const original = app.db.transaction.bind(app.db)
+    vi.spyOn(app.db, 'transaction').mockImplementationOnce(async (fn) => {
+      await app.db
+        .insert(tablaCorte)
+        .values({ id: 'rival', charterId: id, fecha: '2026-02-15', nota: '' })
+      return original(fn)
+    })
+    const r = await guardarCorte(id, '2026-02-15', { avances: pcts(1, 0.2) })
+    expect(r.statusCode).toBe(409)
+    expect(r.json().error.codigo).toBe('corte_simultaneo')
   })
 
   it('sobre una fecha con corte lo edita y recalcula', async () => {

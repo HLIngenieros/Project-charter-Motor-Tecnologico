@@ -15,6 +15,7 @@ import {
 import { and, asc, eq, inArray } from 'drizzle-orm'
 import { v7 } from 'uuid'
 import type { BaseDatos } from '../../db/conexion'
+import { esViolacionUnica } from '../../db/errores'
 import { actividad, avance, charter, corte, type FilaCharter } from '../../db/esquema'
 import { ErrorApi } from '../../errores'
 import { hoyISO } from '../../util/hoy'
@@ -187,6 +188,31 @@ export async function guardarCorte(
 
   const otros = todos.filter((c) => c.id !== nuevo.id)
   const totales = resumir(nuevo, [...otros, nuevo], reglas)
+  try {
+    await escribirCorte(db, fila.id, nuevo, totales, Boolean(existente))
+  } catch (error) {
+    // Dos cortes nuevos a la vez en la misma fecha: el segundo choca con el índice único.
+    if (esViolacionUnica(error)) {
+      throw new ErrorApi(
+        409,
+        'corte_simultaneo',
+        'Se registró otro corte en esa fecha al mismo tiempo. Recarga para verlo.',
+      )
+    }
+    throw error
+  }
+
+  return { corte: await detalleCorte(db, fila, fecha), creado: !existente }
+}
+
+async function escribirCorte(
+  db: BaseDatos,
+  charterId: string,
+  nuevo: CorteConFoto,
+  totales: CorteResumen,
+  existente: boolean,
+): Promise<void> {
+  const { fecha } = nuevo
   await db.transaction(async (tx) => {
     const valores = {
       nota: nuevo.nota,
@@ -198,7 +224,7 @@ export async function guardarCorte(
       await tx.update(corte).set(valores).where(eq(corte.id, nuevo.id))
       await tx.delete(avance).where(eq(avance.corteId, nuevo.id))
     } else {
-      await tx.insert(corte).values({ id: nuevo.id, charterId: fila.id, fecha, ...valores })
+      await tx.insert(corte).values({ id: nuevo.id, charterId, fecha, ...valores })
     }
     await tx.insert(avance).values(
       nuevo.foto.map((f) => ({
@@ -215,10 +241,8 @@ export async function guardarCorte(
     await tx
       .update(charter)
       .set({ actualizadoEn: new Date().toISOString() })
-      .where(eq(charter.id, fila.id))
+      .where(eq(charter.id, charterId))
   })
-
-  return { corte: await detalleCorte(db, fila, fecha), creado: !existente }
 }
 
 export async function eliminarCorte(
