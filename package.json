@@ -10,13 +10,15 @@
     "dev": "concurrently -n api,web -c blue,magenta \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
     "test": "npm test --workspaces --if-present",
     "build": "npm run build -w apps/api && npm run build -w apps/web",
-    "lint": "eslint . && npm run typecheck --workspaces --if-present",
+    "lint": "eslint . && npm run typecheck --workspaces --if-present && tsc -p e2e/tsconfig.json",
     "admin": "npm run admin -w apps/api --",
     "migrar": "npm run migrar -w apps/api",
-    "build:vercel": "npm run migrar && npm run build"
+    "build:vercel": "npm run migrar && npm run build",
+    "e2e": "playwright test"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.65.0",
     "@types/node": "^24.19.2",
     "concurrently": "^10.0.7",
     "eslint": "^9.39.5",

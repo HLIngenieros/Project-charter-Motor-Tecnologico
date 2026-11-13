@@ -47,3 +47,7 @@ data/*.db*
 # Impeccable: capturas de revisión (temporales)
 .impeccable/review/
 .playwright-mcp/
+
+# Pruebas E2E (Playwright)
+e2e/.resultados/
+playwright-report/

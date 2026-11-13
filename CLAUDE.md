@@ -104,7 +104,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - **Fase 4 cerrada (2026-11-10).** T4.5 cumplida con RF1 (2026-11-11).
 - **Fase 5 cerrada (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-10-fase-5-visualizacion-design.md`, plan en `docs/planes/fase-5.md`. `componentes/MiniCurvaS.tsx` la usan el portafolio y Registrar corte.
 - **Primer charter real:** RF1 · Radicación de facturas (Comité IA, eje Automatización; responsable Jorge Espinosa, patrocinador Área ID & TI). Redacción, listas y cronograma (25 actividades, 23 nov 2026 – 10 abr 2027) cargados el 2026-11-11 a partir de la reunión. Indicadores y riesgos propuestos esperan la Fase 6.
-- **T8.3 cerrada (2026-11-13). Siguiente:** T8.4 (E2E; agregar `@playwright/test`) y T8.5. Los `.docx` del Comité IA de la raíz quedan fuera del repo.
+- **T8.4 cerrada (2026-11-13). Siguiente:** T8.5 (publicar). E2E en `e2e/` (`playwright.config.ts` en la raíz). Los `.docx` del Comité IA de la raíz quedan fuera del repo.
 - **PC1 y AC1 (2026-11-13):** PC1 · Plataforma de Control Diario de Cantidades (eje Analítica & Datos, Jonathan Giraldo; amplía la app de horas hombre de ID & TI con la captura de cantidades) y AC1 · Asistente de consulta de especificaciones técnicas, de calidad y HSE (eje Gestión del Conocimiento, Juan Carlos Trujillo; un asistente por proyecto). Ficha completa propuesta y cargada a partir de las transcripciones; falta evaluarla con cada equipo.
 - **Parametrización y exportación cerradas (2026-11-11):** diseño en `docs/superpowers/specs/2026-11-11-parametrizacion-y-exportacion-design.md`, plan en `docs/planes/parametrizacion-exportacion.md`. Web: `pantallas/admin/` (`AreaAdmin` con pestañas como enlaces, `Parametrizacion`; `SoloAdmin` en las rutas), `MenuExportar` en la banda, `api/exportar.ts` y `pantallas/imprimir/` (`Imprimir` sin `Layout`, `CronogramaImpresion`, `imprimir.css`). La impresión reutiliza `SeccionCurvaS` con `estatica` y `ancho`.
 - **Despliegue en curso:** diseño en `docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md`, plan en `docs/planes/despliegue-vercel.md`. Tasks 1–6 hechas el 2026-11-11 (Postgres, API asíncrona, fecha de Bogotá, `CORREOS_PERMITIDOS`, adaptador y `vercel.json`). La Task 7 (Neon, Vercel, verificación, RF1 a Neon y documentación) queda para la Fase 8. Respaldo de la base SQLite y JSON de los 8 charters (RF1 incluido) en `Documents/Desarrollos/respaldo-projectcharter-2026-11-11/`; la base local de PGlite arrancó vacía: recargar RF1 antes de la Fase 6.
@@ -122,6 +122,7 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 ## Comandos
 
 - `npm run dev` (API 3100 + web 5173; base PGlite en `data/pglite`, o Postgres si hay `DATABASE_URL`) · `npm test` · `npm run lint` · `npm run build`.
+- `npm run e2e`: Playwright con API (`e2e/servidor.ts`, PGlite en memoria con Admin `admin.e2e@…`) y web propias en 3300 y 5300; reutiliza servidores ya levantados en esos puertos.
 - `npm run migrar` aplica migraciones y semilla a la base de `DATABASE_URL`; `npm run build:vercel` = migrar + build (lo usa Vercel).
 - Admin: registrar la cuenta y luego `npm run admin -- --promover <correo>` (`--quitar` lo retira).
 - Si Claude levanta `npm run dev` para verificar, al terminar debe matar **todo el árbol** (`concurrently` y `tsx watch`), no solo el proceso del puerto: un `tsx watch` huérfano relanza la API al cambiar el código y ocupa el 3100 (EADDRINUSE).
@@ -180,6 +181,8 @@ Memoria del proyecto para Claude. Mantenerla breve: si algo cambia, se edita la 
 - `tsx watch` del usuario relanza la API al cambiar el código: tras cambios de base, su `npm run dev` ya corre con lo nuevo (sirve para verificar sin levantar otro).
 - Con el `npm run dev` del usuario, la base PGlite está bloqueada: los datos se cargan por la API desde el navegador de Playwright (la cookie de `localhost` sirve en cualquier puerto) con `X-Requested-With: charter`.
 - El Tailwind del dev server puede no generar las clases de un archivo nuevo: revisar con `vite build --outDir <scratchpad>` + `vite preview`. `vite preview` fija la lista de archivos al arrancar: tras reconstruir, reiniciarlo (y matar el `node` hijo, no solo el envoltorio).
+
+- E2E: el radio `sr-only` de «Mis charters / Todos» no se puede `check()`; se hace clic en su texto. La banda y el resumen del corte no tienen espacio entre etiqueta y cifra en `textContent`: comprobar con `/Real\s*70,0 %/`. Las fechas de las pruebas van en el pasado para que el planeado no dependa del día.
 
 ## Glosario
 

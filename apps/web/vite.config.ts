@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
-    proxy: { '/api': 'http://localhost:3100' },
+    // Las pruebas E2E apuntan a su propia API con API_URL.
+    proxy: { '/api': process.env.API_URL ?? 'http://localhost:3100' },
   },
   test: {
     environment: 'jsdom',
