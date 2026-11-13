@@ -202,7 +202,8 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 - **Sesión:** token aleatorio en una cookie `charter_sesion` con `HttpOnly`, `SameSite=Lax`, `Path=/` y `Secure` cuando corre en HTTPS. En la base se guarda solo el hash del token. La sesión dura 7 días y se renueva con el uso *(criterio técnico)*. Logout, desactivación y cambio de clave borran las sesiones.
 - **CSRF:** la web y la API se sirven en el mismo origen. Con `SameSite=Lax`, y como las mutaciones exigen `Content-Type: application/json` y una cabecera `X-Requested-With`, no hace falta un token adicional.
 - **Fuerza bruta:** se limita el login a 10 intentos por 15 minutos por correo y por IP, y el registro a 20 por hora por IP (`@fastify/rate-limit`; 429 `demasiados_intentos`).
-- **Cabeceras:** se usa `@fastify/helmet` con una política CSP propia (las fuentes son locales y no se usan CDN).
+- **Cabeceras:** las pone Vercel desde `vercel.json` para toda respuesta: CSP propia (`'self'`; estilos en línea para Motion y la impresión; fuentes `data:` porque Vite incrusta los subconjuntos pequeños), HSTS, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy` y `Permissions-Policy`. La API agrega `Cache-Control: no-store` y `nosniff`. Los archivos con hash de `/assets` se guardan un año.
+- **Sesiones vencidas:** se borran al usarlas y, las de todos, cada vez que se crea una sesión.
 - **Registro:** el dominio se valida en la API, no solo en la web. Un correo ya registrado da un error genérico.
 
 ## 9. Frontend
@@ -242,19 +243,20 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 
 ## 10. Despliegue
 
-### Ahora: local
+### Producción: Vercel + Neon *(2026-11-13)*
+
+- **Link:** https://project-charter-flame.vercel.app (proyecto `grupo-hl/project-charter`, plan Hobby, región `iad1`). Base en Neon (`us-east-1`, cadena *pooled*).
+- **Despliegue:** cada push a `main` del repo de GitHub despliega solo; cada rama tiene su vista previa. También se puede desplegar desde el PC con `vercel deploy --prod` (sube solo lo que deja `.vercelignore`, una lista blanca).
+- **Build:** `npm run build:vercel` = `npm run migrar` (migraciones y semilla en Neon) + `npm run build`. La web sale de `apps/web/dist`; `/api/*` va a la función `api/index.js`, que reexporta `apps/api/dist/vercel.js` (arranca Fastify una vez por instancia).
+- **Variables (Production):** `DATABASE_URL` (secreta, con `sslmode=verify-full`), `COOKIE_SEGURA=true`, `CONFIAR_PROXY=true`, `DOMINIO_PERMITIDO=hlingenieros.com` y `CORREOS_PERMITIDOS` (si no está vacía, solo esos correos se registran). Se cambian con `vercel env` o en el panel y requieren volver a desplegar.
+- **Admin:** `DATABASE_URL=<neon> npm run admin -- --promover <correo>` desde el PC.
+- **Respaldo:** el historial de Neon (restauración a un punto en el tiempo).
+
+### Desarrollo: local
 
 - `npm install` y `npm run dev` levantan la API (puerto 3100) y Vite (5173) con proxy de `/api`.
-- La base queda en `data/charters.db` y las migraciones se aplican al arrancar.
+- La base es PGlite en `data/pglite` (o Postgres si hay `DATABASE_URL` en el `.env` de la raíz). Las migraciones se aplican al arrancar.
 - El perfil Admin se otorga con `npm run admin -- --promover <correo>` (la cuenta debe estar registrada) y se retira con `--quitar`.
-
-### Después: servidor interno
-
-- `npm run build` genera la web estática, y Fastify la sirve junto con la API en **un solo proceso y un solo puerto**.
-- Se configura con un `.env` en la raíz (plantilla en `.env.ejemplo`; la API y el CLI lo cargan al arrancar): `PUERTO`, `DATABASE_URL` (vacío = PGlite en `data/pglite`), `DOMINIO_PERMITIDO=hlingenieros.com`, `COOKIE_SEGURA` y `CONFIAR_PROXY`. Detrás de IIS, `CONFIAR_PROXY=true` para que el límite de intentos use la IP real del cliente y no la del proxy.
-- En Windows Server se corre como servicio (NSSM o PM2) detrás de IIS o de otro proxy con HTTPS.
-- **Respaldo:** en producción, el historial de Neon.
-- **Migración a PostgreSQL:** solo si el uso lo exige. Drizzle lo permite cambiando el dialecto y regenerando las migraciones.
 
 ## 11. Calidad
 
@@ -290,3 +292,4 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 | 2026-11-09 | Cortes pasados usan su foto; situación actual y curva planeada usan la línea base vigente | Claude |
 | 2026-11-09 | Portafolio muestra la situación al último corte, con aviso si tiene más de 14 días | Claude |
 | 2026-11-09 | Charter cerrado o cancelado queda en solo lectura; el dueño lo puede reabrir | Claude |
+| 2026-11-13 | Producción en Vercel + Neon; cabeceras en `vercel.json`, purga de sesiones al crear una y pantallas con carga diferida | Usuario / Claude |

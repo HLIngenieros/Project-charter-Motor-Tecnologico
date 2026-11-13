@@ -73,7 +73,7 @@ Definición completa en [docs/arquitectura.md](docs/arquitectura.md). Resumen:
 |---|---|
 | Frontend | React + Vite + TypeScript + Tailwind CSS |
 | Animación | Motion (Framer Motion) |
-| Gráficas | Apache ECharts (curva S, Gantt, indicadores) |
+| Gráficas | SVG propio animado con Motion (curva S, Gantt, matriz de riesgos) |
 | Backend | Node + Fastify + Drizzle ORM |
 | Base de datos | PostgreSQL con Drizzle: Neon en producción, PGlite en desarrollo |
 | Autenticación | Usuario + contraseña con hash (argon2), sesión en cookie httpOnly |
@@ -99,7 +99,7 @@ ProjectCharter/
 
 - Registro libre con dominio `@hlingenieros.com`, sin confirmación por correo.
 - Sin aprobación de charters ni congelamiento de la línea base: cada corte guarda una foto de pesos y fechas.
-- Despliegue local por ahora; después, servidor interno.
+- Publicado en Vercel con la base en Neon: https://project-charter-flame.vercel.app. Cada push a `main` despliega solo. Detalle en [docs/arquitectura.md §10](docs/arquitectura.md#10-despliegue).
 
 ## 9. Historial
 

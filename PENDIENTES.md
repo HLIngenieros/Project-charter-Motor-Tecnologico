@@ -28,7 +28,7 @@
 
 ### Pendientes de la revisión de la Fase 2
 
-- [ ] Límite de intentos por IP también en `POST /auth/registro`.
+- [x] Límite de intentos por IP también en `POST /auth/registro` (20 por hora, T8.3) — 2026-11-13
 - [x] Motor: `pct` no numérico (o no finito) cuenta como 0 y `construirArbol` rechaza ids repetidos (`id_duplicado`) — 2026-11-09
 - [x] La prueba de zona horaria ya puede fallar: `hoyISO` usa `America/Bogota` y las pruebas de la API corren con `TZ=UTC` — 2026-11-11
 - [x] Web: un error que no sea 401 en `/auth/yo` (API caída) muestra un aviso de conexión en vez de mandar a `/entrar`; `JSON.parse` protegido en `api/cliente.ts` — 2026-11-09
@@ -36,7 +36,7 @@
 - [x] Regla de estado por brecha en puntos (10 / 25 / 50) con estado `vencida` y conteo de vencidas en agrupadoras (§4.4) — 2026-11-09
 - [x] Actualizar la demo del semáforo en el [resumen visual](https://claude.ai/artifact/NX8tLwQ1npVZoC9NcrffBC) con la regla por brecha — 2026-11-09
 - [x] T5.4: tonos del semáforo con prueba de contraste (naranja `#de781c`; amarillo con borde en la curva) — 2026-11-10
-- Seguridad y despliegue (helmet, argon2, purga de sesiones, dominio en la web, bundle) quedaron en T8.5; cerrar sesiones al desactivar, en T7.1.
+- Seguridad y despliegue cerrados en T8.5 (2026-11-13): cabeceras en `vercel.json` (en vez de helmet), argon2id, purga de sesiones vencidas al crear una y bundle dividido por pantallas. El dominio no se expone a la web: solo es el ejemplo del campo y la API lo valida.
 
 ## Fase 3 · Charter básico
 
@@ -90,7 +90,7 @@ Diseño: [docs/superpowers/specs/2026-11-12-fase-7-admin-design.md](docs/superpo
 - [x] T8.2 · Charters de prueba (cumplida con RF1, PC1 y AC1, reales del Comité IA) — 2026-11-13
 - [x] T8.3 · Pulido responsive y de movimiento (360, 768 y 1440 px; movimiento reducido; foco) — 2026-11-13
 - [x] T8.4 · Pruebas E2E (Playwright: flujo completo y Admin en solo lectura; `npm run e2e`) — 2026-11-13
-- [ ] T8.5 · Build de producción y despliegue → **Task 7 del plan de Vercel + Neon** (decisión del usuario: se publica con todo terminado)
+- [x] T8.5 · Build de producción y despliegue en https://project-charter-flame.vercel.app (Vercel + Neon), con RF1, PC1 y AC1 copiados — 2026-11-13
 
 ## Despliegue en Vercel + Neon
 
@@ -103,9 +103,9 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 - [x] Task 4 · Cronograma y cortes asíncronos (versión dentro de la transacción)
 - [x] Task 5 · Fecha de Bogotá y `CORREOS_PERMITIDOS` (cierra la prueba de zona horaria) — 2026-11-11
 - [x] Task 6 · Adaptador (`apps/api/src/vercel.ts`, `api/index.js`), `vercel.json`, `npm run migrar` y Node 24 — 2026-11-11
-- [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación, RF1 y documentación) → **en la Fase 8 (T8.5)**
+- [x] Task 7 · Publicación (Neon, Vercel, verificación, RF1, PC1 y AC1 y documentación) — 2026-11-13
 
-**Próxima tarea sugerida:** T8.5 (publicar: Task 7 del plan de Vercel + Neon; el usuario crea las cuentas de Neon y Vercel). Detalles opcionales vistos en T8.4, sin decidir: en la ficha en solo lectura los campos vacíos muestran sus ayudas («Agregar código», «¿Quién lo lidera?») en vez de «—»; el índice dice «Los cambios se guardan solos»; y la ruta dice «Mis charters» aunque el Admin llegue desde «Todos». Los `.docx` del Comité IA en la raíz no van al repo.
+**v1.0 publicada (2026-11-13).** Pendiente del usuario: push desde GitHub Desktop (primer despliegue automático: revisar que quede «Ready» en Vercel), activar 2FA en Vercel y cambiar la clave de `neondb_owner` en Neon (quedó en el chat) y actualizar `DATABASE_URL` en Vercel. Para abrir el registro a más personas: vaciar o ampliar `CORREOS_PERMITIDOS` y volver a desplegar. Detalles opcionales vistos en T8.4, sin decidir: en la ficha en solo lectura los campos vacíos muestran sus ayudas («Agregar código», «¿Quién lo lidera?») en vez de «—»; el índice dice «Los cambios se guardan solos»; y la ruta dice «Mis charters» aunque el Admin llegue desde «Todos». Los `.docx` del Comité IA en la raíz no van al repo.
 
 ## Registro de sesiones
 
@@ -141,3 +141,4 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 | 2026-11-13 | Cronograma legible                | El nombre de la actividad en la fila del Gantt pasa a 2 líneas (antes se truncaba) y la columna Estado sube a 132 px. El detalle de la actividad es una tarjeta (borde, sombra, encabezado «Actividad 1.2» y cerrar) con Actividad y Entregable a todo el ancho en `textarea` que crecen con el texto (`field-sizing:content`); en solo lectura, nombre como título y entregable como párrafo. T8.2 se da por cumplida con RF1, PC1 y AC1. 233 pruebas web, lint y tipos en verde; navegador a 1440 y 390 px.                                                                                                                                                                                                                                                                                               |
 | 2026-11-13 | T8.3 · Pulido responsive          | Menores: límite de 20 registros por IP por hora en `POST /auth/registro` (429) y 409 `corte_simultaneo` cuando dos cortes nuevos chocan en el índice único (antes 500). Banda de la ficha en celular en dos filas («Corte» y «Exportar»; «Registrar corte» y estado) y menú de «Corte» anclado a la izquierda bajo 1024 px; buscador del portafolio hasta 400 px. En la revisión: encabezado en celular con menú «Cuenta» (Admin, clave y salir no cabían a 360 px), etiqueta del fin en la curva S que se acorta u omite si choca con la del corte (`textoFin`), bloque `prefers-reduced-motion` de `tokens.css` reparado (las líneas salían punteadas) y campo de código más ancho. Revisión a 360, 768 y 1440 px sin desbordes y foco visible con Tab. API 154 y web 237 pruebas; lint y build en verde. |
 | 2026-11-13 | T8.4 · Pruebas E2E                | `@playwright/test` 1.65 con su Chromium. `npm run e2e` levanta una API propia (`e2e/servidor.ts`: PGlite en memoria, cuenta Admin creada al arrancar, puerto 3300) y la web en el 5300 (`API_URL` en el proxy de Vite), sin tocar el `npm run dev`. Dos pruebas: registro → charter → cronograma (2 hojas con fechas pasadas, planeado 100 %) → recarga → corte (70 %, brecha 30 pts) → banda, curva S, historial y portafolio; y Admin que encuentra en «Todos» un charter ajeno y lo ve en solo lectura (un tercero recibe 404 y el PATCH del Admin, 403). Estables en 3 repeticiones; lint (con `tsc` de `e2e/`) y 237 pruebas web en verde                                                                                                                                                              |
+| 2026-11-13 | T8.5 · Publicación                | Seguridad: cabeceras (CSP, HSTS, marcos, nosniff) en `vercel.json` y `no-store` en la API; purga de sesiones vencidas al crear una; pantallas secundarias con `lazy` y librerías en archivos aparte (código propio inicial 30 kB gzip, antes 232 kB todo junto). Vercel `grupo-hl/project-charter` (CLI y repo de GitHub conectados; `.vercelignore` en lista blanca) y Neon migrado; la CSP necesitó `font-src data:`. Verificado: salud, 404 JSON, SPA en rutas profundas, cabeceras, consola limpia, registro limitado a `CORREOS_PERMITIDOS`. Usuario Admin en producción y RF1, PC1 y AC1 copiados de la base local (conteos verificados). CLIs de Vercel y Neon, plugins y MCP instalados para Claude Code.                                                                                           |
