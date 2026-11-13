@@ -51,3 +51,6 @@ data/*.db*
 # Pruebas E2E (Playwright)
 e2e/.resultados/
 playwright-report/
+
+# Vercel (proyecto vinculado; .env.local ya lo cubre .env.*)
+.vercel

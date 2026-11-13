@@ -1,0 +1,17 @@
+# Lista blanca: a Vercel solo sube lo necesario para compilar y servir.
+# Quedan fuera documentos, referencias, datos locales y secretos (.env).
+/*
+!/api
+!/apps
+!/packages
+!/package.json
+!/package-lock.json
+!/tsconfig.base.json
+!/vercel.json
+
+node_modules
+dist
+coverage
+test
+*.test.ts
+*.test.tsx
