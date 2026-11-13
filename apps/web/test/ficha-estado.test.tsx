@@ -153,6 +153,8 @@ describe('estado del charter', () => {
     abrir({
       detalle: {
         ...base,
+        codigo: null,
+        responsable: '',
         propietario: { id: 'u2', nombre: 'Beto Ruiz' },
         permisos: { editar: false, reabrir: false },
       },
@@ -160,6 +162,23 @@ describe('estado del charter', () => {
     expect(await screen.findByText('Charter de Beto Ruiz · solo lectura')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /^Estado del charter/ })).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Responsable')).not.toBeInTheDocument()
+    // Los vacíos dicen «—», no la ayuda para escribir; y no se habla de guardar.
+    expect(screen.queryByText('Agregar código')).not.toBeInTheDocument()
+    expect(screen.queryByText('¿Quién lo lidera?')).not.toBeInTheDocument()
+    expect(screen.queryByText('Los cambios se guardan solos')).not.toBeInTheDocument()
+    // Solo el Admin llega al charter de otro, desde «Todos»: la ruta vuelve ahí.
+    const ruta = within(screen.getByRole('navigation', { name: 'Ruta' }))
+    expect(ruta.getByRole('link', { name: 'Todos los charters' })).toHaveAttribute(
+      'href',
+      '/?ver=todos',
+    )
+  })
+
+  it('el charter propio dice «Mis charters» en la ruta y que se guarda solo', async () => {
+    abrir()
+    const ruta = within(await screen.findByRole('navigation', { name: 'Ruta' }))
+    expect(ruta.getByRole('link', { name: 'Mis charters' })).toHaveAttribute('href', '/')
+    expect(screen.getAllByText('Los cambios se guardan solos').length).toBeGreaterThan(0)
   })
 
   it('eliminar pide confirmación y vuelve al portafolio', async () => {

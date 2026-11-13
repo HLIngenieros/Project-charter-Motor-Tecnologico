@@ -93,7 +93,10 @@ export function BandaEstado({
   selectorCorte,
   exportar,
   acciones,
+  volverA = { texto: 'Mis charters', ruta: '/' },
 }: {
+  /** Primer paso de la ruta: el portafolio del que se llegó. */
+  volverA?: { texto: string; ruta: string }
   /** Elige en qué corte se ve la ficha. */
   selectorCorte?: ReactNode
   /** Menú «Exportar»; va antes de «Registrar corte». */
@@ -117,10 +120,10 @@ export function BandaEstado({
         <div className="min-w-0">
           <nav aria-label="Ruta" className="text-xs text-texto-2">
             <Link
-              to="/"
+              to={volverA.ruta}
               className="rounded-sm hover:text-institucional hover:underline focus-visible:outline-2 focus-visible:outline-acento"
             >
-              Mis charters
+              {volverA.texto}
             </Link>
             <span aria-hidden> / </span>
             <span aria-current="page">{nombre}</span>

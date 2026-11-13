@@ -101,7 +101,8 @@ export function TextoEditable({
     const Etiqueta = multilinea ? 'p' : 'span'
     return (
       <Etiqueta className={`${ESTILO[como]} whitespace-pre-line ${className}`}>
-        {valor || <span className="text-texto-2">{placeholder ?? '—'}</span>}
+        {/* El placeholder invita a escribir: en solo lectura un vacío es «—». */}
+        {valor || <span className="text-texto-2">—</span>}
       </Etiqueta>
     )
   }

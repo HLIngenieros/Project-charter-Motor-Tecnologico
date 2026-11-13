@@ -46,9 +46,11 @@ function useReloj(): number {
   return ahora
 }
 
-function EstadoGuardado() {
+/** En solo lectura no se habla de guardar, salvo un guardado en curso o fallido de antes. */
+function EstadoGuardado({ soloLectura }: { soloLectura: boolean }) {
   const { estado, ultimoGuardado, error, reintentar } = useGuardado()
   const ahora = useReloj()
+  if (soloLectura && estado !== 'error' && estado !== 'guardando') return null
   if (estado === 'error')
     return (
       <p role="alert" className="text-[0.78125rem] font-medium text-alerta-texto">
@@ -78,7 +80,13 @@ function EstadoGuardado() {
   )
 }
 
-export function IndiceFicha({ secciones }: { secciones: SeccionIndice[] }) {
+export function IndiceFicha({
+  secciones,
+  soloLectura,
+}: {
+  secciones: SeccionIndice[]
+  soloLectura: boolean
+}) {
   const visible = useSeccionVisible(secciones.map((s) => s.id))
   return (
     <nav
@@ -114,18 +122,18 @@ export function IndiceFicha({ secciones }: { secciones: SeccionIndice[] }) {
           </a>
         )
       })}
-      <div className="mt-4 px-3 max-lg:hidden">
-        <EstadoGuardado />
+      <div className="mt-4 px-3 empty:hidden max-lg:hidden">
+        <EstadoGuardado soloLectura={soloLectura} />
       </div>
     </nav>
   )
 }
 
 /** Estado de guardado para pantallas angostas, donde el índice es una fila. */
-export function EstadoGuardadoMovil() {
+export function EstadoGuardadoMovil({ soloLectura }: { soloLectura: boolean }) {
   return (
-    <div className="mb-3 lg:hidden">
-      <EstadoGuardado />
+    <div className="mb-3 empty:hidden lg:hidden">
+      <EstadoGuardado soloLectura={soloLectura} />
     </div>
   )
 }

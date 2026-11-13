@@ -157,6 +157,8 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
         arriba={
           <BandaEstado
             nombre={charter.nombre}
+            // Al charter de otro solo llega el Admin, desde la vista «Todos».
+            volverA={esDueno ? undefined : { texto: 'Todos los charters', ruta: '/?ver=todos' }}
             situacion={
               vista.arbol.length > 0
                 ? {
@@ -192,6 +194,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
       >
         <div className="grid gap-8 lg:grid-cols-[216px_minmax(0,1fr)]">
           <IndiceFicha
+            soloLectura={soloLectura}
             secciones={secciones(
               charter,
               borrador.cargando ? undefined : borrador.acts.length,
@@ -219,7 +222,7 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
               </Aviso>
             )}
             {aviso}
-            <EstadoGuardadoMovil />
+            <EstadoGuardadoMovil soloLectura={soloLectura} />
             {/* Al pasar a solo lectura o volver, los campos se rehacen desde los datos de la API. */}
             <Fragment key={soloLectura ? 'lectura' : 'edicion'}>
               <SeccionEncabezado
