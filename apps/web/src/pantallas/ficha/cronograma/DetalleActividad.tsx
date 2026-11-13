@@ -13,6 +13,14 @@ const ENTRADA =
 
 const MAX_RESPONSABLES = 5
 
+/** Campo de texto que crece con su contenido: nombres y entregables se leen completos. */
+const AREA = 'resize-none py-1.5 text-[0.9375rem] leading-relaxed [field-sizing:content]'
+
+/** La tarjeta se separa de las filas para leerse como una ficha de la actividad. */
+const CONTENEDOR = 'border-t border-linea-2 bg-fondo/60 px-3 py-3 sm:pr-4 sm:pl-[70px]'
+const TARJETA =
+  'max-w-5xl rounded-tarjeta border border-linea bg-superficie px-4 py-3.5 shadow-flota sm:px-5'
+
 function Etiqueta({
   texto,
   children,
@@ -78,7 +86,7 @@ export function DetalleActividad({
   enfocar: boolean
   acciones: AccionesDetalle
 }) {
-  const nombre = useRef<HTMLInputElement>(null)
+  const nombre = useRef<HTMLTextAreaElement>(null)
   const [peso, setPeso] = useState(pesoATexto(nodo.peso))
   const [nuevoResp, setNuevoResp] = useState('')
   const responsables = nodo.responsables ?? []
@@ -99,7 +107,7 @@ export function DetalleActividad({
     else if (p !== (nodo.peso ?? null)) acciones.aplicar({ peso: p })
   }
 
-  const teclaNombre = (e: KeyboardEvent<HTMLInputElement>) => {
+  const teclaNombre = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       acciones.agregarDebajo()
@@ -135,156 +143,201 @@ export function DetalleActividad({
     </dl>
   )
 
+  const cabecera = (
+    <div className="col-span-full flex items-center gap-2">
+      <span className="text-xs font-semibold tracking-wide text-texto-2 uppercase">
+        {`${nodo.esHoja ? 'Actividad' : 'Agrupadora'} ${nodo.item}`}
+      </span>
+      <button
+        type="button"
+        aria-label="Cerrar detalle"
+        onClick={acciones.cerrar}
+        className="ml-auto flex rounded-control p-1.5 text-texto-2 hover:bg-fondo hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.25"
+          strokeLinecap="round"
+          aria-hidden
+        >
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  )
+
   if (soloLectura) {
     return (
-      <div className="grid gap-3 border-t border-linea-2 bg-fondo/60 px-4 py-3.5 sm:pl-[78px]">
-        <dl className="grid gap-3 sm:grid-cols-4">
-          <Dato texto="Actividad" valor={nodo.nombre || 'Sin nombre'} />
-          <Dato texto="Entregable" valor={nodo.entregable || 'Sin entregable'} />
-          <Dato texto="Responsables" valor={responsables.join(', ') || 'Sin responsable'} />
-          <Dato
-            texto="Fechas"
-            valor={
-              nodo.inicio && nodo.fin
-                ? `${fechaCorta(nodo.inicio)} – ${fechaCorta(nodo.fin)}`
-                : 'Sin fechas'
-            }
-          />
-        </dl>
-        {calculados}
+      <div className={CONTENEDOR}>
+        <div className={`${TARJETA} grid gap-4`}>
+          {cabecera}
+          <h3 className="col-span-full font-titulo text-base leading-snug font-semibold break-words text-tinta">
+            {nodo.nombre || 'Sin nombre'}
+          </h3>
+          <div className="col-span-full flex flex-col gap-1">
+            <span className="text-xs font-semibold text-texto-2">Entregable</span>
+            <p className="text-[0.9375rem] leading-relaxed break-words whitespace-pre-line text-texto">
+              {nodo.entregable || 'Sin entregable'}
+            </p>
+          </div>
+          <dl className="col-span-full grid gap-3 sm:grid-cols-2">
+            <div className="flex flex-col gap-0.5">
+              <dt className="text-xs font-semibold text-texto-2">Responsables</dt>
+              <dd className="text-sm text-tinta">{responsables.join(', ') || 'Sin responsable'}</dd>
+            </div>
+            <Dato
+              texto="Fechas"
+              valor={
+                nodo.inicio && nodo.fin
+                  ? `${fechaCorta(nodo.inicio)} – ${fechaCorta(nodo.fin)}`
+                  : 'Sin fechas'
+              }
+            />
+          </dl>
+          {calculados}
+        </div>
       </div>
     )
   }
 
   return (
-    <div
-      role="group"
-      aria-label={`Detalle de ${nodo.item}`}
-      className="grid grid-cols-2 gap-3 border-t border-linea-2 bg-fondo/60 px-4 py-3.5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_96px_150px_150px] sm:pl-[78px]"
-    >
-      <Etiqueta texto="Actividad" className="col-span-2 sm:col-span-1">
-        <input
-          ref={nombre}
-          className={ENTRADA}
-          value={nodo.nombre}
-          maxLength={300}
-          placeholder="Nombre de la actividad"
-          onChange={(e) => acciones.aplicar({ nombre: e.target.value })}
-          onKeyDown={teclaNombre}
-        />
-      </Etiqueta>
-      <Etiqueta texto="Entregable" className="col-span-2 sm:col-span-1">
-        <input
-          className={ENTRADA}
-          value={nodo.entregable ?? ''}
-          maxLength={1000}
-          placeholder="Sin entregable"
-          onChange={(e) => acciones.aplicar({ entregable: e.target.value || null })}
-        />
-      </Etiqueta>
-      {nodo.esHoja ? (
-        <>
-          <Etiqueta texto={resultado?.pesoAuto ? 'Peso (%) · auto' : 'Peso (%)'}>
-            <input
-              className={`${ENTRADA} text-right font-mono`}
-              inputMode="decimal"
-              title={resultado?.pesoAuto ? 'Peso repartido automáticamente' : undefined}
-              placeholder={resultado?.pesoAuto ? pesoATexto(resultado.peso) : undefined}
-              value={peso}
-              onChange={(e) => setPeso(e.target.value)}
-              onBlur={confirmarPeso}
-              onKeyDown={(e) => e.key === 'Enter' && confirmarPeso()}
-            />
-          </Etiqueta>
-          <Etiqueta texto="Inicio">
-            <input
-              type="date"
-              className={ENTRADA}
-              value={nodo.inicio ?? ''}
-              onChange={(e) =>
-                acciones.aplicar({ inicio: fechaValida(e.target.value) ? e.target.value : null })
-              }
-            />
-          </Etiqueta>
-          <Etiqueta texto="Fin">
-            <input
-              type="date"
-              className={ENTRADA}
-              value={nodo.fin ?? ''}
-              onChange={(e) =>
-                acciones.aplicar({ fin: fechaValida(e.target.value) ? e.target.value : null })
-              }
-            />
-          </Etiqueta>
-        </>
-      ) : (
-        <p className="col-span-2 self-end pb-2 text-xs text-texto-2 sm:col-span-3">
-          Peso y fechas se calculan con sus actividades.
-        </p>
-      )}
-
-      <div className="col-span-full flex flex-col gap-1">
-        <span id={`resp-${nodo.id}`} className="text-xs font-semibold text-texto-2">
-          Responsables
-        </span>
-        <div
-          aria-labelledby={`resp-${nodo.id}`}
-          className="flex min-h-9 flex-wrap items-center gap-1.5 rounded-control border border-linea bg-superficie px-2 py-1"
-        >
-          {responsables.map((nombreResp, i) => (
-            <span
-              key={`${nombreResp}-${i}`}
-              className="inline-flex items-center gap-1 rounded-full bg-fondo px-2 py-0.5 text-xs font-semibold text-tinta"
-            >
-              {nombreResp}
-              <button
-                type="button"
-                aria-label={`Quitar ${nombreResp}`}
-                onClick={() =>
-                  acciones.aplicar({ responsables: responsables.filter((_, j) => j !== i) })
+    <div className={CONTENEDOR}>
+      <div
+        role="group"
+        aria-label={`Detalle de ${nodo.item}`}
+        className={`${TARJETA} grid grid-cols-2 gap-3 sm:grid-cols-[96px_160px_160px_minmax(0,1fr)]`}
+      >
+        {cabecera}
+        <Etiqueta texto="Actividad" className="col-span-full">
+          <textarea
+            ref={nombre}
+            rows={1}
+            className={`${ENTRADA} ${AREA} font-semibold`}
+            value={nodo.nombre}
+            maxLength={300}
+            placeholder="Nombre de la actividad"
+            onChange={(e) => acciones.aplicar({ nombre: e.target.value.replace(/\n/g, ' ') })}
+            onKeyDown={teclaNombre}
+          />
+        </Etiqueta>
+        <Etiqueta texto="Entregable" className="col-span-full">
+          <textarea
+            rows={1}
+            className={`${ENTRADA} ${AREA}`}
+            value={nodo.entregable ?? ''}
+            maxLength={1000}
+            placeholder="Sin entregable"
+            onChange={(e) => acciones.aplicar({ entregable: e.target.value || null })}
+          />
+        </Etiqueta>
+        {nodo.esHoja ? (
+          <>
+            <Etiqueta texto={resultado?.pesoAuto ? 'Peso (%) · auto' : 'Peso (%)'}>
+              <input
+                className={`${ENTRADA} text-right font-mono`}
+                inputMode="decimal"
+                title={resultado?.pesoAuto ? 'Peso repartido automáticamente' : undefined}
+                placeholder={resultado?.pesoAuto ? pesoATexto(resultado.peso) : undefined}
+                value={peso}
+                onChange={(e) => setPeso(e.target.value)}
+                onBlur={confirmarPeso}
+                onKeyDown={(e) => e.key === 'Enter' && confirmarPeso()}
+              />
+            </Etiqueta>
+            <Etiqueta texto="Inicio">
+              <input
+                type="date"
+                className={ENTRADA}
+                value={nodo.inicio ?? ''}
+                onChange={(e) =>
+                  acciones.aplicar({ inicio: fechaValida(e.target.value) ? e.target.value : null })
                 }
-                className="flex rounded-full p-0.5 text-texto-2 hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
+              />
+            </Etiqueta>
+            <Etiqueta texto="Fin">
+              <input
+                type="date"
+                className={ENTRADA}
+                value={nodo.fin ?? ''}
+                onChange={(e) =>
+                  acciones.aplicar({ fin: fechaValida(e.target.value) ? e.target.value : null })
+                }
+              />
+            </Etiqueta>
+          </>
+        ) : (
+          <p className="col-span-full pb-1 text-xs text-texto-2">
+            Peso y fechas se calculan con sus actividades.
+          </p>
+        )}
+
+        <div className="col-span-full flex flex-col gap-1">
+          <span id={`resp-${nodo.id}`} className="text-xs font-semibold text-texto-2">
+            Responsables
+          </span>
+          <div
+            aria-labelledby={`resp-${nodo.id}`}
+            className="flex min-h-9 flex-wrap items-center gap-1.5 rounded-control border border-linea bg-superficie px-2 py-1"
+          >
+            {responsables.map((nombreResp, i) => (
+              <span
+                key={`${nombreResp}-${i}`}
+                className="inline-flex items-center gap-1 rounded-full bg-fondo px-2 py-0.5 text-xs font-semibold text-tinta"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="12"
-                  height="12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  aria-hidden
+                {nombreResp}
+                <button
+                  type="button"
+                  aria-label={`Quitar ${nombreResp}`}
+                  onClick={() =>
+                    acciones.aplicar({ responsables: responsables.filter((_, j) => j !== i) })
+                  }
+                  className="flex rounded-full p-0.5 text-texto-2 hover:text-tinta focus-visible:outline-2 focus-visible:outline-acento"
                 >
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </span>
-          ))}
-          {responsables.length < MAX_RESPONSABLES && (
-            <input
-              aria-label="Agregar responsable"
-              placeholder="Agregar"
-              value={nuevoResp}
-              onChange={(e) => setNuevoResp(e.target.value)}
-              onKeyDown={teclaResp}
-              className="min-w-24 flex-1 bg-transparent px-1 text-sm text-tinta outline-none"
-            />
-          )}
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="12"
+                    height="12"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    aria-hidden
+                  >
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </span>
+            ))}
+            {responsables.length < MAX_RESPONSABLES && (
+              <input
+                aria-label="Agregar responsable"
+                placeholder="Agregar"
+                value={nuevoResp}
+                onChange={(e) => setNuevoResp(e.target.value)}
+                onKeyDown={teclaResp}
+                className="min-w-24 flex-1 bg-transparent px-1 text-sm text-tinta outline-none"
+              />
+            )}
+          </div>
         </div>
-      </div>
 
-      {calculados}
+        {calculados}
 
-      <div className="col-span-full flex flex-wrap gap-2">
-        <Boton variante="secundario" onClick={acciones.agregarDebajo}>
-          Agregar debajo
-        </Boton>
-        <Boton variante="fantasma" onClick={acciones.eliminar} className="text-alerta-texto">
-          Eliminar actividad
-        </Boton>
-        <span className="ml-auto self-center text-xs text-texto-2 max-sm:hidden">
-          Enter agrega debajo · Tab sangra · Mayús + Tab saca de nivel
-        </span>
+        <div className="col-span-full flex flex-wrap gap-2">
+          <Boton variante="secundario" onClick={acciones.agregarDebajo}>
+            Agregar debajo
+          </Boton>
+          <Boton variante="fantasma" onClick={acciones.eliminar} className="text-alerta-texto">
+            Eliminar actividad
+          </Boton>
+          <span className="ml-auto self-center text-xs text-texto-2 max-sm:hidden">
+            Enter agrega debajo · Tab sangra · Mayús + Tab saca de nivel
+          </span>
+        </div>
       </div>
     </div>
   )

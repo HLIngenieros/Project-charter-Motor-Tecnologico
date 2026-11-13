@@ -8,7 +8,7 @@ import { PistaGantt, type Extremo } from './PistaGantt'
 
 /** Rejilla compartida por la cabecera y las filas. */
 export const COLUMNAS =
-  'grid grid-cols-[minmax(0,1fr)_minmax(140px,1.2fr)] md:grid-cols-[60px_minmax(200px,1fr)_64px_118px_minmax(300px,1.35fr)]'
+  'grid grid-cols-[minmax(0,1fr)_minmax(140px,1.2fr)] md:grid-cols-[60px_minmax(200px,1fr)_64px_132px_minmax(300px,1.35fr)]'
 
 const FONDO_FILA: Partial<Record<string, string>> = {
   vencida: 'bg-vencida-suave/50',
@@ -153,7 +153,7 @@ export const FilaGantt = memo(function FilaGantt({
           onClick={() => alAbrir(nodo.id)}
           onKeyDown={(e) => alTecla(nodo.id, e)}
           title={nodo.nombre}
-          className="min-w-0 truncate rounded-sm text-left focus-visible:outline-2 focus-visible:outline-acento"
+          className="line-clamp-2 min-w-0 rounded-sm py-1 text-left leading-snug break-words focus-visible:outline-2 focus-visible:outline-acento"
         >
           {nodo.nombre || <span className="font-normal text-texto-3 italic">Sin nombre</span>}
         </button>
