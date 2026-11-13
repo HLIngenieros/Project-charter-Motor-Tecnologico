@@ -105,7 +105,7 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 - [x] Task 6 · Adaptador (`apps/api/src/vercel.ts`, `api/index.js`), `vercel.json`, `npm run migrar` y Node 24 — 2026-11-11
 - [ ] Task 7 · Publicación con el usuario (Neon, Vercel, verificación, RF1 y documentación) → **en la Fase 8 (T8.5)**
 
-**Próxima tarea sugerida:** T8.5 (publicar: Task 7 del plan de Vercel + Neon). Los `.docx` del Comité IA en la raíz no van al repo.
+**Próxima tarea sugerida:** T8.5 (publicar: Task 7 del plan de Vercel + Neon; el usuario crea las cuentas de Neon y Vercel). Detalles opcionales vistos en T8.4, sin decidir: en la ficha en solo lectura los campos vacíos muestran sus ayudas («Agregar código», «¿Quién lo lidera?») en vez de «—»; el índice dice «Los cambios se guardan solos»; y la ruta dice «Mis charters» aunque el Admin llegue desde «Todos». Los `.docx` del Comité IA en la raíz no van al repo.
 
 ## Registro de sesiones
 
