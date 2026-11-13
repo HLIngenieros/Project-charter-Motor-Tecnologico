@@ -30,6 +30,10 @@ export async function construirApp({ db, config }: OpcionesApp): Promise<Fastify
     errorResponseBuilder: () =>
       new ErrorApi(429, 'demasiados_intentos', 'Demasiados intentos. Espera unos minutos.'),
   })
+  app.addHook('onRequest', async (_request, reply) => {
+    // Datos personales: ni el navegador ni un proxy los guardan; el resto de cabeceras, en vercel.json.
+    reply.header('cache-control', 'no-store').header('x-content-type-options', 'nosniff')
+  })
   app.addHook('onRequest', exigirCabeceraCsrf)
 
   await app.register(

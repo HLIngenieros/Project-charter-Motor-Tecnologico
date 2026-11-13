@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto'
-import { and, eq, ne } from 'drizzle-orm'
+import { and, eq, lte, ne } from 'drizzle-orm'
 import type { FastifyReply } from 'fastify'
 import type { BaseDatos } from '../db/conexion'
 import { sesion, usuario, type FilaUsuario } from '../db/esquema'
@@ -28,10 +28,14 @@ export function aUsuarioSesion(u: FilaUsuario): UsuarioSesion {
   }
 }
 
-/** Crea una sesión y devuelve el token en claro (solo se guarda su hash). */
+/**
+ * Crea una sesión y devuelve el token en claro (solo se guarda su hash).
+ * De paso borra las sesiones vencidas de todos (las que nadie volvió a usar).
+ */
 export async function crearSesion(db: BaseDatos, usuarioId: string): Promise<string> {
   const token = randomBytes(32).toString('base64url')
   const ahora = Date.now()
+  await db.delete(sesion).where(lte(sesion.expiraEn, new Date(ahora).toISOString()))
   await db.insert(sesion).values({
     id: hashToken(token),
     usuarioId,

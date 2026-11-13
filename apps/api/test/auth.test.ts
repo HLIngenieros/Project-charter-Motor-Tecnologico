@@ -248,6 +248,37 @@ describe('sesiones inválidas', () => {
     expect(new Date(s!.expiraEn).getTime()).toBeGreaterThan(Date.now() + 6 * 86_400_000)
     expect(s!.ultimoUso > hace2h).toBe(true)
   })
+
+  it('al crear una sesión se borran las vencidas de todos, no las vigentes', async () => {
+    const { app, db } = await nuevaApp()
+    await registrar(app)
+    await registrar(app, { ...datosRegistro, correo: 'beto@hlingenieros.com' })
+    await db.update(sesion).set({ expiraEn: '2000-01-01T00:00:00.000Z' })
+    const vigente = cookieDe(
+      await registrar(app, { ...datosRegistro, correo: 'caro@hlingenieros.com' }),
+    )!
+    expect(await db.select().from(sesion)).toHaveLength(1)
+
+    await entrar(app, 'ana@hlingenieros.com', datosRegistro.clave)
+    expect(await db.select().from(sesion)).toHaveLength(2)
+    const yo = await app.inject({
+      method: 'GET',
+      url: '/api/auth/yo',
+      headers: conSesion(vigente.value),
+    })
+    expect(yo.statusCode).toBe(200)
+  })
+})
+
+describe('cabeceras de la API', () => {
+  it('no se guardan en caché ni se interpretan con otro tipo', async () => {
+    const { app } = await nuevaApp()
+    const r = await app.inject({ method: 'GET', url: '/api/salud' })
+    expect(r.headers['cache-control']).toBe('no-store')
+    expect(r.headers['x-content-type-options']).toBe('nosniff')
+    const error = await app.inject({ method: 'GET', url: '/api/no-existe' })
+    expect(error.headers['cache-control']).toBe('no-store')
+  })
 })
 
 describe('protección CSRF', () => {
