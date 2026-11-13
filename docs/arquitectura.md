@@ -248,7 +248,7 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 - **Link:** https://project-charter-flame.vercel.app (proyecto `grupo-hl/project-charter`, plan Hobby, región `iad1`). Base en Neon (`us-east-1`, cadena *pooled*).
 - **Despliegue:** cada push a `main` del repo de GitHub despliega solo; cada rama tiene su vista previa. También se puede desplegar desde el PC con `vercel deploy --prod` (sube solo lo que deja `.vercelignore`, una lista blanca).
 - **Build:** `npm run build:vercel` = `npm run migrar` (migraciones y semilla en Neon) + `npm run build`. La web sale de `apps/web/dist`; `/api/*` va a la función `api/index.js`, que reexporta `apps/api/dist/vercel.js` (arranca Fastify una vez por instancia).
-- **Variables (Production):** `DATABASE_URL` (secreta, con `sslmode=verify-full`), `COOKIE_SEGURA=true`, `CONFIAR_PROXY=true`, `DOMINIO_PERMITIDO=hlingenieros.com` y `CORREOS_PERMITIDOS` (si no está vacía, solo esos correos se registran). Se cambian con `vercel env` o en el panel y requieren volver a desplegar.
+- **Variables (Production):** `DATABASE_URL` (secreta, con `sslmode=verify-full`), `COOKIE_SEGURA=true`, `CONFIAR_PROXY=true`, `DOMINIO_PERMITIDO=hlingenieros.com`. `CORREOS_PERMITIDOS` no está definida: cualquiera del dominio se registra (si se define, solo esos correos). Se cambian con `vercel env` o en el panel y requieren volver a desplegar; Vercel pide `--confirm-name` para borrar una variable.
 - **Admin:** `DATABASE_URL=<neon> npm run admin -- --promover <correo>` desde el PC.
 - **Respaldo:** el historial de Neon (restauración a un punto en el tiempo).
 

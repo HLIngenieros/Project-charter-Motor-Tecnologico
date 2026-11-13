@@ -105,7 +105,7 @@ Diseño: [docs/superpowers/specs/2026-11-11-despliegue-vercel-neon-design.md](do
 - [x] Task 6 · Adaptador (`apps/api/src/vercel.ts`, `api/index.js`), `vercel.json`, `npm run migrar` y Node 24 — 2026-11-11
 - [x] Task 7 · Publicación (Neon, Vercel, verificación, RF1, PC1 y AC1 y documentación) — 2026-11-13
 
-**v1.0 publicada (2026-11-13).** Pendiente del usuario: push desde GitHub Desktop (primer despliegue automático: revisar que quede «Ready» en Vercel), activar 2FA en Vercel y cambiar la clave de `neondb_owner` en Neon (quedó en el chat) y actualizar `DATABASE_URL` en Vercel. Para abrir el registro a más personas: vaciar o ampliar `CORREOS_PERMITIDOS` y volver a desplegar. Detalles opcionales vistos en T8.4, sin decidir: en la ficha en solo lectura los campos vacíos muestran sus ayudas («Agregar código», «¿Quién lo lidera?») en vez de «—»; el índice dice «Los cambios se guardan solos»; y la ruta dice «Mis charters» aunque el Admin llegue desde «Todos». Los `.docx` del Comité IA en la raíz no van al repo.
+**v1.0 publicada (2026-11-13).** Push desplegado desde GitHub (verificado), 2FA activo en Vercel y registro abierto a todo `@hlingenieros.com`; la clave de Neon se conserva (decisión del usuario). Detalles opcionales vistos en T8.4, sin decidir: en la ficha en solo lectura los campos vacíos muestran sus ayudas («Agregar código», «¿Quién lo lidera?») en vez de «—»; el índice dice «Los cambios se guardan solos»; y la ruta dice «Mis charters» aunque el Admin llegue desde «Todos». Los `.docx` del Comité IA en la raíz no van al repo.
 
 ## Registro de sesiones
 
