@@ -117,7 +117,7 @@ describe('calcularCronograma · hoja', () => {
 describe('calcularCronograma · agrupadora', () => {
   it('pondera con la suma de pesos de sus hojas como divisor', () => {
     const raices = construirArbol([
-      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      { id: 'g', padreId: null, orden: 1, nombre: 'g', peso: 1 },
       hoja('a', { padreId: 'g', orden: 1, peso: 0.2 }),
       hoja('b', { padreId: 'g', orden: 2, peso: 0.6, inicio: '2025-03-06', fin: '2025-03-15' }),
     ])
@@ -138,7 +138,7 @@ describe('calcularCronograma · agrupadora', () => {
 
   it('cuenta las hojas vencidas aunque la agrupadora siga en plazo', () => {
     const raices = construirArbol([
-      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      { id: 'g', padreId: null, orden: 1, nombre: 'g', peso: 1 },
       hoja('a', { padreId: 'g', orden: 1 }),
       hoja('b', { padreId: 'g', orden: 2, inicio: '2025-03-01', fin: '2025-03-31' }),
     ])
@@ -151,7 +151,7 @@ describe('calcularCronograma · agrupadora', () => {
 
   it('la agrupadora queda vencida si se pasó su propio fin', () => {
     const raices = construirArbol([
-      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      { id: 'g', padreId: null, orden: 1, nombre: 'g', peso: 1 },
       hoja('a', { padreId: 'g', orden: 1 }),
       hoja('b', { padreId: 'g', orden: 2 }),
     ])
@@ -164,7 +164,7 @@ describe('calcularCronograma · agrupadora', () => {
 describe('calcularCronograma · casos degenerados', () => {
   it('todas las hojas sin programar: el proyecto queda sin programar y sin NaN', () => {
     const raices = construirArbol([
-      { id: 'g', padreId: null, orden: 1, nombre: 'g' },
+      { id: 'g', padreId: null, orden: 1, nombre: 'g', peso: 1 },
       hoja('a', { padreId: 'g', inicio: null }),
       hoja('b', { padreId: 'g', orden: 2, fin: null }),
     ])

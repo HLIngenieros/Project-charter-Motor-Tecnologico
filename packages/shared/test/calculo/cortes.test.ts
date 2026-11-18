@@ -16,7 +16,7 @@ describe('totalesDeFoto', () => {
       item: h.item,
       nombre: h.nombre,
       pct: fixture.filas.find((f) => idDe(f.fila) === h.id)!.esperado.L ?? 0,
-      peso: h.peso ?? null,
+      peso: fixture.filas.find((f) => idDe(f.fila) === h.id)!.peso,
       inicio: h.inicio ?? null,
       fin: h.fin ?? null,
     }))
@@ -63,7 +63,7 @@ describe('terminacionesPorHoja', () => {
 describe('hojasProgramadas', () => {
   it('excluye hojas sin peso, sin fechas o con fin antes del inicio', () => {
     const raices = construirArbol([
-      { id: 'g', padreId: null, orden: 0, nombre: 'Grupo' },
+      { id: 'g', padreId: null, orden: 0, nombre: 'Grupo', peso: 1 },
       {
         id: 'ok',
         padreId: 'g',

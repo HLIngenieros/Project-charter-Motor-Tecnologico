@@ -1,4 +1,3 @@
-import { recorrerHojas } from './arbol'
 import type { Umbrales } from './cronograma'
 import { aDia } from './fechas'
 import type { NodoArbol } from './tipos'
@@ -34,34 +33,74 @@ const TOLERANCIA_SUMA = 1e-4
 
 const conFechas = (h: NodoArbol) => !!h.inicio && !!h.fin && aDia(h.fin) >= aDia(h.inicio)
 
-/** Peso con que entra cada hoja (repartido si aplica) y si fue automático. */
+export interface PesoEfectivo {
+  /** Peso global: producto de los relativos desde la raíz. */
+  peso: number
+  /** Parte dentro de su padre (la escrita o la repartida). */
+  relativo: number
+  /** El relativo lo repartió la regla `sinPeso: 'repartir'`. */
+  auto: boolean
+}
+
+/** Una hoja con fechas válidas, o una agrupadora con alguna hoja así: lo que entra en las sumas. */
+export function cuentaEnPesos(n: NodoArbol): boolean {
+  return n.esHoja ? conFechas(n) : n.hijos.some(cuentaEnPesos)
+}
+
+/**
+ * Peso de cada actividad. El `peso` escrito es relativo a su padre (las del primer nivel se
+ * reparten el proyecto); el global de una hoja es el producto de los relativos desde la raíz.
+ * Con `repartir`, las hermanas que cuentan y no tienen peso se reparten lo que les falta.
+ */
 export function pesosEfectivos(
   raices: NodoArbol[],
   sinPeso: Reglas['sinPeso'],
-): Record<string, { peso: number; auto: boolean }> {
-  const hojas = recorrerHojas(raices)
-  const salida: Record<string, { peso: number; auto: boolean }> = {}
-  let suma = 0
-  const vacias: string[] = []
-  for (const h of hojas) {
-    const peso = h.peso ?? 0
-    salida[h.id] = { peso, auto: false }
-    if (!conFechas(h)) continue
-    if (peso > 0) suma += peso
-    else if (h.peso == null) vacias.push(h.id)
+): Record<string, PesoEfectivo> {
+  const salida: Record<string, PesoEfectivo> = {}
+  const nivel = (hermanas: NodoArbol[], globalPadre: number) => {
+    let cada = 0
+    if (sinPeso === 'repartir') {
+      const cuentan = hermanas.filter(cuentaEnPesos)
+      const vacias = cuentan.filter((n) => n.peso == null).length
+      const suma = cuentan.reduce((s, n) => s + Math.max(0, n.peso ?? 0), 0)
+      if (vacias > 0) cada = Math.max(0, 1 - suma) / vacias
+    }
+    for (const n of hermanas) {
+      const auto = n.peso == null && sinPeso === 'repartir' && cuentaEnPesos(n)
+      const relativo = auto ? cada : Math.max(0, n.peso ?? 0)
+      salida[n.id] = { peso: globalPadre * relativo, relativo, auto }
+      nivel(n.hijos, globalPadre * relativo)
+    }
   }
-  if (sinPeso === 'repartir' && vacias.length > 0) {
-    const cada = Math.max(0, 1 - suma) / vacias.length
-    for (const id of vacias) salida[id] = { peso: cada, auto: true }
-  }
+  nivel(raices, 1)
   return salida
 }
 
-/** true si las hojas programadas (con sus pesos efectivos) suman 100 %. */
+/**
+ * Suma de los relativos que cuentan, en el primer nivel (`raiz`) y bajo cada agrupadora que
+ * cuenta y tiene peso (`grupos`, por id).
+ */
+export function sumasDePesos(
+  raices: NodoArbol[],
+  sinPeso: Reglas['sinPeso'],
+): { raiz: number; grupos: Map<string, number> } {
+  const pesos = pesosEfectivos(raices, sinPeso)
+  const suma = (hermanas: NodoArbol[]) =>
+    hermanas.filter(cuentaEnPesos).reduce((s, n) => s + (pesos[n.id]?.relativo ?? 0), 0)
+  const grupos = new Map<string, number>()
+  const visitar = (n: NodoArbol) => {
+    if (n.esHoja) return
+    if (cuentaEnPesos(n) && (pesos[n.id]?.relativo ?? 0) > 0) grupos.set(n.id, suma(n.hijos))
+    n.hijos.forEach(visitar)
+  }
+  raices.forEach(visitar)
+  return { raiz: suma(raices), grupos }
+}
+
+export const sumaCompleta = (x: number) => Math.abs(x - 1) <= TOLERANCIA_SUMA
+
+/** true si el primer nivel y cada agrupadora (con sus pesos efectivos) suman 100 %. */
 export function pesosCompletos(raices: NodoArbol[], reglas: Reglas): boolean {
-  const pesos = pesosEfectivos(raices, reglas.sinPeso)
-  const suma = recorrerHojas(raices)
-    .filter(conFechas)
-    .reduce((s, h) => s + Math.max(0, pesos[h.id]?.peso ?? 0), 0)
-  return Math.abs(suma - 1) <= TOLERANCIA_SUMA
+  const { raiz, grupos } = sumasDePesos(raices, reglas.sinPeso)
+  return sumaCompleta(raiz) && [...grupos.values()].every(sumaCompleta)
 }

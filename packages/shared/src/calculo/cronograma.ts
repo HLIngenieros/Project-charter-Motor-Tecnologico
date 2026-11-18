@@ -36,7 +36,10 @@ export const UMBRALES_POR_DEFECTO: Umbrales = { atencion: 10, riesgo: 25, atraso
 export interface ResultadoNodo {
   id: string
   item: string
+  /** Peso global (hoja) o suma de las hojas programadas (agrupadora). */
   peso: number
+  /** Parte dentro de su padre (la escrita o la repartida). */
+  pesoRelativo: number
   /** El peso lo repartió la regla `sinPeso: 'repartir'` (la hoja no tenía peso). */
   pesoAuto: boolean
   inicio: FechaISO | null
@@ -115,6 +118,7 @@ function sinProgramar(id: string, item: string, extra: Partial<ResultadoNodo> = 
     id,
     item,
     peso: 0,
+    pesoRelativo: 0,
     pesoAuto: false,
     inicio: null,
     fin: null,
@@ -149,6 +153,7 @@ function resultadoDe(
     id,
     item,
     peso: acc.peso,
+    pesoRelativo: 0,
     pesoAuto: false,
     inicio: aISO(acc.ini),
     fin: aISO(acc.fin),
@@ -180,12 +185,22 @@ export function calcularCronograma(
   const pesos = pesosEfectivos(raices, reglas.sinPeso)
 
   const hoja = (n: NodoArbol): Acumulado => {
-    const { peso, auto: pesoAuto } = pesos[n.id] ?? { peso: 0, auto: false }
+    const {
+      peso,
+      relativo: pesoRelativo,
+      auto: pesoAuto,
+    } = pesos[n.id] ?? {
+      peso: 0,
+      relativo: 0,
+      auto: false,
+    }
     const ini = n.inicio ? aDia(n.inicio) : null
     const fin = n.fin ? aDia(n.fin) : null
     if (!(peso > 0) || ini === null || fin === null || fin < ini) {
       nodos[n.id] = sinProgramar(n.id, n.item, {
         peso,
+        pesoRelativo,
+        pesoAuto,
         inicio: n.inicio ?? null,
         fin: n.fin ?? null,
       })
@@ -225,6 +240,7 @@ export function calcularCronograma(
       id: n.id,
       item: n.item,
       peso,
+      pesoRelativo,
       pesoAuto,
       inicio: n.inicio!,
       fin: n.fin!,
@@ -244,7 +260,12 @@ export function calcularCronograma(
   const visitar = (n: NodoArbol): Acumulado => {
     if (n.esHoja) return hoja(n)
     const acc = n.hijos.map(visitar).reduce(combinar, VACIO)
-    nodos[n.id] = resultadoDe(n.id, n.item, acc, t, reglas)
+    const p = pesos[n.id]
+    nodos[n.id] = {
+      ...resultadoDe(n.id, n.item, acc, t, reglas),
+      pesoRelativo: p?.relativo ?? 0,
+      pesoAuto: p?.auto ?? false,
+    }
     return acc
   }
 

@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { aPesosRelativos } from '../../src/calculo/pesos'
 import type { ActividadEntrada } from '../../src/calculo/tipos'
 
 export interface FilaFixture {
@@ -25,17 +26,22 @@ export const fixture: Fixture = JSON.parse(
 
 export const idDe = (fila: number) => `f${fila}`
 
-/** Convierte el fixture del Excel a la entrada del motor (id = 'f' + fila). */
+/**
+ * Convierte el fixture del Excel a la entrada del motor (id = 'f' + fila). El Excel escribe
+ * pesos globales en las hojas: se pasan a relativos, que es lo que lee el motor.
+ */
 export function actividadesFixture(): ActividadEntrada[] {
-  return fixture.filas.map((f) => ({
-    id: idDe(f.fila),
-    padreId: f.padreFila === null ? null : idDe(f.padreFila),
-    orden: f.fila,
-    nombre: f.nombre,
-    entregable: f.entregable,
-    peso: f.peso,
-    inicio: f.inicio,
-    fin: f.fin,
-    responsables: f.responsables,
-  }))
+  return aPesosRelativos(
+    fixture.filas.map((f) => ({
+      id: idDe(f.fila),
+      padreId: f.padreFila === null ? null : idDe(f.padreFila),
+      orden: f.fila,
+      nombre: f.nombre,
+      entregable: f.entregable,
+      peso: f.peso,
+      inicio: f.inicio,
+      fin: f.fin,
+      responsables: f.responsables,
+    })),
+  )
 }

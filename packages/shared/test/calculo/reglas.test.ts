@@ -21,7 +21,7 @@ const hoja = (id: string, extra: Partial<ActividadEntrada> = {}): ActividadEntra
   fin: '2026-03-10',
   ...extra,
 })
-const grupo: ActividadEntrada = { id: 'g', padreId: null, orden: 0, nombre: 'Grupo' }
+const grupo: ActividadEntrada = { id: 'g', padreId: null, orden: 0, nombre: 'Grupo', peso: 1 }
 const reglas = (r: Partial<Reglas>): Reglas => ({ ...REGLAS_POR_DEFECTO, ...r })
 
 describe('reglas del motor', () => {
@@ -58,9 +58,9 @@ describe('reglas del motor', () => {
     expect(p.c!.auto).toBe(true)
     expect(p.d!.peso).toBeCloseTo(0.2, 9)
     expect(p.d!.auto).toBe(true)
-    expect(p.e).toEqual({ peso: 0, auto: false })
+    expect(p.e).toEqual({ peso: 0, relativo: 0, auto: false })
     expect(p.f?.peso ?? 0).toBe(0)
-    expect(pesosEfectivos(raices, 'fuera').c).toEqual({ peso: 0, auto: false })
+    expect(pesosEfectivos(raices, 'fuera').c).toEqual({ peso: 0, relativo: 0, auto: false })
   })
 
   it('repartir con pesos que ya suman más de 100 % deja las vacías en 0', () => {
