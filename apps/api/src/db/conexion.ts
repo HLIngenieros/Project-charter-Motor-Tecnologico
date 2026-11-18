@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core'
+import { convertirPesosRelativos } from './convertirPesos'
 import * as esquema from './esquema'
 import { sembrar } from './semilla'
 
@@ -63,6 +64,7 @@ export async function prepararDb(db: BaseDatos): Promise<void> {
     await migrate(db as never, { migrationsFolder })
   }
   await sembrar(db)
+  await convertirPesosRelativos(db)
 }
 
 /** Abre, migra y siembra (desarrollo, CLI y pruebas). Admite ':memory:'. */

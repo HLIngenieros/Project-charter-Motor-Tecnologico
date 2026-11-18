@@ -101,6 +101,9 @@ export const charter = pgTable(
     reglas: text('reglas').notNull().default(REGLAS_CHARTER_DEFECTO),
     // Sube con cada PUT del cronograma; detecta ediciones desde otra pestaña (409).
     cronogramaVersion: integer('cronograma_version').notNull().default(0),
+    // Los pesos del cronograma son relativos a su padre. Los charters anteriores nacieron en false
+    // y `convertirPesosRelativos` los pasa a true al migrar.
+    pesosRelativos: booleano('pesos_relativos').notNull().default(true),
     ...tiempos,
   },
   (t) => [index('charter_propietario_idx').on(t.propietarioId)],
