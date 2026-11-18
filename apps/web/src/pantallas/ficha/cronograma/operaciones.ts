@@ -1,4 +1,13 @@
-import { MAX_NIVELES, sumarDias, type ActividadEntrada } from '@charter/shared'
+import {
+  aDia,
+  aISO,
+  diasHabiles,
+  MAX_NIVELES,
+  sumarDias,
+  sumarHabiles,
+  type ActividadEntrada,
+  type FechaISO,
+} from '@charter/shared'
 
 /**
  * Operaciones puras sobre la lista plana del cronograma. Todas devuelven una lista nueva en
@@ -74,7 +83,16 @@ export function agregar(
   hermanas.splice(pos, 0, id)
   hijas.set(padreId, hermanas)
   porId.set(id, { id, padreId, orden: pos, nombre: '', responsables: [] })
-  return rearmar(porId, hijas)
+  const salida = rearmar(porId, hijas)
+  const i = salida.findIndex((a) => a.id === id)
+  const predecesora = salida
+    .slice(0, i)
+    .filter((a) => a.fin && !salida.some((h) => h.padreId === a.id))
+    .at(-1)
+  if (!predecesora?.fin) return salida
+  const inicio = habiles(predecesora.fin, 1)
+  salida[i] = { ...salida[i]!, inicio, fin: habiles(inicio, DIAS_NUEVA - 1) }
+  return salida
 }
 
 /** La vuelve la última hija de su hermana anterior. */
@@ -140,19 +158,87 @@ export function editar(
   return acts.map((a) => (a.id === id ? { ...a, ...cambios } : a))
 }
 
-/** Desplaza la barra o uno de sus extremos; el fin nunca queda antes del inicio. */
+/** Resultado de un cambio de fechas: cuántas hojas de abajo se corrieron y cuántos días hábiles. */
+export interface CambioFechas {
+  acts: ActividadEntrada[]
+  corridas: number
+  delta: number
+}
+
+/** Duración por defecto de una actividad nueva, en días hábiles. */
+const DIAS_NUEVA = 5
+
+const habiles = (f: FechaISO, n: number): FechaISO => aISO(sumarHabiles(aDia(f), n))
+
+/** Días hábiles entre dos fechas, ambas incluidas; null sin fechas o con el fin antes del inicio. */
+export function duracion(a: Pick<ActividadEntrada, 'inicio' | 'fin'>): number | null {
+  if (!a.inicio || !a.fin || a.fin < a.inicio) return null
+  return diasHabiles(aDia(a.inicio), aDia(a.fin))
+}
+
+/** Días hábiles con signo que hay que correr cuando el fin pasa de `de` a `a`. */
+function deltaHabil(de: FechaISO, a: FechaISO): number {
+  const x = aDia(de)
+  const y = aDia(a)
+  return y > x ? diasHabiles(x + 1, y) : -diasHabiles(y + 1, x)
+}
+
+/** Corre `delta` días hábiles cada hoja con fechas que esté después de `id` en preorden. */
+export function correrDebajo(
+  acts: ActividadEntrada[],
+  id: string,
+  delta: number,
+): { acts: ActividadEntrada[]; corridas: number } {
+  const i = acts.findIndex((a) => a.id === id)
+  if (i < 0 || delta === 0) return { acts, corridas: 0 }
+  const padres = new Set(acts.map((a) => a.padreId))
+  let corridas = 0
+  const salida = acts.map((a, j) => {
+    if (j <= i || padres.has(a.id) || !a.inicio || !a.fin) return a
+    corridas++
+    return { ...a, inicio: habiles(a.inicio, delta), fin: habiles(a.fin, delta) }
+  })
+  return { acts: salida, corridas }
+}
+
+/** Aplica fechas nuevas; si el fin cambió, corre lo de abajo los mismos días hábiles. */
+export function cambiarFechas(
+  acts: ActividadEntrada[],
+  id: string,
+  cambios: { inicio?: FechaISO | null; fin?: FechaISO | null },
+): CambioFechas {
+  const a = acts.find((x) => x.id === id)
+  if (!a) return { acts, corridas: 0, delta: 0 }
+  const editadas = editar(acts, id, cambios)
+  const nuevoFin = 'fin' in cambios ? cambios.fin : a.fin
+  if (!a.fin || !nuevoFin || nuevoFin === a.fin) return { acts: editadas, corridas: 0, delta: 0 }
+  const delta = deltaHabil(a.fin, nuevoFin)
+  return { ...correrDebajo(editadas, id, delta), delta }
+}
+
+/** Fija la duración en días hábiles: recalcula el fin desde el inicio. */
+export function fijarDias(acts: ActividadEntrada[], id: string, dias: number): CambioFechas {
+  const a = acts.find((x) => x.id === id)
+  if (!a?.inicio || !Number.isInteger(dias) || dias < 1) return { acts, corridas: 0, delta: 0 }
+  return cambiarFechas(acts, id, { fin: habiles(a.inicio, dias - 1) })
+}
+
+/**
+ * Desplaza la barra o uno de sus extremos (en días calendario, como el arrastre); el fin nunca
+ * queda antes del inicio. Si el fin cambia, corre lo de abajo.
+ */
 export function moverFechas(
   acts: ActividadEntrada[],
   id: string,
   dias: number,
   extremo: 'ambos' | 'inicio' | 'fin',
-): ActividadEntrada[] {
+): CambioFechas {
   const a = acts.find((x) => x.id === id)
-  if (!a?.inicio || !a.fin || dias === 0) return acts
+  if (!a?.inicio || !a.fin || dias === 0) return { acts, corridas: 0, delta: 0 }
   let { inicio, fin } = a
   if (extremo !== 'fin') inicio = sumarDias(inicio, dias)
   if (extremo !== 'inicio') fin = sumarDias(fin, dias)
   if (extremo === 'inicio' && inicio > fin) inicio = fin
   if (extremo === 'fin' && fin < inicio) fin = inicio
-  return editar(acts, id, { inicio, fin })
+  return cambiarFechas(acts, id, { inicio, fin })
 }

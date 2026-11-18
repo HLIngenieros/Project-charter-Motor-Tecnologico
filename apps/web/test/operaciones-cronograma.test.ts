@@ -9,6 +9,10 @@ import {
   indentar,
   mover,
   moverFechas,
+  cambiarFechas,
+  correrDebajo,
+  duracion,
+  fijarDias,
 } from '../src/pantallas/ficha/cronograma/operaciones'
 
 /** Ítem → nombre en preorden, para comparar estructuras de un vistazo. */
@@ -101,23 +105,101 @@ describe('moverFechas', () => {
   ]
 
   it('mueve la barra completa', () => {
-    expect(moverFechas(barra(), 'a', 3, 'ambos')[0]).toMatchObject({
+    expect(moverFechas(barra(), 'a', 3, 'ambos').acts[0]).toMatchObject({
       inicio: '2026-03-13',
       fin: '2026-03-14',
     })
   })
 
   it('cambia solo un extremo y nunca deja el fin antes del inicio', () => {
-    expect(moverFechas(barra(), 'a', 3, 'fin')[0]!.fin).toBe('2026-03-14')
-    expect(moverFechas(barra(), 'a', -5, 'fin')[0]).toMatchObject({
+    expect(moverFechas(barra(), 'a', 3, 'fin').acts[0]!.fin).toBe('2026-03-14')
+    expect(moverFechas(barra(), 'a', -5, 'fin').acts[0]).toMatchObject({
       inicio: '2026-03-10',
       fin: '2026-03-10',
     })
-    expect(moverFechas(barra(), 'a', 5, 'inicio')[0]!.inicio).toBe('2026-03-11')
+    expect(moverFechas(barra(), 'a', 5, 'inicio').acts[0]!.inicio).toBe('2026-03-11')
   })
 
   it('sin fechas no cambia nada', () => {
     const a: ActividadEntrada[] = [{ id: 'a', padreId: null, orden: 0, nombre: 'A' }]
-    expect(moverFechas(a, 'a', 3, 'ambos')).toEqual(a)
+    expect(moverFechas(a, 'a', 3, 'ambos').acts).toEqual(a)
+  })
+})
+
+describe('fechas encadenadas en días hábiles', () => {
+  // Lun 2026-11-23 a vie 2026-11-27, y dos hojas de abajo (una dentro de un grupo).
+  const plan = (): ActividadEntrada[] => [
+    { id: 'a', padreId: null, orden: 0, nombre: 'A', inicio: '2026-11-23', fin: '2026-11-27' },
+    { id: 'g', padreId: null, orden: 1, nombre: 'G' },
+    { id: 'b', padreId: 'g', orden: 0, nombre: 'B', inicio: '2026-11-30', fin: '2026-12-04' },
+    { id: 'x', padreId: 'g', orden: 1, nombre: 'Sin fechas' },
+    { id: 'c', padreId: null, orden: 2, nombre: 'C', inicio: '2026-12-07', fin: '2026-12-08' },
+  ]
+  const de = (acts: ActividadEntrada[], id: string) => acts.find((a) => a.id === id)!
+
+  it('duracion cuenta días hábiles con inicio y fin', () => {
+    expect(duracion(de(plan(), 'a'))).toBe(5)
+    expect(duracion(de(plan(), 'x'))).toBeNull()
+  })
+
+  it('una actividad nueva arranca el día hábil siguiente a su predecesora y dura 5 días', () => {
+    const r = agregar(plan(), 'a', 'n')
+    expect(de(r, 'n')).toMatchObject({ inicio: '2026-11-30', fin: '2026-12-04' })
+  })
+
+  it('debajo de un grupo, la predecesora es la última hoja con fechas antes de ella', () => {
+    const r = agregar(plan(), 'x', 'n')
+    expect(de(r, 'n')).toMatchObject({ inicio: '2026-12-07', fin: '2026-12-11' })
+  })
+
+  it('sin predecesora con fechas, la nueva queda sin fechas', () => {
+    const r = agregar([{ id: 'v', padreId: null, orden: 0, nombre: 'V' }], 'v', 'n')
+    expect(de(r, 'n').inicio ?? null).toBeNull()
+  })
+
+  it('mover el fin una semana corre lo de abajo 5 días hábiles y conserva su duración', () => {
+    const r = cambiarFechas(plan(), 'a', { fin: '2026-12-04' })
+    expect(r).toMatchObject({ corridas: 2, delta: 5 })
+    expect(de(r.acts, 'b')).toMatchObject({ inicio: '2026-12-07', fin: '2026-12-11' })
+    expect(de(r.acts, 'c')).toMatchObject({ inicio: '2026-12-14', fin: '2026-12-15' })
+    expect(de(r.acts, 'x').inicio ?? null).toBeNull()
+  })
+
+  it('mover el fin hacia atrás corre con delta negativo', () => {
+    const r = cambiarFechas(plan(), 'a', { fin: '2026-11-26' })
+    expect(r).toMatchObject({ corridas: 2, delta: -1 })
+    expect(de(r.acts, 'b')).toMatchObject({ inicio: '2026-11-27', fin: '2026-12-03' })
+  })
+
+  it('cambiar solo el inicio no corre nada', () => {
+    const r = cambiarFechas(plan(), 'b', { inicio: '2026-11-25' })
+    expect(r.corridas).toBe(0)
+    expect(de(r.acts, 'c').inicio).toBe('2026-12-07')
+  })
+
+  it('un fin movido de viernes a sábado no corre nada', () => {
+    const r = cambiarFechas(plan(), 'a', { fin: '2026-11-28' })
+    expect(r).toMatchObject({ corridas: 0, delta: 0 })
+    expect(de(r.acts, 'a').fin).toBe('2026-11-28')
+  })
+
+  it('fijarDias recalcula el fin desde el inicio y corre lo de abajo', () => {
+    const r = fijarDias(plan(), 'b', 10)
+    expect(de(r.acts, 'b').fin).toBe('2026-12-11')
+    expect(r).toMatchObject({ corridas: 1, delta: 5 })
+    expect(fijarDias(plan(), 'b', 0).corridas).toBe(0)
+    expect(fijarDias(plan(), 'x', 3).acts).toEqual(plan())
+  })
+
+  it('correrDebajo mueve solo las hojas con fechas de abajo', () => {
+    const r = correrDebajo(plan(), 'b', 2)
+    expect(r.corridas).toBe(1)
+    expect(de(r.acts, 'c')).toMatchObject({ inicio: '2026-12-09', fin: '2026-12-10' })
+    expect(de(r.acts, 'a').inicio).toBe('2026-11-23')
+  })
+
+  it('arrastrar la barra completa corre lo de abajo; el extremo de inicio no', () => {
+    expect(moverFechas(plan(), 'a', 7, 'ambos')).toMatchObject({ corridas: 2, delta: 5 })
+    expect(moverFechas(plan(), 'b', -2, 'inicio').corridas).toBe(0)
   })
 })

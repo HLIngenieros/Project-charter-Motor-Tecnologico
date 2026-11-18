@@ -184,7 +184,7 @@ export function SeccionCronograma({
   )
   const alMover = useCallback(
     (id: string, dias: number, extremo: Extremo) => {
-      aplicar((a) => op.moverFechas(a, id, dias, extremo))
+      aplicar((a) => op.moverFechas(a, id, dias, extremo).acts)
       setDestello(id)
     },
     [aplicar],
