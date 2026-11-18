@@ -39,7 +39,7 @@ export function ResumenPesos({
     <div
       role="group"
       aria-label="Resumen de pesos"
-      className={`mb-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-control px-3 py-2 text-[0.8125rem] ${todoBien ? 'bg-fondo text-texto-2' : 'bg-amarillo-suave text-tinta'}`}
+      className={`mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-control px-3 py-2 text-[0.8125rem] ${todoBien ? 'bg-fondo text-texto-2' : 'bg-amarillo-suave text-tinta'}`}
     >
       <span className="inline-flex items-center gap-1.5">
         <span className="font-semibold text-tinta">Pesos:</span>

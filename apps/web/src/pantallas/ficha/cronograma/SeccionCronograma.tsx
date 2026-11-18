@@ -317,7 +317,7 @@ export function SeccionCronograma({
         </div>
       </div>
 
-      <div className="mb-2.5">
+      <div className="mb-3">
         <LeyendaEstados />
       </div>
 

@@ -17,7 +17,7 @@ export function LeyendaEstados() {
   return (
     <ul
       aria-label="Convenciones"
-      className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs text-texto-2"
+      className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-texto-2"
     >
       {PUNTO.map(([estado, clase]) => (
         <li key={estado} className="inline-flex items-center gap-1.5">

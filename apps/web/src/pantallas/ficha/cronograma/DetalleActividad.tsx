@@ -160,7 +160,7 @@ export function DetalleActividad({
       <Dato texto="Planeado" valor={r ? porcentaje(r.pv) : '—'} />
       <Dato texto="Real" valor={r ? porcentaje(r.ev) : '—'} />
       <Dato texto="Desviación" valor={r?.dur ? `${Math.round(r.desv)} días` : '—'} />
-      <Dato texto="Duración" valor={r?.dur ? `${r.dur} días` : '—'} />
+      <Dato texto="Días calendario" valor={r?.dur ? `${r.dur}` : '—'} />
       <Dato texto="Fin proyectado" valor={r?.forecast ? fechaCorta(r.forecast) : '—'} />
     </dl>
   )

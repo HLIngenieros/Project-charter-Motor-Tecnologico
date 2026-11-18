@@ -49,7 +49,7 @@ export function PesoAuto({ peso }: { peso: number }) {
   return (
     <span title="Peso repartido automáticamente" className="text-texto-2">
       {pesoTexto(peso)}{' '}
-      <span className="font-sans text-[0.6875rem] font-semibold tracking-wide text-texto-3 uppercase">
+      <span className="font-sans text-[0.6875rem] font-semibold text-texto-3">
         auto
       </span>
     </span>
