@@ -3,6 +3,7 @@ import {
   construirArbol,
   hojasProgramadas,
   pesosCompletos,
+  REGLAS_POR_DEFECTO,
   sumarDias,
   type AvancesPorHoja,
   type FechaISO,
@@ -37,6 +38,11 @@ interface Preparado {
   fechaFija: FechaISO | null
   minimo: FechaISO | null
   anterior: FechaISO | null
+  /**
+   * Pesos completos con el árbol real (cada grupo suma 100 %); null al editar un corte, donde
+   * solo está la foto sin grupos y se revisa la suma de sus hojas.
+   */
+  pesosCompletos: boolean | null
 }
 
 function Grupo({
@@ -127,7 +133,8 @@ function Formulario({
       ),
     [p.filas],
   )
-  const bloqueado = reglas.sumaPesos === 'obligatoria' && !pesosCompletos(raices, reglas)
+  const bloqueado =
+    reglas.sumaPesos === 'obligatoria' && !(p.pesosCompletos ?? pesosCompletos(raices, reglas))
 
   const calculo = useMemo(() => {
     const avances: AvancesPorHoja = Object.fromEntries(
@@ -330,7 +337,7 @@ function Formulario({
           </label>
           {bloqueado && (
             <Aviso tono="alerta">
-              Los pesos de las actividades deben sumar 100 % para registrar un corte.
+              Los pesos del proyecto y de cada grupo deben sumar 100 % para registrar un corte.
             </Aviso>
           )}
           {error && <Aviso tono="alerta">{error}</Aviso>}
@@ -420,6 +427,7 @@ export function RegistrarCorte() {
         fechaFija: fechaEditar,
         minimo: null,
         anterior: anteriorAEditar,
+        pesosCompletos: null,
       }
     }
     const ultimo = cronograma.data.ultimoCorte
@@ -428,11 +436,10 @@ export function RegistrarCorte() {
     for (const [idHoja, a] of Object.entries(avances))
       if (a.terminadaEn) terminadas[idHoja] = a.terminadaEn
     const ultimaFecha = fechas.at(-1) ?? null
+    const arbol = construirArbol(cronograma.data.actividades)
     return {
-      filas: hojasProgramadas(
-        construirArbol(cronograma.data.actividades),
-        charter.data?.reglas,
-      ).map((h) => ({
+      pesosCompletos: pesosCompletos(arbol, charter.data?.reglas ?? REGLAS_POR_DEFECTO),
+      filas: hojasProgramadas(arbol, charter.data?.reglas).map((h) => ({
         id: h.id,
         item: h.item,
         nombre: h.nombre,

@@ -227,8 +227,41 @@ describe('registrar corte', () => {
     })
     await screen.findByRole('heading', { name: 'Registrar corte' })
     expect(
-      screen.getByText('Los pesos de las actividades deben sumar 100 % para registrar un corte.'),
+      screen.getByText('Los pesos del proyecto y de cada grupo deben sumar 100 % para registrar un corte.'),
     ).toBeInTheDocument()
+    for (const b of screen.getAllByRole('button', { name: 'Guardar corte' }))
+      expect(b).toBeDisabled()
+  })
+
+  it('con suma obligatoria, un grupo incompleto bloquea aunque el total dé 100 %', async () => {
+    // G1 (50 %) suma 90 % y G2 (50 %) suma 110 %: los globales dan 100 %, los grupos no.
+    const grupo = (id: string, orden: number): ActividadEntrada => ({
+      id,
+      padreId: null,
+      orden,
+      nombre: id,
+      entregable: null,
+      peso: 0.5,
+      inicio: null,
+      fin: null,
+      responsables: [],
+    })
+    const en = (padreId: string, a: ActividadEntrada) => ({ ...a, padreId })
+    abrir('/charters/c1/corte', undefined, {
+      charter: { ...detalle, reglas: { ...REGLAS_POR_DEFECTO, sumaPesos: 'obligatoria' } },
+      crono: {
+        ...cronograma,
+        actividades: [
+          grupo('G1', 0),
+          en('G1', hoja('a', 0, 'Levantamiento', 0.4, '2026-02-01', '2026-03-01')),
+          en('G1', hoja('b', 1, 'Diseño', 0.5, '2026-03-01', '2026-03-31')),
+          grupo('G2', 1),
+          en('G2', hoja('c', 0, 'Pruebas', 0.6, '2026-04-01', '2026-04-30')),
+          en('G2', hoja('d', 1, 'Ajustes', 0.5, '2026-04-01', '2026-04-30')),
+        ],
+      },
+    })
+    await screen.findByRole('heading', { name: 'Registrar corte' })
     for (const b of screen.getAllByRole('button', { name: 'Guardar corte' }))
       expect(b).toBeDisabled()
   })
