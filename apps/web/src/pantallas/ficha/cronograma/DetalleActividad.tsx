@@ -1,12 +1,14 @@
 import {
   fechaISO,
   type ActividadEntrada,
+  type FechaISO,
   type NodoArbol,
   type ResultadoNodo,
 } from '@charter/shared'
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Boton } from '../../../componentes/Boton'
 import { fechaCorta, porcentaje } from '../../../formato'
+import { duracion } from './operaciones'
 
 const ENTRADA =
   'min-h-9 w-full min-w-0 rounded-control border border-linea bg-superficie px-2.5 text-sm text-tinta focus-visible:border-acento focus-visible:outline-2 focus-visible:outline-acento/40'
@@ -64,6 +66,10 @@ const fechaValida = (v: string) => fechaISO.safeParse(v).success
 
 export interface AccionesDetalle {
   aplicar(cambios: Partial<Omit<ActividadEntrada, 'id' | 'padreId' | 'orden'>>): void
+  /** Fechas nuevas; si cambia el fin, corre lo de abajo. */
+  cambiarFechas(cambios: { inicio?: FechaISO | null; fin?: FechaISO | null }): void
+  /** Duración en días hábiles desde el inicio. */
+  fijarDias(dias: number): void
   agregarDebajo(): void
   indentar(): void
   desindentar(): void
@@ -99,6 +105,20 @@ export function DetalleActividad({
   if (pesoPrevio !== nodo.peso) {
     setPesoPrevio(nodo.peso)
     setPeso(pesoATexto(nodo.peso))
+  }
+
+  // Días hábiles: texto local, que sigue a las fechas cuando cambian por fuera.
+  const diasActuales = duracion(nodo)
+  const [dias, setDias] = useState(diasActuales?.toString() ?? '')
+  const [diasPrevios, setDiasPrevios] = useState(diasActuales)
+  if (diasPrevios !== diasActuales) {
+    setDiasPrevios(diasActuales)
+    setDias(diasActuales?.toString() ?? '')
+  }
+  const confirmarDias = () => {
+    const n = Number(dias.trim())
+    if (Number.isInteger(n) && n >= 1 && n <= 2000 && n !== diasActuales) acciones.fijarDias(n)
+    else setDias(diasActuales?.toString() ?? '')
   }
 
   const confirmarPeso = () => {
@@ -209,7 +229,7 @@ export function DetalleActividad({
       <div
         role="group"
         aria-label={`Detalle de ${nodo.item}`}
-        className={`${TARJETA} grid grid-cols-2 gap-3 sm:grid-cols-[96px_160px_160px_minmax(0,1fr)]`}
+        className={`${TARJETA} grid grid-cols-2 gap-3 sm:grid-cols-[96px_160px_160px_112px_minmax(0,1fr)]`}
       >
         {cabecera}
         <Etiqueta texto="Actividad" className="col-span-full">
@@ -254,7 +274,9 @@ export function DetalleActividad({
                 className={ENTRADA}
                 value={nodo.inicio ?? ''}
                 onChange={(e) =>
-                  acciones.aplicar({ inicio: fechaValida(e.target.value) ? e.target.value : null })
+                  acciones.cambiarFechas({
+                    inicio: fechaValida(e.target.value) ? e.target.value : null,
+                  })
                 }
               />
             </Etiqueta>
@@ -264,8 +286,22 @@ export function DetalleActividad({
                 className={ENTRADA}
                 value={nodo.fin ?? ''}
                 onChange={(e) =>
-                  acciones.aplicar({ fin: fechaValida(e.target.value) ? e.target.value : null })
+                  acciones.cambiarFechas({
+                    fin: fechaValida(e.target.value) ? e.target.value : null,
+                  })
                 }
+              />
+            </Etiqueta>
+            <Etiqueta texto="Días hábiles">
+              <input
+                className={`${ENTRADA} text-right font-mono`}
+                inputMode="numeric"
+                disabled={!nodo.inicio}
+                title={nodo.inicio ? undefined : 'Pon primero la fecha de inicio'}
+                value={dias}
+                onChange={(e) => setDias(e.target.value.replace(/\D/g, ''))}
+                onBlur={confirmarDias}
+                onKeyDown={(e) => e.key === 'Enter' && confirmarDias()}
               />
             </Etiqueta>
           </>

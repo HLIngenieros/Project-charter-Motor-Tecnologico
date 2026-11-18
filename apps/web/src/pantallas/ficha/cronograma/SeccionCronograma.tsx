@@ -1,4 +1,9 @@
-import type { AvanceFoto, Aviso as AvisoCronograma, NodoArbol } from '@charter/shared'
+import type {
+  ActividadEntrada,
+  AvanceFoto,
+  Aviso as AvisoCronograma,
+  NodoArbol,
+} from '@charter/shared'
 import {
   Fragment,
   useCallback,
@@ -14,6 +19,7 @@ import { Boton } from '../../../componentes/Boton'
 import { Cargando } from '../../../componentes/Cargando'
 import { Dialogo } from '../../../componentes/Dialogo'
 import { fechaCorta, porcentaje } from '../../../formato'
+import { AvisoCorrimiento } from './AvisoCorrimiento'
 import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
 import { LeyendaEstados } from './LeyendaEstados'
@@ -83,7 +89,51 @@ export function SeccionCronograma({
   const [enfocar, setEnfocar] = useState<string | null>(null)
   const [plegadas, setPlegadas] = useState<Set<string>>(new Set())
   const [porEliminar, setPorEliminar] = useState<string | null>(null)
-  const { aplicar, acts, avances } = b
+  const { acts, avances } = b
+  // Último corrimiento en cadena, para avisarlo y poder deshacerlo (se acumula si sigue la misma
+  // actividad, p. ej. al escribir una fecha cifra por cifra).
+  const [corrimiento, setCorrimiento] = useState<{
+    id: string
+    previo: ActividadEntrada[]
+    corridas: number
+    delta: number
+  } | null>(null)
+  const aplicarBorrador = b.aplicar
+  /** Cualquier edición que no sea un cambio de fechas cierra el aviso. */
+  const aplicar = useCallback(
+    (fn: (a: ActividadEntrada[]) => ActividadEntrada[]) => {
+      setCorrimiento(null)
+      aplicarBorrador(fn)
+    },
+    [aplicarBorrador],
+  )
+  const conFechas = useCallback(
+    (id: string, fn: (a: ActividadEntrada[]) => op.CambioFechas) => {
+      aplicarBorrador((a) => {
+        const r = fn(a)
+        setCorrimiento((prev) => {
+          const mismo = prev?.id === id ? prev : null
+          if (r.corridas === 0) return mismo
+          const delta = (mismo?.delta ?? 0) + r.delta
+          if (delta === 0) return null
+          return { id, previo: mismo?.previo ?? a, corridas: r.corridas, delta }
+        })
+        return r.acts
+      })
+    },
+    [aplicarBorrador],
+  )
+  const deshacer = () => {
+    if (!corrimiento) return
+    const { previo } = corrimiento
+    setCorrimiento(null)
+    aplicarBorrador(() => previo)
+  }
+  useEffect(() => {
+    if (!corrimiento) return
+    const t = setTimeout(() => setCorrimiento(null), 8000)
+    return () => clearTimeout(t)
+  }, [corrimiento])
 
   const filas = useMemo(() => visibles(b.arbol, plegadas), [b.arbol, plegadas])
   const avisoPesos = b.avisos.find((a) => a.codigo === 'pesos_no_suman_100')
@@ -142,6 +192,8 @@ export function SeccionCronograma({
 
   const acciones = (id: string): AccionesDetalle => ({
     aplicar: (cambios) => aplicar((a) => op.editar(a, id, cambios)),
+    cambiarFechas: (cambios) => conFechas(id, (a) => op.cambiarFechas(a, id, cambios)),
+    fijarDias: (dias) => conFechas(id, (a) => op.fijarDias(a, id, dias)),
     agregarDebajo: () => agregar(id),
     indentar: () => {
       aplicar((a) => op.indentar(a, id))
@@ -184,10 +236,10 @@ export function SeccionCronograma({
   )
   const alMover = useCallback(
     (id: string, dias: number, extremo: Extremo) => {
-      aplicar((a) => op.moverFechas(a, id, dias, extremo).acts)
+      conFechas(id, (a) => op.moverFechas(a, id, dias, extremo))
       setDestello(id)
     },
-    [aplicar],
+    [conFechas],
   )
 
   return (
@@ -263,6 +315,13 @@ export function SeccionCronograma({
         </Aviso>
       )}
       {avisoPesos && <Aviso className="mb-3">{avisoPesos.mensaje}</Aviso>}
+      {corrimiento && !soloLectura && (
+        <AvisoCorrimiento
+          corridas={corrimiento.corridas}
+          delta={corrimiento.delta}
+          alDeshacer={deshacer}
+        />
+      )}
 
       {b.error ? (
         <Aviso tono="alerta">No se pudo cargar el cronograma. {b.error.message}</Aviso>

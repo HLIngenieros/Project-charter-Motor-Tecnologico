@@ -1,4 +1,11 @@
-import { aDia, sumarDias, type FechaISO, type NodoArbol, type ResultadoNodo } from '@charter/shared'
+import {
+  aDia,
+  diasHabiles,
+  sumarDias,
+  type FechaISO,
+  type NodoArbol,
+  type ResultadoNodo,
+} from '@charter/shared'
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { fechaCorta } from '../../../formato'
 import { aPorcentaje, diasPorPixel, type Rango } from './escala'
@@ -51,7 +58,7 @@ function desplazar(inicio: FechaISO, fin: FechaISO, dias: number, extremo: Extre
 }
 
 const textoFechas = (i: FechaISO, f: FechaISO) =>
-  `${fechaCorta(i)} – ${fechaCorta(f)} · ${aDia(f) - aDia(i) + 1} días`
+  `${fechaCorta(i)} – ${fechaCorta(f)} · ${diasHabiles(aDia(i), aDia(f))} días hábiles`
 
 export function PistaGantt({
   nodo,

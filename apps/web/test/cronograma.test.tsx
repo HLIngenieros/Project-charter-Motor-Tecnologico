@@ -426,3 +426,73 @@ describe('columnas de fechas y colores por estado', () => {
       expect(within(leyenda).getByText(t)).toBeInTheDocument()
   })
 })
+
+describe('duración y corrimiento', () => {
+  const cronograma = (): CronogramaRespuesta => ({
+    version: 1,
+    actividades: [
+      hoja('A', { nombre: 'Diseño', orden: 0, peso: 0.5, inicio: '2026-11-23', fin: '2026-11-27' }),
+      hoja('B', {
+        nombre: 'Pruebas',
+        orden: 1,
+        peso: 0.5,
+        inicio: '2026-11-30',
+        fin: '2026-12-04',
+      }),
+    ],
+    ultimoCorte: null,
+  })
+  const ultimas = (llamadas: Llamada[]) =>
+    (puts(llamadas).at(-1)!.cuerpo as { actividades: ActividadEntrada[] }).actividades
+  const de = (acts: ActividadEntrada[], id: string) => acts.find((a) => a.id === id)!
+
+  it('escribir los días hábiles recalcula el fin y lo guarda', async () => {
+    const { llamadas, usuario } = abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    await usuario.click(s.getByText('Pruebas'))
+    const dias = s.getByRole('textbox', { name: 'Días hábiles' })
+    expect(dias).toHaveValue('5')
+    await usuario.clear(dias)
+    await usuario.type(dias, '10{Enter}')
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    expect(de(ultimas(llamadas), 'B').fin).toBe('2026-12-11')
+  })
+
+  it('cambiar el fin corre lo de abajo, avisa y se puede deshacer', async () => {
+    const { llamadas, usuario } = abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    await usuario.click(s.getByText('Diseño'))
+    fireEvent.change(s.getByLabelText('Fin'), { target: { value: '2026-12-04' } })
+    expect(await s.findByText('Se corrió 1 actividad 5 días hábiles después')).toBeInTheDocument()
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    expect(de(ultimas(llamadas), 'B').inicio).toBe('2026-12-07')
+
+    await usuario.click(s.getByRole('button', { name: 'Deshacer' }))
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(2))
+    expect(de(ultimas(llamadas), 'A').fin).toBe('2026-11-27')
+    expect(de(ultimas(llamadas), 'B').inicio).toBe('2026-11-30')
+    expect(s.queryByText(/Se corrió/)).not.toBeInTheDocument()
+  })
+
+  it('el aviso se va solo a los 8 segundos', async () => {
+    const { usuario } = abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    await usuario.click(s.getByText('Diseño'))
+    fireEvent.change(s.getByLabelText('Fin'), { target: { value: '2026-12-04' } })
+    await s.findByText(/Se corrió/)
+    await act(() => vi.advanceTimersByTimeAsync(8000))
+    expect(s.queryByText(/Se corrió/)).not.toBeInTheDocument()
+  })
+
+  it('«Agregar actividad» encadena la nueva a la última', async () => {
+    const { llamadas, usuario } = abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    await usuario.click(s.getByRole('button', { name: 'Agregar actividad' }))
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    expect(ultimas(llamadas).at(-1)).toMatchObject({ inicio: '2026-12-07', fin: '2026-12-11' })
+  })
+})
