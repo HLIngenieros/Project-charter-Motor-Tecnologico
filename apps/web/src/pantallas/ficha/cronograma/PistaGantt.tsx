@@ -15,6 +15,16 @@ export const COLOR_AVANCE: Record<string, string> = {
   vencida: 'bg-vencida',
 }
 
+/** Barra completa (lo planeado) en el color del estado, atenuado; el avance va pleno encima. */
+export const FONDO_BARRA: Record<string, string> = {
+  terminada: 'bg-ok/35',
+  al_dia: 'bg-ok/35',
+  en_atencion: 'bg-amarillo/45 ring-1 ring-amarillo-texto/70 ring-inset',
+  en_riesgo: 'bg-naranja/35',
+  atrasada: 'bg-alerta/35',
+  vencida: 'bg-vencida/35',
+}
+
 /** Extensión punteada del fin proyectado (el amarillo no llega a 3:1: va su tono de texto). */
 const BORDE_PROYECTADO: Record<string, string> = {
   al_dia: 'border-ok',
@@ -169,7 +179,8 @@ export function PistaGantt({
                 ...eventos('ambos'),
               }
             : {})}
-          className={`group absolute top-[11px] h-3.5 min-w-[5px] touch-none rounded bg-barra transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento ${editable ? (arrastre ? 'cursor-grabbing shadow-flota' : 'cursor-grab hover:shadow-[0_0_0_2px_rgb(0_51_102/0.18)]') : ''}`}
+          data-estado={resultado?.estado}
+          className={`group absolute top-[11px] h-3.5 min-w-[5px] touch-none rounded ${FONDO_BARRA[resultado?.estado ?? ''] ?? 'bg-barra'} transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acento ${editable ? (arrastre ? 'cursor-grabbing shadow-flota' : 'cursor-grab hover:shadow-[0_0_0_2px_rgb(0_51_102/0.18)]') : ''}`}
           style={{ left: `${izq}%`, width: `${ancho}%` }}
         >
           <span

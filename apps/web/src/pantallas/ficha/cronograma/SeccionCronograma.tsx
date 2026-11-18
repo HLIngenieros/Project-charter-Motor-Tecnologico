@@ -16,6 +16,7 @@ import { Dialogo } from '../../../componentes/Dialogo'
 import { fechaCorta, porcentaje } from '../../../formato'
 import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
+import { LeyendaEstados } from './LeyendaEstados'
 import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
 import * as op from './operaciones'
 import type { Extremo } from './PistaGantt'
@@ -243,6 +244,10 @@ export function SeccionCronograma({
         </div>
       </div>
 
+      <div className="mb-2.5">
+        <LeyendaEstados />
+      </div>
+
       {b.conflicto && (
         <Aviso tono="alerta" className="mb-3">
           <span className="flex flex-wrap items-center gap-x-3">
@@ -271,7 +276,8 @@ export function SeccionCronograma({
             <div className="px-2.5 max-md:hidden">Ítem</div>
             <div className="px-2.5">Actividad</div>
             <div className="px-2.5 text-right max-md:hidden">Peso</div>
-            <div className="px-2.5 max-md:hidden">Estado</div>
+            <div className="px-2.5 max-md:hidden">Inicio</div>
+            <div className="px-2.5 max-md:hidden">Fin</div>
             <div ref={cabecera} className="relative h-8 overflow-hidden" aria-label="Fechas">
               <span className="sr-only">Fechas</span>
               {marcas.map((m) => (
@@ -353,7 +359,9 @@ export function SeccionCronograma({
               <div className="px-2.5 text-right font-mono text-xs max-md:hidden">
                 {f.peso ? porcentaje(f.peso) : '—'}
               </div>
-              <div className="px-2.5 font-mono text-xs max-md:hidden">{porcentaje(f.pct)} real</div>
+              <div className="col-span-2 px-2.5 font-mono text-xs max-md:hidden">
+                {porcentaje(f.pct)} real
+              </div>
               <div />
             </div>
           ))}

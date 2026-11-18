@@ -1,14 +1,12 @@
 import type { Aviso, FechaISO, NodoArbol, ResultadoNodo } from '@charter/shared'
 import { memo, type KeyboardEvent } from 'react'
-import { Chip } from '../../../componentes/Chip'
-import { porcentaje } from '../../../formato'
+import { fechaCorta, porcentaje } from '../../../formato'
 import type { Rango } from './escala'
-import { chipDe } from './estados'
 import { PistaGantt, type Extremo } from './PistaGantt'
 
 /** Rejilla compartida por la cabecera y las filas. */
 export const COLUMNAS =
-  'grid grid-cols-[minmax(0,1fr)_minmax(140px,1.2fr)] md:grid-cols-[60px_minmax(200px,1fr)_64px_132px_minmax(300px,1.35fr)]'
+  'grid grid-cols-[minmax(0,1fr)_minmax(140px,1.2fr)] md:grid-cols-[60px_minmax(200px,1fr)_64px_68px_68px_minmax(300px,1.35fr)]'
 
 const FONDO_FILA: Partial<Record<string, string>> = {
   vencida: 'bg-vencida-suave/50',
@@ -31,6 +29,20 @@ const Chevron = () => (
     <path d="m6 9 6 6 6-6" />
   </svg>
 )
+
+/** Fecha corta sin el año («23 nov»); el año va en el título. */
+export const fechaSinAnio = (f: FechaISO) => fechaCorta(f).replace(/ \d{4}$/, '')
+
+function CeldaFecha({ fecha }: { fecha: FechaISO | null | undefined }) {
+  return (
+    <div
+      className="px-2.5 font-mono text-xs whitespace-nowrap text-texto-2 max-md:hidden"
+      title={fecha ? fechaCorta(fecha) : undefined}
+    >
+      {fecha ? fechaSinAnio(fecha) : '—'}
+    </div>
+  )
+}
 
 /** Peso efectivo de una hoja sin peso propio, repartido por la regla del charter. */
 export function PesoAuto({ peso }: { peso: number }) {
@@ -108,7 +120,6 @@ export const FilaGantt = memo(function FilaGantt({
   alTecla,
   alMover,
 }: PropsFila) {
-  const chip = resultado ? chipDe(resultado, nodo.esHoja) : null
   const tonoFila = nodo.esHoja ? resultado?.estado : resultado?.vencidas ? 'vencida' : undefined
   const auto = nodo.esHoja && !!resultado?.pesoAuto
   const peso = nodo.esHoja && !auto ? nodo.peso : resultado?.peso
@@ -174,9 +185,8 @@ export const FilaGantt = memo(function FilaGantt({
       <div className="px-2.5 text-right font-mono text-xs whitespace-nowrap max-md:hidden">
         {auto ? <PesoAuto peso={peso ?? 0} /> : peso ? porcentaje(peso) : '—'}
       </div>
-      <div className="min-w-0 px-2.5 max-md:hidden">
-        {chip && <Chip tono={chip.tono}>{chip.texto}</Chip>}
-      </div>
+      <CeldaFecha fecha={nodo.esHoja ? nodo.inicio : resultado?.inicio} />
+      <CeldaFecha fecha={nodo.esHoja ? nodo.fin : resultado?.fin} />
       <div className="min-w-0 self-stretch">
         <PistaGantt
           nodo={nodo}

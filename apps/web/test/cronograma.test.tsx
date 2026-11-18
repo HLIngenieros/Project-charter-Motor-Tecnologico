@@ -124,8 +124,8 @@ describe('cronograma de la ficha', () => {
         reglas: { ...REGLAS_POR_DEFECTO, umbrales: { atencion: 5, riesgo: 25, atraso: 50 } },
       },
     })
-    const s = await seccion()
-    expect(s.getByText('En atención')).toBeInTheDocument()
+    await seccion()
+    expect(document.querySelector('[data-fila="A"] [data-estado="en_atencion"]')).not.toBeNull()
   })
 
   it('con «repartir», una hoja sin peso muestra su peso efectivo y la marca auto', async () => {
@@ -375,5 +375,54 @@ describe('Gantt completo', () => {
     expect(s.getByText('Grupo 2')).toBeInTheDocument()
     await usuario.click(s.getByRole('button', { name: 'Desplegar todo' }))
     expect(s.getByText('Hoja 2')).toBeInTheDocument()
+  })
+})
+
+describe('columnas de fechas y colores por estado', () => {
+  const cronograma: CronogramaRespuesta = {
+    version: 1,
+    actividades: [
+      hoja('A', { nombre: 'Diseño', peso: 1, inicio: '2026-11-23', fin: '2026-12-04' }),
+    ],
+    ultimoCorte: { fecha: '2026-12-01', avances: { A: { pct: 0, terminadaEn: null } } },
+  }
+
+  it('la cabecera tiene Inicio y Fin y no Estado', async () => {
+    abrir({ cronograma })
+    const s = await seccion()
+    expect(s.getByText('Inicio')).toBeInTheDocument()
+    expect(s.getByText('Fin')).toBeInTheDocument()
+    expect(s.queryByText('Estado')).not.toBeInTheDocument()
+  })
+
+  it('la fila muestra inicio y fin sin el año', async () => {
+    abrir({ cronograma })
+    const s = await seccion()
+    const fila = s.getByText('Diseño').closest('[data-fila]') as HTMLElement
+    expect(within(fila).getByText('23 nov')).toBeInTheDocument()
+    expect(within(fila).getByText('4 dic')).toBeInTheDocument()
+  })
+
+  it('la barra lleva el estado de la actividad', async () => {
+    abrir({ cronograma })
+    await seccion()
+    const fila = document.querySelector('[data-fila="A"]')!
+    expect(fila.querySelector('[data-estado="atrasada"]')).not.toBeNull()
+  })
+
+  it('la leyenda muestra las convenciones de estado', async () => {
+    abrir({ cronograma })
+    const s = await seccion()
+    const leyenda = s.getByRole('list', { name: 'Convenciones' })
+    for (const t of [
+      'Al día',
+      'En atención',
+      'En riesgo',
+      'Atrasada',
+      'Vencida',
+      'Terminada',
+      'Por iniciar',
+    ])
+      expect(within(leyenda).getByText(t)).toBeInTheDocument()
   })
 })

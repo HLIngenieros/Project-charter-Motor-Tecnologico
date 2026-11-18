@@ -69,7 +69,7 @@ const act = (
 })
 
 const ACTS = [
-  act('g', null, 0, 'Fase 1'),
+  act('g', null, 0, 'Fase 1', { peso: 1 }),
   act('h1', 'g', 0, 'Diseño', { peso: 0.5, inicio: '2026-11-01', fin: '2026-11-30' }),
   act('h2', 'g', 1, 'Pruebas', { peso: 0.5, inicio: '2026-11-15', fin: '2026-12-15' }),
 ]
