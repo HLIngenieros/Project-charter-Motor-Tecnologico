@@ -43,7 +43,7 @@ const vacio = (i: Indicador) =>
 
 /** Número · Indicador · Fórmula · Meta · Observaciones · acciones. En celular se apila. */
 const COLUMNAS =
-  'grid grid-cols-[28px_minmax(0,1fr)_auto] gap-x-2 gap-y-2 md:grid-cols-[28px_minmax(0,1.1fr)_minmax(0,1.3fr)_minmax(10.5rem,auto)_minmax(0,1fr)_auto] md:gap-x-4'
+  'grid grid-cols-[28px_minmax(0,1fr)_auto] gap-x-2 gap-y-2 md:grid-cols-[28px_minmax(0,1fr)_minmax(0,1.25fr)_10.5rem_minmax(0,1.25fr)_auto] md:gap-x-4'
 const FILA = `${COLUMNAS} items-start border-t border-linea-2 py-[9px] first:border-t-0`
 /** En celular los campos van en la segunda columna; desde `md` cada uno es su columna. */
 const CUERPO = 'col-start-2 row-start-1 flex min-w-0 flex-col gap-2 md:contents'
@@ -176,7 +176,7 @@ function Edicion({ charter, idTitulo }: { charter: CharterDetalle; idTitulo: str
                 </label>
                 <div>
                   <EtiquetaMovil>Meta</EtiquetaMovil>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
                     <SelectorCompacto
                       etiqueta={`Operador de la meta ${n}`}
                       valor={ind.metaOperador}
@@ -194,7 +194,7 @@ function Edicion({ charter, idTitulo }: { charter: CharterDetalle; idTitulo: str
                       alCambiar={(metaValor) => editar({ metaValor })}
                       alSalir={col.enviar}
                       placeholder="Valor"
-                      className="!mx-0 w-[4.5rem] text-right"
+                      className="!mx-0 w-[3.75rem] text-right"
                     />
                     <input
                       type="text"
@@ -204,7 +204,7 @@ function Edicion({ charter, idTitulo }: { charter: CharterDetalle; idTitulo: str
                       placeholder="unidad"
                       onChange={(e) => editar({ metaUnidad: e.target.value })}
                       onBlur={col.enviar}
-                      className={`${CLASE_CAMPO} !mx-0 w-[4.5rem]`}
+                      className={`${CLASE_CAMPO} !mx-0 w-[3.5rem] min-w-0`}
                     />
                   </div>
                 </div>
