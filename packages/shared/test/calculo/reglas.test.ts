@@ -120,13 +120,13 @@ describe('reglas del motor', () => {
       hoja('b', { orden: 1, peso: 0.4 }),
     ])
     const aviso = validarCronograma(raices, reglas({ sumaPesos: 'obligatoria' })).find(
-      (a) => a.codigo === 'pesos_no_suman_100',
+      (a) => a.codigo === 'pesos_grupo',
     )!
     expect(aviso.mensaje.endsWith('Debes completarlos para registrar un corte.')).toBe(true)
     const repartido = construirArbol([grupo, hoja('a', { peso: 0.5 }), hoja('b', { orden: 1 })])
     expect(
       validarCronograma(repartido, reglas({ sinPeso: 'repartir' })).some(
-        (a) => a.codigo === 'pesos_no_suman_100' || a.codigo === 'sin_programar',
+        (a) => a.codigo.startsWith('pesos') || a.codigo === 'sin_programar',
       ),
     ).toBe(false)
   })

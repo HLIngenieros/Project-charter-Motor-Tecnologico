@@ -1,14 +1,19 @@
 import { aDia } from './fechas'
-import { pesosEfectivos, REGLAS_POR_DEFECTO, type Reglas } from './reglas'
+import {
+  pesosEfectivos,
+  REGLAS_POR_DEFECTO,
+  sumaCompleta,
+  sumasDePesos,
+  type Reglas,
+} from './reglas'
 import type { NodoArbol } from './tipos'
 
 export interface Aviso {
-  codigo: 'pesos_no_suman_100' | 'fin_antes_de_inicio' | 'sin_programar' | 'nombre_vacio'
+  codigo:
+    'pesos_no_suman_100' | 'pesos_grupo' | 'fin_antes_de_inicio' | 'sin_programar' | 'nombre_vacio'
   actividadId?: string
   mensaje: string
 }
-
-const TOLERANCIA = 1e-6
 
 const porcentaje = (x: number) => (x * 100).toLocaleString('es-CO', { maximumFractionDigits: 2 })
 
@@ -18,7 +23,6 @@ export function validarCronograma(
   reglas: Reglas = REGLAS_POR_DEFECTO,
 ): Aviso[] {
   const avisos: Aviso[] = []
-  let sumaPesos = 0
   const pesos = pesosEfectivos(raices, reglas.sinPeso)
 
   const visitar = (n: NodoArbol) => {
@@ -41,9 +45,7 @@ export function validarCronograma(
 
     if (n.esHoja) {
       const peso = pesos[n.id]?.peso ?? 0
-      if (peso > 0 && n.inicio && n.fin && !fechasInvertidas) {
-        sumaPesos += peso
-      } else if (!fechasInvertidas) {
+      if (!(peso > 0 && n.inicio && n.fin) && !fechasInvertidas) {
         avisos.push({
           codigo: 'sin_programar',
           actividadId: n.id,
@@ -55,13 +57,59 @@ export function validarCronograma(
   }
   raices.forEach(visitar)
 
-  if (sumaPesos > 0 && Math.abs(sumaPesos - 1) > TOLERANCIA) {
+  const { raiz, grupos } = sumasDePesos(raices, reglas.sinPeso)
+  const nodos = porId(raices)
+  const cola =
+    reglas.sumaPesos === 'obligatoria' ? ' Debes completarlos para registrar un corte.' : ''
+  for (const [id, suma] of grupos) {
+    if (sumaCompleta(suma)) continue
+    avisos.push({
+      codigo: 'pesos_grupo',
+      actividadId: id,
+      mensaje: `Las subactividades de ${nodos.get(id)?.item ?? ''} suman ${porcentaje(suma)} %; ${
+        suma < 1 ? 'falta' : 'sobra'
+      } ${porcentaje(Math.abs(1 - suma))} %.${cola}`,
+    })
+  }
+  if (raiz > 0 && !sumaCompleta(raiz)) {
     avisos.unshift({
       codigo: 'pesos_no_suman_100',
-      mensaje: `Los pesos de las actividades suman ${porcentaje(sumaPesos)} % y deberían sumar 100 %.${
-        reglas.sumaPesos === 'obligatoria' ? ' Debes completarlos para registrar un corte.' : ''
-      }`,
+      mensaje: `Las actividades del primer nivel suman ${porcentaje(raiz)} % y deberían sumar 100 %.${cola}`,
     })
   }
   return avisos
+}
+
+function porId(raices: NodoArbol[]): Map<string, NodoArbol> {
+  const m = new Map<string, NodoArbol>()
+  const visitar = (n: NodoArbol) => {
+    m.set(n.id, n)
+    n.hijos.forEach(visitar)
+  }
+  raices.forEach(visitar)
+  return m
+}
+
+export interface ResumenPesos {
+  /** Suma de los relativos del primer nivel que cuentan. */
+  proyecto: number
+  /** Solo las agrupadoras cuyas subactividades no suman 100 %, en preorden. */
+  grupos: { id: string; item: string; nombre: string; suma: number }[]
+}
+
+export function resumenPesos(
+  raices: NodoArbol[],
+  reglas: Reglas = REGLAS_POR_DEFECTO,
+): ResumenPesos {
+  const { raiz, grupos } = sumasDePesos(raices, reglas.sinPeso)
+  const nodos = porId(raices)
+  return {
+    proyecto: raiz,
+    grupos: [...grupos]
+      .filter(([, suma]) => !sumaCompleta(suma))
+      .map(([id, suma]) => {
+        const n = nodos.get(id)!
+        return { id, item: n.item, nombre: n.nombre, suma }
+      }),
+  }
 }
