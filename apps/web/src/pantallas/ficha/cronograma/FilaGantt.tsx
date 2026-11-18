@@ -1,6 +1,6 @@
 import type { Aviso, FechaISO, NodoArbol, ResultadoNodo } from '@charter/shared'
 import { memo, type KeyboardEvent } from 'react'
-import { fechaCorta, porcentaje } from '../../../formato'
+import { fechaCorta, pesoTexto } from '../../../formato'
 import type { Rango } from './escala'
 import { PistaGantt, type Extremo } from './PistaGantt'
 
@@ -48,10 +48,21 @@ function CeldaFecha({ fecha }: { fecha: FechaISO | null | undefined }) {
 export function PesoAuto({ peso }: { peso: number }) {
   return (
     <span title="Peso repartido automáticamente" className="text-texto-2">
-      {porcentaje(peso)}{' '}
+      {pesoTexto(peso)}{' '}
       <span className="font-sans text-[0.6875rem] font-semibold tracking-wide text-texto-3 uppercase">
         auto
       </span>
+    </span>
+  )
+}
+
+/** Suma de las subactividades de un grupo que no llega (ámbar) o pasa (rojo) del 100 %. */
+export function MarcaSuma({ suma, className = '' }: { suma: number; className?: string }) {
+  return (
+    <span
+      className={`font-sans text-[0.6875rem] font-semibold ${suma < 1 ? 'text-amarillo-texto' : 'text-alerta-texto'} ${className}`}
+    >
+      suma {pesoTexto(suma)}
     </span>
   )
 }
@@ -60,6 +71,8 @@ interface PropsFila {
   nodo: NodoArbol
   resultado: ResultadoNodo | undefined
   avisos: Aviso[]
+  /** Agrupadora cuyas subactividades no suman 100 %: su suma. */
+  sumaHijas?: number | null
   abierta: boolean
   plegada: boolean
   destello: boolean
@@ -107,6 +120,7 @@ export const FilaGantt = memo(function FilaGantt({
   nodo,
   resultado,
   avisos,
+  sumaHijas = null,
   abierta,
   plegada,
   destello,
@@ -121,9 +135,17 @@ export const FilaGantt = memo(function FilaGantt({
   alMover,
 }: PropsFila) {
   const tonoFila = nodo.esHoja ? resultado?.estado : resultado?.vencidas ? 'vencida' : undefined
-  const auto = nodo.esHoja && !!resultado?.pesoAuto
-  const peso = nodo.esHoja && !auto ? nodo.peso : resultado?.peso
-  const aviso = avisos.map((a) => a.mensaje).join(' ')
+  const auto = !!resultado?.pesoAuto
+  const peso = resultado?.pesoRelativo ?? nodo.peso ?? 0
+  const padre = nodo.item.includes('.') ? nodo.item.slice(0, nodo.item.lastIndexOf('.')) : null
+  const tituloPeso = peso
+    ? `${pesoTexto(peso)} de ${padre ?? 'el proyecto'}${padre ? ` · ${pesoTexto(resultado?.pesoGlobal ?? 0)} del proyecto` : ''}`
+    : undefined
+  // El faltante de pesos de un grupo ya se ve en su marca «suma …».
+  const aviso = avisos
+    .filter((a) => a.codigo !== 'pesos_grupo')
+    .map((a) => a.mensaje)
+    .join(' ')
 
   return (
     <div
@@ -182,8 +204,12 @@ export const FilaGantt = memo(function FilaGantt({
           />
         )}
       </div>
-      <div className="px-2.5 text-right font-mono text-xs whitespace-nowrap max-md:hidden">
-        {auto ? <PesoAuto peso={peso ?? 0} /> : peso ? porcentaje(peso) : '—'}
+      <div
+        className="flex flex-col items-end px-2.5 font-mono text-xs whitespace-nowrap max-md:hidden"
+        title={tituloPeso}
+      >
+        <span>{auto ? <PesoAuto peso={peso} /> : peso ? pesoTexto(peso) : '—'}</span>
+        {sumaHijas !== null && <MarcaSuma suma={sumaHijas} />}
       </div>
       <CeldaFecha fecha={nodo.esHoja ? nodo.inicio : resultado?.inicio} />
       <CeldaFecha fecha={nodo.esHoja ? nodo.fin : resultado?.fin} />

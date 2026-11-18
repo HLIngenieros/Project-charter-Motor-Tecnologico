@@ -40,6 +40,8 @@ export interface ResultadoNodo {
   peso: number
   /** Parte dentro de su padre (la escrita o la repartida). */
   pesoRelativo: number
+  /** Peso de la actividad sobre el proyecto (producto de los relativos), también en agrupadoras. */
+  pesoGlobal: number
   /** El peso lo repartió la regla `sinPeso: 'repartir'` (la hoja no tenía peso). */
   pesoAuto: boolean
   inicio: FechaISO | null
@@ -119,6 +121,7 @@ function sinProgramar(id: string, item: string, extra: Partial<ResultadoNodo> = 
     item,
     peso: 0,
     pesoRelativo: 0,
+    pesoGlobal: 0,
     pesoAuto: false,
     inicio: null,
     fin: null,
@@ -154,6 +157,7 @@ function resultadoDe(
     item,
     peso: acc.peso,
     pesoRelativo: 0,
+    pesoGlobal: 0,
     pesoAuto: false,
     inicio: aISO(acc.ini),
     fin: aISO(acc.fin),
@@ -200,6 +204,7 @@ export function calcularCronograma(
       nodos[n.id] = sinProgramar(n.id, n.item, {
         peso,
         pesoRelativo,
+        pesoGlobal: peso,
         pesoAuto,
         inicio: n.inicio ?? null,
         fin: n.fin ?? null,
@@ -241,6 +246,7 @@ export function calcularCronograma(
       item: n.item,
       peso,
       pesoRelativo,
+      pesoGlobal: peso,
       pesoAuto,
       inicio: n.inicio!,
       fin: n.fin!,
@@ -264,6 +270,7 @@ export function calcularCronograma(
     nodos[n.id] = {
       ...resultadoDe(n.id, n.item, acc, t, reglas),
       pesoRelativo: p?.relativo ?? 0,
+      pesoGlobal: p?.peso ?? 0,
       pesoAuto: p?.auto ?? false,
     }
     return acc

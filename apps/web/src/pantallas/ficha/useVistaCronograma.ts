@@ -127,6 +127,7 @@ export function useVistaCronograma(
     avances: historica.avances,
     calculo: historica.calculo,
     avisos: [],
+    resumenPesos: null,
     fechaCalculo: historica.historica.fecha,
     fechaCorte: historica.historica.fecha,
     cargando: borrador.cargando || detalle.isPending,

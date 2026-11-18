@@ -7,7 +7,7 @@ import {
 } from '@charter/shared'
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Boton } from '../../../componentes/Boton'
-import { fechaCorta, porcentaje } from '../../../formato'
+import { fechaCorta, pesoTexto, porcentaje } from '../../../formato'
 import { duracion } from './operaciones'
 
 const ENTRADA =
@@ -120,6 +120,8 @@ export function DetalleActividad({
     if (Number.isInteger(n) && n >= 1 && n <= 2000 && n !== diasActuales) acciones.fijarDias(n)
     else setDias(diasActuales?.toString() ?? '')
   }
+
+  const padre = nodo.item.includes('.') ? nodo.item.slice(0, nodo.item.lastIndexOf('.')) : null
 
   const confirmarPeso = () => {
     const p = textoAPeso(peso)
@@ -254,20 +256,20 @@ export function DetalleActividad({
             onChange={(e) => acciones.aplicar({ entregable: e.target.value || null })}
           />
         </Etiqueta>
+        <Etiqueta texto={resultado?.pesoAuto ? 'Peso (%) · auto' : 'Peso (%)'}>
+          <input
+            className={`${ENTRADA} text-right font-mono`}
+            inputMode="decimal"
+            title={resultado?.pesoAuto ? 'Peso repartido automáticamente' : undefined}
+            placeholder={resultado?.pesoAuto ? pesoATexto(resultado.pesoRelativo) : undefined}
+            value={peso}
+            onChange={(e) => setPeso(e.target.value)}
+            onBlur={confirmarPeso}
+            onKeyDown={(e) => e.key === 'Enter' && confirmarPeso()}
+          />
+        </Etiqueta>
         {nodo.esHoja ? (
           <>
-            <Etiqueta texto={resultado?.pesoAuto ? 'Peso (%) · auto' : 'Peso (%)'}>
-              <input
-                className={`${ENTRADA} text-right font-mono`}
-                inputMode="decimal"
-                title={resultado?.pesoAuto ? 'Peso repartido automáticamente' : undefined}
-                placeholder={resultado?.pesoAuto ? pesoATexto(resultado.peso) : undefined}
-                value={peso}
-                onChange={(e) => setPeso(e.target.value)}
-                onBlur={confirmarPeso}
-                onKeyDown={(e) => e.key === 'Enter' && confirmarPeso()}
-              />
-            </Etiqueta>
             <Etiqueta texto="Inicio">
               <input
                 type="date"
@@ -306,8 +308,16 @@ export function DetalleActividad({
             </Etiqueta>
           </>
         ) : (
-          <p className="col-span-full pb-1 text-xs text-texto-2">
-            Peso y fechas se calculan con sus actividades.
+          <p className="col-span-full self-end pb-1 text-xs text-texto-2 sm:col-span-3">
+            Las fechas se calculan con sus actividades.
+          </p>
+        )}
+        {padre && resultado && resultado.pesoRelativo > 0 && (
+          <p className="col-span-full -mt-1 text-xs text-texto-2">
+            {pesoTexto(resultado.pesoRelativo)} de {padre} ={' '}
+            <span className="font-semibold text-tinta">
+              {pesoTexto(resultado.pesoGlobal)} del proyecto
+            </span>
           </p>
         )}
 

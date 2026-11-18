@@ -144,7 +144,7 @@ describe('cronograma de la ficha', () => {
     const s = await seccion()
     const fila = s.getByRole('button', { name: 'Pruebas' }).closest('[data-fila]') as HTMLElement
     const peso = within(fila).getByTitle('Peso repartido automáticamente')
-    expect(peso).toHaveTextContent('20,0 %')
+    expect(peso).toHaveTextContent('20 %')
     expect(peso).toHaveTextContent('auto')
   })
 
@@ -234,7 +234,9 @@ describe('cronograma de la ficha', () => {
       },
     })
     const s = await seccion()
-    expect(s.getByText(/suman 95 %/)).toBeInTheDocument()
+    const resumen = s.getByRole('group', { name: 'Resumen de pesos' })
+    expect(resumen).toHaveTextContent('proyecto 95 %')
+    expect(resumen).toHaveTextContent('falta 5 %')
   })
 
   it('eliminar una hoja con avances pide confirmación; sin avances no', async () => {
@@ -494,5 +496,50 @@ describe('duración y corrimiento', () => {
     await esperarGuardado()
     await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
     expect(ultimas(llamadas).at(-1)).toMatchObject({ inicio: '2026-12-07', fin: '2026-12-11' })
+  })
+})
+
+describe('pesos relativos en la ficha', () => {
+  const F = { inicio: '2026-11-23', fin: '2026-11-27' }
+  const cronograma = (): CronogramaRespuesta => ({
+    version: 1,
+    actividades: [
+      hoja('G', { nombre: 'Fase uno', orden: 0, peso: 0.3 }),
+      hoja('g1', { nombre: 'Levantar', padreId: 'G', orden: 0, peso: 0.4, ...F }),
+      hoja('g2', { nombre: 'Diseñar', padreId: 'G', orden: 1, peso: 0.5, ...F }),
+      hoja('H', { nombre: 'Cierre', orden: 1, peso: 0.7, ...F }),
+    ],
+    ultimoCorte: null,
+  })
+
+  it('el grupo incompleto muestra su suma en la fila y en el resumen', async () => {
+    abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    const fila = s.getByText('Fase uno').closest('[data-fila]') as HTMLElement
+    expect(within(fila).getByText('suma 90 %')).toBeInTheDocument()
+    const resumen = s.getByRole('group', { name: 'Resumen de pesos' })
+    expect(within(resumen).getByText(/proyecto 100 %/)).toBeInTheDocument()
+    expect(within(resumen).getByRole('button', { name: '1 suma 90 %' })).toBeInTheDocument()
+  })
+
+  it('la fila de una hoja muestra su peso relativo y el global en el título', async () => {
+    abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    const fila = s.getByText('Levantar').closest('[data-fila]') as HTMLElement
+    const peso = within(fila).getByText('40 %')
+    expect(peso.closest('[title]')?.getAttribute('title')).toContain('12 % del proyecto')
+  })
+
+  it('el peso de una agrupadora se edita en su detalle', async () => {
+    const { llamadas, usuario } = abrir({ cronograma: cronograma() })
+    const s = await seccion()
+    await usuario.click(s.getByText('Fase uno'))
+    const campo = s.getByRole('textbox', { name: 'Peso (%)' })
+    await usuario.clear(campo)
+    await usuario.type(campo, '25{Enter}')
+    await esperarGuardado()
+    await waitFor(() => expect(puts(llamadas)).toHaveLength(1))
+    const acts = (puts(llamadas)[0]!.cuerpo as { actividades: ActividadEntrada[] }).actividades
+    expect(acts.find((a) => a.id === 'G')!.peso).toBe(0.25)
   })
 })

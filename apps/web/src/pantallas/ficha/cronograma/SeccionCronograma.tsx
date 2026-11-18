@@ -23,6 +23,7 @@ import { AvisoCorrimiento } from './AvisoCorrimiento'
 import { DetalleActividad, type AccionesDetalle } from './DetalleActividad'
 import { COLUMNAS, FilaGantt } from './FilaGantt'
 import { LeyendaEstados } from './LeyendaEstados'
+import { ResumenPesos } from './ResumenPesos'
 import { aPorcentaje, marcas as marcasDe, rangoVisible, type Escala } from './escala'
 import * as op from './operaciones'
 import type { Extremo } from './PistaGantt'
@@ -136,7 +137,13 @@ export function SeccionCronograma({
   }, [corrimiento])
 
   const filas = useMemo(() => visibles(b.arbol, plegadas), [b.arbol, plegadas])
-  const avisoPesos = b.avisos.find((a) => a.codigo === 'pesos_no_suman_100')
+  const obligatoria = b.avisos.some(
+    (a) => a.codigo.startsWith('pesos') && a.mensaje.endsWith('registrar un corte.'),
+  )
+  const sumaDeGrupo = useMemo(
+    () => new Map(b.resumenPesos?.grupos.map((g) => [g.id, g.suma]) ?? []),
+    [b.resumenPesos],
+  )
   const avisosPorId = useMemo(() => {
     const m = new Map<string, AvisoCronograma[]>()
     for (const a of b.avisos)
@@ -223,6 +230,20 @@ export function SeccionCronograma({
     },
     [soloLectura, aplicar],
   )
+  /** Abre una fila, despliega sus agrupadoras y la trae a la vista. */
+  const irAFila = (id: string) => {
+    const porId = new Map(acts.map((a) => [a.id, a]))
+    const ancestros = new Set<string>()
+    for (let p = porId.get(id)?.padreId ?? null; p; p = porId.get(p)?.padreId ?? null)
+      ancestros.add(p)
+    setPlegadas((x) => new Set([...x].filter((i) => !ancestros.has(i))))
+    setAbierta(id)
+    requestAnimationFrame(() =>
+      document
+        .querySelector(`[data-fila="${id}"]`)
+        ?.scrollIntoView({ block: 'center', behavior: 'smooth' }),
+    )
+  }
   const alAbrir = useCallback((id: string) => setAbierta((x) => (x === id ? null : id)), [])
   const alPlegar = useCallback(
     (id: string) =>
@@ -314,7 +335,9 @@ export function SeccionCronograma({
           </span>
         </Aviso>
       )}
-      {avisoPesos && <Aviso className="mb-3">{avisoPesos.mensaje}</Aviso>}
+      {b.resumenPesos && !soloLectura && (
+        <ResumenPesos resumen={b.resumenPesos} obligatoria={obligatoria} alAbrir={irAFila} />
+      )}
       {corrimiento && !soloLectura && (
         <AvisoCorrimiento
           corridas={corrimiento.corridas}
@@ -380,6 +403,7 @@ export function SeccionCronograma({
                 nodo={n}
                 resultado={b.calculo.nodos[n.id]}
                 avisos={avisosPorId.get(n.id) ?? SIN_AVISOS}
+                sumaHijas={sumaDeGrupo.get(n.id) ?? null}
                 abierta={abierta === n.id}
                 plegada={plegadas.has(n.id)}
                 destello={destello === n.id}

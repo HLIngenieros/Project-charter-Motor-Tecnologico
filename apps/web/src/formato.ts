@@ -24,6 +24,11 @@ export function diasEntre(desde: string, hasta: string): number {
 }
 
 /** `0.1251` → `'12,5 %'`. */
+/** Peso como porcentaje, con decimal solo si lo tiene: «40 %», «12,5 %». */
+export function pesoTexto(fraccion: number): string {
+  return `${(fraccion * 100).toLocaleString('es-CO', { maximumFractionDigits: 1 })} %`
+}
+
 export function porcentaje(fraccion: number, decimales = 1): string {
   const texto = (fraccion * 100).toLocaleString('es-CO', {
     minimumFractionDigits: decimales,

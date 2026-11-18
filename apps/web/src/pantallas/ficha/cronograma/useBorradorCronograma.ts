@@ -2,6 +2,8 @@ import {
   calcularCronograma,
   construirArbol,
   validarCronograma,
+  resumenPesos,
+  type ResumenPesos,
   type ActividadEntrada,
   type Aviso,
   type AvancesPorHoja,
@@ -26,6 +28,8 @@ export interface BorradorCronograma {
   arbol: NodoArbol[]
   calculo: ResultadoCronograma
   avisos: Aviso[]
+  /** Sumas de pesos (total y grupos incompletos); null sin actividades o en la vista histórica. */
+  resumenPesos: ResumenPesos | null
   avances: AvancesPorHoja
   fechaCalculo: FechaISO
   /** Fecha del último corte; null si aún no hay cortes. */
@@ -124,12 +128,13 @@ export function useBorradorCronograma(
   const ultimoCorte = datos?.ultimoCorte ?? null
   const fechaCalculo = ultimoCorte?.fecha ?? hoyISO()
   const avances = useMemo(() => ultimoCorte?.avances ?? {}, [ultimoCorte])
-  const { arbol, calculo, avisos } = useMemo(() => {
+  const { arbol, calculo, avisos, resumen } = useMemo(() => {
     const arbol = construirArbol(lista)
     return {
       arbol,
       calculo: calcularCronograma(arbol, avances, fechaCalculo, reglas),
       avisos: lista.length ? validarCronograma(arbol, reglas) : [],
+      resumen: lista.length ? resumenPesos(arbol, reglas) : null,
     }
   }, [lista, avances, fechaCalculo, reglas])
 
@@ -140,6 +145,7 @@ export function useBorradorCronograma(
     arbol,
     calculo,
     avisos,
+    resumenPesos: resumen,
     avances,
     fechaCalculo,
     fechaCorte: ultimoCorte?.fecha ?? null,
