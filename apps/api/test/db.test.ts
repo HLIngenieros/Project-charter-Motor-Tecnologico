@@ -12,6 +12,7 @@ const TABLAS = [
   'categoria',
   'area',
   'charter',
+  'charter_acceso',
   'item_lista',
   'riesgo',
   'indicador',
@@ -47,7 +48,7 @@ async function errorDe(promesa: PromiseLike<unknown>): Promise<unknown> {
 }
 
 describe('crearDb', () => {
-  it('crea las 16 tablas, «Default» y las 3 categorías del Comité', async () => {
+  it('crea las 17 tablas, «Default» y las 3 categorías del Comité', async () => {
     const db = await crearDb(':memory:')
     // Con el tipo genérico de la base, `execute` no sabe la forma del resultado.
     const filas = (await db.execute(

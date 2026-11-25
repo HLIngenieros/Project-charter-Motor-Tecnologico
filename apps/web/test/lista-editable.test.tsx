@@ -29,7 +29,8 @@ const base: CharterDetalle = {
   actualizadoEn: '2026-11-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -40,7 +41,7 @@ function abrir(listas: Partial<Record<TipoLista, ItemLista[]>> = {}, editar = tr
   const detalle: CharterDetalle = {
     ...base,
     listas: { ...base.listas, ...listas },
-    permisos: { editar, reabrir: false },
+    permisos: { editar, reabrir: false, compartir: true },
   }
   let n = 0
   const llamadas = simularApi((l) => {

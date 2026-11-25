@@ -30,6 +30,7 @@ function charter(p: Partial<CharterResumen> & { id: string; nombre: string }): C
     categoria: null,
     area: null,
     propietario: { id: 'u-ana', nombre: 'Ana Pérez' },
+    compartido: null,
     actualizadoEn: '2026-11-01T10:00:00.000Z',
     ultimoCorte: null,
     cortes: [],

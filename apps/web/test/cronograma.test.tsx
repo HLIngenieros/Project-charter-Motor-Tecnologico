@@ -33,7 +33,8 @@ const detalle: CharterDetalle = {
   actualizadoEn: '2026-01-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -262,7 +263,7 @@ describe('cronograma de la ficha', () => {
 
   it('en solo lectura no se edita', async () => {
     const { usuario } = abrir({
-      detalleCharter: { ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true } },
+      detalleCharter: { ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true, compartir: true } },
       cronograma: { version: 1, actividades: [hoja('a', { nombre: 'Uno' })], ultimoCorte: null },
     })
     const s = await seccion()
@@ -319,7 +320,7 @@ describe('pista del Gantt', () => {
 
   it('en solo lectura la barra no se mueve', async () => {
     abrir({
-      detalleCharter: { ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true } },
+      detalleCharter: { ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true, compartir: true } },
       cronograma: programada(),
     })
     const s = await seccion()

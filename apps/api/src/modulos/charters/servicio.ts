@@ -10,7 +10,7 @@ import {
   type ItemLista,
   type TipoLista,
 } from '@charter/shared'
-import { and, asc, desc, eq, inArray } from 'drizzle-orm'
+import { and, asc, desc, eq, inArray, or } from 'drizzle-orm'
 import { v7 } from 'uuid'
 import type { UsuarioSesion } from '../../auth/sesiones'
 import type { BaseDatos } from '../../db/conexion'
@@ -18,6 +18,7 @@ import {
   area,
   categoria,
   charter,
+  charterAcceso,
   corte,
   itemLista,
   usuario,
@@ -25,6 +26,7 @@ import {
 } from '../../db/esquema'
 import { ErrorApi } from '../../errores'
 import { listarCortes } from '../cortes/servicio'
+import { rolEn } from './acceso'
 import { leerComplementos } from './complementos'
 
 const ESTADOS_CERRADOS = new Set<FilaCharter['estado']>(['cerrado', 'cancelado'])
@@ -84,11 +86,28 @@ export async function validarCatalogos(
   }
 }
 
-/** Resumen de los charters de `propietarioId`, o de todos si no viene (vista del Admin). */
+/**
+ * Resumen de los charters de `propietarioId` más los compartidos con `correo`, o de todos
+ * si no viene ninguno (vista del Admin).
+ */
 export async function listarCharters(
   db: BaseDatos,
-  { propietarioId }: { propietarioId?: string } = {},
+  { propietarioId, correo }: { propietarioId?: string; correo?: string } = {},
 ): Promise<CharterResumen[]> {
+  const compartidos = new Map<string, CharterResumen['compartido']>()
+  if (correo) {
+    const accesos = await db
+      .select({ charterId: charterAcceso.charterId, rol: charterAcceso.rol })
+      .from(charterAcceso)
+      .where(eq(charterAcceso.correo, correo))
+    for (const a of accesos) compartidos.set(a.charterId, a.rol)
+  }
+  const ids = [...compartidos.keys()]
+  const filtro = !propietarioId
+    ? undefined
+    : ids.length > 0
+      ? or(eq(charter.propietarioId, propietarioId), inArray(charter.id, ids))
+      : eq(charter.propietarioId, propietarioId)
   const filas = await db
     .select({
       charter,
@@ -100,7 +119,7 @@ export async function listarCharters(
     .innerJoin(usuario, eq(charter.propietarioId, usuario.id))
     .leftJoin(categoria, eq(charter.categoriaId, categoria.id))
     .leftJoin(area, eq(charter.areaId, area.id))
-    .where(propietarioId ? eq(charter.propietarioId, propietarioId) : undefined)
+    .where(filtro)
     .orderBy(desc(charter.actualizadoEn), desc(charter.id))
   if (filas.length === 0) return []
 
@@ -143,6 +162,7 @@ export async function listarCharters(
       categoria: cat ? aCategoria(cat) : null,
       area: ar ? aArea(ar) : null,
       propietario,
+      compartido: c.propietarioId === propietarioId ? null : (compartidos.get(c.id) ?? null),
       actualizadoEn: c.actualizadoEn,
       ultimoCorte: await ultimoDe(c),
       cortes: series.get(c.id) ?? [],
@@ -192,7 +212,9 @@ export async function detalleCharter(
     .orderBy(asc(itemLista.orden))
   for (const i of items) listas[i.tipo].push({ id: i.id, texto: i.texto })
 
-  const esDueno = fila.propietarioId === yo.id
+  // Solo llega aquí quien pasó `cargarCharter`: siempre tiene un rol.
+  const rol = (await rolEn(db, fila, yo)) ?? 'admin'
+  const esDueno = rol === 'dueno'
   const cerrado = ESTADOS_CERRADOS.has(fila.estado)
   return {
     id: fila.id,
@@ -210,7 +232,12 @@ export async function detalleCharter(
     actualizadoEn: fila.actualizadoEn,
     propietario: propietario!,
     listas,
-    permisos: { editar: esDueno && !cerrado, reabrir: esDueno && cerrado },
+    rol,
+    permisos: {
+      editar: (esDueno || rol === 'editor') && !cerrado,
+      reabrir: esDueno && cerrado,
+      compartir: esDueno,
+    },
     reglas: reglasDeCharter(fila),
     ...(await leerComplementos(db, fila.id)),
   }

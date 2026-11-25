@@ -26,7 +26,8 @@ const base: CharterDetalle = {
   actualizadoEn: '2026-11-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -42,6 +43,7 @@ const resumen = (d: CharterDetalle): CharterResumen => ({
   categoria: null,
   area: null,
   propietario: d.propietario,
+  compartido: null,
   actualizadoEn: d.actualizadoEn,
   ultimoCorte: null,
   cortes: [],
@@ -50,7 +52,7 @@ const resumen = (d: CharterDetalle): CharterResumen => ({
 /** Al cambiar el estado, los permisos siguen la regla de la API. */
 function conEstado(d: CharterDetalle, estado: CharterDetalle['estado']): CharterDetalle {
   const abierto = estado === 'activo' || estado === 'pausado'
-  return { ...d, estado, permisos: { editar: abierto, reabrir: !abierto } }
+  return { ...d, estado, permisos: { editar: abierto, reabrir: !abierto, compartir: true } }
 }
 
 function abrir({
@@ -156,7 +158,8 @@ describe('estado del charter', () => {
         codigo: null,
         responsable: '',
         propietario: { id: 'u2', nombre: 'Beto Ruiz' },
-        permisos: { editar: false, reabrir: false },
+        rol: 'admin',
+        permisos: { editar: false, reabrir: false, compartir: false },
       },
     })
     expect(await screen.findByText('Charter de Beto Ruiz · solo lectura')).toBeInTheDocument()
@@ -172,6 +175,29 @@ describe('estado del charter', () => {
       'href',
       '/?ver=todos',
     )
+  })
+
+  it('un charter compartido como lector se ve en solo lectura, sin compartir ni menú', async () => {
+    abrir({
+      detalle: {
+        ...base,
+        propietario: { id: 'u2', nombre: 'Beto Ruiz' },
+        rol: 'lector',
+        permisos: { editar: false, reabrir: false, compartir: false },
+      },
+    })
+    expect(
+      await screen.findByText('Charter de Beto Ruiz · compartido contigo, solo lectura'),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Compartir' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Estado del charter/ })).not.toBeInTheDocument()
+    const ruta = within(screen.getByRole('navigation', { name: 'Ruta' }))
+    expect(ruta.getByRole('link', { name: 'Mis charters' })).toHaveAttribute('href', '/')
+  })
+
+  it('el dueño ve «Compartir» en la banda', async () => {
+    abrir()
+    expect(await screen.findByRole('button', { name: 'Compartir' })).toBeInTheDocument()
   })
 
   it('el charter propio dice «Mis charters» en la ruta y que se guarda solo', async () => {

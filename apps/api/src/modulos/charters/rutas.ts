@@ -1,4 +1,5 @@
 import {
+  accesoEntrada,
   charterCrear,
   charterEditar,
   indicadoresEntrada,
@@ -10,7 +11,9 @@ import {
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { exigirAdmin, exigirSesion } from '../../auth/guardas'
+import { ErrorApi } from '../../errores'
 import { cargarCharter } from './acceso'
+import { compartir, listarAccesos, quitarAcceso } from './accesos'
 import { reemplazarIndicadores, reemplazarPresupuesto, reemplazarRiesgos } from './complementos'
 import { exportarCharter } from './exportar'
 import {
@@ -40,7 +43,8 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
       await exigirAdmin(request)
       return listarCharters(db)
     }
-    return listarCharters(db, { propietarioId: request.usuario!.id })
+    const yo = request.usuario!
+    return listarCharters(db, { propietarioId: yo.id, correo: yo.correo })
   })
 
   app.post('/', async (request, reply) => {
@@ -64,6 +68,10 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
       yo,
       soloReabre ? 'reapertura' : 'escritura',
     )
+    // El editor cambia todo lo demás; el estado del charter es decisión del dueño.
+    if (datos.estado !== undefined && fila.propietarioId !== yo.id) {
+      throw new ErrorApi(403, 'solo_dueno', 'Solo el dueño puede cambiar el estado del charter.')
+    }
     return detalleCharter(db, await editarCharter(db, fila, datos), yo)
   })
 
@@ -96,6 +104,25 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'lectura')
     return exportarCharter(db, fila, request.usuario!, request.query.corte || undefined)
   })
+
+  app.get<ConId>('/:id/accesos', async (request) => {
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+    return listarAccesos(db, fila.id)
+  })
+
+  app.post<ConId>('/:id/accesos', async (request) => {
+    const datos = accesoEntrada.parse(request.body)
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+    return compartir(db, fila, datos, app.config.dominioPermitido)
+  })
+
+  app.delete<{ Params: { id: string; correo: string } }>(
+    '/:id/accesos/:correo',
+    async (request) => {
+      const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+      return quitarAcceso(db, fila.id, request.params.correo)
+    },
+  )
 
   app.delete<ConId>('/:id', async (request, reply) => {
     const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')

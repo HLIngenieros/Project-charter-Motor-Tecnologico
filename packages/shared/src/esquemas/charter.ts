@@ -72,6 +72,32 @@ export const listaEntrada = z.object({
     .max(50, { error: 'Una lista puede tener máximo 50 ítems' }),
 })
 
+// ── Compartir ───────────────────────────────────────────────────────────
+
+export const ROLES_ACCESO = ['lector', 'editor'] as const
+export const rolAcceso = z.enum(ROLES_ACCESO, { error: 'Elige Lector o Editor' })
+
+/** Correo y rol de la persona con quien se comparte; el correo llega normalizado. */
+export const accesoEntrada = z.object({
+  correo: z
+    .string({ error: 'Escribe el correo' })
+    .transform((c) => c.trim().toLowerCase())
+    .pipe(z.email({ error: 'Escribe un correo válido' })),
+  rol: rolAcceso,
+})
+
+export type RolAcceso = z.infer<typeof rolAcceso>
+/** Cómo ve el charter quien lo abre: `admin` = Admin sin acceso compartido (solo consulta). */
+export type RolCharter = 'dueno' | RolAcceso | 'admin'
+export type AccesoEntrada = z.infer<typeof accesoEntrada>
+
+export interface AccesoCharter {
+  correo: string
+  rol: RolAcceso
+  /** Nulo mientras la persona no se registre con ese correo. */
+  nombre: string | null
+}
+
 export type EstadoCharter = z.infer<typeof estadoCharter>
 export type TipoLista = z.infer<typeof tipoLista>
 export type CharterCrear = z.infer<typeof charterCrear>
@@ -110,6 +136,8 @@ export interface CharterResumen {
   categoria: CategoriaPublica | null
   area: AreaPublica | null
   propietario: { id: string; nombre: string }
+  /** Mi rol si el charter es de otro y me lo compartieron; nulo si es mío (o vista «Todos»). */
+  compartido: RolAcceso | null
   actualizadoEn: string
   /** Totales guardados del último corte (no se recalculan con el cronograma actual). */
   ultimoCorte: {
@@ -139,7 +167,8 @@ export interface CharterDetalle {
   actualizadoEn: string
   propietario: { id: string; nombre: string }
   listas: Record<TipoLista, ItemLista[]>
-  permisos: { editar: boolean; reabrir: boolean }
+  rol: RolCharter
+  permisos: { editar: boolean; reabrir: boolean; compartir: boolean }
   /** Reglas de cálculo del charter (copiadas de las vigentes al crearlo). */
   reglas: Reglas
   indicadores: Indicador[]

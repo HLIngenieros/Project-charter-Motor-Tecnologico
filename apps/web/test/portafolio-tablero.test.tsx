@@ -22,6 +22,7 @@ function charter(p: Partial<CharterResumen> & { id: string; nombre: string }): C
     categoria: null,
     area: null,
     propietario: { id: 'u1', nombre: 'Ana Pérez' },
+    compartido: null,
     actualizadoEn: '2026-11-01T10:00:00.000Z',
     ultimoCorte: null,
     cortes: [],
@@ -64,6 +65,7 @@ const ajeno = charter({
   nombre: 'Charter de Luis',
   area: obras,
   propietario: { id: 'u2', nombre: 'Luis Gómez' },
+  compartido: null,
 })
 
 function abrir({ admin = false, ruta = '/' } = {}) {

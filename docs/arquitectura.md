@@ -22,8 +22,9 @@ Definición técnica de la plataforma. Complementa el [README](../README.md) (qu
 |---|---|---|
 | Registrarse e iniciar sesión | Sí | Sí |
 | Crear, editar y eliminar **sus** charters | Sí | Sí *(criterio técnico: el Admin es un usuario con un permiso extra; también puede tener charters propios)* |
-| Ver charters de **otros** | No | Sí, **solo lectura** |
-| Editar charters de otros | No | No |
+| Ver charters de **otros** | Solo los compartidos con él | Sí, **solo lectura** |
+| Editar charters de otros | Solo si se los compartieron como **Editor** | Igual que un usuario |
+| Compartir un charter (Lector o Editor) | Solo los suyos | Solo los suyos |
 | Gestionar catálogos (categorías, áreas) | No | Sí |
 | Gestionar cuentas (ver, desactivar, reactivar, restablecer clave, otorgar o quitar Admin) | No | Sí |
 
@@ -31,6 +32,7 @@ Definición técnica de la plataforma. Complementa el [README](../README.md) (qu
 - **Primer Admin:** se crea por línea de comandos (`npm run admin -- --promover correo@hlingenieros.com`) sobre una cuenta ya registrada. Desde ahí, un Admin puede otorgar el permiso a otros desde la pantalla de cuentas.
 - **Olvido de clave:** como no hay servidor de correo, la clave la restablece un Admin. Se genera una clave temporal y el usuario debe cambiarla al entrar *(criterio técnico)*.
 - **Cuenta desactivada:** no puede iniciar sesión y sus sesiones abiertas se cierran. Sus charters se conservan y el Admin los sigue viendo.
+- **Compartir** *(2026-11-24)*: el dueño comparte por correo `@hlingenieros.com`, aunque la persona aún no tenga cuenta (el acceso queda pendiente y vale al registrarse con ese correo). **Editor:** edita la ficha, el cronograma y los complementos, y registra cortes. **Lector:** consulta y exporta. Solo el dueño comparte, cambia el estado, reabre o elimina. No se envían correos: el dueño avisa por fuera. Diseño en `docs/superpowers/specs/2026-11-24-compartir-charters-design.md`.
 
 ## 3. Stack
 
@@ -104,6 +106,7 @@ Convenciones: identificadores `TEXT` con UUID v7 *(criterio técnico: ordenables
 | Tabla | Campos |
 |---|---|
 | `charter` | id, propietario_id, nombre, codigo (opcional, ej. "A1"), categoria_id?, area_id?, responsable, patrocinador, revision, razon_de_ser, objetivo_general, estado (`activo` · `pausado` · `cerrado` · `cancelado`), umbral_atencion (10), umbral_riesgo (25), umbral_atraso (50) — puntos de brecha, §4.4 del análisis; reglas (JSON: suma de pesos, sin peso, reparto, proyección y días de gracia; se copian de `parametros` al crear) |
+| `charter_acceso` | charter_id, correo (normalizado), rol (`lector` · `editor`); clave (charter_id, correo), índice por correo, `ON DELETE CASCADE` |
 | `parametros` | Una fila (`id = 1`): reglas (JSON) vigentes para los charters nuevos, actualizado_por, actualizado_en. Sin fila rigen `REGLAS_POR_DEFECTO` del motor |
 | `item_lista` | id, charter_id, tipo (`objetivo` · `supuesto` · `criterio_exito`), texto, orden |
 | `riesgo` | id, charter_id, riesgo, causa, mitigacion, orden |
@@ -180,7 +183,8 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 |---|---|
 | Auth | `POST /auth/registro` · `POST /auth/login` · `POST /auth/logout` · `GET /auth/yo` · `POST /auth/cambiar-clave` |
 | Catálogos (lectura) | `GET /categorias` · `GET /areas` |
-| Charters | `GET /charters` (los míos) · `POST /charters` · `GET/PATCH/DELETE /charters/:id` · `GET /charters/:id/exportar[?corte=]` (JSON completo con cortes; 404 `no_encontrado` si el corte no existe) |
+| Charters | `GET /charters` (los míos y los compartidos conmigo, con `compartido`) · `POST /charters` · `GET/PATCH/DELETE /charters/:id` · `GET /charters/:id/exportar[?corte=]` (JSON completo con cortes; 404 `no_encontrado` si el corte no existe) |
+| Compartir (solo el dueño) | `GET /charters/:id/accesos` · `POST /charters/:id/accesos` (`{ correo, rol }`: crea o cambia el rol) · `DELETE /charters/:id/accesos/:correo` |
 | Listas | `PUT /charters/:id/listas/:tipo` (reemplaza la lista ordenada) |
 | Cronograma | `GET /charters/:id/cronograma` · `PUT /charters/:id/cronograma` (guarda el árbol completo en una transacción) |
 | Cortes | `GET /charters/:id/cortes` · `GET/PUT/DELETE /charters/:id/cortes/:fecha` |
@@ -190,7 +194,7 @@ REST con JSON bajo `/api`. Todas las rutas, salvo registro y login, exigen sesi�
 | Admin | `GET /charters?ver=todos` (todos, con `propietario`; un no-Admin recibe 403) · `GET/PUT /admin/parametros` · `GET /admin/cuentas` · `PATCH /admin/cuentas/:id` (activa, Admin; 400 `sobre_si_mismo`, 409 `ultimo_admin`) · `POST /admin/cuentas/:id/restablecer-clave` · `GET/POST /admin/catalogos/{categorias,areas}` y `PATCH/DELETE …/:id` (409 `nombre_repetido`, `en_uso`, `protegida`) |
 
 - **Guardado por bloques** *(criterio técnico)*: listas, cronograma, riesgos, indicadores y presupuesto se envían completos con `PUT`. Simplifica la edición en línea y el reordenamiento. El volumen es pequeño (un cronograma grande tiene unas 200 filas).
-- **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`. Con `modo = 'escritura'` exige que el usuario sea el dueño. Con `modo = 'lectura'` acepta al dueño o a un Admin. Si el charter es de otro, responde **404** (no 403), para no revelar que existe. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
+- **Aislamiento:** un solo punto de control, `cargarCharter(id, usuario, modo)`, con el rol de `rolEn` (`dueno`, `editor`, `lector` o `admin`). `lectura` acepta a cualquiera con rol; `escritura`, al dueño o un editor (403 `solo_lectura` para lector y Admin); `reapertura` (reabrir, eliminar, compartir), solo al dueño (403 `solo_dueno`). Cambiar el estado por `PATCH` también exige ser el dueño. Sin rol, responde **404** (no 403), para no revelar que existe. El detalle trae `rol` y `permisos.compartir`. Hay pruebas de API que verifican que un usuario no puede leer ni escribir charters ajenos por ninguna ruta.
 - **Concurrencia:** cada charter tiene un solo editor, así que se aplica "el último guardado gana". El `PUT` del cronograma envía `version` (`charter.cronograma_version`); si no coincide, la API responde 409 `cronograma_desactualizado` y la web muestra «El cronograma cambió en otra pestaña» con «Recargar». Dos cortes nuevos en la misma fecha a la vez chocan en el índice único y el segundo recibe 409 `corte_simultaneo`. No se usa `actualizado_en` porque los `PATCH` del encabezado lo cambian y darían falsos 409.
 - **Cortes:** `PUT /cortes/:fecha` crea el corte con la foto de la línea base vigente o, si ya existe en esa fecha, edita su % y su nota sin tocar la foto. Códigos propios: `fecha_futura`, `corte_anterior` (un corte nuevo no puede ir antes del último), `sin_hojas_programadas`, `actividad_invalida`; en el cronograma, `id_invalido` (id de otro charter).
 - **Admin:** las rutas `/admin/*` usan `exigirAdmin` y responden 403 `solo_admin`; ocultarlas no protege nada.
@@ -267,7 +271,6 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 
 ## 12. Fuera de alcance (por ahora)
 
-- Compartir charters o tener varios editores.
 - Flujos de aprobación, control de cambios formal y roles intermedios.
 - Notificaciones y correos.
 - Importar el Excel desde la interfaz (el Excel solo se usa como fixture de pruebas).
@@ -293,3 +296,4 @@ El menú «Exportar» de la banda ofrece PDF y JSON del corte que se está viend
 | 2026-11-09 | Portafolio muestra la situación al último corte, con aviso si tiene más de 14 días | Claude |
 | 2026-11-09 | Charter cerrado o cancelado queda en solo lectura; el dueño lo puede reabrir | Claude |
 | 2026-11-13 | Producción en Vercel + Neon; cabeceras en `vercel.json`, purga de sesiones al crear una y pantallas con carga diferida | Usuario / Claude |
+| 2026-11-24 | Compartir charters por correo como Lector o Editor, también con quien aún no tiene cuenta; sin transferir la propiedad | Usuario / Claude |

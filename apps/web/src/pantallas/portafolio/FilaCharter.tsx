@@ -6,6 +6,7 @@ import { MiniCurvaS } from '../../componentes/MiniCurvaS'
 import { diasEntre, fechaCorta, hoyISO, porcentaje } from '../../formato'
 import { escalonado, useVariantes } from '../../movimiento'
 import { ETIQUETA_ESTADO, tonoDe } from '../ficha/cronograma/estados'
+import { NOMBRE_ROL } from '../ficha/DialogoCompartir'
 
 const EnlaceAnimado = motion.create(Link)
 
@@ -77,12 +78,17 @@ export function FilaCharter({
             {c.nombre}
           </span>
           {pausa && <Chip>{pausa}</Chip>}
+          {c.compartido && <Chip>Compartido · {NOMBRE_ROL[c.compartido]}</Chip>}
         </div>
         <div className="mt-1 flex flex-wrap items-center gap-2 text-[0.8125rem] text-texto-2">
           <ChipCategoria categoria={c.categoria} />
           <span>{c.responsable}</span>
           {c.codigo && <span className="font-cifra text-xs">{c.codigo}</span>}
-          {conDueno && <span className="lg:hidden">· de {c.propietario.nombre}</span>}
+          {conDueno ? (
+            <span className="lg:hidden">· de {c.propietario.nombre}</span>
+          ) : (
+            c.compartido && <span>· de {c.propietario.nombre}</span>
+          )}
         </div>
       </div>
 

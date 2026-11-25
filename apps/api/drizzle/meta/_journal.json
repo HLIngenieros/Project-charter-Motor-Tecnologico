@@ -29,6 +29,13 @@
       "when": 1795013857538,
       "tag": "0003_pesos_relativos",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795580333543,
+      "tag": "0004_compartir",
+      "breakpoints": true
     }
   ]
 }

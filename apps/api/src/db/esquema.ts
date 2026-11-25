@@ -1,4 +1,4 @@
-import { ESTADOS_CHARTER, REGLAS_POR_DEFECTO, TIPOS_LISTA } from '@charter/shared'
+import { ESTADOS_CHARTER, REGLAS_POR_DEFECTO, ROLES_ACCESO, TIPOS_LISTA } from '@charter/shared'
 import {
   type AnyPgColumn,
   bigint,
@@ -113,6 +113,24 @@ const charterId = () =>
   text('charter_id')
     .notNull()
     .references(() => charter.id, { onDelete: 'cascade' })
+
+/**
+ * Personas con quien el dueño compartió el charter. Va por correo (normalizado) y no por
+ * cuenta: un acceso a un correo sin registrar queda pendiente y vale al registrarse.
+ */
+export const charterAcceso = pgTable(
+  'charter_acceso',
+  {
+    charterId: charterId(),
+    correo: text('correo').notNull(),
+    rol: text('rol', { enum: ROLES_ACCESO }).notNull(),
+    ...tiempos,
+  },
+  (t) => [
+    primaryKey({ columns: [t.charterId, t.correo] }),
+    index('charter_acceso_correo_idx').on(t.correo),
+  ],
+)
 
 export const itemLista = pgTable('item_lista', {
   id: text('id').primaryKey(),

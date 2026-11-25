@@ -81,7 +81,7 @@ describe('crear charter', () => {
       codigo: null,
       propietario: { nombre: 'ana Prueba' },
       listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-      permisos: { editar: true, reabrir: false },
+      permisos: { editar: true, reabrir: false, compartir: true },
     })
   })
 
@@ -235,7 +235,7 @@ describe('editar charter', () => {
     expect(escribir.statusCode).toBe(403)
     expect(escribir.json().error.codigo).toBe('solo_lectura')
     const leido = await detalle(id, admin)
-    expect(leido.permisos).toEqual({ editar: false, reabrir: false })
+    expect(leido.permisos).toEqual({ editar: false, reabrir: false, compartir: false })
   })
 
   it('conserva una categoría que se desactivó pero no deja cambiar a otra inactiva', async () => {
@@ -258,7 +258,7 @@ describe('editar charter', () => {
     const id = await crearCharterPrueba(app, ana)
     const cerrar = await pedir('PATCH', `/api/charters/${id}`, ana, { estado: 'cerrado' })
     expect(cerrar.statusCode).toBe(200)
-    expect(cerrar.json<CharterDetalle>().permisos).toEqual({ editar: false, reabrir: true })
+    expect(cerrar.json<CharterDetalle>().permisos).toEqual({ editar: false, reabrir: true, compartir: true })
 
     const editar = await pedir('PATCH', `/api/charters/${id}`, ana, { nombre: 'X' })
     expect(editar.statusCode).toBe(409)
@@ -270,7 +270,7 @@ describe('editar charter', () => {
 
     const reabrir = await pedir('PATCH', `/api/charters/${id}`, ana, { estado: 'activo' })
     expect(reabrir.statusCode).toBe(200)
-    expect(reabrir.json<CharterDetalle>().permisos).toEqual({ editar: true, reabrir: false })
+    expect(reabrir.json<CharterDetalle>().permisos).toEqual({ editar: true, reabrir: false, compartir: true })
   })
 
   it('el Admin no puede reabrir un charter ajeno', async () => {

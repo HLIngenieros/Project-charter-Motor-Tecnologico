@@ -4,7 +4,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { CLAVES, useAreas, useCategorias, useCharter, useEditarCharter } from '../../api/charters'
 import { ErrorCliente } from '../../api/cliente'
-import { CLAVE_SESION, useSesion } from '../../api/sesion'
+import { CLAVE_SESION } from '../../api/sesion'
 import { Layout } from '../../app/Layout'
 import { Aviso } from '../../componentes/Aviso'
 import { Boton } from '../../componentes/Boton'
@@ -12,6 +12,7 @@ import { Cargando } from '../../componentes/Cargando'
 import { BandaEstado } from './BandaEstado'
 import { ContextoGuardado, useColaGuardado, type AlFallar } from './colaGuardado'
 import { EstadoGuardadoMovil, IndiceFicha, type SeccionIndice } from './IndiceFicha'
+import { BotonCompartir } from './DialogoCompartir'
 import { MenuCharter } from './MenuCharter'
 import { MenuExportar } from './MenuExportar'
 import { fechaCorta } from '../../formato'
@@ -75,7 +76,6 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
   const areas = useAreas()
   const editar = useEditarCharter(charter.id)
   const cliente = useQueryClient()
-  const sesion = useSesion()
   /** Mensaje de la API cuando un guardado chocó con un charter ya cerrado. */
   const [rechazo, setRechazo] = useState<string>()
 
@@ -127,28 +127,37 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
   const { historica } = vista
   /** Un corte pasado se ve siempre en solo lectura (también mientras se resuelve el pedido). */
   const soloLectura = !charter.permisos.editar || historica !== null || vista.resolviendoCorte
-  const esDueno = sesion.data?.id === charter.propietario.id
-  const aviso = !esDueno ? (
-    <Aviso>Charter de {charter.propietario.nombre} · solo lectura</Aviso>
-  ) : charter.permisos.reabrir ? (
-    <Aviso tono={rechazo ? 'alerta' : 'info'}>
-      <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <span>
-          {rechazo && <span className="block">{rechazo}</span>}
-          Este charter está {charter.estado === 'cancelado' ? 'cancelado' : 'cerrado'}.
+  const esDueno = charter.rol === 'dueno'
+  const de = charter.propietario.nombre
+  const aviso =
+    charter.rol === 'admin' ? (
+      <Aviso>Charter de {de} · solo lectura</Aviso>
+    ) : charter.rol === 'lector' ? (
+      <Aviso>Charter de {de} · compartido contigo, solo lectura</Aviso>
+    ) : charter.rol === 'editor' && !rechazo ? (
+      <Aviso>
+        Charter de {de} · compartido contigo
+        {charter.permisos.editar ? ' como editor' : `, ${charter.estado} y en solo lectura`}
+      </Aviso>
+    ) : charter.permisos.reabrir ? (
+      <Aviso tono={rechazo ? 'alerta' : 'info'}>
+        <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span>
+            {rechazo && <span className="block">{rechazo}</span>}
+            Este charter está {charter.estado === 'cancelado' ? 'cancelado' : 'cerrado'}.
+          </span>
+          <button
+            type="button"
+            onClick={() => cambiarEstado('activo')}
+            className="rounded-sm font-semibold underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
+          >
+            Reabrir
+          </button>
         </span>
-        <button
-          type="button"
-          onClick={() => cambiarEstado('activo')}
-          className="rounded-sm font-semibold underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-acento"
-        >
-          Reabrir
-        </button>
-      </span>
-    </Aviso>
-  ) : rechazo ? (
-    <Aviso tono="alerta">{rechazo}</Aviso>
-  ) : null
+      </Aviso>
+    ) : rechazo ? (
+      <Aviso tono="alerta">{rechazo}</Aviso>
+    ) : null
 
   return (
     <ContextoGuardado.Provider value={cola}>
@@ -158,7 +167,11 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
           <BandaEstado
             nombre={charter.nombre}
             // Al charter de otro solo llega el Admin, desde la vista «Todos».
-            volverA={esDueno ? undefined : { texto: 'Todos los charters', ruta: '/?ver=todos' }}
+            volverA={
+              charter.rol === 'admin'
+                ? { texto: 'Todos los charters', ruta: '/?ver=todos' }
+                : undefined
+            }
             situacion={
               vista.arbol.length > 0
                 ? {
@@ -181,12 +194,15 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
             acciones={
               esDueno &&
               !historica && (
-                <MenuCharter
-                  charterId={charter.id}
-                  nombre={charter.nombre}
-                  estado={charter.estado}
-                  cambiarEstado={cambiarEstado}
-                />
+                <div className="flex items-center gap-2">
+                  <BotonCompartir charterId={charter.id} nombre={charter.nombre} />
+                  <MenuCharter
+                    charterId={charter.id}
+                    nombre={charter.nombre}
+                    estado={charter.estado}
+                    cambiarEstado={cambiarEstado}
+                  />
+                </div>
               )
             }
           />

@@ -34,7 +34,8 @@ const detalle: CharterDetalle = {
   actualizadoEn: '2026-01-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -169,7 +170,7 @@ describe('banda e historial de cortes', () => {
   })
 
   it('en solo lectura no se registra ni se elimina', async () => {
-    abrir({ ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true } })
+    abrir({ ...detalle, estado: 'cerrado', permisos: { editar: false, reabrir: true, compartir: true } })
     const h = await historial()
     await h.findByText('2 nov 2026')
     expect(h.queryByRole('button', { name: /Eliminar/ })).not.toBeInTheDocument()

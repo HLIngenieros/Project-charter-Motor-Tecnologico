@@ -18,6 +18,7 @@ function charter(p: Partial<CharterResumen> & { id: string }): CharterResumen {
     categoria: null,
     area: null,
     propietario: { id: 'u1', nombre: 'Ana' },
+    compartido: null,
     actualizadoEn: '2026-11-01T10:00:00.000Z',
     ultimoCorte: null,
     cortes: [],

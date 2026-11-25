@@ -26,7 +26,8 @@ const base: CharterDetalle = {
   actualizadoEn: '2026-11-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -45,7 +46,7 @@ const indicador = (n: number, cambios: Partial<Indicador> = {}): Indicador => ({
 })
 
 function abrir(indicadores: Indicador[] = [], editar = true) {
-  const detalle: CharterDetalle = { ...base, indicadores, permisos: { editar, reabrir: false } }
+  const detalle: CharterDetalle = { ...base, indicadores, permisos: { editar, reabrir: false, compartir: true } }
   const llamadas = simularApi((l) => {
     if (l.url === '/api/categorias' || l.url === '/api/areas' || l.url === '/api/charters')
       return { estado: 200, cuerpo: [] }

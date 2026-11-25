@@ -29,7 +29,8 @@ const detalle: CharterDetalle = {
   actualizadoEn: '2026-01-01T15:00:00.000Z',
   propietario: { id: 'u1', nombre: 'Ana Pérez' },
   listas: { objetivo: [], supuesto: [], criterio_exito: [] },
-  permisos: { editar: true, reabrir: false },
+  rol: 'dueno',
+  permisos: { editar: true, reabrir: false, compartir: true },
   reglas: REGLAS_POR_DEFECTO,
   indicadores: [],
   riesgos: [],
@@ -174,7 +175,7 @@ describe('exportar la ficha', () => {
     const { usuario } = abrir('/charters/c1', {
       ...detalle,
       propietario: { id: 'u2', nombre: 'Luis Gómez' },
-      permisos: { editar: false, reabrir: false },
+      permisos: { editar: false, reabrir: false, compartir: true },
     })
     await exportar(usuario, 'PDF')
     expect(abiertas).toEqual(['/charters/c1/imprimir'])

@@ -1,4 +1,6 @@
 import type {
+  AccesoCharter,
+  AccesoEntrada,
   AreaPublica,
   CategoriaPublica,
   CharterCrear,
@@ -124,4 +126,35 @@ export function useEliminarCharter() {
       void cliente.invalidateQueries({ queryKey: CLAVES.charters })
     },
   })
+}
+
+const clavesAccesos = (id: string) => ['accesos', id] as const
+
+/** Personas con acceso al charter (solo la pide el dueño). */
+export function useAccesos(id: string, activo = true) {
+  return useQuery({
+    queryKey: clavesAccesos(id),
+    queryFn: () => api<AccesoCharter[]>(`/charters/${id}/accesos`),
+    enabled: activo,
+  })
+}
+
+/** Comparte (o cambia el rol) y quita accesos; ambas devuelven la lista completa. */
+export function useCompartir(id: string) {
+  const cliente = useQueryClient()
+  const guardar = (lista: AccesoCharter[]) => cliente.setQueryData(clavesAccesos(id), lista)
+  return {
+    compartir: useMutation({
+      mutationFn: (datos: AccesoEntrada) =>
+        api<AccesoCharter[]>(`/charters/${id}/accesos`, { metodo: 'POST', cuerpo: datos }),
+      onSuccess: guardar,
+    }),
+    quitar: useMutation({
+      mutationFn: (correo: string) =>
+        api<AccesoCharter[]>(`/charters/${id}/accesos/${encodeURIComponent(correo)}`, {
+          metodo: 'DELETE',
+        }),
+      onSuccess: guardar,
+    }),
+  }
 }
