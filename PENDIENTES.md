@@ -131,8 +131,9 @@ Diseño en `docs/superpowers/specs/2026-11-24-compartir-charters-design.md`, pla
 - [x] Tabla `charter_acceso` por correo (migración `0004_compartir`) y control de acceso por rol (dueño, editor, lector, Admin)
 - [x] API: `GET/POST /charters/:id/accesos` y `DELETE …/:correo`; el listado trae los compartidos y el detalle `rol` y `permisos.compartir`
 - [x] Web: botón y diálogo «Compartir» (correo, rol, pendientes, quitar, copiar enlace), avisos por rol en la ficha y chip «Compartido · rol» en el portafolio
-- [ ] Publicar (push a `main`: Vercel aplica la migración en Neon)
-- [ ] Desde la cuenta dueña de los 9 charters («admin»), compartirlos como Editor con quien registra los cortes
+- [x] Publicado (2026-11-24; redesplegado con autor `TransformacionDigitalHL`)
+- [x] Cualquier Admin comparte en todos los charters, incluso consigo mismo (2026-11-25)
+- [ ] Publicar el ajuste del Admin y agregarse como Editor en los 9 charters de jurbina@
 
 ## Registro de sesiones
 

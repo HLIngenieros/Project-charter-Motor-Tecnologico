@@ -192,16 +192,21 @@ function Hoja({ charter }: { charter: CharterDetalle }) {
               />
             }
             acciones={
-              esDueno &&
+              (esDueno || charter.permisos.compartir) &&
               !historica && (
                 <div className="flex items-center gap-2">
-                  <BotonCompartir charterId={charter.id} nombre={charter.nombre} />
-                  <MenuCharter
-                    charterId={charter.id}
-                    nombre={charter.nombre}
-                    estado={charter.estado}
-                    cambiarEstado={cambiarEstado}
-                  />
+                  {/* Compartir: el dueño o un Admin. El estado sigue siendo solo del dueño. */}
+                  {charter.permisos.compartir && (
+                    <BotonCompartir charterId={charter.id} nombre={charter.nombre} />
+                  )}
+                  {esDueno && (
+                    <MenuCharter
+                      charterId={charter.id}
+                      nombre={charter.nombre}
+                      estado={charter.estado}
+                      cambiarEstado={cambiarEstado}
+                    />
+                  )}
                 </div>
               )
             }

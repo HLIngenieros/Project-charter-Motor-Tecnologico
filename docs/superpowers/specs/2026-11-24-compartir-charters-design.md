@@ -55,6 +55,10 @@ Hoy cada charter tiene un solo dueño: solo él edita y registra cortes, y el Ad
 - Portafolio: chip «Compartido · Editor/Lector» y «de X» en la línea de datos.
 - El resto de la ficha y Registrar corte ya se gobiernan con `permisos.editar`.
 
+## Ajuste del 2026-11-25 (usuario)
+
+Cualquier Admin también puede compartir, cambiar el rol o quitar accesos en **todos** los charters, incluso agregarse a sí mismo como Editor. Modo `compartir` en `cargarCharter` (dueño o Admin); `permisos.compartir = dueño || Admin`. Estado, reabrir y eliminar siguen siendo solo del dueño.
+
 ## Decisiones de Claude
 
 - Los compartidos entran también al tablero del portafolio de quien los recibe (es su vista de trabajo).

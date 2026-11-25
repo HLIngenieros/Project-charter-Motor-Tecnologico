@@ -94,6 +94,41 @@ describe('compartir charters', () => {
     expect((await compartir(app, beto, id, 'luz@hlingenieros.com')).statusCode).toBe(403)
   })
 
+  it('un Admin comparte un charter ajeno, también consigo mismo, pero no cambia su estado', async () => {
+    const { app, ana, id } = await escenario()
+    const admin = await sesionDe(app, 'jefe@hlingenieros.com', { admin: true })
+    const antes = (await detalle(app, admin, id)).json<CharterDetalle>()
+    expect(antes.rol).toBe('admin')
+    expect(antes.permisos).toEqual({ editar: false, reabrir: false, compartir: true })
+
+    expect((await compartir(app, admin, id, 'luz@hlingenieros.com', 'lector')).statusCode).toBe(200)
+    const propio = await compartir(app, admin, id, 'jefe@hlingenieros.com', 'editor')
+    expect(propio.json<AccesoCharter[]>().map((a) => a.correo)).toEqual([
+      'luz@hlingenieros.com',
+      'jefe@hlingenieros.com',
+    ])
+    const despues = (await detalle(app, admin, id)).json<CharterDetalle>()
+    expect(despues.rol).toBe('editor')
+    expect(despues.permisos).toEqual({ editar: true, reabrir: false, compartir: true })
+    expect((await escribirLista(app, admin, id)).statusCode).toBe(200)
+
+    const estado = await app.inject({
+      method: 'PATCH',
+      url: `/api/charters/${id}`,
+      headers: admin,
+      payload: { estado: 'pausado' },
+    })
+    expect(estado.json().error).toMatchObject({ codigo: 'solo_dueno' })
+    // El dueño sigue protegido.
+    expect(
+      (await compartir(app, admin, id, 'ana@hlingenieros.com')).json().error.campos.correo,
+    ).toBe('Ese es el correo del dueño del charter')
+    expect(
+      (await app.inject({ method: 'GET', url: `/api/charters/${id}/accesos`, headers: ana }))
+        .statusCode,
+    ).toBe(200)
+  })
+
   it('cambiar el rol no duplica y quitar el acceso lo oculta', async () => {
     const { app, ana, id } = await escenario()
     await compartir(app, ana, id, 'beto@hlingenieros.com', 'editor')

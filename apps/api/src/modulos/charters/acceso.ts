@@ -5,7 +5,7 @@ import type { BaseDatos } from '../../db/conexion'
 import { charter, charterAcceso, type FilaCharter } from '../../db/esquema'
 import { ErrorApi } from '../../errores'
 
-export type ModoAcceso = 'lectura' | 'escritura' | 'reapertura'
+export type ModoAcceso = 'lectura' | 'escritura' | 'reapertura' | 'compartir'
 
 const ESTADOS_CERRADOS = new Set<FilaCharter['estado']>(['cerrado', 'cancelado'])
 
@@ -31,7 +31,8 @@ export async function rolEn(
  * - Inexistente o sin acceso: el mismo 404, para no revelar que existe.
  * - `lectura`: el dueño, quien lo tenga compartido o un Admin.
  * - `escritura`: el dueño o un editor, y solo si no está cerrado ni cancelado.
- * - `reapertura`: solo el dueño, en cualquier estado (reabrir, eliminar y compartir).
+ * - `reapertura`: solo el dueño, en cualquier estado (reabrir y eliminar).
+ * - `compartir`: el dueño o cualquier Admin, en cualquier estado (quién tiene acceso).
  */
 export async function cargarCharter(
   db: BaseDatos,
@@ -45,6 +46,14 @@ export async function cargarCharter(
     throw new ErrorApi(404, 'no_encontrado', 'No encontramos ese charter')
   }
   if (modo === 'lectura') return fila
+  if (modo === 'compartir') {
+    if (rol === 'dueno' || usuario.esAdmin) return fila
+    throw new ErrorApi(
+      403,
+      'solo_dueno',
+      'Solo el dueño o un administrador puede compartir este charter.',
+    )
+  }
 
   const puede = rol === 'dueno' || (modo === 'escritura' && rol === 'editor')
   if (!puede) {

@@ -235,7 +235,7 @@ describe('editar charter', () => {
     expect(escribir.statusCode).toBe(403)
     expect(escribir.json().error.codigo).toBe('solo_lectura')
     const leido = await detalle(id, admin)
-    expect(leido.permisos).toEqual({ editar: false, reabrir: false, compartir: false })
+    expect(leido.permisos).toEqual({ editar: false, reabrir: false, compartir: true })
   })
 
   it('conserva una categoría que se desactivó pero no deja cambiar a otra inactiva', async () => {

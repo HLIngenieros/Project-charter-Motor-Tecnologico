@@ -142,7 +142,12 @@ export function useAccesos(id: string, activo = true) {
 /** Comparte (o cambia el rol) y quita accesos; ambas devuelven la lista completa. */
 export function useCompartir(id: string) {
   const cliente = useQueryClient()
-  const guardar = (lista: AccesoCharter[]) => cliente.setQueryData(clavesAccesos(id), lista)
+  const guardar = (lista: AccesoCharter[]) => {
+    cliente.setQueryData(clavesAccesos(id), lista)
+    // Un Admin que se agrega o se quita cambia su propio rol: la ficha y el portafolio se releen.
+    void cliente.invalidateQueries({ queryKey: CLAVES.charter(id) })
+    void cliente.invalidateQueries({ queryKey: CLAVES.charters })
+  }
   return {
     compartir: useMutation({
       mutationFn: (datos: AccesoEntrada) =>

@@ -106,20 +106,20 @@ export async function rutasCharters(app: FastifyInstance): Promise<void> {
   })
 
   app.get<ConId>('/:id/accesos', async (request) => {
-    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'compartir')
     return listarAccesos(db, fila.id)
   })
 
   app.post<ConId>('/:id/accesos', async (request) => {
     const datos = accesoEntrada.parse(request.body)
-    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+    const fila = await cargarCharter(db, request.params.id, request.usuario!, 'compartir')
     return compartir(db, fila, datos, app.config.dominioPermitido)
   })
 
   app.delete<{ Params: { id: string; correo: string } }>(
     '/:id/accesos/:correo',
     async (request) => {
-      const fila = await cargarCharter(db, request.params.id, request.usuario!, 'reapertura')
+      const fila = await cargarCharter(db, request.params.id, request.usuario!, 'compartir')
       return quitarAcceso(db, fila.id, request.params.correo)
     },
   )

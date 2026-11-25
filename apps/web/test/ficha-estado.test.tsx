@@ -195,6 +195,19 @@ describe('estado del charter', () => {
     expect(ruta.getByRole('link', { name: 'Mis charters' })).toHaveAttribute('href', '/')
   })
 
+  it('un Admin ve «Compartir» en un charter ajeno, sin el menú de estado', async () => {
+    abrir({
+      detalle: {
+        ...base,
+        propietario: { id: 'u2', nombre: 'Beto Ruiz' },
+        rol: 'admin',
+        permisos: { editar: false, reabrir: false, compartir: true },
+      },
+    })
+    expect(await screen.findByRole('button', { name: 'Compartir' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Estado del charter/ })).not.toBeInTheDocument()
+  })
+
   it('el dueño ve «Compartir» en la banda', async () => {
     abrir()
     expect(await screen.findByRole('button', { name: 'Compartir' })).toBeInTheDocument()

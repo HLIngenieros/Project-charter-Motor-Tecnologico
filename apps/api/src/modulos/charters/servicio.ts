@@ -236,7 +236,8 @@ export async function detalleCharter(
     permisos: {
       editar: (esDueno || rol === 'editor') && !cerrado,
       reabrir: esDueno && cerrado,
-      compartir: esDueno,
+      // Quién tiene acceso lo maneja el dueño o cualquier Admin.
+      compartir: esDueno || yo.esAdmin,
     },
     reglas: reglasDeCharter(fila),
     ...(await leerComplementos(db, fila.id)),
