@@ -1,0 +1,6 @@
+salida/
+proyecto/node_modules/
+proyecto/renders/
+proyecto/snapshots/
+__pycache__/
+proyecto/.hyperframes/

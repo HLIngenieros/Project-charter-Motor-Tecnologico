@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "proyecto": {
+    "slug": "project-charter",
+    "nombre": "Project Charter",
+    "entrada": "Project Charter"
+  },
+  "fase": "entregado",
+  "motor": "hyperframes",
+  "estilo": null,
+  "aprobacion": {
+    "fecha": "2026-11-26",
+    "motor": "hyperframes",
+    "estilo": null,
+    "pista": "technology-corporate",
+    "tramo": [
+      12.964,
+      53.678
+    ]
+  },
+  "escenas": [
+    {
+      "id": "apertura",
+      "estado": "revisada"
+    },
+    {
+      "id": "excel",
+      "estado": "revisada"
+    },
+    {
+      "id": "cronograma",
+      "estado": "revisada"
+    },
+    {
+      "id": "corte",
+      "estado": "revisada"
+    },
+    {
+      "id": "curva-s",
+      "estado": "revisada"
+    },
+    {
+      "id": "complementos",
+      "estado": "revisada"
+    },
+    {
+      "id": "portafolio",
+      "estado": "revisada"
+    },
+    {
+      "id": "cierre",
+      "estado": "revisada"
+    }
+  ],
+  "ajustes": []
+}

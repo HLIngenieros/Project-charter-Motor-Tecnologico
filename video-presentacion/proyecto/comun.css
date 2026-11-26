@@ -1,0 +1,42 @@
+/* Piezas que repiten las escenas (réplicas de la app, con sus tokens). */
+.t-titulo {
+  font-family: var(--font-titulo);
+  font-weight: 700;
+  font-size: 92px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  color: var(--tinta);
+  white-space: nowrap;
+}
+.t-sub {
+  font-family: var(--font-texto);
+  font-weight: 400;
+  font-size: 38px;
+  color: var(--texto-2);
+  white-space: nowrap;
+}
+.tarjeta {
+  border-radius: var(--radio-tarjeta);
+  background: var(--superficie);
+  border: 2px solid var(--linea);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 18px 0 14px;
+  border-radius: 22px;
+  font-family: var(--font-texto);
+  font-weight: 600;
+  font-size: 24px;
+  white-space: nowrap;
+}
+.chip i { width: 12px; height: 12px; border-radius: 6px; }
+.chip-ok { background: var(--ok-suave); color: var(--ok-texto); }
+.chip-ok i { background: var(--ok); }
+.chip-amarillo { background: var(--amarillo-suave); color: var(--amarillo-texto); }
+.chip-amarillo i { background: var(--amarillo); }
+.chip-naranja { background: var(--naranja-suave); color: var(--naranja-texto); }
+.chip-naranja i { background: var(--naranja); }
+.cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; }

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guion gráfico</title>
+<style>
+  /* Colores neutros a propósito: la identidad del proyecto va en los cuadros de estilo. */
+  :root {
+    --fondo: #f6f6f4; --superficie: #ffffff; --tinta: #1c1c1a; --suave: #5f5f5a; --linea: #dcdcd6;
+    --marca: #2d5bd8; --aviso: #a35a00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --fondo: #141413; --superficie: #1e1e1c; --tinta: #ececea; --suave: #a3a39d; --linea: #34342f; --marca: #7d9df0; --aviso: #e0a24a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 28px; line-height: 1.2; margin: 0 0 4px; }
+  .datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 24px; margin: 20px 0 8px; padding: 16px 0; border-block: 1px solid var(--linea); }
+  .datos dt { color: var(--suave); font-size: 12px; }
+  .datos dd { margin: 0; font-weight: 600; }
+  .supuestos { margin: 16px 0 0; padding: 12px 16px; border-left: 3px solid var(--aviso); background: var(--superficie); }
+  .supuestos h2 { font-size: 14px; margin: 0 0 4px; color: var(--aviso); }
+  .supuestos ul { margin: 0; padding-left: 18px; }
+  .franja { position: relative; height: 44px; margin: 28px 0 8px; border-radius: 6px; background: var(--superficie); border: 1px solid var(--linea); overflow: hidden; }
+  .franja div { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--linea); font-size: 12px; font-weight: 600; }
+  .franja div:nth-child(odd) { background: color-mix(in srgb, var(--marca) 10%, transparent); }
+  .eje { display: flex; justify-content: space-between; color: var(--suave); font-size: 12px; margin-bottom: 28px; }
+  .escena { display: grid; grid-template-columns: minmax(0, 480px) 1fr; gap: 24px; padding: 20px 0; border-top: 1px solid var(--linea); }
+  @media (max-width: 760px) { .escena { grid-template-columns: 1fr; } }
+  .cuadro { aspect-ratio: 16 / 9; border-radius: 6px; background: var(--superficie); border: 1px solid var(--linea); overflow: hidden; display: flex; align-items: center; justify-content: center; color: var(--suave); font-size: 13px; }
+  .cuadro img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tiempo { color: var(--suave); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .titulo { font-size: 20px; font-weight: 700; margin: 2px 0 0; }
+  .subtitulo { color: var(--suave); margin: 0 0 10px; }
+  .escena dl { margin: 0; }
+  .escena dt { font-size: 12px; color: var(--suave); margin-top: 8px; }
+  .escena dd { margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="titulo"></h1>
+  <p id="bajada" class="subtitulo"></p>
+  <dl class="datos" id="datos"></dl>
+  <section class="supuestos" id="supuestos" hidden><h2>Lo que asumí</h2><ul></ul></section>
+  <div class="franja" id="franja" aria-label="Escenas a escala en el tiempo"></div>
+  <div class="eje"><span>0 s</span><span id="fin"></span></div>
+  <div id="escenas"></div>
+</main>
+
+<script type="application/json" id="guion">
+{
+  "proyecto": "Project Charter",
+  "entrada": "Project Charter (Sistema · En producción)",
+  "motor": "hyperframes",
+  "porQueMotor": "Lo que convence es ver la app en uso: arrastrar una barra del Gantt, registrar un corte y ver cómo se mueve la curva S.",
+  "estilo": null,
+  "pista": "technology-corporate",
+  "tramo": [12.964, 53.678],
+  "duracion": 40.714,
+  "supuestos": [
+    "Todos los datos son ficticios: un portafolio inventado de 6 charters («Portal de Proveedores» y otros), con áreas genéricas, cifras redondas (presupuesto COP 50.000.000) y riesgos genéricos («Retraso del proveedor»). Nada de RF1, PC1 ni AC1, ni nombres de personas.",
+    "Las capturas salieron de un servidor aislado (video-presentacion/servidor-demo.ts: base en memoria, puertos 3400 y 5400). No se tocó data/pglite ni Neon.",
+    "El nombre en pantalla es «Project Charter», como la entrada del portafolio (el encabezado de la app dice «Project Charters»).",
+    "El proyecto no tiene logo propio: se usa el sello «HL» de su encabezado sobre la retícula azul institucional.",
+    "Música: la misma pista de Horas Hombre, pero otro tramo (la primera parte fuerte, no el final), para que no suenen iguales. Termina con fundido de 1,5 s, sin el acorde final.",
+    "No se muestran la pantalla de entrada, la administración de cuentas ni el compartir: no caben en 40 s y no son el corazón del mensaje.",
+    "Sin planos generados con IA: no hacen falta."
+  ],
+  "escenas": [
+    { "n": 1, "desde": 0, "hasta": 4.286, "titulo": "Project Charter", "subtitulo": "Del Excel a una ficha viva", "accion": "Sobre la retícula azul del encabezado entra el sello HL, el nombre sube desde su máscara y se dibuja una línea en el color de acento.", "puente": "La línea de acento se queda y la retícula se vuelve la cuadrícula de una hoja de cálculo.", "cuadro": "cuadros/cuadro-1-apertura.png" },
+    { "n": 2, "desde": 4.286, "hasta": 8.571, "titulo": "Adiós al Excel", "subtitulo": "El charter, en la web", "accion": "Entrada fuerte de la música: las celdas de la hoja se sueltan y se reordenan hasta formar la ficha, con su banda de Planeado, Real y Brecha.", "puente": "La ficha baja hasta el cronograma: las filas de la hoja ya son barras.", "cuadro": null },
+    { "n": 3, "desde": 8.571, "hasta": 17.143, "titulo": "Cronograma que se arrastra", "subtitulo": "Fechas encadenadas y pesos claros", "accion": "El Gantt de «Portal de Proveedores». Un cursor toma el fin de una barra y lo arrastra (acento en 12,9 s): las actividades de abajo se corren los mismos días hábiles y aparece el aviso «Deshacer». Los pesos suman 100 %.", "puente": "Cae la línea de corte sobre el Gantt y la cámara entra a la actividad que cruza.", "cuadro": null },
+    { "n": 4, "desde": 17.143, "hasta": 21.429, "titulo": "Cada corte, una foto", "subtitulo": "Registra solo lo que toca", "accion": "Pantalla «Registrar corte»: se escribe el % real de la actividad en curso, la barra avanza, y el resumen «Así queda el charter» recalcula Real y Brecha.", "puente": "El punto del corte sale del resumen y vuela a su lugar en la curva.", "cuadro": null },
+    { "n": 5, "desde": 21.429, "hasta": 27.857, "titulo": "La curva S, viva", "subtitulo": "Planeado contra real, corte a corte", "accion": "Acento en 21,4 s: se dibuja el planeado, cae la línea de corte y el real avanza de corte en corte; la brecha se sombrea, las cifras cuentan y el semáforo se pinta.", "puente": "El semáforo se parte en celdas de colores que forman la matriz de riesgos.", "cuadro": "cuadros/cuadro-5-curva-s.png" },
+    { "n": 6, "desde": 27.857, "hasta": 32.143, "titulo": "Riesgos y presupuesto", "subtitulo": "Todo en la misma ficha", "accion": "Los riesgos (genéricos) caen como puntos en la matriz de probabilidad × impacto; al lado crecen las barras de los rubros y el total cuenta hasta COP 50.000.000 (acento en 30,0 s). Datos ficticios.", "puente": "La ficha se encoge hasta ser una fila del portafolio.", "cuadro": null },
+    { "n": 7, "desde": 32.143, "hasta": 36.429, "titulo": "Todo el portafolio", "subtitulo": "Semáforo por área y categoría", "accion": "Para quién es: cada área con sus charters. Las filas del portafolio entran con su mini curva S y los semáforos por área se llenan de color.", "puente": "Las barras del semáforo se juntan en la línea de acento de la apertura.", "cuadro": null },
+    { "n": 8, "desde": 36.429, "hasta": 40.714, "titulo": "Project Charter", "subtitulo": "Transformación Digital · Grupo HL", "accion": "Vuelve la retícula azul con el nombre; en el acento de 38,6 s aparece el logo grande de Grupo HL, quieto, solo con fundido. Queda quieto 2,1 s mientras la música se apaga.", "puente": "Fin.", "cuadro": null }
+  ]
+}
+</script>
+<script>
+  const g = JSON.parse(document.getElementById('guion').textContent);
+  const el = (tag, texto, clase) => { const e = document.createElement(tag); if (texto != null) e.textContent = texto; if (clase) e.className = clase; return e; };
+  const seg = (s) => `${Number(s).toFixed(1).replace('.', ',')} s`;
+  const total = g.duracion || Math.max(...g.escenas.map((e) => e.hasta));
+
+  document.title = `Guion gráfico · ${g.proyecto}`;
+  document.getElementById('titulo').textContent = `Guion gráfico · ${g.proyecto}`;
+  document.getElementById('bajada').textContent = `${g.escenas.length} escenas, ${seg(total)}. Boceto para aprobar antes de animar.`;
+
+  const datos = document.getElementById('datos');
+  for (const [dt, dd] of [
+    ['Entrada del portafolio', g.entrada],
+    ['Motor', g.motor === 'opuscar' ? 'Lemo-Opuscar' : 'HyperFrames'],
+    ['Por qué', g.porQueMotor],
+    ['Estilo base', g.estilo || '—'],
+    ['Música', g.pista],
+    ['Tramo', g.tramo ? `${seg(g.tramo[0])} a ${seg(g.tramo[1])}` : '—'],
+  ]) { const d = el('div'); d.append(el('dt', dt), el('dd', dd)); datos.append(d); }
+
+  if (g.supuestos?.length) {
+    const s = document.getElementById('supuestos'); s.hidden = false;
+    for (const x of g.supuestos) s.querySelector('ul').append(el('li', x));
+  }
+
+  const franja = document.getElementById('franja');
+  document.getElementById('fin').textContent = seg(total);
+  const lista = document.getElementById('escenas');
+  for (const e of g.escenas) {
+    const b = el('div', e.n);
+    b.style.left = `${(e.desde / total) * 100}%`;
+    b.style.width = `${((e.hasta - e.desde) / total) * 100}%`;
+    b.title = e.titulo;
+    franja.append(b);
+
+    const fila = el('article', null, 'escena');
+    const cuadro = el('div', null, 'cuadro');
+    if (e.cuadro) { const img = el('img'); img.src = e.cuadro; img.alt = `Cuadro de estilo de la escena ${e.n}`; cuadro.append(img); }
+    else cuadro.textContent = 'Sin cuadro de estilo';
+    const info = el('div');
+    info.append(el('div', `${e.n} · ${seg(e.desde)} – ${seg(e.hasta)}`, 'tiempo'), el('p', e.titulo, 'titulo'), el('p', e.subtitulo, 'subtitulo'));
+    const dl = el('dl');
+    for (const [dt, dd] of [['Acción', e.accion], ['Puente', e.puente || '—']]) dl.append(el('dt', dt), el('dd', dd));
+    info.append(dl);
+    fila.append(cuadro, info);
+    lista.append(fila);
+  }
+</script>
+</body>
+</html>

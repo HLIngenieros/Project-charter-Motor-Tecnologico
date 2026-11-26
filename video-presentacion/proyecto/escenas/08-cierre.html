@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 8 · 36,429 → 40,714 s (8 golpes; acento de la música en el golpe 4 = el logo). B = 60/112.
+      Cierre sobre la retícula azul. El logo de Grupo HL entra solo con fundido y queda quieto
+      (sin escala, giro ni rebote) hasta el final: 1,6 s de imagen quieta.
+    */
+    #ci-textos { position: absolute; left: 0; right: 0; top: 170px; text-align: center; }
+    .ci-mascara { display: block; overflow: hidden; padding-bottom: 12px; }
+    #ci-titulo {
+      display: inline-block; font-family: var(--font-titulo); font-weight: 700; font-size: 132px; line-height: 1.1;
+      letter-spacing: -3px; color: var(--superficie);
+    }
+    #ci-linea { position: absolute; left: 720px; top: 352px; width: 480px; height: 8px; border-radius: 4px; background: var(--acento); transform-origin: 50% 50%; }
+    #ci-sub { position: absolute; left: 0; right: 0; top: 396px; text-align: center; font-family: var(--font-texto); font-weight: 400; font-size: 40px; color: var(--barra); }
+    #ci-placa {
+      position: absolute; left: 700px; top: 560px; width: 520px; height: 260px; border-radius: 28px; background: var(--superficie);
+      display: flex; align-items: center; justify-content: center; box-shadow: var(--sombra-tarjeta);
+    }
+    #ci-logo { width: 420px; height: 172px; }
+  </style>
+  <div id="root" data-composition-id="cierre" data-width="1920" data-height="1080">
+    <div id="ci-cuadro" class="clip" data-start="0" data-duration="4.2857">
+      <div id="ci-textos">
+        <span class="ci-mascara"><h1 id="ci-titulo">Project Charter</h1></span>
+      </div>
+      <div id="ci-linea"></div>
+      <p id="ci-sub">Transformación Digital · Grupo HL</p>
+      <div id="ci-placa"><img id="ci-logo" src="assets/logo-grupo-hl-grande.png" alt="Grupo HL" /></div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    // Golpe 0: el nombre sube desde su máscara; golpe 1: la línea de acento se abre desde el centro.
+    tl.fromTo("#ci-titulo", { y: 170 }, { y: 0, duration: 0.7, ease: "power4.out" }, 0.1);
+    tl.fromTo("#ci-linea", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 1 * B);
+    tl.fromTo("#ci-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2 * B);
+    // Golpe 4 (acento de la música): el logo de Grupo HL, solo con fundido. Después, todo quieto.
+    tl.fromTo("#ci-placa", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 4 * B);
+    window.__timelines["cierre"] = tl;
+  </script>
+</template>

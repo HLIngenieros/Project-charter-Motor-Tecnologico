@@ -1,0 +1,96 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 7 · 32,143 → 36,429 s (8 golpes). B = 60/112.
+      Réplica viva del portafolio y su tablero (capturas/2-portafolio.png): 6 charters inventados.
+    */
+    #po-camara { position: absolute; inset: 0; transform-origin: 50% 50%; }
+    #po-titulos { position: absolute; left: 0; right: 0; top: 70px; text-align: center; }
+    #po-sub { margin-top: 6px; }
+    #po-areas { position: absolute; left: 120px; top: 320px; width: 560px; height: 600px; }
+    #po-lista { position: absolute; left: 720px; top: 320px; width: 1080px; height: 600px; overflow: hidden; }
+    .po-h { position: absolute; left: 40px; top: 30px; font-family: var(--font-titulo); font-weight: 600; font-size: 32px; color: var(--tinta); white-space: nowrap; }
+    .po-area { position: absolute; left: 40px; width: 480px; height: 110px; }
+    .po-area span { position: absolute; left: 0; top: 0; font-family: var(--font-texto); font-size: 26px; color: var(--tinta); }
+    .po-area b { position: absolute; right: 0; top: 0; font-family: var(--font-titulo); font-weight: 600; font-size: 26px; color: var(--tinta); }
+    .po-seg { position: absolute; top: 46px; height: 22px; border-radius: 5px; transform-origin: 0 50%; }
+    .po-verde { background: var(--ok); } .po-amarillo { background: var(--amarillo); } .po-naranja { background: var(--naranja); }
+    .po-fila { position: absolute; left: 0; width: 1080px; height: 100px; border-bottom: 2px solid var(--linea-2); }
+    .po-nombre { position: absolute; left: 40px; top: 16px; font-family: var(--font-titulo); font-weight: 600; font-size: 30px; color: var(--tinta); white-space: nowrap; }
+    .po-cat { position: absolute; left: 40px; top: 58px; display: flex; align-items: center; gap: 10px; font-family: var(--font-texto); font-size: 24px; color: var(--texto-2); white-space: nowrap; }
+    .po-cat i { width: 12px; height: 12px; border-radius: 6px; }
+    .po-pct { position: absolute; left: 470px; top: 18px; font-family: var(--font-titulo); font-weight: 600; font-size: 28px; color: var(--tinta); white-space: nowrap; }
+    .po-riel { position: absolute; left: 470px; top: 66px; width: 200px; height: 10px; border-radius: 5px; background: var(--linea-2); }
+    .po-av { position: absolute; left: 470px; top: 66px; height: 10px; border-radius: 5px; background: var(--ok); transform-origin: 0 50%; }
+    .po-mini { position: absolute; left: 710px; top: 22px; }
+    .po-mini path { fill: none; stroke-linecap: round; }
+    .po-fila .chip { position: absolute; left: 880px; top: 28px; height: 42px; font-size: 22px; }
+  </style>
+  <div id="root" data-composition-id="portafolio" data-width="1920" data-height="1080">
+    <div id="po-cuadro" class="clip" data-start="0" data-duration="4.2857">
+      <div id="po-camara">
+        <div id="po-titulos">
+          <h1 id="po-titulo" class="t-titulo">Todo el portafolio</h1>
+          <p id="po-sub" class="t-sub">Semáforo por área y categoría</p>
+        </div>
+        <div id="po-areas" class="tarjeta">
+          <div class="po-h">Semáforo por área</div>
+          <div class="po-area" style="top:120px"><span>Calidad</span><b>2</b>
+            <div class="po-seg po-verde" style="left:0; width:237px"></div><div class="po-seg po-naranja" style="left:243px; width:237px"></div></div>
+          <div class="po-area" style="top:232px"><span>Compras</span><b>1</b>
+            <div class="po-seg po-verde" style="left:0; width:480px"></div></div>
+          <div class="po-area" style="top:344px"><span>Operaciones</span><b>2</b>
+            <div class="po-seg po-verde" style="left:0; width:237px"></div><div class="po-seg po-verde" style="left:243px; width:237px"></div></div>
+          <div class="po-area" style="top:456px"><span>Talento Humano</span><b>1</b>
+            <div class="po-seg po-amarillo" style="left:0; width:480px"></div></div>
+        </div>
+        <div id="po-lista" class="tarjeta"><div id="po-filas"></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    // [nombre, categoría, color de la categoría (PALETA_CATEGORIAS), % real, estado, clase del chip, altura final del real en la mini curva]
+    const CHARTERS = [
+      ["Portal de Proveedores", "Automatización", "#D98A00", "33,9", "Al día", "ok", 30],
+      ["Inventario en Línea", "Análisis de Data", "#6A55D8", "66,0", "Al día", "ok", 18],
+      ["Mesa de Ayuda Digital", "Automatización", "#D98A00", "50,0", "En atención", "amarillo", 30],
+      ["Archivo Digital", "Gestión del Conocimiento", "#0A9C9B", "32,0", "En riesgo", "naranja", 40],
+      ["Tablero de Obra", "Análisis de Data", "#6A55D8", "100,0", "Terminada", "ok", 8],
+      ["App de Visitas", "Gestión del Conocimiento", "#0A9C9B", "60,0", "Al día", "ok", 20],
+    ];
+    // Las filas son réplica estática: se arman una vez, antes de la línea de tiempo.
+    document.querySelector("#po-filas").innerHTML = CHARTERS.map((c, i) => `
+      <div class="po-fila" id="po-f${i}" style="top:${i * 100}px">
+        <div class="po-nombre">${c[0]}</div>
+        <div class="po-cat"><i style="background:${c[2]}"></i>${c[1]}</div>
+        <div class="po-pct">${c[3]} %</div>
+        <div class="po-riel"></div><div class="po-av" id="po-a${i}" style="width:${Math.round(parseFloat(c[3].replace(",", ".")) * 2)}px"></div>
+        <svg class="po-mini" width="130" height="56" viewBox="0 0 130 56">
+          <path stroke="#003366" stroke-width="3" d="M2,52 C40,46 80,24 128,8" />
+          <path id="po-m${i}" pathLength="1" stroke="#00a9e0" stroke-width="4" d="M2,52 C40,48 80,${c[6] + 8} 128,${c[6]}" />
+        </svg>
+        <div class="chip chip-${c[5]}"><i></i>${c[4]}</div>
+      </div>`).join("");
+
+    // Golpe 0: el portafolio aparece al alejarse la cámara (la ficha anterior quedó como una fila).
+    tl.fromTo("#po-camara", { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#po-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
+    // Golpes 0,5 a 3: entran las filas, cada una con su avance y su mini curva S.
+    CHARTERS.forEach((c, i) => {
+      const t = 0.5 * B + i * 0.14;
+      tl.fromTo("#po-f" + i, { opacity: 0, x: 70 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, t);
+      tl.fromTo("#po-a" + i, { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, t + 0.2);
+      tl.fromTo("#po-m" + i, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.out" }, t + 0.2);
+    });
+    // Golpes 3 a 5: los semáforos por área se llenan de color.
+    tl.fromTo(".po-seg", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out", stagger: 0.13 }, 3 * B);
+    tl.fromTo(".po-area b", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out", stagger: 0.2 }, 3.2 * B);
+    // Cámara: empuje lento; al final todo se recoge hacia el centro y vuelve la retícula azul.
+    tl.fromTo("#po-camara", { scale: 1 }, { scale: 1.04, duration: 5.6 * B, ease: "none", immediateRender: false }, 1.6 * B);
+    tl.fromTo("#po-camara", { scale: 1.04, opacity: 1 }, { scale: 0.86, opacity: 0, duration: 0.34, ease: "power2.in", immediateRender: false }, 8 * B - 0.36);
+    window.__timelines["portafolio"] = tl;
+  </script>
+</template>

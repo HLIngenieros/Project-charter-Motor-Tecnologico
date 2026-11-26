@@ -1,0 +1,116 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 6 · 27,857 → 32,143 s (8 golpes; acento de la música en el golpe 4 = el total). B = 60/112.
+      Réplicas vivas de «Riesgos» (matriz probabilidad × impacto) y «Presupuesto» de la ficha
+      (capturas/6-riesgos.png y 7-presupuesto.png). TODO es ficticio: charter inventado, cifras redondas
+      y riesgos genéricos.
+      Matriz: celdas de 100 px con 8 px de separación; columna = impacto (1 a 5), fila = probabilidad (5 arriba).
+    */
+    #cm-entrada { position: absolute; inset: 0; }
+    #cm-camara { position: absolute; inset: 0; transform-origin: 50% 45%; }
+    #cm-titulo { position: absolute; left: 120px; top: 826px; }
+    #cm-sub { position: absolute; left: 124px; top: 938px; }
+    #cm-riesgos { position: absolute; left: 120px; top: 70px; width: 700px; height: 720px; }
+    #cm-pres { position: absolute; left: 860px; top: 70px; width: 940px; height: 720px; }
+    .cm-h { position: absolute; left: 44px; top: 30px; font-family: var(--font-titulo); font-weight: 600; font-size: 36px; color: var(--tinta); }
+    .cm-celda { position: absolute; width: 100px; height: 100px; border-radius: 10px; }
+    .cm-bajo { background: var(--ok-suave); } .cm-medio { background: var(--amarillo-suave); }
+    .cm-alto { background: var(--naranja-suave); } .cm-critico { background: var(--alerta-suave); }
+    .cm-eje { position: absolute; font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); }
+    #cm-eje-p { left: -22px; top: 350px; width: 160px; text-align: center; rotate: -90deg; }
+    #cm-eje-i { left: 110px; top: 650px; width: 532px; text-align: center; }
+    .cm-punto {
+      position: absolute; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 24px; background: var(--tinta);
+      color: var(--superficie); font-family: var(--font-cifra); font-weight: 700; font-size: 24px; line-height: 48px; text-align: center;
+      box-shadow: 0 0 0 4px var(--superficie);
+    }
+    #cm-nota {
+      position: absolute; left: 150px; top: 296px; height: 52px; padding: 0 22px; display: flex; align-items: center; gap: 16px;
+      border-radius: 12px; background: var(--tinta); color: var(--superficie); font-family: var(--font-texto); font-weight: 600;
+      font-size: 25px; white-space: nowrap; box-shadow: var(--sombra-tarjeta);
+    }
+    #cm-nota b { color: var(--naranja-suave); font-weight: 700; }
+    #cm-leyenda { position: absolute; left: 44px; top: 686px; display: none; }
+    #cm-total-rotulo { position: absolute; left: 44px; top: 98px; font-family: var(--font-texto); font-size: 28px; color: var(--texto-2); }
+    #cm-total { position: absolute; left: 44px; top: 134px; font-family: var(--font-titulo); font-weight: 700; font-size: 92px; letter-spacing: -2px; color: var(--tinta); white-space: nowrap; }
+    #cm-raya { position: absolute; left: 0; top: 280px; width: 940px; height: 2px; background: var(--linea); }
+    .cm-rubro { position: absolute; left: 0; width: 940px; height: 100px; }
+    .cm-rubro span { position: absolute; top: 32px; white-space: nowrap; }
+    .cm-nombre { left: 44px; font-family: var(--font-texto); font-size: 30px; color: var(--tinta); }
+    .cm-valor { right: 44px; font-family: var(--font-cifra); font-size: 28px; color: var(--tinta); }
+    .cm-riel { position: absolute; left: 330px; top: 42px; width: 340px; height: 16px; border-radius: 8px; background: var(--linea-2); }
+    .cm-barra { position: absolute; left: 330px; top: 42px; height: 16px; border-radius: 8px; background: var(--institucional); transform-origin: 0 50%; }
+  </style>
+  <div id="root" data-composition-id="complementos" data-width="1920" data-height="1080">
+    <div id="cm-cuadro" class="clip" data-start="0" data-duration="4.2857">
+      <div id="cm-entrada">
+        <div id="cm-camara">
+          <h1 id="cm-titulo" class="t-titulo">Riesgos y presupuesto</h1>
+          <p id="cm-sub" class="t-sub">Todo en la misma ficha</p>
+          <div id="cm-riesgos" class="tarjeta">
+            <div class="cm-h">Riesgos</div>
+            <div id="cm-celdas"></div>
+            <div class="cm-eje" id="cm-eje-p">Probabilidad</div>
+            <div class="cm-eje" id="cm-eje-i">Impacto</div>
+            <div class="cm-punto" id="cm-p1" style="left:484px; top:376px">1</div>
+            <div class="cm-punto" id="cm-p2" style="left:484px; top:484px">2</div>
+            <div class="cm-punto" id="cm-p3" style="left:268px; top:268px">3</div>
+            <div class="cm-punto" id="cm-p4" style="left:268px; top:484px">4</div>
+            <div class="cm-punto" id="cm-p5" style="left:484px; top:268px">5</div>
+            <div id="cm-nota">Retraso del proveedor <b>Alto · 12</b></div>
+          </div>
+          <div id="cm-pres" class="tarjeta">
+            <div class="cm-h">Presupuesto</div>
+            <div id="cm-total-rotulo">Presupuesto total</div>
+            <div id="cm-total">COP <span id="cm-n">50.000.000</span></div>
+            <div id="cm-raya"></div>
+            <div class="cm-rubro" style="top:300px"><span class="cm-nombre">Desarrollo</span><div class="cm-riel"></div><div class="cm-barra" style="width:340px"></div><span class="cm-valor">25.000.000</span></div>
+            <div class="cm-rubro" style="top:400px"><span class="cm-nombre">Infraestructura</span><div class="cm-riel"></div><div class="cm-barra" style="width:136px"></div><span class="cm-valor">10.000.000</span></div>
+            <div class="cm-rubro" style="top:500px"><span class="cm-nombre">Licencias</span><div class="cm-riel"></div><div class="cm-barra" style="width:136px"></div><span class="cm-valor">10.000.000</span></div>
+            <div class="cm-rubro" style="top:600px"><span class="cm-nombre">Capacitación</span><div class="cm-riel"></div><div class="cm-barra" style="width:68px"></div><span class="cm-valor">5.000.000</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    // La matriz es réplica estática: 25 celdas con el color de su nivel (probabilidad × impacto).
+    let celdas = "";
+    for (let p = 5; p >= 1; p--) for (let i = 1; i <= 5; i++) {
+      const n = p * i, nivel = n >= 16 ? "critico" : n >= 10 ? "alto" : n >= 5 ? "medio" : "bajo";
+      celdas += `<div class="cm-celda cm-${nivel}" data-d="${i + (5 - p)}" style="left:${110 + (i - 1) * 108}px; top:${110 + (5 - p) * 108}px"></div>`;
+    }
+    document.querySelector("#cm-celdas").innerHTML = celdas;
+
+    // Golpe 0: entra desde abajo (sigue la salida de la curva S).
+    tl.fromTo("#cm-entrada", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0);
+    tl.fromTo("#cm-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
+    // La cámara recorre de la matriz al presupuesto.
+    tl.fromTo("#cm-camara", { scale: 1.07, x: 60 }, { x: -60, duration: 7 * B, ease: "power1.inOut" }, 0);
+    // Golpes 0,3 a 1,5: las celdas se encienden en diagonal.
+    document.querySelectorAll(".cm-celda").forEach((c) => {
+      tl.fromTo(c, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" }, 0.3 * B + Number(c.dataset.d) * 0.055);
+    });
+    // Golpes 1,5 a 3,5: los riesgos caen en su celda, uno cada medio golpe.
+    [1, 2, 3, 4, 5].forEach((n, k) => {
+      tl.fromTo("#cm-p" + n, { opacity: 0, y: -90, scale: 1.5 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "power3.in" }, (1.5 + k * 0.5) * B - 0.32);
+    });
+    tl.fromTo("#cm-nota", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.6 * B);
+    // Golpe 4 (acento de la música): el total cuenta y las barras de los rubros crecen.
+    const el = document.querySelector("#cm-n"), v = { n: 0 };
+    tl.fromTo(v, { n: 0 }, {
+      n: 50, duration: 1.6 * B, ease: "power3.out",
+      onUpdate: () => { el.textContent = (Math.round(v.n * 10) * 100000).toLocaleString("de-DE"); },
+    }, 4 * B);
+    tl.fromTo("#cm-total", { opacity: 0, scale: 0.9, transformOrigin: "0% 60%" }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 4 * B);
+    tl.fromTo(".cm-barra", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out", stagger: 0.12 }, 4.2 * B);
+    tl.fromTo(".cm-valor", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.12 }, 4.4 * B);
+    // Salida: la ficha se encoge (será una fila del portafolio).
+    tl.fromTo("#cm-entrada", { scale: 1, opacity: 1 }, { scale: 0.55, opacity: 0, duration: 0.34, ease: "power2.in", immediateRender: false }, 8 * B - 0.36);
+    window.__timelines["complementos"] = tl;
+  </script>
+</template>

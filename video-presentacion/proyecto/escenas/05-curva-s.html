@@ -1,0 +1,180 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 5 · 21,429 → 27,857 s (12 golpes; acento de la música en el golpe 0). B = 60/112.
+      Réplica viva de la sección «Curva S» de la ficha (capturas/4-curva-s.png), con datos ficticios
+      del charter inventado «Portal de Proveedores».
+      Gráfica (SVG 1680×600): x = 110 + días/178 × 1490 (1 sep → 26 feb); y = 540 − % × 4,8.
+    */
+    #cs-entrada { position: absolute; inset: 0; }
+    #cs-camara { position: absolute; inset: 0; transform-origin: 43% 60%; }
+    #cs-titulo {
+      position: absolute;
+      left: 120px;
+      top: 70px;
+      font-family: var(--font-titulo);
+      font-weight: 700;
+      font-size: 92px;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      color: var(--tinta);
+    }
+    #cs-subtitulo {
+      position: absolute;
+      left: 124px;
+      top: 182px;
+      font-family: var(--font-texto);
+      font-weight: 400;
+      font-size: 38px;
+      color: var(--texto-2);
+    }
+    #cs-tarjeta {
+      position: absolute;
+      left: 120px;
+      top: 270px;
+      width: 1680px;
+      height: 690px;
+      border-radius: var(--radio-tarjeta);
+      background: var(--superficie);
+      border: 2px solid var(--linea);
+    }
+    #cs-cifras { position: absolute; right: 120px; top: 84px; display: flex; gap: 56px; align-items: flex-end; }
+    .cs-cifra { font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); }
+    .cs-cifra b {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--font-titulo);
+      font-weight: 600;
+      font-size: 60px;
+      line-height: 1.1;
+      color: var(--tinta);
+      white-space: nowrap;
+    }
+    #cs-brecha-cifra b { color: var(--ok-texto); }
+    #cs-chip {
+      height: 52px;
+      padding: 0 22px 0 18px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 26px;
+      background: var(--ok-suave);
+      color: var(--ok-texto);
+      font-family: var(--font-texto);
+      font-weight: 600;
+      font-size: 28px;
+    }
+    #cs-chip i { width: 14px; height: 14px; border-radius: 7px; background: var(--ok); }
+    #cs-svg { position: absolute; left: 0; top: 20px; }
+    .cs-eje { font-family: var(--font-cifra); font-size: 22px; fill: var(--texto-2); }
+    .cs-mes { font-family: var(--font-texto); font-size: 24px; fill: var(--texto-2); }
+    .cs-rejilla { stroke: var(--linea-2); stroke-width: 2; }
+    #cs-futuro { fill: var(--fondo); }
+    #cs-planeado { fill: none; stroke: var(--institucional); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    #cs-real { fill: none; stroke: var(--acento); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+    #cs-brecha { fill: var(--ok); opacity: 0.22; }
+    #cs-corte { stroke: var(--acento); stroke-width: 3; stroke-dasharray: 8 8; }
+    #cs-corte-texto { font-family: var(--font-texto); font-weight: 600; font-size: 26px; fill: var(--acento); }
+    .cs-punto { fill: var(--ok); stroke: var(--superficie); stroke-width: 4; }
+    #cs-semaforo-texto { font-family: var(--font-texto); font-size: 24px; fill: var(--texto-2); }
+    .cs-riel { fill: var(--linea); }
+    .cs-seg { fill: var(--ok); }
+  </style>
+  <div id="root" data-composition-id="curva-s" data-width="1920" data-height="1080">
+    <div id="cs-cuadro" class="clip" data-start="0" data-duration="6.4286">
+      <div id="cs-entrada">
+      <div id="cs-camara">
+        <h1 id="cs-titulo">La curva S, viva</h1>
+        <p id="cs-subtitulo">Planeado contra real, corte a corte</p>
+        <div id="cs-cifras">
+          <div class="cs-cifra" id="cs-cifra-pv">Planeado<b><span id="cs-pv">41,0</span> %</b></div>
+          <div class="cs-cifra" id="cs-cifra-ev">Real<b><span id="cs-ev">33,9</span> %</b></div>
+          <div class="cs-cifra" id="cs-brecha-cifra">Brecha<b><span id="cs-desv">7,1</span> pts</b></div>
+          <div id="cs-chip"><i></i>Al día</div>
+        </div>
+        <div id="cs-tarjeta">
+          <svg id="cs-svg" width="1680" height="660" viewBox="0 0 1680 660">
+            <rect id="cs-futuro" x="822" y="60" width="778" height="480" />
+            <g class="cs-rejilla">
+              <line x1="110" y1="60" x2="1600" y2="60" />
+              <line x1="110" y1="180" x2="1600" y2="180" />
+              <line x1="110" y1="300" x2="1600" y2="300" />
+              <line x1="110" y1="420" x2="1600" y2="420" />
+              <line x1="110" y1="540" x2="1600" y2="540" />
+            </g>
+            <g class="cs-eje" text-anchor="end">
+              <text x="92" y="68">100 %</text>
+              <text x="92" y="188">75 %</text>
+              <text x="92" y="308">50 %</text>
+              <text x="92" y="428">25 %</text>
+              <text x="92" y="548">0 %</text>
+            </g>
+            <g class="cs-mes">
+              <text x="110" y="582">sep</text>
+              <text x="361" y="582">oct</text>
+              <text x="621" y="582">nov</text>
+              <text x="872" y="582">dic</text>
+              <text x="1131" y="582">ene 2027</text>
+              <text x="1391" y="582">feb</text>
+            </g>
+            <polygon id="cs-brecha" points="110,540 252,504 428,468 662,392.4 822,343.2 822,377.3 604,430.1 353,489.6" />
+            <path id="cs-planeado" pathLength="1" d="M110,540 L252,504 L428,468 L662,392.4 L822,343.2 L897,316.8 L1190,252 L1366,204 L1483,156 L1541,98.4 L1600,60" />
+            <path id="cs-real" pathLength="1" d="M110,540 L353,489.6 L604,430.1 L822,377.3" />
+            <line id="cs-corte" x1="822" y1="40" x2="822" y2="540" />
+            <text id="cs-corte-texto" x="836" y="48">Corte 25 nov</text>
+            <circle class="cs-punto" id="cs-p1" cx="353" cy="489.6" r="10" />
+            <circle class="cs-punto" id="cs-p2" cx="604" cy="430.1" r="10" />
+            <circle class="cs-punto" id="cs-p3" cx="822" cy="377.3" r="13" />
+            <rect class="cs-riel" x="826" y="616" width="774" height="18" rx="4" />
+            <rect class="cs-seg" id="cs-s1" x="110" y="616" width="240" height="18" rx="4" />
+            <rect class="cs-seg" id="cs-s2" x="356" y="616" width="245" height="18" rx="4" />
+            <rect class="cs-seg" id="cs-s3" x="607" y="616" width="215" height="18" rx="4" />
+          </svg>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    const cifra = (id, hasta, inicio, dur) => {
+      const el = document.querySelector(id);
+      const v = { n: 0 };
+      tl.fromTo(v, { n: 0 }, {
+        n: hasta, duration: dur, ease: "power2.out",
+        onUpdate: () => { el.textContent = v.n.toFixed(1).replace(".", ","); },
+      }, inicio);
+    };
+    // La cámara se acerca despacio a la zona del corte durante toda la escena.
+    tl.fromTo("#cs-camara", { scale: 1 }, { scale: 1.035, duration: 12 * B, ease: "none" }, 0);
+    // Golpe 0 (acento): título y tarjeta.
+    // Entra desde la derecha (sigue la salida de la escena 4).
+    tl.fromTo("#cs-entrada", { x: 320, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0);
+    tl.fromTo("#cs-subtitulo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.5 * B);
+    // Golpes 1 a 4: se dibuja el planeado.
+    tl.fromTo("#cs-planeado", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 3 * B, ease: "power2.inOut" }, 1 * B);
+    tl.fromTo("#cs-cifra-pv", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 2 * B);
+    cifra("#cs-pv", 41, 2 * B, 2 * B);
+    // Golpe 4: cae la línea de corte. Golpes 4 a 7: el real avanza corte a corte.
+    tl.fromTo("#cs-corte", { opacity: 0, scaleY: 0, transformOrigin: "50% 0%" }, { opacity: 1, scaleY: 1, duration: 0.5, ease: "power3.out" }, 4 * B);
+    tl.fromTo("#cs-corte-texto", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 4.5 * B);
+    tl.fromTo("#cs-real", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 3 * B, ease: "none" }, 4 * B);
+    tl.fromTo("#cs-cifra-ev", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 4 * B);
+    cifra("#cs-ev", 33.9, 4 * B, 3 * B);
+    ["#cs-p1", "#cs-p2", "#cs-p3"].forEach((p, i) => {
+      tl.fromTo(p, { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" }, (5 + i) * B);
+      tl.fromTo("#cs-s" + (i + 1), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, (5 + i) * B);
+    });
+    // Golpe 7: la brecha se sombrea y aparece su cifra; golpe 8: el estado.
+    tl.fromTo("#cs-brecha", { opacity: 0 }, { opacity: 0.22, duration: 0.5, ease: "power2.out" }, 7 * B);
+    tl.fromTo("#cs-brecha-cifra", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 7 * B);
+    cifra("#cs-desv", 7.1, 7 * B, 1 * B);
+    tl.fromTo("#cs-chip", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 8 * B);
+    // Salida hacia arriba: la escena 6 entra desde abajo.
+    tl.fromTo("#cs-entrada", { y: 0, opacity: 1 }, { y: -260, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 12 * B - 0.34);
+    window.__timelines["curva-s"] = tl;
+  </script>
+</template>

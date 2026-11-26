@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="fuentes.css" />
+    <link rel="stylesheet" href="comun.css" />
+    <style>
+      /*
+        Composición principal. Las escenas viven en escenas/*.html; aquí van la música y los dos fondos:
+        la retícula azul del encabezado de la app (apertura y cierre) y el fondo claro de la app (escenas 2 a 7).
+        Tiempos: compases de la música (golpes.md). B = 60/112 s por golpe; un compás = 4 B.
+        Las escenas se encadenan por movimiento: cada una sale en la dirección por la que entra la siguiente.
+      */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--institucional); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--institucional); }
+      #reticula { position: absolute; inset: 0; background: var(--reticula); }
+      #claro { position: absolute; inset: 0; z-index: 1; background: var(--fondo); opacity: 0; }
+      #apertura, #excel, #cronograma, #corte, #curva-s, #complementos, #portafolio, #cierre { z-index: 2; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40.7143" data-width="1920" data-height="1080">
+      <div id="reticula"></div>
+      <div id="claro"></div>
+      <audio id="musica" src="assets/musica/pista.mp3" data-start="0" data-duration="40.7143" data-track-index="0" data-volume="1"></audio>
+
+      <div id="apertura" data-composition-id="apertura" data-composition-src="escenas/01-apertura.html"
+           data-start="0" data-duration="4.2857" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="excel" data-composition-id="excel" data-composition-src="escenas/02-excel.html"
+           data-start="4.2857" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+      <div id="cronograma" data-composition-id="cronograma" data-composition-src="escenas/03-cronograma.html"
+           data-start="8.5714" data-duration="8.5714" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="corte" data-composition-id="corte" data-composition-src="escenas/04-corte.html"
+           data-start="17.1429" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+      <div id="curva-s" data-composition-id="curva-s" data-composition-src="escenas/05-curva-s.html"
+           data-start="21.4286" data-duration="6.4286" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="complementos" data-composition-id="complementos" data-composition-src="escenas/06-complementos.html"
+           data-start="27.8571" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+      <div id="portafolio" data-composition-id="portafolio" data-composition-src="escenas/07-portafolio.html"
+           data-start="32.1429" data-duration="4.2857" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="cierre" data-composition-id="cierre" data-composition-src="escenas/08-cierre.html"
+           data-start="36.4286" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      // El fondo claro de la app cubre la retícula justo antes de la entrada fuerte (4,286 s)
+      // y la devuelve para el cierre (36,429 s).
+      tl.fromTo("#claro", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut" }, 4.0);
+      tl.fromTo("#claro", { opacity: 1 }, { opacity: 0, duration: 0.36, ease: "power2.inOut", immediateRender: false }, 36.16);
+      tl.to({}, { duration: 0.01 }, 40.7);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

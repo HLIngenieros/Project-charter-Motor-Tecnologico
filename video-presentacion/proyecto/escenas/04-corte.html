@@ -1,0 +1,146 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 4 · 17,143 → 21,429 s (8 golpes). B = 60/112.
+      Réplica viva de «Registrar corte» (capturas/9-registrar-corte.png), con datos ficticios.
+      Antes del corte: Real 30,8 % y Brecha 10,3 pts (En atención). Con el 20 % de «Carga de documentos»:
+      Real 33,9 % y Brecha 7,1 pts (Al día), las cifras que después muestra la curva S.
+    */
+    #co-camara { position: absolute; inset: 0; transform-origin: 50% 55%; }
+    #co-titulos { position: absolute; left: 0; right: 0; top: 70px; text-align: center; }
+    #co-sub { margin-top: 6px; }
+    #co-lista { position: absolute; left: 150px; top: 320px; width: 980px; height: 560px; }
+    #co-resumen { position: absolute; left: 1170px; top: 320px; width: 600px; height: 560px; }
+    .co-h { position: absolute; left: 44px; top: 36px; font-family: var(--font-titulo); font-weight: 600; font-size: 38px; color: var(--tinta); white-space: nowrap; }
+    #co-fecha {
+      position: absolute; right: 44px; top: 30px; height: 60px; padding: 0 22px; display: flex; align-items: center;
+      border-radius: var(--radio-control); border: 2px solid var(--linea); font-family: var(--font-cifra); font-size: 26px; color: var(--tinta);
+    }
+    #co-raya { position: absolute; left: 0; top: 120px; width: 980px; height: 2px; background: var(--linea); }
+    #co-nombre { position: absolute; left: 44px; top: 170px; font-family: var(--font-titulo); font-weight: 600; font-size: 44px; color: var(--tinta); white-space: nowrap; }
+    #co-detalle { position: absolute; left: 44px; top: 236px; font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); white-space: nowrap; }
+    #co-antes { position: absolute; left: 600px; top: 196px; font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); white-space: nowrap; }
+    #co-campo {
+      position: absolute; left: 740px; top: 160px; width: 196px; height: 104px; border-radius: var(--radio-control);
+      border: 2px solid var(--linea); background: var(--superficie);
+    }
+    #co-foco { position: absolute; inset: -8px; border-radius: 18px; border: 6px solid var(--acento); opacity: 0; }
+    .co-num { position: absolute; right: 62px; top: 16px; font-family: var(--font-cifra); font-weight: 600; font-size: 54px; color: var(--tinta); opacity: 0; }
+    #co-n0 { opacity: 1; color: var(--texto-3); }
+    #co-pct { position: absolute; right: 18px; top: 26px; font-family: var(--font-cifra); font-size: 40px; color: var(--texto-2); }
+    #co-riel { position: absolute; left: 44px; top: 330px; width: 892px; height: 16px; border-radius: 8px; background: var(--linea); }
+    #co-avance { position: absolute; left: 44px; top: 330px; width: 892px; height: 16px; border-radius: 8px; background: var(--naranja); transform-origin: 0 50%; }
+    #co-esperado { position: absolute; left: 596px; top: 318px; width: 5px; height: 40px; border-radius: 2px; background: var(--institucional); }
+    #co-esperado-texto { position: absolute; left: 612px; top: 362px; font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); white-space: nowrap; }
+    #co-resto { position: absolute; left: 44px; top: 452px; font-family: var(--font-texto); font-size: 28px; color: var(--texto-2); white-space: nowrap; }
+    #co-resto b { font-family: var(--font-titulo); font-weight: 600; color: var(--tinta); }
+    #co-raya2 { position: absolute; left: 0; top: 420px; width: 980px; height: 2px; background: var(--linea); }
+    #co-estado { position: absolute; right: 36px; top: 36px; width: 200px; height: 44px; }
+    #co-estado .chip { position: absolute; right: 0; top: 0; }
+    .co-cifra { position: absolute; top: 140px; font-family: var(--font-texto); font-size: 26px; color: var(--texto-2); }
+    .co-cifra b { display: block; margin-top: 2px; font-family: var(--font-titulo); font-weight: 600; font-size: 40px; line-height: 1.15; color: var(--tinta); white-space: nowrap; }
+    #co-c1 { left: 44px; } #co-c2 { left: 214px; } #co-c3 { left: 384px; }
+    #co-mini { position: absolute; left: 44px; top: 280px; }
+    #co-mini path { fill: none; stroke-linecap: round; }
+    #co-boton {
+      position: absolute; left: 44px; top: 440px; width: 512px; height: 84px; border-radius: var(--radio-control);
+      background: var(--institucional); color: var(--superficie); font-family: var(--font-titulo); font-weight: 600; font-size: 32px;
+      line-height: 84px; text-align: center; overflow: hidden;
+    }
+    #co-hecho {
+      position: absolute; inset: 0; background: var(--ok); display: flex; align-items: center; justify-content: center; gap: 14px; opacity: 0;
+    }
+    #co-hecho svg { width: 36px; height: 36px; }
+    #co-cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; }
+  </style>
+  <div id="root" data-composition-id="corte" data-width="1920" data-height="1080">
+    <div id="co-cuadro" class="clip" data-start="0" data-duration="4.2857">
+      <div id="co-camara">
+        <div id="co-titulos">
+          <h1 id="co-titulo" class="t-titulo">Cada corte, una foto</h1>
+          <p id="co-sub" class="t-sub">Registra solo lo que toca</p>
+        </div>
+        <div id="co-lista" class="tarjeta">
+          <div class="co-h">Registrar corte</div>
+          <div id="co-fecha">25 nov 2026</div>
+          <div id="co-raya"></div>
+          <div id="co-nombre">Carga de documentos</div>
+          <div id="co-detalle">2.2 · fin 4 dic 2026</div>
+          <div id="co-antes">Antes 0 %</div>
+          <div id="co-campo">
+            <div id="co-foco"></div>
+            <span class="co-num" id="co-n0">0</span><span class="co-num" id="co-n1">2</span><span class="co-num" id="co-n2">20</span>
+            <span id="co-pct">%</span>
+          </div>
+          <div id="co-riel"></div>
+          <div id="co-avance"></div>
+          <div id="co-esperado"></div>
+          <div id="co-esperado-texto">debería llevar 62 %</div>
+          <div id="co-raya2"></div>
+          <div id="co-resto"><b>Resto · 8</b>&nbsp;&nbsp;siguen como estaban</div>
+        </div>
+        <div id="co-resumen" class="tarjeta">
+          <div class="co-h">Así queda</div>
+          <div id="co-estado">
+            <div class="chip chip-amarillo" id="co-chip-a" data-layout-allow-overlap><i></i>En atención</div>
+            <div class="chip chip-ok" id="co-chip-b"><i></i>Al día</div>
+          </div>
+          <div class="co-cifra" id="co-c1">Planeado<b>41,0 %</b></div>
+          <div class="co-cifra" id="co-c2">Real<b><span id="co-ev">30,8</span> %</b></div>
+          <div class="co-cifra" id="co-c3">Brecha<b><span id="co-desv">10,3</span> pts</b></div>
+          <svg id="co-mini" width="512" height="130" viewBox="0 0 512 130">
+            <path stroke="#dce3ec" stroke-width="2" d="M0,128 H512" />
+            <path stroke="#003366" stroke-width="5" d="M4,120 L150,96 L330,58 L508,22" />
+            <path id="co-m-real" pathLength="1" stroke="#00a9e0" stroke-width="6" d="M4,120 L150,100 L330,72 L508,42" />
+          </svg>
+          <div id="co-boton">Guardar corte
+            <div id="co-hecho">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5" /></svg>
+              Corte guardado
+            </div>
+          </div>
+        </div>
+        <svg id="co-cursor" viewBox="0 0 24 24"><path d="M4 2l15 9.5-6.6 1.4L16 20l-3 1.4-3.5-7L5 18.5z" fill="#0b1f33" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" /></svg>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    const cifra = (id, de, a, inicio, dur) => {
+      const el = document.querySelector(id), v = { n: de };
+      tl.fromTo(v, { n: de }, { n: a, duration: dur, ease: "power2.out", onUpdate: () => { el.textContent = v.n.toFixed(1).replace(".", ","); } }, inicio);
+    };
+    // Golpe 0: la pantalla nace desde el punto donde entró la cámara de la escena 3.
+    tl.fromTo("#co-camara", { scale: 0.7, opacity: 0, x: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" }, 0);
+    tl.fromTo("#co-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
+    tl.fromTo("#co-resumen", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.4 * B);
+    // Golpe 1,5: el cursor llega al campo; golpe 2: foco.
+    tl.fromTo("#co-cursor", { x: 1300, y: 980, opacity: 0, scale: 1 }, { x: 1010, y: 560, opacity: 1, duration: 1.1 * B, ease: "power2.inOut" }, 1 * B);
+    tl.fromTo("#co-foco", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 2.1 * B);
+    // Golpes 2,5 y 3: se escribe «20».
+    tl.fromTo("#co-n0", { opacity: 1 }, { opacity: 0, duration: 0.03, ease: "none" }, 2.5 * B);
+    tl.fromTo("#co-n1", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "none" }, 2.5 * B);
+    tl.fromTo("#co-n1", { opacity: 1 }, { opacity: 0, duration: 0.03, ease: "none", immediateRender: false }, 3 * B);
+    tl.fromTo("#co-n2", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "none" }, 3 * B);
+    // Golpes 3 a 4,5: la barra avanza y el resumen recalcula.
+    tl.fromTo("#co-avance", { scaleX: 0 }, { scaleX: 0.2, duration: 1.2 * B, ease: "power3.out" }, 3 * B);
+    cifra("#co-ev", 30.8, 33.9, 3.2 * B, 1.3 * B);
+    cifra("#co-desv", 10.3, 7.1, 3.2 * B, 1.3 * B);
+    tl.fromTo("#co-m-real", { strokeDasharray: 1, strokeDashoffset: 0.36 }, { strokeDashoffset: 0, duration: 1.3 * B, ease: "power2.out" }, 3.2 * B);
+    tl.fromTo("#co-chip-a", { opacity: 1, y: 0 }, { opacity: 0, y: -16, duration: 0.25, ease: "power2.in" }, 4.2 * B);
+    tl.fromTo("#co-chip-b", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 4.4 * B);
+    // Golpes 4,5 a 5,5: el cursor va a «Guardar corte» y hace clic en el golpe 5,5.
+    tl.fromTo("#co-foco", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.in", immediateRender: false }, 4.5 * B);
+    tl.fromTo("#co-cursor", { x: 1010, y: 560 }, { x: 1500, y: 812, duration: 0.9 * B, ease: "power2.inOut", immediateRender: false }, 4.5 * B);
+    tl.fromTo("#co-boton", { scale: 1 }, { scale: 0.95, duration: 0.1, ease: "power2.out" }, 5.5 * B);
+    tl.fromTo("#co-boton", { scale: 0.95 }, { scale: 1, duration: 0.25, ease: "power2.out", immediateRender: false }, 5.5 * B + 0.1);
+    tl.fromTo("#co-hecho", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 5.5 * B + 0.1);
+    tl.fromTo("#co-cursor", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, 6.2 * B);
+    // Cámara: empuje lento y salida hacia la izquierda (la curva S entra desde la derecha).
+    tl.fromTo("#co-camara", { scale: 1 }, { scale: 1.04, duration: 6 * B, ease: "none", immediateRender: false }, 1.2 * B);
+    tl.fromTo("#co-camara", { x: 0, opacity: 1 }, { x: -320, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 8 * B - 0.34);
+    window.__timelines["corte"] = tl;
+  </script>
+</template>

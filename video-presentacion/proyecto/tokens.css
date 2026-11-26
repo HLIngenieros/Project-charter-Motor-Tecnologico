@@ -1,0 +1,47 @@
+/*
+  Tokens de Project Charter. Origen: apps/web/src/estilos/tokens.css (bloque @theme) y
+  apps/web/src/estilos/global.css (.reticula). SOLO los del proyecto: nada inventado.
+*/
+:root {
+  --institucional: #003366;
+  --institucional-2: #0a3f73;
+  --tinta: #0b1f33;
+  --texto: #3b4b5e;
+  --texto-2: #5b6c7e;
+  --texto-3: #7c8ca1;
+  --linea: #dce3ec;
+  --linea-2: #e3e8ef;
+  --fondo: #eef2f6;
+  --superficie: #ffffff;
+  --acento: #00a9e0;
+
+  --ok: #15a06a;
+  --ok-suave: #e3f4ec;
+  --ok-texto: #0e6e48;
+  --amarillo: #d9a400;
+  --amarillo-suave: #fbf3d9;
+  --amarillo-texto: #7a5c00;
+  --naranja: #de781c;
+  --naranja-suave: #fcebdc;
+  --naranja-texto: #9a4a0a;
+  --alerta: #c4513c;
+  --alerta-suave: #f8e9e5;
+  --alerta-texto: #a63f2c;
+  --vencida: #7a1f2b;
+  --barra: #c9d6e5;
+
+  --font-titulo: 'Sora Variable', 'Segoe UI', sans-serif;
+  --font-texto: 'Plus Jakarta Sans Variable', 'Segoe UI', sans-serif;
+  --font-cifra: 'JetBrains Mono Variable', monospace;
+
+  --radio-control: 12px;
+  --radio-tarjeta: 18px;
+  --sombra-tarjeta: 0 24px 48px -12px rgb(11 31 51 / 0.28);
+
+  /* .reticula del encabezado de la app, a escala del lienzo (×2). */
+  --reticula:
+    linear-gradient(rgb(255 255 255 / 0.06) 2px, transparent 2px) -2px -2px / 192px 192px,
+    linear-gradient(90deg, rgb(255 255 255 / 0.06) 2px, transparent 2px) -2px -2px / 192px 192px,
+    linear-gradient(rgb(255 255 255 / 0.03) 2px, transparent 2px) -2px -2px / 48px 48px,
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 2px, transparent 2px) -2px -2px / 48px 48px;
+}

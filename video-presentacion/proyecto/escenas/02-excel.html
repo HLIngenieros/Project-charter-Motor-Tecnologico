@@ -1,0 +1,137 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    /*
+      Escena 2 · 4,286 → 8,571 s (8 golpes; entrada fuerte de la música en el golpe 0). B = 60/112.
+      Una hoja de cálculo genérica se desarma: sus celdas vuelan y forman la ficha del charter.
+      Ventana: x 210, y 300, 1500×650. Los bloques (.ex-b) están en su posición FINAL (la ficha);
+      GSAP los trae desde la celda de la hoja que ocupaban (x, y, scaleX, scaleY).
+    */
+    #ex-camara { position: absolute; inset: 0; transform-origin: 50% 40%; }
+    #ex-titulos { position: absolute; left: 0; right: 0; top: 70px; text-align: center; }
+    #ex-sub { margin-top: 6px; }
+    #ex-ventana { position: absolute; left: 210px; top: 300px; width: 1500px; height: 650px; overflow: hidden; }
+    #ex-hoja { position: absolute; inset: 0; }
+    #ex-letras { position: absolute; left: 0; top: 0; width: 1500px; height: 50px; background: var(--fondo); border-bottom: 2px solid var(--linea); }
+    #ex-letras span {
+      position: absolute; top: 10px; width: 250px; text-align: center;
+      font-family: var(--font-cifra); font-size: 24px; color: var(--texto-3);
+    }
+    .ex-v { position: absolute; top: 0; width: 2px; height: 650px; background: var(--linea-2); }
+    .ex-h { position: absolute; left: 0; width: 1500px; height: 2px; background: var(--linea-2); }
+    .ex-b { position: absolute; border-radius: 10px; transform-origin: 0 0; background: var(--barra); overflow: hidden; }
+    .ex-b u { position: absolute; inset: 0; opacity: 0; }
+    #ex-b0 { left: 0; top: 0; width: 1500px; height: 120px; border-radius: 0; }
+    #ex-b0 u { background: var(--superficie); border-bottom: 2px solid var(--linea); }
+    #ex-b1, #ex-b2, #ex-b3, #ex-b4, #ex-b5 { left: 40px; width: 250px; height: 22px; }
+    #ex-b1 { top: 170px; } #ex-b2 { top: 226px; } #ex-b3 { top: 282px; } #ex-b4 { top: 338px; } #ex-b5 { top: 394px; }
+    #ex-b1 u, #ex-b3 u, #ex-b4 u, #ex-b5 u { background: var(--linea); }
+    #ex-b2 u { background: var(--institucional); }
+    #ex-b6 { left: 360px; top: 160px; width: 1100px; height: 200px; border-radius: 14px; }
+    #ex-b7 { left: 360px; top: 390px; width: 535px; height: 220px; border-radius: 14px; }
+    #ex-b8 { left: 925px; top: 390px; width: 535px; height: 220px; border-radius: 14px; }
+    #ex-b6 u, #ex-b7 u, #ex-b8 u { background: var(--fondo); }
+    #ex-ficha { position: absolute; inset: 0; }
+    /* Todo lo de la ficha nace invisible; sus tweens (immediateRender: false) lo encienden. */
+    #ex-ficha > * { opacity: 0; }
+    #ex-nombre { position: absolute; left: 40px; top: 34px; font-family: var(--font-titulo); font-weight: 600; font-size: 44px; color: var(--tinta); white-space: nowrap; }
+    #ex-chip { position: absolute; left: 600px; top: 38px; }
+    .ex-cifra { position: absolute; top: 20px; font-family: var(--font-texto); font-size: 24px; color: var(--texto-2); }
+    .ex-cifra b { display: block; font-family: var(--font-titulo); font-weight: 600; font-size: 44px; line-height: 1.15; color: var(--tinta); white-space: nowrap; }
+    #ex-c1 { left: 820px; } #ex-c2 { left: 1040px; } #ex-c3 { left: 1250px; }
+    #ex-c3 b { color: var(--ok-texto); }
+    .ex-rotulo { position: absolute; font-family: var(--font-titulo); font-weight: 600; font-size: 32px; color: var(--tinta); }
+    .ex-renglon { position: absolute; height: 16px; border-radius: 8px; background: var(--barra); transform-origin: 0 50%; }
+    #ex-mini { position: absolute; left: 360px; top: 160px; }
+    #ex-mini path { fill: none; stroke-width: 6; stroke-linecap: round; }
+  </style>
+  <div id="root" data-composition-id="excel" data-width="1920" data-height="1080">
+    <div id="ex-cuadro" class="clip" data-start="0" data-duration="4.2857">
+      <div id="ex-camara">
+        <div id="ex-titulos">
+          <h1 id="ex-titulo" class="t-titulo">Adiós al Excel</h1>
+          <p id="ex-sub" class="t-sub">El charter, en la web</p>
+        </div>
+        <div id="ex-ventana" class="tarjeta">
+          <div id="ex-hoja">
+            <div id="ex-letras" data-layout-ignore>
+              <span style="left:0">A</span><span style="left:250px">B</span><span style="left:500px">C</span>
+              <span style="left:750px">D</span><span style="left:1000px">E</span><span style="left:1250px">F</span>
+            </div>
+            <div class="ex-v" style="left:250px"></div><div class="ex-v" style="left:500px"></div>
+            <div class="ex-v" style="left:750px"></div><div class="ex-v" style="left:1000px"></div>
+            <div class="ex-v" style="left:1250px"></div>
+            <div class="ex-h" style="top:125px"></div><div class="ex-h" style="top:200px"></div>
+            <div class="ex-h" style="top:275px"></div><div class="ex-h" style="top:350px"></div>
+            <div class="ex-h" style="top:425px"></div><div class="ex-h" style="top:500px"></div>
+            <div class="ex-h" style="top:575px"></div>
+          </div>
+          <div class="ex-b" id="ex-b0"><u></u></div>
+          <div class="ex-b" id="ex-b1"><u></u></div>
+          <div class="ex-b" id="ex-b2"><u></u></div>
+          <div class="ex-b" id="ex-b3"><u></u></div>
+          <div class="ex-b" id="ex-b4"><u></u></div>
+          <div class="ex-b" id="ex-b5"><u></u></div>
+          <div class="ex-b" id="ex-b6"><u></u></div>
+          <div class="ex-b" id="ex-b7"><u></u></div>
+          <div class="ex-b" id="ex-b8"><u></u></div>
+          <div id="ex-ficha">
+            <div id="ex-nombre">Portal de Proveedores</div>
+            <div id="ex-chip" class="chip chip-ok"><i></i>Al día</div>
+            <div class="ex-cifra" id="ex-c1">Planeado<b><span id="ex-pv">41,0</span> %</b></div>
+            <div class="ex-cifra" id="ex-c2">Real<b><span id="ex-ev">33,9</span> %</b></div>
+            <div class="ex-cifra" id="ex-c3">Brecha<b>7,1 pts</b></div>
+            <div class="ex-rotulo" id="ex-r1" style="left:392px; top:184px">Curva S</div>
+            <svg id="ex-mini" width="1100" height="200" viewBox="0 0 1100 200">
+              <path id="ex-m1" pathLength="1" stroke="#003366" d="M240,160 C460,150 620,110 780,70 S980,40 1060,34" />
+              <path id="ex-m2" pathLength="1" stroke="#00a9e0" d="M240,160 C400,154 500,136 620,118" />
+            </svg>
+            <div class="ex-rotulo" id="ex-r2" style="left:392px; top:414px">Objetivos</div>
+            <div class="ex-renglon ex-l" style="left:392px; top:480px; width:440px"></div>
+            <div class="ex-renglon ex-l" style="left:392px; top:516px; width:380px"></div>
+            <div class="ex-renglon ex-l" style="left:392px; top:552px; width:410px"></div>
+            <div class="ex-rotulo" id="ex-r3" style="left:957px; top:414px">Cronograma</div>
+            <div class="ex-renglon ex-l" style="left:957px; top:480px; width:200px; background: var(--ok)"></div>
+            <div class="ex-renglon ex-l" style="left:1100px; top:516px; width:230px; background: var(--ok)"></div>
+            <div class="ex-renglon ex-l" style="left:1250px; top:552px; width:170px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const B = 60 / 112;
+    const tl = gsap.timeline({ paused: true });
+    // Celda de origen de cada bloque en la hoja: [x, y, ancho, alto] dentro de la ventana.
+    const final = [[0, 0, 1500, 120], [40, 170, 250, 22], [40, 226, 250, 22], [40, 282, 250, 22], [40, 338, 250, 22], [40, 394, 250, 22], [360, 160, 1100, 200], [360, 390, 535, 220], [925, 390, 535, 220]];
+    const celda = [[20, 68, 460, 40], [20, 143, 200, 40], [270, 218, 180, 40], [520, 143, 210, 40], [770, 293, 190, 40], [1020, 218, 200, 40], [270, 368, 440, 40], [20, 443, 200, 40], [1020, 518, 430, 40]];
+    // Golpe 0 (entrada fuerte): la hoja entra de golpe con el título.
+    tl.fromTo("#ex-camara", { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power4.out" }, 0);
+    tl.fromTo("#ex-titulo", { y: 40 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.fromTo("#ex-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 3.5 * B);
+    // Golpe 2: la rejilla se apaga y las celdas vuelan a su lugar en la ficha.
+    tl.fromTo("#ex-hoja", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power2.in" }, 2 * B);
+    final.forEach((f, i) => {
+      const c = celda[i];
+      const desde = { x: c[0] - f[0], y: c[1] - f[1], scaleX: c[2] / f[2], scaleY: c[3] / f[3] };
+      tl.fromTo("#ex-b" + i, desde, { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.8, ease: "power3.inOut" }, 2 * B + i * 0.045);
+      tl.fromTo("#ex-b" + i + " u", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 2 * B + 0.3 + i * 0.045);
+    });
+    // Golpe 4: la ficha cobra vida.
+    tl.fromTo("#ex-nombre, #ex-chip", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out", stagger: 0.08, immediateRender: false }, 4 * B);
+    tl.fromTo(".ex-cifra", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.1, immediateRender: false }, 4.3 * B);
+    [["#ex-pv", 41], ["#ex-ev", 33.9]].forEach(([id, n]) => {
+      const el = document.querySelector(id), v = { n: 0 };
+      tl.fromTo(v, { n: 0 }, { n, duration: 1.4 * B, ease: "power2.out", onUpdate: () => { el.textContent = v.n.toFixed(1).replace(".", ","); } }, 4.3 * B);
+    });
+    tl.fromTo(".ex-rotulo", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out", stagger: 0.08, immediateRender: false }, 4.6 * B);
+    tl.fromTo(".ex-l", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", stagger: 0.05, immediateRender: false }, 5 * B);
+    tl.fromTo("#ex-mini", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none", immediateRender: false }, 5 * B);
+    tl.fromTo("#ex-m1", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4 * B, ease: "power2.inOut" }, 5 * B);
+    tl.fromTo("#ex-m2", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2 * B, ease: "power2.out" }, 5.8 * B);
+    // La cámara empuja hacia la ficha y sale hacia abajo: la escena 3 entra desde ahí.
+    tl.fromTo("#ex-camara", { scale: 1 }, { scale: 1.05, duration: 5.4 * B, ease: "none", immediateRender: false }, 2 * B);
+    tl.fromTo("#ex-camara", { y: 0, opacity: 1 }, { y: -260, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 8 * B - 0.34);
+    window.__timelines["excel"] = tl;
+  </script>
+</template>
