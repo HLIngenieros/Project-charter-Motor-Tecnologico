@@ -46,7 +46,7 @@
     #ex-mini path { fill: none; stroke-width: 6; stroke-linecap: round; }
   </style>
   <div id="root" data-composition-id="excel" data-width="1920" data-height="1080">
-    <div id="ex-cuadro" class="clip" data-start="0" data-duration="4.2857">
+    <div id="ex-cuadro" class="clip" data-start="0" data-duration="4.5857">
       <div id="ex-camara">
         <div id="ex-titulos">
           <h1 id="ex-titulo" class="t-titulo">Adiós al Excel</h1>
@@ -83,8 +83,8 @@
             <div class="ex-cifra" id="ex-c3">Brecha<b>7,1 pts</b></div>
             <div class="ex-rotulo" id="ex-r1" style="left:392px; top:184px">Curva S</div>
             <svg id="ex-mini" width="1100" height="200" viewBox="0 0 1100 200">
-              <path id="ex-m1" pathLength="1" stroke="#003366" d="M240,160 C460,150 620,110 780,70 S980,40 1060,34" />
-              <path id="ex-m2" pathLength="1" stroke="#00a9e0" d="M240,160 C400,154 500,136 620,118" />
+              <path id="ex-m1" stroke="#003366" d="M240,160 C460,150 620,110 780,70 S980,40 1060,34" />
+              <path id="ex-m2" stroke="#00a9e0" d="M240,160 C400,154 500,136 620,118" />
             </svg>
             <div class="ex-rotulo" id="ex-r2" style="left:392px; top:414px">Objetivos</div>
             <div class="ex-renglon ex-l" style="left:392px; top:480px; width:440px"></div>
@@ -102,11 +102,17 @@
   <script>
     const B = 60 / 112;
     const tl = gsap.timeline({ paused: true });
+    // Trazo: la línea se dibuja con su longitud real (getTotalLength), de `desde` a `hasta` (1 = sin dibujar).
+    const trazo = (sel, inicio, dur, ease, desde = 1, hasta = 0, primero = true) => {
+      const p = document.querySelector(sel), L = p.getTotalLength();
+      tl.fromTo(p, { strokeDasharray: L + " " + L, strokeDashoffset: L * desde },
+        { strokeDashoffset: L * hasta, duration: dur, ease, immediateRender: primero }, inicio);
+    };
     // Celda de origen de cada bloque en la hoja: [x, y, ancho, alto] dentro de la ventana.
     const final = [[0, 0, 1500, 120], [40, 170, 250, 22], [40, 226, 250, 22], [40, 282, 250, 22], [40, 338, 250, 22], [40, 394, 250, 22], [360, 160, 1100, 200], [360, 390, 535, 220], [925, 390, 535, 220]];
     const celda = [[20, 68, 460, 40], [20, 143, 200, 40], [270, 218, 180, 40], [520, 143, 210, 40], [770, 293, 190, 40], [1020, 218, 200, 40], [270, 368, 440, 40], [20, 443, 200, 40], [1020, 518, 430, 40]];
     // Golpe 0 (entrada fuerte): la hoja entra de golpe con el título.
-    tl.fromTo("#ex-camara", { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power4.out" }, 0);
+    tl.fromTo("#ex-camara", { scale: 0.93, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, 0);
     tl.fromTo("#ex-titulo", { y: 40 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
     tl.fromTo("#ex-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 3.5 * B);
     // Golpe 2: la rejilla se apaga y las celdas vuelan a su lugar en la ficha.
@@ -114,7 +120,7 @@
     final.forEach((f, i) => {
       const c = celda[i];
       const desde = { x: c[0] - f[0], y: c[1] - f[1], scaleX: c[2] / f[2], scaleY: c[3] / f[3] };
-      tl.fromTo("#ex-b" + i, desde, { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.8, ease: "power3.inOut" }, 2 * B + i * 0.045);
+      tl.fromTo("#ex-b" + i, desde, { x: 0, y: 0, scaleX: 1, scaleY: 1, duration: 0.95, ease: "power3.inOut" }, 2 * B + i * 0.045);
       tl.fromTo("#ex-b" + i + " u", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 2 * B + 0.3 + i * 0.045);
     });
     // Golpe 4: la ficha cobra vida.
@@ -127,11 +133,11 @@
     tl.fromTo(".ex-rotulo", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out", stagger: 0.08, immediateRender: false }, 4.6 * B);
     tl.fromTo(".ex-l", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", stagger: 0.05, immediateRender: false }, 5 * B);
     tl.fromTo("#ex-mini", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none", immediateRender: false }, 5 * B);
-    tl.fromTo("#ex-m1", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4 * B, ease: "power2.inOut" }, 5 * B);
-    tl.fromTo("#ex-m2", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2 * B, ease: "power2.out" }, 5.8 * B);
+    trazo("#ex-m1", 5 * B, 1.8 * B, "power2.inOut");
+    trazo("#ex-m2", 5.8 * B, 1.5 * B, "power2.inOut");
     // La cámara empuja hacia la ficha y sale hacia abajo: la escena 3 entra desde ahí.
     tl.fromTo("#ex-camara", { scale: 1 }, { scale: 1.05, duration: 5.4 * B, ease: "none", immediateRender: false }, 2 * B);
-    tl.fromTo("#ex-camara", { y: 0, opacity: 1 }, { y: -260, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 8 * B - 0.34);
+    tl.fromTo("#ex-camara", { y: 0, opacity: 1 }, { y: -130, opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 8 * B - 0.36);
     window.__timelines["excel"] = tl;
   </script>
 </template>

@@ -19,7 +19,9 @@
       #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--institucional); }
       #reticula { position: absolute; inset: 0; background: var(--reticula); }
       #claro { position: absolute; inset: 0; z-index: 1; background: var(--fondo); opacity: 0; }
-      #apertura, #excel, #cronograma, #corte, #curva-s, #complementos, #portafolio, #cierre { z-index: 2; }
+      /* Cada escena se cruza 0,3 s con la siguiente: la que entra va encima. */
+      #apertura { z-index: 2; } #excel { z-index: 3; } #cronograma { z-index: 4; } #corte { z-index: 5; }
+      #curva-s { z-index: 6; } #complementos { z-index: 7; } #portafolio { z-index: 8; } #cierre { z-index: 9; }
     </style>
   </head>
   <body>
@@ -29,19 +31,19 @@
       <audio id="musica" src="assets/musica/pista.mp3" data-start="0" data-duration="40.7143" data-track-index="0" data-volume="1"></audio>
 
       <div id="apertura" data-composition-id="apertura" data-composition-src="escenas/01-apertura.html"
-           data-start="0" data-duration="4.2857" data-track-index="1" data-track-kind="graphics"></div>
+           data-start="0" data-duration="4.5857" data-track-index="1" data-track-kind="graphics"></div>
       <div id="excel" data-composition-id="excel" data-composition-src="escenas/02-excel.html"
-           data-start="4.2857" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+           data-start="4.2857" data-duration="4.5857" data-track-index="2" data-track-kind="graphics"></div>
       <div id="cronograma" data-composition-id="cronograma" data-composition-src="escenas/03-cronograma.html"
-           data-start="8.5714" data-duration="8.5714" data-track-index="1" data-track-kind="graphics"></div>
+           data-start="8.5714" data-duration="8.8714" data-track-index="1" data-track-kind="graphics"></div>
       <div id="corte" data-composition-id="corte" data-composition-src="escenas/04-corte.html"
-           data-start="17.1429" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+           data-start="17.1429" data-duration="4.5857" data-track-index="2" data-track-kind="graphics"></div>
       <div id="curva-s" data-composition-id="curva-s" data-composition-src="escenas/05-curva-s.html"
-           data-start="21.4286" data-duration="6.4286" data-track-index="1" data-track-kind="graphics"></div>
+           data-start="21.4286" data-duration="6.7286" data-track-index="1" data-track-kind="graphics"></div>
       <div id="complementos" data-composition-id="complementos" data-composition-src="escenas/06-complementos.html"
-           data-start="27.8571" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
+           data-start="27.8571" data-duration="4.5857" data-track-index="2" data-track-kind="graphics"></div>
       <div id="portafolio" data-composition-id="portafolio" data-composition-src="escenas/07-portafolio.html"
-           data-start="32.1429" data-duration="4.2857" data-track-index="1" data-track-kind="graphics"></div>
+           data-start="32.1429" data-duration="4.5857" data-track-index="1" data-track-kind="graphics"></div>
       <div id="cierre" data-composition-id="cierre" data-composition-src="escenas/08-cierre.html"
            data-start="36.4286" data-duration="4.2857" data-track-index="2" data-track-kind="graphics"></div>
     </div>
@@ -50,8 +52,8 @@
       const tl = gsap.timeline({ paused: true });
       // El fondo claro de la app cubre la retícula justo antes de la entrada fuerte (4,286 s)
       // y la devuelve para el cierre (36,429 s).
-      tl.fromTo("#claro", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut" }, 4.0);
-      tl.fromTo("#claro", { opacity: 1 }, { opacity: 0, duration: 0.36, ease: "power2.inOut", immediateRender: false }, 36.16);
+      tl.fromTo("#claro", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 4.0);
+      tl.fromTo("#claro", { opacity: 1 }, { opacity: 0, duration: 0.55, ease: "power2.inOut", immediateRender: false }, 36.18);
       tl.to({}, { duration: 0.01 }, 40.7);
       window.__timelines["main"] = tl;
     </script>

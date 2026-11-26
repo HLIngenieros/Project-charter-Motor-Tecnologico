@@ -53,7 +53,7 @@
     }
   </style>
   <div id="root" data-composition-id="apertura" data-width="1920" data-height="1080">
-    <div id="ap-cuadro" class="clip" data-start="0" data-duration="4.2857">
+    <div id="ap-cuadro" class="clip" data-start="0" data-duration="4.5857">
       <div id="ap-camara">
         <div id="ap-sello">HL</div>
         <div id="ap-textos">
@@ -69,16 +69,16 @@
     const tl = gsap.timeline({ paused: true });
     // La cámara se acerca despacio durante toda la escena.
     tl.fromTo("#ap-camara", { scale: 1 }, { scale: 1.04, duration: 7.4 * B, ease: "none" }, 0);
-    tl.fromTo("#ap-camara", { scale: 1.04 }, { scale: 1.5, duration: 0.6 * B, ease: "power3.in", immediateRender: false }, 7.4 * B);
+    tl.fromTo("#ap-camara", { scale: 1.04 }, { scale: 1.22, duration: 0.6 * B + 0.3, ease: "power2.in", immediateRender: false }, 7.4 * B);
     // Golpe 0: el sello entra; golpe 1: el nombre sube desde su máscara.
-    tl.fromTo("#ap-sello", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.1);
-    tl.fromTo("#ap-titulo", { y: 210 }, { y: 0, duration: 0.8, ease: "power4.out" }, 1 * B);
+    tl.fromTo("#ap-sello", { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 0.1);
+    tl.fromTo("#ap-titulo", { y: 210 }, { y: 0, duration: 1.0, ease: "expo.out" }, 1 * B);
     // Golpe 2: la línea de acento se dibuja (la misma que después será la serie Real).
-    tl.fromTo("#ap-linea", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 2 * B);
+    tl.fromTo("#ap-linea", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "power3.inOut" }, 2 * B);
     // Golpe 3: subtítulo.
     tl.fromTo("#ap-subtitulo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 3 * B);
     // Salida: la cámara entra a la retícula justo antes de la entrada fuerte de la música.
-    tl.fromTo("#ap-cuadro > #ap-camara", { opacity: 1 }, { opacity: 0, duration: 0.26, ease: "power2.in", immediateRender: false }, 8 * B - 0.3);
+    tl.fromTo("#ap-cuadro > #ap-camara", { opacity: 1 }, { opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 8 * B - 0.2);
     window.__timelines["apertura"] = tl;
   </script>
 </template>

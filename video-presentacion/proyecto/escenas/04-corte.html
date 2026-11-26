@@ -55,7 +55,7 @@
     #co-cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; }
   </style>
   <div id="root" data-composition-id="corte" data-width="1920" data-height="1080">
-    <div id="co-cuadro" class="clip" data-start="0" data-duration="4.2857">
+    <div id="co-cuadro" class="clip" data-start="0" data-duration="4.5857">
       <div id="co-camara">
         <div id="co-titulos">
           <h1 id="co-titulo" class="t-titulo">Cada corte, una foto</h1>
@@ -91,8 +91,8 @@
           <div class="co-cifra" id="co-c3">Brecha<b><span id="co-desv">10,3</span> pts</b></div>
           <svg id="co-mini" width="512" height="130" viewBox="0 0 512 130">
             <path stroke="#dce3ec" stroke-width="2" d="M0,128 H512" />
-            <path stroke="#003366" stroke-width="5" d="M4,120 L150,96 L330,58 L508,22" />
-            <path id="co-m-real" pathLength="1" stroke="#00a9e0" stroke-width="6" d="M4,120 L150,100 L330,72 L508,42" />
+            <path id="co-m-plan" stroke="#003366" stroke-width="5" d="M4,120 L150,96 L330,58 L508,22" />
+            <path id="co-m-real" stroke="#00a9e0" stroke-width="6" d="M4,120 L150,100 L330,72 L508,42" />
           </svg>
           <div id="co-boton">Guardar corte
             <div id="co-hecho">
@@ -108,14 +108,20 @@
   <script>
     const B = 60 / 112;
     const tl = gsap.timeline({ paused: true });
+    // Trazo: la línea se dibuja con su longitud real (getTotalLength), de `desde` a `hasta` (1 = sin dibujar).
+    const trazo = (sel, inicio, dur, ease, desde = 1, hasta = 0, primero = true) => {
+      const p = document.querySelector(sel), L = p.getTotalLength();
+      tl.fromTo(p, { strokeDasharray: L + " " + L, strokeDashoffset: L * desde },
+        { strokeDashoffset: L * hasta, duration: dur, ease, immediateRender: primero }, inicio);
+    };
     const cifra = (id, de, a, inicio, dur) => {
       const el = document.querySelector(id), v = { n: de };
       tl.fromTo(v, { n: de }, { n: a, duration: dur, ease: "power2.out", onUpdate: () => { el.textContent = v.n.toFixed(1).replace(".", ","); } }, inicio);
     };
     // Golpe 0: la pantalla nace desde el punto donde entró la cámara de la escena 3.
-    tl.fromTo("#co-camara", { scale: 0.7, opacity: 0, x: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" }, 0);
+    tl.fromTo("#co-camara", { scale: 0.9, opacity: 0, x: 0 }, { scale: 1, opacity: 1, duration: 0.85, ease: "power3.out" }, 0);
     tl.fromTo("#co-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
-    tl.fromTo("#co-resumen", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.4 * B);
+    tl.fromTo("#co-resumen", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0.4 * B);
     // Golpe 1,5: el cursor llega al campo; golpe 2: foco.
     tl.fromTo("#co-cursor", { x: 1300, y: 980, opacity: 0, scale: 1 }, { x: 1010, y: 560, opacity: 1, duration: 1.1 * B, ease: "power2.inOut" }, 1 * B);
     tl.fromTo("#co-foco", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 2.1 * B);
@@ -125,10 +131,13 @@
     tl.fromTo("#co-n1", { opacity: 1 }, { opacity: 0, duration: 0.03, ease: "none", immediateRender: false }, 3 * B);
     tl.fromTo("#co-n2", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "none" }, 3 * B);
     // Golpes 3 a 4,5: la barra avanza y el resumen recalcula.
-    tl.fromTo("#co-avance", { scaleX: 0 }, { scaleX: 0.2, duration: 1.2 * B, ease: "power3.out" }, 3 * B);
+    tl.fromTo("#co-avance", { scaleX: 0 }, { scaleX: 0.2, duration: 1.4 * B, ease: "power3.inOut" }, 3 * B);
     cifra("#co-ev", 30.8, 33.9, 3.2 * B, 1.3 * B);
     cifra("#co-desv", 10.3, 7.1, 3.2 * B, 1.3 * B);
-    tl.fromTo("#co-m-real", { strokeDasharray: 1, strokeDashoffset: 0.36 }, { strokeDashoffset: 0, duration: 1.3 * B, ease: "power2.out" }, 3.2 * B);
+    // La mini curva se dibuja al entrar; con el corte, el real avanza el tramo que faltaba.
+    trazo("#co-m-plan", 0.8 * B, 1.6 * B, "power2.inOut");
+    trazo("#co-m-real", 1.1 * B, 1.5 * B, "power2.inOut", 1, 0.36);
+    trazo("#co-m-real", 3.2 * B, 1.3 * B, "power2.inOut", 0.36, 0, false);
     tl.fromTo("#co-chip-a", { opacity: 1, y: 0 }, { opacity: 0, y: -16, duration: 0.25, ease: "power2.in" }, 4.2 * B);
     tl.fromTo("#co-chip-b", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 4.4 * B);
     // Golpes 4,5 a 5,5: el cursor va a «Guardar corte» y hace clic en el golpe 5,5.
@@ -140,7 +149,7 @@
     tl.fromTo("#co-cursor", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, 6.2 * B);
     // Cámara: empuje lento y salida hacia la izquierda (la curva S entra desde la derecha).
     tl.fromTo("#co-camara", { scale: 1 }, { scale: 1.04, duration: 6 * B, ease: "none", immediateRender: false }, 1.2 * B);
-    tl.fromTo("#co-camara", { x: 0, opacity: 1 }, { x: -320, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 8 * B - 0.34);
+    tl.fromTo("#co-camara", { x: 0, opacity: 1 }, { x: -150, opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 8 * B - 0.36);
     window.__timelines["corte"] = tl;
   </script>
 </template>

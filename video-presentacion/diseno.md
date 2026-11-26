@@ -5,7 +5,7 @@
 ## Resultado
 
 - **Archivos:**
-  - `project-charter-presentacion.mp4`: 40,7 s, 1920×1080, 30 fps, H.264 yuv420p y AAC, 11,3 MB.
+  - `project-charter-presentacion.mp4`: 40,7 s, 1920×1080, 30 fps, H.264 yuv420p y AAC, 11,5 MB.
   - `project-charter-presentacion-liviano.mp4`: para el sitio y la intranet, CRF 26 y `+faststart`, 3,8 MB.
   - `project-charter-poster.jpg`: fotograma del cronograma (16,3 s).
 - **Cómo se rearma:** `bash construir.sh`. Las capturas de referencia se rehacen con `capturas.py` (levanta `servidor-demo.ts`, datos ficticios).
@@ -16,6 +16,7 @@
 
 | Fecha | Pedido | Qué cambió |
 |---|---|---|
+| 2026-11-26 | Las líneas de las gráficas aparecían de repente; entradas y salidas más suaves | Las curvas se dibujan como trazo con su longitud real (`getTotalLength`; con `pathLength="1"` el trazo no se animaba en el render) en la curva S, la ficha, el corte y el portafolio. Cada escena se cruza 0,3 s con la siguiente (la que entra va encima), con entradas de 0,8 a 0,9 s, recorridos más cortos y curvas `inOut` en barras, arrastre y línea de corte; los riesgos se posan en vez de caer. Final de 11,5 MB y liviano de 3,8 MB |
 
 ## Para qué es
 

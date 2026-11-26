@@ -44,7 +44,7 @@
     .cm-barra { position: absolute; left: 330px; top: 42px; height: 16px; border-radius: 8px; background: var(--institucional); transform-origin: 0 50%; }
   </style>
   <div id="root" data-composition-id="complementos" data-width="1920" data-height="1080">
-    <div id="cm-cuadro" class="clip" data-start="0" data-duration="4.2857">
+    <div id="cm-cuadro" class="clip" data-start="0" data-duration="4.5857">
       <div id="cm-entrada">
         <div id="cm-camara">
           <h1 id="cm-titulo" class="t-titulo">Riesgos y presupuesto</h1>
@@ -87,17 +87,17 @@
     document.querySelector("#cm-celdas").innerHTML = celdas;
 
     // Golpe 0: entra desde abajo (sigue la salida de la curva S).
-    tl.fromTo("#cm-entrada", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0);
+    tl.fromTo("#cm-entrada", { y: 130, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, 0);
     tl.fromTo("#cm-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
     // La cámara recorre de la matriz al presupuesto.
     tl.fromTo("#cm-camara", { scale: 1.07, x: 60 }, { x: -60, duration: 7 * B, ease: "power1.inOut" }, 0);
     // Golpes 0,3 a 1,5: las celdas se encienden en diagonal.
     document.querySelectorAll(".cm-celda").forEach((c) => {
-      tl.fromTo(c, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" }, 0.3 * B + Number(c.dataset.d) * 0.055);
+      tl.fromTo(c, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out" }, 0.4 * B + Number(c.dataset.d) * 0.055);
     });
     // Golpes 1,5 a 3,5: los riesgos caen en su celda, uno cada medio golpe.
     [1, 2, 3, 4, 5].forEach((n, k) => {
-      tl.fromTo("#cm-p" + n, { opacity: 0, y: -90, scale: 1.5 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "power3.in" }, (1.5 + k * 0.5) * B - 0.32);
+      tl.fromTo("#cm-p" + n, { opacity: 0, y: -36, scale: 1.25 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, (1.5 + k * 0.5) * B - 0.1);
     });
     tl.fromTo("#cm-nota", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.6 * B);
     // Golpe 4 (acento de la música): el total cuenta y las barras de los rubros crecen.
@@ -107,10 +107,10 @@
       onUpdate: () => { el.textContent = (Math.round(v.n * 10) * 100000).toLocaleString("de-DE"); },
     }, 4 * B);
     tl.fromTo("#cm-total", { opacity: 0, scale: 0.9, transformOrigin: "0% 60%" }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 4 * B);
-    tl.fromTo(".cm-barra", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out", stagger: 0.12 }, 4.2 * B);
+    tl.fromTo(".cm-barra", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "power3.inOut", stagger: 0.12 }, 4 * B);
     tl.fromTo(".cm-valor", { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", stagger: 0.12 }, 4.4 * B);
     // Salida: la ficha se encoge (será una fila del portafolio).
-    tl.fromTo("#cm-entrada", { scale: 1, opacity: 1 }, { scale: 0.55, opacity: 0, duration: 0.34, ease: "power2.in", immediateRender: false }, 8 * B - 0.36);
+    tl.fromTo("#cm-entrada", { scale: 1, opacity: 1 }, { scale: 0.88, opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 8 * B - 0.36);
     window.__timelines["complementos"] = tl;
   </script>
 </template>

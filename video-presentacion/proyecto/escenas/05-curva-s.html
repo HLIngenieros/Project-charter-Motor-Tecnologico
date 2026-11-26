@@ -83,7 +83,7 @@
     .cs-seg { fill: var(--ok); }
   </style>
   <div id="root" data-composition-id="curva-s" data-width="1920" data-height="1080">
-    <div id="cs-cuadro" class="clip" data-start="0" data-duration="6.4286">
+    <div id="cs-cuadro" class="clip" data-start="0" data-duration="6.7286">
       <div id="cs-entrada">
       <div id="cs-camara">
         <h1 id="cs-titulo">La curva S, viva</h1>
@@ -120,8 +120,8 @@
               <text x="1391" y="582">feb</text>
             </g>
             <polygon id="cs-brecha" points="110,540 252,504 428,468 662,392.4 822,343.2 822,377.3 604,430.1 353,489.6" />
-            <path id="cs-planeado" pathLength="1" d="M110,540 L252,504 L428,468 L662,392.4 L822,343.2 L897,316.8 L1190,252 L1366,204 L1483,156 L1541,98.4 L1600,60" />
-            <path id="cs-real" pathLength="1" d="M110,540 L353,489.6 L604,430.1 L822,377.3" />
+            <path id="cs-planeado" d="M110,540 L252,504 L428,468 L662,392.4 L822,343.2 L897,316.8 L1190,252 L1366,204 L1483,156 L1541,98.4 L1600,60" />
+            <path id="cs-real" d="M110,540 L353,489.6 L604,430.1 L822,377.3" />
             <line id="cs-corte" x1="822" y1="40" x2="822" y2="540" />
             <text id="cs-corte-texto" x="836" y="48">Corte 25 nov</text>
             <circle class="cs-punto" id="cs-p1" cx="353" cy="489.6" r="10" />
@@ -140,6 +140,12 @@
   <script>
     const B = 60 / 112;
     const tl = gsap.timeline({ paused: true });
+    // Trazo: la línea se dibuja con su longitud real (getTotalLength), de `desde` a `hasta` (1 = sin dibujar).
+    const trazo = (sel, inicio, dur, ease, desde = 1, hasta = 0, primero = true) => {
+      const p = document.querySelector(sel), L = p.getTotalLength();
+      tl.fromTo(p, { strokeDasharray: L + " " + L, strokeDashoffset: L * desde },
+        { strokeDashoffset: L * hasta, duration: dur, ease, immediateRender: primero }, inicio);
+    };
     const cifra = (id, hasta, inicio, dur) => {
       const el = document.querySelector(id);
       const v = { n: 0 };
@@ -152,16 +158,16 @@
     tl.fromTo("#cs-camara", { scale: 1 }, { scale: 1.035, duration: 12 * B, ease: "none" }, 0);
     // Golpe 0 (acento): título y tarjeta.
     // Entra desde la derecha (sigue la salida de la escena 4).
-    tl.fromTo("#cs-entrada", { x: 320, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0);
+    tl.fromTo("#cs-entrada", { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, 0);
     tl.fromTo("#cs-subtitulo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.5 * B);
     // Golpes 1 a 4: se dibuja el planeado.
-    tl.fromTo("#cs-planeado", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 3 * B, ease: "power2.inOut" }, 1 * B);
+    trazo("#cs-planeado", 0.8 * B, 3.4 * B, "power1.inOut");
     tl.fromTo("#cs-cifra-pv", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 2 * B);
     cifra("#cs-pv", 41, 2 * B, 2 * B);
     // Golpe 4: cae la línea de corte. Golpes 4 a 7: el real avanza corte a corte.
-    tl.fromTo("#cs-corte", { opacity: 0, scaleY: 0, transformOrigin: "50% 0%" }, { opacity: 1, scaleY: 1, duration: 0.5, ease: "power3.out" }, 4 * B);
+    tl.fromTo("#cs-corte", { opacity: 0, scaleY: 0, transformOrigin: "50% 0%" }, { opacity: 1, scaleY: 1, duration: 0.7, ease: "power3.inOut" }, 4 * B - 0.25);
     tl.fromTo("#cs-corte-texto", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 4.5 * B);
-    tl.fromTo("#cs-real", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 3 * B, ease: "none" }, 4 * B);
+    trazo("#cs-real", 4 * B, 3 * B, "none");
     tl.fromTo("#cs-cifra-ev", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 4 * B);
     cifra("#cs-ev", 33.9, 4 * B, 3 * B);
     ["#cs-p1", "#cs-p2", "#cs-p3"].forEach((p, i) => {
@@ -169,12 +175,12 @@
       tl.fromTo("#cs-s" + (i + 1), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, (5 + i) * B);
     });
     // Golpe 7: la brecha se sombrea y aparece su cifra; golpe 8: el estado.
-    tl.fromTo("#cs-brecha", { opacity: 0 }, { opacity: 0.22, duration: 0.5, ease: "power2.out" }, 7 * B);
+    tl.fromTo("#cs-brecha", { opacity: 0 }, { opacity: 0.22, duration: 0.9, ease: "power2.inOut" }, 6.6 * B);
     tl.fromTo("#cs-brecha-cifra", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 7 * B);
     cifra("#cs-desv", 7.1, 7 * B, 1 * B);
     tl.fromTo("#cs-chip", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 8 * B);
     // Salida hacia arriba: la escena 6 entra desde abajo.
-    tl.fromTo("#cs-entrada", { y: 0, opacity: 1 }, { y: -260, opacity: 0, duration: 0.32, ease: "power2.in", immediateRender: false }, 12 * B - 0.34);
+    tl.fromTo("#cs-entrada", { y: 0, opacity: 1 }, { y: -130, opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 12 * B - 0.36);
     window.__timelines["curva-s"] = tl;
   </script>
 </template>

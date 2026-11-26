@@ -52,5 +52,12 @@
       "estado": "revisada"
     }
   ],
-  "ajustes": []
+  "ajustes": [
+    {
+      "fecha": "2026-11-26",
+      "pedido": "Las líneas de las gráficas deben dibujarse como un trazo y las entradas y salidas deben sentirse más suaves",
+      "cambiaGuion": false,
+      "estado": "hecho"
+    }
+  ]
 }

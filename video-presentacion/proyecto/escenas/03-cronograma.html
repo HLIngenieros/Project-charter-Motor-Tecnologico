@@ -57,7 +57,7 @@
     #cr-cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; }
   </style>
   <div id="root" data-composition-id="cronograma" data-width="1920" data-height="1080">
-    <div id="cr-cuadro" class="clip" data-start="0" data-duration="8.5714">
+    <div id="cr-cuadro" class="clip" data-start="0" data-duration="8.8714">
       <div id="cr-camara">
         <h1 id="cr-titulo" class="t-titulo">Cronograma que se arrastra</h1>
         <p id="cr-sub" class="t-sub">Fechas encadenadas y pesos claros</p>
@@ -116,12 +116,12 @@
     }).join("");
 
     // Golpe 0: la escena sube desde abajo (sigue el movimiento de salida de la escena 2).
-    tl.fromTo("#cr-camara", { y: 260, opacity: 0, scale: 1, transformOrigin: "1300px 620px" }, { y: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 0);
+    tl.fromTo("#cr-camara", { y: 130, opacity: 0, scale: 1, transformOrigin: "1300px 620px" }, { y: 0, opacity: 1, duration: 0.85, ease: "power3.out" }, 0);
     tl.fromTo("#cr-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1 * B);
     // Golpes 0,5 a 3: las filas entran en cascada y sus barras crecen.
     FILAS.forEach((f, i) => {
-      tl.fromTo("#cr-f" + i, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.5 * B + i * 0.07);
-      tl.fromTo("#cr-b" + i, { scaleX: 0, x: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, 1.5 * B + i * 0.07);
+      tl.fromTo("#cr-f" + i, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, 0.6 * B + i * 0.07);
+      tl.fromTo("#cr-b" + i, { scaleX: 0, x: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, 1.5 * B + i * 0.07);
     });
     // Golpes 5 a 6,5: la cámara se acerca a las barras; el cursor llega al fin de «Registro de proveedores».
     tl.fromTo("#cr-camara", { scale: 1 }, { scale: 1.28, duration: 1.5 * B, ease: "power2.inOut", immediateRender: false }, 5 * B);
@@ -132,14 +132,14 @@
     tl.fromTo("#cr-cursor", { scale: 1 }, { scale: 0.82, duration: 0.15, ease: "power2.out", immediateRender: false }, 7.6 * B);
     // Golpe 8 (acento de la música): arrastra el fin; las de abajo se corren los mismos días.
     const D = 51;
-    tl.fromTo("#cr-cursor", { x: 1356 }, { x: 1356 + D, duration: 0.5, ease: "power3.out", immediateRender: false }, 8 * B);
+    tl.fromTo("#cr-cursor", { x: 1356 }, { x: 1356 + D, duration: 0.7, ease: "power3.inOut", immediateRender: false }, 8 * B - 0.15);
     FILAS.forEach((f, i) => {
       if (!f[10]) return;
       const t = 8 * B + (i - 3) * 0.05;
       if (f[10] === "estira") {
-        tl.fromTo("#cr-b" + i, { scaleX: 1 }, { scaleX: (f[6] + D) / f[6], duration: 0.5, ease: "power3.out", immediateRender: false }, 8 * B);
+        tl.fromTo("#cr-b" + i, { scaleX: 1 }, { scaleX: (f[6] + D) / f[6], duration: 0.7, ease: "power3.inOut", immediateRender: false }, 8 * B - 0.15);
       } else {
-        tl.fromTo("#cr-b" + i, { x: 0 }, { x: D, duration: 0.55, ease: "power3.out", immediateRender: false }, t);
+        tl.fromTo("#cr-b" + i, { x: 0 }, { x: D, duration: 0.8, ease: "power3.inOut", immediateRender: false }, t - 0.1);
       }
       tl.fromTo("#cr-l" + i, { opacity: 0.2 }, { opacity: 0, duration: 1.4, ease: "power2.out", immediateRender: false }, t);
       ["cr-ini", "cr-fin"].forEach((c, k) => {
@@ -157,11 +157,11 @@
     tl.fromTo("#cr-pesos", { opacity: 0, y: -24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 12 * B);
     tl.fromTo("#cr-check path", { strokeDasharray: 30, strokeDashoffset: 30 }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" }, 12.6 * B);
     // Golpe 13: cae la línea de corte.
-    tl.fromTo("#cr-corte", { scaleY: 0 }, { scaleY: 1, duration: 0.45, ease: "power3.out" }, 13 * B);
+    tl.fromTo("#cr-corte", { scaleY: 0 }, { scaleY: 1, duration: 0.7, ease: "power3.inOut" }, 13 * B - 0.2);
     tl.fromTo("#cr-corte-texto", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 13.4 * B);
     // Golpes 14,6 a 16: la cámara entra por la actividad que cruza el corte (la escena 4 nace de ahí).
-    tl.fromTo("#cr-camara", { scale: 1, x: 0, y: 0, opacity: 1 }, { scale: 2.6, x: -350, y: -130, duration: 1.4 * B, ease: "power3.in", immediateRender: false }, 14.6 * B);
-    tl.fromTo("#cr-camara", { opacity: 1 }, { opacity: 0, duration: 0.22, ease: "power1.in", immediateRender: false }, 16 * B - 0.24);
+    tl.fromTo("#cr-camara", { scale: 1, x: 0, y: 0, opacity: 1 }, { scale: 1.6, x: -170, y: -60, duration: 1.4 * B + 0.3, ease: "power2.in", immediateRender: false }, 14.6 * B);
+    tl.fromTo("#cr-camara", { opacity: 1 }, { opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 16 * B - 0.36);
     window.__timelines["cronograma"] = tl;
   </script>
 </template>

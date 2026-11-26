@@ -34,11 +34,11 @@
     const B = 60 / 112;
     const tl = gsap.timeline({ paused: true });
     // Golpe 0: el nombre sube desde su máscara; golpe 1: la línea de acento se abre desde el centro.
-    tl.fromTo("#ci-titulo", { y: 170 }, { y: 0, duration: 0.7, ease: "power4.out" }, 0.1);
-    tl.fromTo("#ci-linea", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 1 * B);
+    tl.fromTo("#ci-titulo", { y: 170 }, { y: 0, duration: 1.0, ease: "expo.out" }, 0.2);
+    tl.fromTo("#ci-linea", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "power3.inOut" }, 1 * B);
     tl.fromTo("#ci-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2 * B);
     // Golpe 4 (acento de la música): el logo de Grupo HL, solo con fundido. Después, todo quieto.
-    tl.fromTo("#ci-placa", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 4 * B);
+    tl.fromTo("#ci-placa", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.inOut" }, 4 * B - 0.2);
     window.__timelines["cierre"] = tl;
   </script>
 </template>
